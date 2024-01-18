@@ -1,4 +1,56 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    cursor: default;
+    caret-color: transparent;
+}
+
+input {
+    cursor: text;
+    caret-color: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+    margin: 0;
+    font-family: Nunito;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+h1 {
+    font-size: 46px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+// 20, 32 sind sehr selten und sollten einzeln benutzt werden
+
+h3 {
+    font-size: 18px;
+}
+
+h4 {
+    font-size: 16px;
+}
+
+h5 {
+    font-size: 14px;
+}
+
+// media query 768px
+// 22 17 20 font sizes
