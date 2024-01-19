@@ -7,20 +7,40 @@
     </div>
   </div>
 
-    <!-- Intro -->
+  <!-- Intro -->
   <div
     [@backgroundAnimation]="backgroundState"
     [class.none]="setNone"
     class="start-animation"
   >
     <div class="content" [@moveAnimation]="moveState">
-      <img [@slideAnimation]="svgTransform" src="../../assets/img/Logo.svg" />
+      <img [@slideAnimation]="svgTransform" src="../../assets/img/dabubble-logo.svg" />
       <div class="text">
         <span [@textAnimation]="textState">DABubble</span>
       </div>
     </div>
   </div>
 
-
-
+  <div class="login-wrapper">
+    <div class="login-container">
+      <div class="login-header">
+        <h1>Anmeldung</h1>
+        <span
+          >Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der
+          Arbeit verwendest.</span
+        >
+      </div>
+      <form class="form-login">
+        <input class="email" type="email" placeholder="beispielname@gmail.com" />
+        <input type="password" placeholder="Passwort" />
+        <div><img src="../../assets/img/lock.png"></div>
+        <a href="#" class="forgot-password">Passwort vergessen?</a>
+      </form>
+      <div class="login-divider">
+        <mat-divider></mat-divider>
+        <span>ODER</span>
+        <mat-divider></mat-divider>
+      </div>
+    </div>
+  </div>
 </div>

@@ -7,10 +7,13 @@ import {
   transition,
   keyframes,
 } from '@angular/animations';
+import {MatDividerModule} from '@angular/material/divider';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [
+    MatDividerModule,
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   animations: [
