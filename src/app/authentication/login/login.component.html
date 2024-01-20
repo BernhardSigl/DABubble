@@ -14,7 +14,7 @@
     class="start-animation"
   >
     <div class="content" [@moveAnimation]="moveState">
-      <img [@slideAnimation]="svgTransform" src="../../assets/img/dabubble-logo.svg" />
+      <img [@slideAnimation]="svgTransform" src="../../assets/img/Logo.svg" />
       <div class="text">
         <span [@textAnimation]="textState">DABubble</span>
       </div>
@@ -31,9 +31,18 @@
         >
       </div>
       <form class="form-login">
-        <input class="email" type="email" placeholder="beispielname@gmail.com" />
-        <input type="password" placeholder="Passwort" />
-        <!-- <div><img src="../../assets/img/lock.png"></div> -->
+        <div class="email-field">
+          <input
+            class="email"
+            type="email"
+            placeholder="beispielname@gmail.com"
+          />
+          <img src="../../../assets/img/mail-grey.png" />
+        </div>
+        <div class="password-field">
+          <input type="password" placeholder="Passwort" />
+          <img src="../../../assets/img/lock-grey.png" />
+        </div>
         <a href="#" class="forgot-password">Passwort vergessen?</a>
       </form>
       <div class="login-divider">
@@ -41,6 +50,26 @@
         <span>ODER</span>
         <mat-divider></mat-divider>
       </div>
+
+      <div class="login-methods">
+        <div class="google-btn-div">
+          <div class="google-login">
+          <img src="../../../assets/img/Google.png" alt="">
+          <span >Anmelden mit Google</span>
+        </div>
+        </div>
+
+        <div class="login-btns-div">
+          <button class="login-btn">Anmelden</button>
+          <button class="guest-login">Gäste-Login</button>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="imprint-wrapper">
+      <a class="imprint">Impressum</a>
+      <a class="policy">Datenschutz</a>
     </div>
   </div>
 </div>
