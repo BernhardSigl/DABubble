@@ -16,8 +16,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthenticationService } from '../../firebase-services/authentication.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AuthyService } from '../../firebase-services/authy.service';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +27,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
     MatFormFieldModule,
     CommonModule,
     ReactiveFormsModule,
-    RouterModule,
+    RouterModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -86,8 +86,8 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', Validators.required),
   })
 
-  constructor(public authenticationService: AuthenticationService) {
-
+  constructor(
+    private authyService: AuthyService) {
 
   }
 

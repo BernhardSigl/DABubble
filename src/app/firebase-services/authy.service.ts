@@ -1,21 +1,14 @@
-// declare var google: any;
 import { Injectable, inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { from } from 'rxjs';
-import { Auth } from 'firebase/auth';
+import { Auth } from '@angular/fire/auth';
+import { Firestore } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
-
-export class AuthenticationService {
-  // router = inject(Router);
-  // private auth: Auth
-  // constructor() {
-
-  // }
+export class AuthyService {
+  firestore: Firestore = inject(Firestore);
+  constructor(private afAuth: Auth) {
+  }
 
   // signUp(email: string, password: string) {
   //   this.afAuth.createUserWithEmailAndPassword(email, password)
@@ -62,6 +55,4 @@ export class AuthenticationService {
   // get isAuthenticated(): boolean {
   //   return this.afAuth.currentUser !== null;
   // }
-
-
 }
