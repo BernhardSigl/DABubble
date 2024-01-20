@@ -10,12 +10,12 @@ import {
   transition,
   keyframes,
 } from '@angular/animations';
-import {MatDividerModule} from '@angular/material/divider';
-import { FormGroup , FormControl, NonNullableFormBuilder , Validators} from '@angular/forms';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatDividerModule } from '@angular/material/divider';
+import { FormGroup, FormControl, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthenticationService } from '../../firebase-services/authentication.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 
@@ -26,7 +26,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
     MatDividerModule,
     MatFormFieldModule,
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -81,13 +82,13 @@ export class LoginComponent implements OnInit {
   animationPlayed: boolean = false;
 
   loginForm = new FormGroup({
-    email:new FormControl('', [Validators.required,Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
   })
 
   constructor(
 
-  ) {}
+  ) { }
 
 
   // google:
@@ -97,7 +98,7 @@ export class LoginComponent implements OnInit {
 
   // google:
   // constructor(private ngZone: NgZone) { }
-  isGuest:boolean | undefined;
+  isGuest: boolean | undefined;
 
   ngOnInit(): void {
     if (!this.animationPlayed) {
@@ -108,11 +109,11 @@ export class LoginComponent implements OnInit {
     // });
   }
 
-  get email(){
+  get email() {
     return this.loginForm.get('email');
   }
 
-  get password(){
+  get password() {
     return this.loginForm.get('password');
   }
 
@@ -131,19 +132,19 @@ export class LoginComponent implements OnInit {
   }
 
 
-    // google:
-    // google.accounts.id.initialize({
-    // client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
-    // callback: (resp: any) => this.handleLogin(resp)
-    // });
+  // google:
+  // google.accounts.id.initialize({
+  // client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
+  // callback: (resp: any) => this.handleLogin(resp)
+  // });
 
-    // google:
-    // google.accounts.id.renderButton(document.getElementById('google-btn'), {
-    // theme: 'filled_blue',
-    // size: 'large',
-    // shape: 'rectangle',
-    // width: 350
-    // })
+  // google:
+  // google.accounts.id.renderButton(document.getElementById('google-btn'), {
+  // theme: 'filled_blue',
+  // size: 'large',
+  // shape: 'rectangle',
+  // width: 350
+  // })
 
 
   // google:
