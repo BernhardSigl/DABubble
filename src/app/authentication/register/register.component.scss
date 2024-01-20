@@ -73,6 +73,34 @@
         box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
         max-width: 486px;
         padding: 2rem 2.3rem 2rem 2.3rem;
+        position: relative;
+
+        .arrow-left {
+            position: absolute;
+            top: 2.8125rem;
+            left: 2rem;
+            cursor: pointer;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            .arrow-left-img {
+                width: 24px;
+                height: 24px;
+                background-image: url('./../../../assets/img/arrow-left-light.png');
+            }
+
+            &:hover {
+                background-color: #eceefe;
+
+                .arrow-left-img {
+                    background-image: url('./../../../assets/img/arrow-left-light-blue.png');
+                }
+            }
+        }
 
         .login-header {
             text-align: center;
@@ -140,6 +168,7 @@
                 display: flex;
                 justify-content: center;
                 gap: 1.6rem;
+                justify-content: flex-end;
 
                 button {
                     border-radius: 5rem;
@@ -170,14 +199,12 @@
     align-items: center;
 
     .checkbox {
-
         border-radius: 100%;
 
         &:hover {
             background-color: #eceefe;
         }
     }
-
 
     a {
         color: var(--secondary);
