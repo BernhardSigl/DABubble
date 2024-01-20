@@ -15,6 +15,9 @@ import { FormGroup , FormControl, NonNullableFormBuilder , Validators} from '@an
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../../firebase-services/authentication.service';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-login',
@@ -82,6 +85,11 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', Validators.required),
   })
 
+  constructor(
+
+  ) {}
+
+
   // google:
   // firestore: Firestore = inject(Firestore);
   // google:
@@ -89,11 +97,39 @@ export class LoginComponent implements OnInit {
 
   // google:
   // constructor(private ngZone: NgZone) { }
+  isGuest:boolean | undefined;
 
   ngOnInit(): void {
     if (!this.animationPlayed) {
       this.playAnimation();
     }
+    // this.authService.currentUser$.subscribe((user) => {
+    //   this.isGuest = !user;
+    // });
+  }
+
+  get email(){
+    return this.loginForm.get('email');
+  }
+
+  get password(){
+    return this.loginForm.get('password');
+  }
+
+  submit() {
+    const { email, password } = this.loginForm.value;
+
+
+  }
+  /**
+   * Logs in as a guest user.
+   */
+  loginAsGuest() {
+    const guestEmail = 'guest@guest.de';
+    const guestPassword = 'guest1';
+
+  }
+
 
     // google:
     // google.accounts.id.initialize({
@@ -108,7 +144,7 @@ export class LoginComponent implements OnInit {
     // shape: 'rectangle',
     // width: 350
     // })
-  }
+
 
   // google:
   // private decodeToken(token: string) {
