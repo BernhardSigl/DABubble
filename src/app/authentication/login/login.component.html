@@ -29,7 +29,7 @@
           <input class="email" type="email" placeholder="beispielname@gmail.com" matInput formControlName="email" />
           <img src="../../../assets/img/mail-grey.png" />
           <mat-error *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']">
-            Email is required
+            *Diese E-Mail-Adresse ist leider ungültig.
           </mat-error>
           <mat-error *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']">
             Please enter the correct Email
@@ -40,7 +40,7 @@
           <input type="password" placeholder="Passwort" matInput formControlName="password" />
           <img src="../../../assets/img/lock-grey.png" />
           <mat-error *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']">
-            Password is required
+            Falsches Passwort. Bitte noch einmal versuchen.
           </mat-error>
         </div>
 
