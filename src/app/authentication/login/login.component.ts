@@ -27,7 +27,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
     MatFormFieldModule,
     CommonModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -86,9 +86,10 @@ export class LoginComponent implements OnInit {
     password: new FormControl('', Validators.required),
   })
 
-  constructor(
+  constructor(public authenticationService: AuthenticationService) {
 
-  ) { }
+
+  }
 
 
   // google:
