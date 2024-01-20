@@ -11,8 +11,7 @@
   <div
     [@backgroundAnimation]="backgroundState"
     [class.none]="setNone"
-    class="start-animation"
-  >
+    class="start-animation">
     <div class="content" [@moveAnimation]="moveState">
       <img [@slideAnimation]="svgTransform" src="../../assets/img/Logo.svg" />
       <div class="text">
@@ -50,23 +49,20 @@
         <span>ODER</span>
         <mat-divider></mat-divider>
       </div>
-
       <div class="login-methods">
         <div class="google-btn-div">
           <div class="google-login">
-          <img src="../../../assets/img/Google.png" alt="">
-          <span >Anmelden mit Google</span>
+            <img src="../../../assets/img/Google.png" alt="" />
+            <span>Anmelden mit Google</span>
+          </div>
         </div>
-        </div>
-
         <div class="login-btns-div">
           <button class="login-btn">Anmelden</button>
           <button class="guest-login">Gäste-Login</button>
         </div>
       </div>
-
-
     </div>
+    <!-- Imprint Data Policy -->
     <div class="imprint-wrapper">
       <a class="imprint">Impressum</a>
       <a class="policy">Datenschutz</a>
