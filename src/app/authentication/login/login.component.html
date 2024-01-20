@@ -8,11 +8,7 @@
   </div>
 
   <!-- Intro -->
-  <div
-    [@backgroundAnimation]="backgroundState"
-    [class.none]="setNone"
-    class="start-animation"
-  >
+  <div [@backgroundAnimation]="backgroundState" [class.none]="setNone" class="start-animation">
     <div class="content" [@moveAnimation]="moveState">
       <img [@slideAnimation]="svgTransform" src="../../assets/img/Logo.svg" />
       <div class="text">
@@ -25,48 +21,32 @@
     <div class="login-container">
       <div class="login-header">
         <h1>Anmeldung</h1>
-        <span
-          >Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der
-          Arbeit verwendest.</span
-        >
+        <span>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der
+          Arbeit verwendest.</span>
       </div>
       <form class="form-login" [formGroup]="loginForm">
         <div class="email-field">
-          <input
-            class="email"
-            type="email"
-            placeholder="beispielname@gmail.com"
-            matInput
-            formControlName="email"
-          />
+          <input class="email" type="email" placeholder="beispielname@gmail.com" matInput formControlName="email" />
           <img src="../../../assets/img/mail-grey.png" />
         </div>
-        <mat-error
-          *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']"
-        >
+        <mat-error *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']">
           Email is required
         </mat-error>
-        <mat-error
-          *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']"
-        >
+        <mat-error *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']">
           Please enter the correct Email
         </mat-error>
         <div class="password-field">
-          <input
-            type="password"
-            placeholder="Passwort"
-            matInput
-            formControlName="password"
-          />
+          <input type="password" placeholder="Passwort" matInput formControlName="password" />
           <img src="../../../assets/img/lock-grey.png" />
         </div>
-        <mat-error
-          *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']"
-        >
+        <mat-error *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.errors?.['required']">
           Password is required
         </mat-error>
-        <a href="#" class="forgot-password">Passwort vergessen?</a>
       </form>
+      <div class="forgot-password">
+        <a href="#">Passwort vergessen?</a>
+      </div>
+
       <div class="login-divider">
         <mat-divider></mat-divider>
         <span>ODER</span>
