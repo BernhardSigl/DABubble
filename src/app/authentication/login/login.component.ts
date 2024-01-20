@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+// google:
+// declare var google: any;
+
+import { Component, OnInit, inject, NgZone } from '@angular/core';
 import {
   trigger,
   state,
@@ -8,11 +11,19 @@ import {
   keyframes,
 } from '@angular/animations';
 import {MatDividerModule} from '@angular/material/divider';
+import { FormGroup , FormControl, NonNullableFormBuilder , Validators} from '@angular/forms';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     MatDividerModule,
+    MatFormFieldModule,
+    CommonModule,
+    ReactiveFormsModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -57,6 +68,7 @@ import {MatDividerModule} from '@angular/material/divider';
     ]),
   ],
 })
+
 export class LoginComponent implements OnInit {
   textState: string = 'hidden';
   svgTransform: string = 'middle';
@@ -65,11 +77,87 @@ export class LoginComponent implements OnInit {
   moveState: string = 'middle';
   animationPlayed: boolean = false;
 
+  loginForm = new FormGroup({
+    email:new FormControl('', [Validators.required,Validators.email]),
+    password: new FormControl('', Validators.required),
+  })
+
+  // google:
+  // firestore: Firestore = inject(Firestore);
+  // google:
+  // private router = inject(Router);
+
+  // google:
+  // constructor(private ngZone: NgZone) { }
+
   ngOnInit(): void {
     if (!this.animationPlayed) {
       this.playAnimation();
     }
+
+    // google:
+    // google.accounts.id.initialize({
+    // client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
+    // callback: (resp: any) => this.handleLogin(resp)
+    // });
+
+    // google:
+    // google.accounts.id.renderButton(document.getElementById('google-btn'), {
+    // theme: 'filled_blue',
+    // size: 'large',
+    // shape: 'rectangle',
+    // width: 350
+    // })
   }
+
+  // google:
+  // private decodeToken(token: string) {
+  // return JSON.parse(atob(token.split('.')[1]));
+  // }
+
+  // google:
+  // async handleLogin(response: any) {
+  // if (response) {
+  // const payLoad = this.decodeToken(response.credential);
+  // sessionStorage.setItem('loggedInUser', JSON.stringify(payLoad));
+
+  // const newEmail = payLoad.email; // choosen user-email at login
+  // const newFirstName = payLoad.given_name;
+  // const newProfilePic = payLoad.picture;
+  // const newLocation = payLoad.locale;
+  // const querySnapshot = await this.getUsersDocRef();
+
+  // const existingUser = querySnapshot.docs.find(doc => doc.data()['email'] === newEmail); // email already exists?
+
+  // if (existingUser) {
+  // this.redirect(existingUser.id);
+  // } else {
+  // this.addField(newEmail, newFirstName, newProfilePic, newLocation);
+  // }
+  // }
+  // }
+
+  // google:
+  // async addField(newEmail: string, newFirstName: string, newProfilePic: string, newLocation: string) {
+  // this.user = new User({
+  // firstName: newFirstName,
+  // picture: newProfilePic,
+  // location: newLocation,
+  // email: newEmail
+  // });
+  // await this.addUser().then((result: any) => {
+  // this.redirect(result.id);
+  // });
+  // }
+
+  // google:
+  // async redirect(token: string) {
+  // this.ngZone.run(() => {
+  // this.router.navigate([`path...`]);
+  // });
+  // }
+
+
 
   playAnimation() {
     this.textState = 'hidden';
