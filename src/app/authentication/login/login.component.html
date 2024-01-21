@@ -24,7 +24,7 @@
         <span>Wir empfehlen dir, die E-Mail-Adresse zu nutzen, die du bei der
           Arbeit verwendest.</span>
       </div>
-      <form class="form-login" [formGroup]="loginForm">
+      <form class="form-login" [formGroup]="loginForm" (ngSubmit)="submit()">
         <div class="email-field">
           <input class="email" type="email" placeholder="beispielname@gmail.com" matInput formControlName="email" />
           <img src="../../../assets/img/mail-grey.png" />
@@ -44,7 +44,7 @@
           </mat-error>
         </div>
 
-      </form>
+
       <div class="forgot-password">
         <a href="#">Passwort vergessen?</a>
       </div>
@@ -62,11 +62,13 @@
           </div>
         </div>
         <div class="login-btns-div">
-          <button class="login-btn">Anmelden</button>
-          <button class="guest-login">Gäste-Login</button>
+          <button   type="submit" class="login-btn">Anmelden</button>
+          <button (click)="loginAsGuest()" class="guest-login">Gäste-Login</button>
         </div>
       </div>
+    </form>
     </div>
+
     <!-- Imprint Data Policy -->
     <div class="imprint-wrapper">
       <a class="imprint">Impressum</a>

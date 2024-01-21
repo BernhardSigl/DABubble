@@ -81,13 +81,18 @@ export class LoginComponent implements OnInit {
   moveState: string = 'middle';
   animationPlayed: boolean = false;
 
+
+
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
   })
 
+
   constructor(
-    private authyService: AuthyService) {
+    private authyService: AuthyService,
+    private router:Router
+) {
 
   }
 
@@ -105,9 +110,7 @@ export class LoginComponent implements OnInit {
     if (!this.animationPlayed) {
       this.playAnimation();
     }
-    // this.authService.currentUser$.subscribe((user) => {
-    //   this.isGuest = !user;
-    // });
+
   }
 
   get email() {
@@ -118,11 +121,7 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('password');
   }
 
-  submit() {
-    const { email, password } = this.loginForm.value;
 
-
-  }
   /**
    * Logs in as a guest user.
    */
@@ -130,7 +129,54 @@ export class LoginComponent implements OnInit {
     const guestEmail = 'guest@guest.de';
     const guestPassword = 'guest1';
 
+    this.authyService.loginWithEmailAndPassword(guestEmail,guestPassword);
+    this.router.navigate(['/main']);
+    console.log('logged in');
+  } catch (err: any) {
+
+    if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+      window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
+    } else {
+      window.alert('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+    }
+
   }
+
+
+
+  async submit() {
+    console.log('CLICKED');
+    const email = this.loginForm.value.email;
+    const password = this.loginForm.value.password;
+
+
+    if (this.loginForm.valid && typeof email === 'string' && typeof password === 'string') {
+      this.loginForm.disable();
+      try {
+        await this.login(email, password);
+      } catch (err) {
+        console.error(err);
+      }
+      this.loginForm.enable();
+    }
+  }
+
+
+  async login(email: string, password: string) {
+    try {
+      const userCredential = await this.authyService.loginWithEmailAndPassword(email, password);
+      this.router.navigate(['/main']);
+      console.log('logged in');
+    } catch (err: any) {
+
+      if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
+      } else {
+        window.alert('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+      }
+    }
+  }
+
 
 
   // google:
