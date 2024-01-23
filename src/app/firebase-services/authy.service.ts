@@ -6,29 +6,29 @@ import {
   signOut,
 } from '@angular/fire/auth';
 import { AppUser } from '../classes/user.class';
-
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthyService {
   // currentUser: User;
 
-  constructor(    private auth: Auth) {
+  constructor( private auth: Auth , private firestore: AngularFirestore) {
   }
 
-  // async registerWithEmailAndPassword(user: AppUser) {
-  //   try {
-  //     const userCredential = await createUserWithEmailAndPassword(
-  //       this.auth,
-  //       user.email,
-  //       user.password
-  //     );
-  //     return userCredential;
-  //   } catch (err) {
-  //     console.error(err);
-  //     return err;
-  //   }
-  // }
+  async registerWithEmailAndPassword(user: AppUser) {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        this.auth,
+        user.email,
+        user.password
+      );
+      return userCredential;
+    } catch (err) {
+      console.error(err);
+      return err;
+    }
+  }
 
   async loginWithEmailAndPassword(email: string, password: string) {
     try {
@@ -42,6 +42,18 @@ export class AuthyService {
     }
   }
 
+  async updateUserData(user: AppUser): Promise<void> {
+    const userId = user.userId;
+
+    if (userId) {
+      try {
+        await this.firestore.collection('users').doc(userId).update(user.toJson());
+        console.log('User data updated successfully');
+      } catch (error) {
+        console.error('Error updating user data:', error);
+      }
+    }
+  }
 
 
   // async updateEmailInFirebaseAuth(email: string) {
@@ -51,35 +63,6 @@ export class AuthyService {
   //     console.error(err);
   //   }
   // }
-
-
-  // signUp(email: string, password: string) {
-  //   this.afAuth.createUserWithEmailAndPassword(email, password)
-  //     .then(() => {
-  //       // Sign up successful
-  //       // popup successfully signed up
-  //       // route to login
-  //     })
-  //     .catch((error) => {
-  //       // An error occurred
-  //       // route to signup with popup
-  //     });
-  // }
-
-  // login(email: string, password: string) {
-  //   this.afAuth.signInWithEmailAndPassword(email, password)
-  //     .then(() => {
-  //       // Login successful
-  //       // route to main
-  //       // popup login sucessful
-  //     })
-  //     .catch((error) => {
-  //       // An error occurred
-  //       // route to login + popup
-  //     });
-  // }
-
-
 
   //   signOut() {
   //     google.accounts.id.disableAutoSelect();

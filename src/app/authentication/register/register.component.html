@@ -14,12 +14,12 @@
             </div>
             <form class="form-login" [formGroup]="loginForm">
                 <div class="name-field">
-                    <input class="email" type="name" placeholder="Name und Nachname" matInput formControlName="email" />
+                    <input class="email" type="name" placeholder="Name und Nachname" matInput formControlName="name" />
                     <img src="../../../assets/img/mail-grey.png" />
-                    <mat-error *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['required']">
+                    <mat-error *ngIf="loginForm.get('name')?.touched && loginForm.get('name')?.errors?.['required']">
                         *Dieser Name ist leider ungültig.
                     </mat-error>
-                    <mat-error *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']">
+                    <mat-error *ngIf="loginForm.get('name')?.touched && loginForm.get('name')?.errors?.['email']">
                         Please enter a correct Name.
                     </mat-error>
                 </div>
@@ -61,7 +61,7 @@
 
             <div class="login-methods">
                 <div class="login-btns-div">
-                    <button class="login-btn" routerLink="/chooseAvatar">Weiter</button>
+                    <button class="login-btn" [disabled]="!isValidForm()" (click)="navigateToChooseAvatar();registerUser()">Weiter</button>
                 </div>
             </div>
         </div>

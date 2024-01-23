@@ -6,6 +6,7 @@ import { MainChatComponent } from './main-chat/main-chat.component';
 
 export const routes: Routes = [
   {path:'', component:LoginComponent},
+  {path:'login', component:LoginComponent},
   {path:'register', component:RegisterComponent},
   {path:'chooseAvatar', component:ChooseAvaterComponent},
   {path:'main', component:MainChatComponent}
