@@ -18,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthyService } from '../../firebase-services/authy.service';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,8 @@ import { AuthyService } from '../../firebase-services/authy.service';
     MatFormFieldModule,
     CommonModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    AngularFirestoreModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',

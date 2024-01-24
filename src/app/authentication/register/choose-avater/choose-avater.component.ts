@@ -3,10 +3,14 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AvatarDataService } from '../../../firebase-services/avatar-data.service';
 import { AuthyService } from '../../../firebase-services/authy.service';
 import { AppUser } from '../../../classes/user.class';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 @Component({
   selector: 'app-choose-avater',
   standalone: true,
-  imports: [RouterModule],
+  imports: [
+    RouterModule,
+    AngularFirestoreModule
+  ],
   templateUrl: './choose-avater.component.html',
   styleUrl: './choose-avater.component.scss',
 })
@@ -28,14 +32,12 @@ export class ChooseAvaterComponent implements OnInit {
   }
   handleFileSelect(event: any): void {
     const file = event.target.files[0];
-
     // Check if the selected file is an image
     if (file && file.type.startsWith('image/')) {
       // If avatars are chosen, reset the uploaded image and show the selected avatar
       if (this.profileImageSrc !== '../../assets/img/profile.png') {
         this.profileImageSrc = '';
       }
-
       // Display the selected image in .profile-img
       this.profileImageSrc = URL.createObjectURL(file);
     } else {
@@ -58,13 +60,13 @@ export class ChooseAvaterComponent implements OnInit {
     // Get user data from Firebase
     const user = new AppUser({
       name: this.userName,
-      email: '', // You can update this if you have the email information
-      userId: '', // You can update this if you have the userId information
+      email: '',
+      userId: '',
       profileImg: avatarSrc,
-      password: '', // You can update this if you have the password information
+      password: '',
     });
 
     // Update user data in Firebase
-    this.authyService.updateUserData(user);
+    // this.authyService.updateUserData(user);
   }
 }

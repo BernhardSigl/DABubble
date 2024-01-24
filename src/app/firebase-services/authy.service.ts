@@ -1,20 +1,13 @@
 import { Injectable } from '@angular/core';
-import {
-  Auth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-} from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, fetchSignInMethodsForEmail } from '@angular/fire/auth';
 import { AppUser } from '../classes/user.class';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthyService {
-  // currentUser: User;
 
-  constructor( private auth: Auth , private firestore: AngularFirestore) {
-  }
+  constructor(private auth: Auth) {}
 
   async registerWithEmailAndPassword(user: AppUser) {
     try {
@@ -26,7 +19,7 @@ export class AuthyService {
       return userCredential;
     } catch (err) {
       console.error(err);
-      return err;
+      throw err; // Rethrow the error to be caught by the caller
     }
   }
 
@@ -37,48 +30,32 @@ export class AuthyService {
         email,
         password
       );
+      return userCredential;
     } catch (err) {
       throw err;
     }
   }
 
-  async updateUserData(user: AppUser): Promise<void> {
-    const userId = user.userId;
-
-    if (userId) {
-      try {
-        await this.firestore.collection('users').doc(userId).update(user.toJson());
-        console.log('User data updated successfully');
-      } catch (error) {
-        console.error('Error updating user data:', error);
-      }
+  async forgotPassword(email: string) {
+    try {
+      const userCredential = await sendPasswordResetEmail(
+        this.auth,
+        email
+      );
+      return userCredential;
+    } catch (err) {
+      throw err;
     }
   }
 
+  async checkEmailExists(email: string): Promise<any> {
+    try {
+      const userCredential = await fetchSignInMethodsForEmail(this.auth, email);
+      return userCredential ;
+    } catch (error) {
+      console.error('Error checking email existence:', error);
+      throw error;
+    }
+  }
 
-  // async updateEmailInFirebaseAuth(email: string) {
-  //   try {
-  //     await updateEmail(this.currentUser, email);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // }
-
-  //   signOut() {
-  //     google.accounts.id.disableAutoSelect();
-  //     this.router.navigate(['/']);
-  //      this.afAuth.signOut()
-  //       .then(() => {
-  //         // Logout successful
-  //       })
-  //       .catch((error) => {
-  //         // An error occurred
-  //       });
-  //   }
-
-  // }
-
-  // get isAuthenticated(): boolean {
-  //   return this.afAuth.currentUser !== null;
-  // }
 }

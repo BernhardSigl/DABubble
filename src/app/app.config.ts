@@ -7,9 +7,11 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { HotToastModule } from '@ngneat/hot-toast';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    [HotToastModule.forRoot()],
     provideRouter(routes),
     provideAnimations(),
     importProvidersFrom(
