@@ -19,7 +19,7 @@ export class AuthyService {
       return userCredential;
     } catch (err) {
       console.error(err);
-      throw err; // Rethrow the error to be caught by the caller
+      throw err;
     }
   }
 
