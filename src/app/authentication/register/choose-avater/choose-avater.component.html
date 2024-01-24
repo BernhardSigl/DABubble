@@ -4,40 +4,43 @@
     </div>
     <div class="choose-avatar-wrapper">
         <div class="choose-avatar-container">
-            <div class="arrow-left">
-                <div class="arrow-left-img"></div>
+            <div routerLink="/register" class="arrow-left">
+                <div class="arrow-left-img" routerLink="/register"></div>
             </div>
             <div class="choose-avatar-header">
                 <h1>Wähle deinen Avatar</h1>
             </div>
             <div class="choose-avatar-content">
                 <div class="profile-img">
-                    <img src="../../assets/img/profile.png">
+                    <img [src]="profileImageSrc">
                 </div>
                 <div class="name-avatar-list">
-                    <div class="user">Name Nachname</div>
+                    <div class="user">{{userName}}</div>
                     <span>Aus der Liste wählen</span>
                     <div class="avatars">
-                        <img src="./../../../../assets/img/profile-1.png">
-                        <img src="./../../../../assets/img/profile-2.png">
-                        <img src="./../../../../assets/img/profile-3.png">
-                        <img src="./../../../../assets/img/profile-4.png">
-                        <img src="./../../../../assets/img/profile-5.png">
-                        <img src="./../../../../assets/img/profile-6.png">
-                    </div>
+                      <img src="./../../../../assets/img/profile-1.png" (click)="handleAvatarSelect('./../../../../assets/img/profile-1.png')">
+                      <img src="./../../../../assets/img/profile-2.png" (click)="handleAvatarSelect('./../../../../assets/img/profile-2.png')">
+                      <img src="./../../../../assets/img/profile-3.png" (click)="handleAvatarSelect('./../../../../assets/img/profile-3.png')">
+                      <img src="./../../../../assets/img/profile-4.png" (click)="handleAvatarSelect('./../../../../assets/img/profile-4.png')">
+                      <img src="./../../../../assets/img/profile-5.png" (click)="handleAvatarSelect('./../../../../assets/img/profile-5.png')">
+                      <img src="./../../../../assets/img/profile-6.png" (click)="handleAvatarSelect('./../../../../assets/img/profile-6.png')">
+                  </div>
                 </div>
+                <input type="file" id="uploadFile" style="display:none" accept="image/*" (change)="handleFileSelect($event)">
+
+
                 <div class="upload-img">
                     <span>eigenes Bild hochladen</span>
-                    <a href="#"> Datei hochladen</a>
+                    <a (click)="triggerFileInput()"> Datei hochladen</a>
                 </div>
             </div>
             <div class="login-methods">
                 <div class="login-btns-div">
-                    <button class="login-btn" routerLink="/chooseAvatar">Weiter</button>
+                    <button class="login-btn" routerLink="/login">Weiter</button>
                 </div>
             </div>
         </div>
-        
+
 
         <!-- Imprint Data Policy -->
         <div class="imprint-wrapper">
