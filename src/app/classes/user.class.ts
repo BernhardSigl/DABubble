@@ -1,15 +1,15 @@
 export interface AppUser {
-  name: string;
-  email: string;
-  userId: string;
-  profileImg: string;
-  password: string;
+  name?: string;
+  email?: string;
+  userId?: string;
+  profileImg?: string;
+  password?: string;
 }
 
 export class User {
-  name: string;
-  email: string;
-  profileImg: string;
+  name?: string;
+  email?: string;
+  profileImg?: string;
   userId?: string;
   password?: string;
 

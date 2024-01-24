@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AvatarDataService } from '../../../firebase-services/avatar-data.service';
 import { AuthyService } from '../../../firebase-services/authy.service';
-import { AppUser } from '../../../classes/user.class';
+import { AppUser, User } from '../../../classes/user.class';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 @Component({
   selector: 'app-choose-avater',
@@ -58,7 +58,7 @@ export class ChooseAvaterComponent implements OnInit {
     this.avatarDataService.setSelectedAvatar(avatarSrc);
 
     // Get user data from Firebase
-    const user = new AppUser({
+    const user = new User({
       name: this.userName,
       email: '',
       userId: '',
