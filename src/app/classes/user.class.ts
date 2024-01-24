@@ -21,7 +21,7 @@ export class AppUser {
     this.password = data?.password || '';
   }
 
-  toJson() {
+  toJSON() {
     return {
       name: this.name,
       email: this.email,

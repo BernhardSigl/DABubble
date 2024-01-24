@@ -1,5 +1,5 @@
-// google:
-// declare var google: any;
+//google login:
+declare var google: any;
 
 import { Component, OnInit, inject, NgZone } from '@angular/core';
 import {
@@ -19,6 +19,8 @@ import { Router, RouterModule } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthyService } from '../../firebase-services/authy.service';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { UserData} from '../../classes/user.class';
+import { Firestore, addDoc, } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-login',
@@ -83,29 +85,21 @@ export class LoginComponent implements OnInit {
   moveState: string = 'middle';
   animationPlayed: boolean = false;
 
-
-
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
   })
 
+  // google
+  user!: User;
+  firestore: Firestore = inject(Firestore);
+  private router = inject(Router);
 
   constructor(
     private authyService: AuthyService,
-    private router:Router
-) {
-
-  }
-
-
-  // google:
-  // firestore: Firestore = inject(Firestore);
-  // google:
-  // private router = inject(Router);
-
-  // google:
-  // constructor(private ngZone: NgZone) { }
+    // private user: UserData,
+    private ngZone: NgZone
+) { }
   isGuest: boolean | undefined;
 
   ngOnInit(): void {
@@ -113,6 +107,83 @@ export class LoginComponent implements OnInit {
       this.playAnimation();
     }
 
+    //google login
+    google.accounts.id.initialize({
+      client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
+      callback: (resp: any) => this.handleLogin(resp)
+    });
+
+    //google login
+    google.accounts.id.renderButton(document.getElementById('google-btn'), {
+      theme: 'filled_blue',
+      size: 'large',
+      shape: 'rectangle',
+      width: 350
+    })
+  }
+
+  //google login
+  private decodeToken(token: string) {
+    return JSON.parse(atob(token.split('.')[1]));
+  }
+
+  //google login
+  async handleLogin(response: any) {
+    if (response) {
+      const payLoad = this.decodeToken(response.credential);
+      sessionStorage.setItem('loggedInUser', JSON.stringify(payLoad));
+
+      const name = payLoad.given_name;
+      const email = payLoad.email;
+      const profileImg = payLoad.picture;
+      const querySnapshot = await this.getUsersDocRef();
+
+      const existingUser = querySnapshot.docs.find(doc => doc.data()['email'] === email); // email already exists?
+
+      if (existingUser) {
+        this.redirect(existingUser.id);
+      } else {
+        this.addField(name, email, profileImg);
+      }
+    }
+  }
+
+  //google login
+  async redirect(token: string) {
+    this.ngZone.run(() => {
+      console.log('Weiterleitung auf landing page mit id: ', token);
+      // this.router.navigate([``]);
+    });
+  }
+
+  // google
+  async addField(name: string, email: string, profileImg: string) {
+    this.user = new User ({
+      name: name,
+      email: email,
+      profileImg: profileImg,
+    });
+    await this.addUser().then((result: any) => {
+      this.redirect(result.id);
+    });
+  }
+
+  // google
+  async addUser() {
+    const docRef = await addDoc(this.getUsersColRef(), this.user.toJSON());
+    return docRef;
+  }
+
+  // google
+  async getUsersDocRef() {
+    const q = query(this.getUsersColRef());
+    const querySnapshot = await getDocs(q);
+    return querySnapshot;
+  }
+
+  // google
+  getUsersColRef() {
+    return collection(this.firestore, "users");
   }
 
   get email() {
@@ -122,7 +193,6 @@ export class LoginComponent implements OnInit {
   get password() {
     return this.loginForm.get('password');
   }
-
 
   /**
    * Logs in as a guest user.
@@ -178,72 +248,6 @@ export class LoginComponent implements OnInit {
       }
     }
   }
-
-
-
-  // google:
-  // google.accounts.id.initialize({
-  // client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
-  // callback: (resp: any) => this.handleLogin(resp)
-  // });
-
-  // google:
-  // google.accounts.id.renderButton(document.getElementById('google-btn'), {
-  // theme: 'filled_blue',
-  // size: 'large',
-  // shape: 'rectangle',
-  // width: 350
-  // })
-
-
-  // google:
-  // private decodeToken(token: string) {
-  // return JSON.parse(atob(token.split('.')[1]));
-  // }
-
-  // google:
-  // async handleLogin(response: any) {
-  // if (response) {
-  // const payLoad = this.decodeToken(response.credential);
-  // sessionStorage.setItem('loggedInUser', JSON.stringify(payLoad));
-
-  // const newEmail = payLoad.email; // choosen user-email at login
-  // const newFirstName = payLoad.given_name;
-  // const newProfilePic = payLoad.picture;
-  // const newLocation = payLoad.locale;
-  // const querySnapshot = await this.getUsersDocRef();
-
-  // const existingUser = querySnapshot.docs.find(doc => doc.data()['email'] === newEmail); // email already exists?
-
-  // if (existingUser) {
-  // this.redirect(existingUser.id);
-  // } else {
-  // this.addField(newEmail, newFirstName, newProfilePic, newLocation);
-  // }
-  // }
-  // }
-
-  // google:
-  // async addField(newEmail: string, newFirstName: string, newProfilePic: string, newLocation: string) {
-  // this.user = new User({
-  // firstName: newFirstName,
-  // picture: newProfilePic,
-  // location: newLocation,
-  // email: newEmail
-  // });
-  // await this.addUser().then((result: any) => {
-  // this.redirect(result.id);
-  // });
-  // }
-
-  // google:
-  // async redirect(token: string) {
-  // this.ngZone.run(() => {
-  // this.router.navigate([`path...`]);
-  // });
-  // }
-
-
 
   playAnimation() {
     this.textState = 'hidden';
