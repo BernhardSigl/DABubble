@@ -1,4 +1,4 @@
-//google login:
+//google:
 declare var google: any;
 
 import { Component, OnInit, inject, NgZone } from '@angular/core';
@@ -11,15 +11,14 @@ import {
   keyframes,
 } from '@angular/animations';
 import { MatDividerModule } from '@angular/material/divider';
-import { FormGroup, FormControl, NonNullableFormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthyService } from '../../firebase-services/authy.service';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { Firestore, addDoc, collection, getDocs, query, } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, getDocs, query, updateDoc, } from '@angular/fire/firestore';
 import { User } from '../../classes/user.class'
 
 @Component({
@@ -92,13 +91,14 @@ export class LoginComponent implements OnInit {
 
   // google
   user!: User;
+  userId!: string;
+
   firestore: Firestore = inject(Firestore);
   private router = inject(Router);
 
   constructor(
     private authyService: AuthyService,
-    // private user: UserData,
-    private ngZone: NgZone
+    private ngZone: NgZone, // google
   ) { }
   isGuest: boolean | undefined;
 
@@ -107,35 +107,50 @@ export class LoginComponent implements OnInit {
       this.playAnimation();
     }
 
-    //google login
+    //google
     google.accounts.id.initialize({
       client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
       callback: (resp: any) => this.handleLogin(resp)
     });
-
-    //google login
-    google.accounts.id.renderButton(document.getElementById('google-btn'), {
-      theme: 'filled_blue',
-      size: 'large',
-      shape: 'rectangle',
-      width: 350
-    })
   }
 
-  //google login
+
+  // google login window
+  ngAfterViewInit(): void {
+    const customGoogleButton = document.getElementById('google-btn');
+    if (customGoogleButton) {
+      customGoogleButton.addEventListener('click', () => {
+        google.accounts.id.prompt((response: any) => {
+          if (response.isNotDisplayed() || response.isSkippedMoment()) {
+            document.cookie = `g_state=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT`;
+            google.accounts.id.prompt();
+          }
+        });
+      });
+    }
+  }
+
+  /**
+   * Google: Get all information from google login service
+   */
   private decodeToken(token: string) {
     return JSON.parse(atob(token.split('.')[1]));
   }
 
-  //google login
+  /**
+   * Google: convert google token in readable context (response.credential)
+   * Save the converted google data in session storage
+   * Define the essential data
+   * Check if user already exists
+   */
   async handleLogin(response: any) {
     if (response) {
       const payLoad = this.decodeToken(response.credential);
       sessionStorage.setItem('loggedInUser', JSON.stringify(payLoad));
 
-      const name = payLoad.given_name;
-      const email = payLoad.email;
-      const profileImg = payLoad.picture;
+      const name = payLoad.name; // find this in session storage
+      const email = payLoad.email; // find this in session storage
+      const profileImg = payLoad.picture; // find this in session storage
       const querySnapshot = await this.getUsersDocRef();
 
       const existingUser = querySnapshot.docs.find(doc => doc.data()['email'] === email); // email already exists?
@@ -148,15 +163,20 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  //google login
-  async redirect(token: string) {
+  /**
+   * Google: Redirect to landing page after successful google credentials
+   */
+  async redirect(userId: string) {
     this.ngZone.run(() => {
-      console.log('Weiterleitung auf landing page mit id: ', token);
+      console.log('Weiterleitung auf landing page mit id: ', userId);
       // this.router.navigate([``]);
     });
   }
 
-  // google
+  /**
+   * Google: Create a user with google information data
+   * Add doc id afterwards
+   */
   async addField(name: string, email: string, profileImg: string) {
     this.user = new User({
       name: name,
@@ -164,26 +184,50 @@ export class LoginComponent implements OnInit {
       profileImg: profileImg,
     });
     await this.addUser().then((result: any) => {
-      this.redirect(result.id);
+      this.userId = result.id;
+      this.user['userId'] = result.id;
+      this.save();
+      this.redirect(this.userId);
     });
   }
 
-  // google
+  /**
+   * Save doc id after creating the user
+   */
+  async save() {
+    let docRef = this.getSingleUserDocRef();
+    await updateDoc(docRef, this.user.toJson());
+  }
+
+  /**
+   * Get the doc of the current logging user
+   */
+  getSingleUserDocRef() {
+    return doc(this.getUsersColRef(), this.userId);
+  }
+
+  /**
+   * Google: Get firebase users collection
+   */
+  getUsersColRef() {
+    return collection(this.firestore, "users");
+  }
+
+  /**
+   * Add a user to firebase database
+   */
   async addUser() {
     const docRef = await addDoc(this.getUsersColRef(), this.user.toJson());
     return docRef;
   }
 
-  // google
+  /**
+   * Reference to all user docs
+   */
   async getUsersDocRef() {
     const q = query(this.getUsersColRef());
     const querySnapshot = await getDocs(q);
     return querySnapshot;
-  }
-
-  // google
-  getUsersColRef() {
-    return collection(this.firestore, "users");
   }
 
   get email() {
