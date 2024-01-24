@@ -1,4 +1,4 @@
-export interface UserData {
+export interface AppUser {
   name: string;
   email: string;
   userId: string;
@@ -6,28 +6,28 @@ export interface UserData {
   password: string;
 }
 
-export class AppUser {
+export class User {
   name: string;
   email: string;
-  userId: string;
   profileImg: string;
-  password: string;
+  userId?: string;
+  password?: string;
 
-  constructor(data?: UserData) {
-    this.name = data?.name || '';
-    this.email = data?.email || '';
-    this.userId = data?.userId || '';
-    this.profileImg = data?.profileImg || '';
-    this.password = data?.password || '';
+  constructor(obj?: any) {
+    this.name = obj && obj.name ? obj.name : '';
+    this.email = obj && obj.email ? obj.email : '';
+    this.userId = obj && obj.userId ? obj.userId : '';
+    this.profileImg = obj && obj.profileImg ? obj.profileImg : '';
+    this.password = obj && obj.password ? obj.password : '';
   }
 
-  toJSON() {
+  toJson() {
     return {
       name: this.name,
       email: this.email,
       userId: this.userId,
       profileImg: this.profileImg,
       password: this.password,
-    };
+    }
   }
 }

@@ -6,16 +6,16 @@ import {
   sendPasswordResetEmail,
   fetchSignInMethodsForEmail,
 } from '@angular/fire/auth';
-import { AppUser } from '../classes/user.class';
+import { User } from '../classes/user.class';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthyService {
-  constructor(private auth: Auth) {}
-//  private fireStore: AngularFirestore
-  async registerWithEmailAndPassword(user: AppUser) {
+  constructor(private auth: Auth) { }
+  //  private fireStore: AngularFirestore
+  async registerWithEmailAndPassword(user: User) {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         this.auth,
