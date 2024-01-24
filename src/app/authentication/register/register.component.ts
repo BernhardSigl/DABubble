@@ -42,7 +42,9 @@ export class RegisterComponent {
     private avatarDataService: AvatarDataService,
     // private firestore: AngularFirestore
   ) {
-    this.avatarDataService.selectedAvatar$.subscribe((avatarSrc) => {});
+    this.avatarDataService.selectedAvatar$.subscribe((avatarSrc) => {
+      console.log(avatarSrc)
+    });
   }
 
   async registerUser() {

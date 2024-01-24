@@ -1,14 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, fetchSignInMethodsForEmail } from '@angular/fire/auth';
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  fetchSignInMethodsForEmail,
+} from '@angular/fire/auth';
 import { AppUser } from '../classes/user.class';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthyService {
-
   constructor(private auth: Auth) {}
-
+//  private fireStore: AngularFirestore
   async registerWithEmailAndPassword(user: AppUser) {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -38,10 +44,7 @@ export class AuthyService {
 
   async forgotPassword(email: string) {
     try {
-      const userCredential = await sendPasswordResetEmail(
-        this.auth,
-        email
-      );
+      const userCredential = await sendPasswordResetEmail(this.auth, email);
       return userCredential;
     } catch (err) {
       throw err;
@@ -51,11 +54,10 @@ export class AuthyService {
   async checkEmailExists(email: string): Promise<any> {
     try {
       const userCredential = await fetchSignInMethodsForEmail(this.auth, email);
-      return userCredential ;
+      return userCredential;
     } catch (error) {
       console.error('Error checking email existence:', error);
       throw error;
     }
   }
-
 }
