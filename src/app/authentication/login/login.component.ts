@@ -19,8 +19,8 @@ import { Router, RouterModule } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthyService } from '../../firebase-services/authy.service';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { UserData} from '../../classes/user.class';
-import { Firestore, addDoc, } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, getDocs, query, } from '@angular/fire/firestore';
+import { User } from '../../classes/user.class'
 
 @Component({
   selector: 'app-login',
@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit {
     private authyService: AuthyService,
     // private user: UserData,
     private ngZone: NgZone
-) { }
+  ) { }
   isGuest: boolean | undefined;
 
   ngOnInit(): void {
@@ -158,7 +158,7 @@ export class LoginComponent implements OnInit {
 
   // google
   async addField(name: string, email: string, profileImg: string) {
-    this.user = new User ({
+    this.user = new User({
       name: name,
       email: email,
       profileImg: profileImg,
@@ -170,7 +170,7 @@ export class LoginComponent implements OnInit {
 
   // google
   async addUser() {
-    const docRef = await addDoc(this.getUsersColRef(), this.user.toJSON());
+    const docRef = await addDoc(this.getUsersColRef(), this.user.toJson());
     return docRef;
   }
 
@@ -201,10 +201,10 @@ export class LoginComponent implements OnInit {
     const guestEmail = 'guest@guest.de';
     const guestPassword = 'guest1';
 
-    this.authyService.loginWithEmailAndPassword(guestEmail,guestPassword);
+    this.authyService.loginWithEmailAndPassword(guestEmail, guestPassword);
     this.router.navigate(['/main']);
     console.log('logged in');
-  } catch (err: any) {
+  } catch(err: any) {
 
     if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
       window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');

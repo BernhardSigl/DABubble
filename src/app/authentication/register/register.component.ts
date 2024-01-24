@@ -42,9 +42,7 @@ export class RegisterComponent {
     private avatarDataService: AvatarDataService,
     // private firestore: AngularFirestore
   ) {
-    this.avatarDataService.selectedAvatar$.subscribe((avatarSrc) => {
-      console.log(avatarSrc)
-    });
+    this.avatarDataService.selectedAvatar$.subscribe((avatarSrc) => { });
   }
 
   async registerUser() {
@@ -65,10 +63,10 @@ export class RegisterComponent {
         const userCredential =
           await this.authyService.registerWithEmailAndPassword(user);
 
-          const userId = userCredential.user?.uid;
-          // if (userId) {
-          //   await this.fireStore.collection('users').doc(userId).set(user.toJson());
-          // }
+        const userId = userCredential.user?.uid;
+        // if (userId) {
+        //   await this.fireStore.collection('users').doc(userId).set(user.toJson());
+        // }
         this.router.navigate(['/chooseAvatar'], {
           queryParams: { name: user.name },
         });
