@@ -6,7 +6,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { AuthyService } from '../../firebase-services/authy.service';
-import { HotToastService } from '@ngneat/hot-toast';
 
 @Component({
   selector: 'app-forget-password',
@@ -16,7 +15,6 @@ import { HotToastService } from '@ngneat/hot-toast';
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-
     MatInputModule
   ],
   templateUrl: './forget-password.component.html',
@@ -28,7 +26,7 @@ export class ForgetPasswordComponent implements OnInit{
     email: new FormControl('', [Validators.required, Validators.email]),
   })
 
-  constructor(private authService:AuthyService,private toast: HotToastService){}
+  constructor(private authService:AuthyService){}
 
   ngOnInit(): void {
 
@@ -43,17 +41,13 @@ export class ForgetPasswordComponent implements OnInit{
 
         if (emailExists) {
           await this.authService.forgotPassword(email);
-          this.toast.success('Reset email sent successfully');
           console.log('Reset email sent successfully');
         } else {
           console.log('Email is not registered in the system.');
         }
       } catch (error) {
         console.error('Error:', error);
-        this.toast.error('An error occurred');
       }
     }
   }
-
-
 }

@@ -5,8 +5,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthenticationService } from '../../firebase-services/authentication.service';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthyService } from '../../firebase-services/authy.service';
 import { UserData,AppUser } from '../../classes/user.class';
 import { AvatarDataService } from '../../firebase-services/avatar-data.service';
@@ -36,7 +34,7 @@ export class RegisterComponent {
 
   constructor(private router: Router, private authyService:AuthyService,    private avatarDataService: AvatarDataService) {
         this.avatarDataService.selectedAvatar$.subscribe((avatarSrc) => {
-          console.log('Selected Avatar:', avatarSrc);
+
         });
   }
 

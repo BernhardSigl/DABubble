@@ -1,17 +1,14 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-
-import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { HotToastModule } from '@ngneat/hot-toast';
+import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    [HotToastModule.forRoot()],
+
     provideRouter(routes),
     provideAnimations(),
     importProvidersFrom(
@@ -29,5 +26,4 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(provideAuth(() => getAuth())),
     importProvidersFrom(provideFirestore(() => getFirestore())),
   ],
-
 };
