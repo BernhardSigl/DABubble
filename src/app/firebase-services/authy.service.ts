@@ -4,6 +4,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  getAuth,
+  UserCredential,
   fetchSignInMethodsForEmail,
 } from '@angular/fire/auth';
 import { User } from '../classes/user.class';
@@ -13,14 +15,18 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
   providedIn: 'root',
 })
 export class AuthyService {
-  constructor(private auth: Auth) { }
+  constructor(private auth: Auth) {
+    this.auth = getAuth();
+  }
+
   //  private fireStore: AngularFirestore
-  async registerWithEmailAndPassword(user: User) {
+
+  async registerWithEmailAndPassword(user: User): Promise<UserCredential> {
     try {
       const userCredential = await createUserWithEmailAndPassword(
-        this.auth,
-        user.email,
-        user.password
+        this.auth as any,
+        user.email || '',
+        user.password || ''
       );
       return userCredential;
     } catch (err) {
