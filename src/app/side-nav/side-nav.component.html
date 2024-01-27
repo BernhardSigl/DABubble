@@ -1,1 +1,18 @@
-<p>side-nav works!</p>
+<mat-drawer-container class="sidenav-wrapper" autosize>
+    <mat-drawer #drawer class="sidenav-container" mode="side">
+       <div class="channel-header">
+        <img src="./../../assets/img/channel-logo.png">
+        <p>Code learning</p>
+        <img src="./../../assets/img/edit-channel.png" alt="">
+       </div>
+       
+       
+    </mat-drawer>
+</mat-drawer-container>
+
+<div class="sidenav-button">
+    <button type="button" mat-button (click)="drawer.toggle()">
+        Workspace-Menü schließen
+        <img src="./../../assets/img/hide-nav-black.png">
+    </button>
+</div>

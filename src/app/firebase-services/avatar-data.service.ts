@@ -11,4 +11,6 @@ export class AvatarDataService {
   setSelectedAvatar(avatarSrc: string) {
     this.selectedAvatarSource.next(avatarSrc);
   }
+
+  
 }
