@@ -44,38 +44,6 @@ export class RegisterComponent {
   }
 
 
-<<<<<<< HEAD
-=======
-      const userData: User =new User( {
-        name: formData.name || '',
-        email: formData.email || '',
-        userId: '',
-        profileImg: '',
-        password: formData.password || '',
-
-      });
-
-      const user = new User(userData);
-      console.log(user);
-      try {
-        const userCredential =
-          await this.authyService.registerWithEmailAndPassword(user.toJson());
-
-        const userId = userCredential.user?.uid;
-        // if (userId) {
-        //   await this.fireStore.collection('users').doc(userId).set(user.toJson());
-        // }
-        this.router.navigate(['/chooseAvatar'], {
-          queryParams: { name: user.name },
-        });
-      } catch (error) {
-        console.error(error);
-        alert('Registration failed. Please try again.');
-      }
-    }
-  }
->>>>>>> main
-
   isValidForm(): boolean {
     return this.loginForm.valid && this.checkboxChecked;
   }
