@@ -45,29 +45,29 @@
         </div>
 
 
-      <div class="forgot-password">
-        <a routerLink="/forgot">Passwort vergessen?</a>
-      </div>
+        <div class="forgot-password">
+          <a routerLink="/forgot">Passwort vergessen?</a>
+        </div>
 
-      <div class="login-divider">
-        <mat-divider></mat-divider>
-        <span>ODER</span>
-        <mat-divider></mat-divider>
-      </div>
-      <div class="login-methods">
-        <div class="google-btn-div">
-          <div class="google-login">
-            <img src="../../../assets/img/Google.png" alt="" />
-            <span>Anmelden mit Google</span>
+        <div class="login-divider">
+          <mat-divider></mat-divider>
+          <span>ODER</span>
+          <mat-divider></mat-divider>
+        </div>
+        <div class="login-methods">
+          <div class="google-btn-div" id="google-btn">
+            <div class="google-login">
+              <img src="../../../assets/img/Google.png" alt="" />
+              <span>Anmelden mit Google</span>
+            </div>
+          </div>
+          <div class="login-btns-div">
+            <button type="submit" class="login-btn">Anmelden</button>
+            <button (click)="loginAsGuest()" class="guest-login">Gäste-Login</button>
           </div>
         </div>
-        <div class="login-btns-div">
-          <button   type="submit" class="login-btn">Anmelden</button>
-          <button (click)="loginAsGuest()" class="guest-login">Gäste-Login</button>
-        </div>
-      </div>
-      <div id="google-btn"></div>
-    </form>
+        <div></div>
+      </form>
     </div>
 
     <!-- Imprint Data Policy -->

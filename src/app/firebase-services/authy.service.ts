@@ -7,21 +7,29 @@ import {
   getAuth,
   UserCredential,
   fetchSignInMethodsForEmail,
+  getAuth
 } from '@angular/fire/auth';
-import { User } from '../classes/user.class';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AppUser } from '../classes/user.class';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthyService {
   constructor(private auth: Auth) {
+<<<<<<< HEAD
     this.auth = getAuth();
   }
 
   //  private fireStore: AngularFirestore
 
   async registerWithEmailAndPassword(user: User): Promise<UserCredential> {
+=======
+    this.auth = getAuth()
+  }
+
+  async registerWithEmailAndPassword(user: AppUser) {
+>>>>>>> main
     try {
       const userCredential = await createUserWithEmailAndPassword(
         this.auth as any,
