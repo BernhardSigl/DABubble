@@ -2,11 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AvatarDataService } from '../../../firebase-services/avatar-data.service';
 import { AuthyService } from '../../../firebase-services/authy.service';
-<<<<<<< HEAD
-import { AppUser , User} from '../../../classes/user.class';
-=======
 import { AppUser, User } from '../../../classes/user.class';
->>>>>>> main
+
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { Firestore, addDoc, collection, getDocs, query, } from '@angular/fire/firestore';
 @Component({
