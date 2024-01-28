@@ -43,10 +43,9 @@ export class RegisterComponent {
     this.avatarDataService.selectedAvatar$.subscribe((avatarSrc) => { });
   }
 
-  async registerUser() {
-    if (this.isValidForm()) {
-      const formData = this.loginForm.value;
 
+<<<<<<< HEAD
+=======
       const userData: User =new User( {
         name: formData.name || '',
         email: formData.email || '',
@@ -75,6 +74,7 @@ export class RegisterComponent {
       }
     }
   }
+>>>>>>> main
 
   isValidForm(): boolean {
     return this.loginForm.valid && this.checkboxChecked;
@@ -87,7 +87,9 @@ export class RegisterComponent {
   navigateToChooseAvatar() {
     if (this.isValidForm()) {
       const name = this.loginForm.get('name')?.value;
-      this.router.navigate(['/chooseAvatar'], { queryParams: { name: name } });
+      const email = this.loginForm.get('email')?.value;
+      const password = this.loginForm.get('password')?.value;
+      this.router.navigate(['/chooseAvatar'], { queryParams: { name: name, email:email, password:password } });
     }
   }
 }
