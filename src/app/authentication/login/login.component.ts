@@ -281,7 +281,8 @@ export class LoginComponent implements OnInit {
   async login(email: string, password: string) {
     try {
       const userCredential = await this.authyService.loginWithEmailAndPassword(email, password);
-      this.router.navigate(['/main']);
+      this.router.navigate(['/main'], {queryParams:{email:this.email}});
+      
       console.log('logged in');
     } catch (err: any) {
 

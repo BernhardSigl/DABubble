@@ -5,7 +5,8 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   fetchSignInMethodsForEmail,
-  getAuth
+  getAuth,
+  UserInfo
 } from '@angular/fire/auth';
 import { AppUser } from '../classes/user.class';
 
@@ -63,4 +64,7 @@ export class AuthyService {
       throw error;
     }
   }
+
+
+
 }
