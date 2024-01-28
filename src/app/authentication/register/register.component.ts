@@ -43,6 +43,7 @@ export class RegisterComponent {
     this.avatarDataService.selectedAvatar$.subscribe((avatarSrc) => { });
   }
 
+
   isValidForm(): boolean {
     return this.loginForm.valid && this.checkboxChecked;
   }

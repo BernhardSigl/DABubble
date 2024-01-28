@@ -3,9 +3,11 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AvatarDataService } from '../../../firebase-services/avatar-data.service';
 import { AuthyService } from '../../../firebase-services/authy.service';
 import { AppUser, User } from '../../../classes/user.class';
-
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { Firestore, addDoc, collection, getDocs, query, } from '@angular/fire/firestore';
+
+
+
 @Component({
   selector: 'app-choose-avater',
   standalone: true,
@@ -69,7 +71,7 @@ export class ChooseAvaterComponent implements OnInit {
     const user = new User({
       name: this.userName,
       email: this.email,
-      userId: '',
+      userId:'',
       profileImg: avatarSrc,
       password: this.password,
     });

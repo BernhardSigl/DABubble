@@ -18,7 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthyService } from '../../firebase-services/authy.service';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { Firestore, addDoc, collection, doc, getDocs, query, updateDoc, } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, getDocs, query, updateDoc, where, } from '@angular/fire/firestore';
 import { User } from '../../classes/user.class'
 
 @Component({
@@ -112,6 +112,8 @@ export class LoginComponent implements OnInit {
       client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
       callback: (resp: any) => this.handleLogin(resp)
     });
+
+
   }
 
 
@@ -278,10 +280,14 @@ export class LoginComponent implements OnInit {
   }
 
 
+
   async login(email: string, password: string) {
     try {
       const userCredential = await this.authyService.loginWithEmailAndPassword(email, password);
-      this.router.navigate(['/main']);
+      this.userId = userCredential.user?.uid;
+      console.log('UserID:', this.userId);
+      this.router.navigate(['/main'], {queryParams:{userId:this.userId}});
+
       console.log('logged in');
     } catch (err: any) {
 

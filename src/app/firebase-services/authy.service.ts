@@ -17,11 +17,9 @@ import { AppUser } from '../classes/user.class';
 })
 export class AuthyService {
   constructor(private auth: Auth) {
+
     this.auth = getAuth();
   }
-
-
-
 
   async registerWithEmailAndPassword(user: AppUser) {
 
