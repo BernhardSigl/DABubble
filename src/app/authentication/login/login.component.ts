@@ -113,7 +113,7 @@ export class LoginComponent implements OnInit {
       callback: (resp: any) => this.handleLogin(resp)
     });
 
-    this.getUserIdFromFirestore()
+
   }
 
 
@@ -279,28 +279,15 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  async getUserIdFromFirestore(){
-    try{
-      const usersCollection = collection(this.firestore,'users');
-      const q = query(usersCollection, where('userId','==', this.userId));
-      const querySnapshot = await getDocs(q);
 
-      querySnapshot.forEach(doc=>{
-        const userData = doc.data();
-        this.userId = userData['userId'];
-        console.log(this.userId)
-      });
-    }catch(err){
-      console.error(err)
-    }
-  }
 
   async login(email: string, password: string) {
     try {
       const userCredential = await this.authyService.loginWithEmailAndPassword(email, password);
+      this.userId = userCredential.user?.uid;
       console.log('UserID:', this.userId);
       this.router.navigate(['/main'], {queryParams:{userId:this.userId}});
-      
+
       console.log('logged in');
     } catch (err: any) {
 
