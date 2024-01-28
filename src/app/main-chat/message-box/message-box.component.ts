@@ -1,12 +1,25 @@
 import { Component } from '@angular/core';
-
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { PickerModule } from "@ctrl/ngx-emoji-mart";
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-message-box',
   standalone: true,
-  imports: [],
+  imports: [MatDividerModule, MatTooltipModule,PickerModule, CommonModule, FormsModule],
   templateUrl: './message-box.component.html',
-  styleUrl: './message-box.component.scss'
+  styleUrl: './message-box.component.scss',
 })
 export class MessageBoxComponent {
+  public textArea: string = "";
+  public isEmojiPickerVisible: boolean = false;
 
+  toggleEmojiPicker() {
+    this.isEmojiPickerVisible = !this.isEmojiPickerVisible;
+  }
+
+  addEmoji(event: { emoji: { native: any } }) {
+    this.textArea += event.emoji.native;
+  }
 }

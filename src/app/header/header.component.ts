@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AvatarDataService } from '../firebase-services/avatar-data.service';
 import { Firestore, addDoc, collection, getDocs, query, where} from '@angular/fire/firestore';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { AngularFireAuth } from '@angular/fire/compat/auth'; 
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-header',
@@ -19,11 +19,10 @@ export class HeaderComponent implements OnInit {
   userImage: string = '';
 
   constructor(private firestore: Firestore,private route: ActivatedRoute) {
-   
+
   }
 
   ngOnInit() {
-    debugger;
     this.route.queryParams.subscribe(params=>{
       this.userId = params['userId'];
       console.log(this.userId)
@@ -48,7 +47,7 @@ export class HeaderComponent implements OnInit {
 
         console.log(this.userName, this.userEmail, this.userImage)
       })
-      
+
     }
     catch(err){
       console.error(err)

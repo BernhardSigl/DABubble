@@ -1,0 +1,14 @@
+.desktop-view{
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 25px;
+  .main-chat{
+    margin-top: 20px;
+    height: 80vh;
+    background: var(--white);
+    border-radius: 30px;
+    width: 989px;
+    margin-right: 20px;
+  }
+}

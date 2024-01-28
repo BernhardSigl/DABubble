@@ -1,3 +1,16 @@
 <div class="message-box">
-  <textarea placeholder="Nachricht an #Entwicklerteam"></textarea>
+  <textarea class="textarea" placeholder="Nachricht an #Entwicklerteam" [(ngModel)]="textArea"></textarea>
+
+  <div class="add-ons">
+    <img matTooltip="Add Image" src="../../../assets/img/add.png" class="add">
+    <mat-divider class="vertical-divider"></mat-divider>
+    <img matTooltip="Open the emoji" class="emoji" src="../../../assets/img/emoji.png" (click)="toggleEmojiPicker()">
+    <emoji-mart
+      class="emoji-mart"
+      *ngIf="isEmojiPickerVisible"
+      (emojiSelect)="addEmoji($event)"
+      title="Choose your emoji"
+    ></emoji-mart>
+    <img matTooltip="mention someone" src="../../../assets/img/at-grey.png" alt="" class="mention">
+  </div>
 </div>

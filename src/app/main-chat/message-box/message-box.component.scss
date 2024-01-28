@@ -1,0 +1,52 @@
+.message-box{
+  position: fixed;
+  bottom: 65px;
+  padding: 0 35px 40px 35px;
+  width: 100%;
+
+  textarea{
+    width: 77%;
+    border-radius: 20px;
+    border: 1px solid var(--ligth-purple-lines, #ADB0D9);
+    height: 100px;
+    font-size: 18px;
+    padding: 30px;
+    caret-color: auto;
+    outline: none;
+    position: relative;
+  }
+}
+
+.add-ons{
+  display: flex;
+  gap: 13px;
+  position: absolute;
+  bottom: 60px;
+  left: 66px;
+
+  img{
+    cursor: pointer;
+  }
+}
+
+.vertical-divider {
+  width: 1px;
+  height: 22px;
+  margin: 0 5px;
+  background-color: #ADB0D9;
+}
+
+emoji-mart{
+  max-height: 30rem;
+    overflow: auto;
+    position: absolute;
+    bottom: 20px;
+}
+
+.emoji-mart-bar{
+  display: none !important;
+}
+
+emoji-mart-bar{
+  display:none !important;
+}
