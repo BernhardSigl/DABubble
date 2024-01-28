@@ -13,5 +13,10 @@ import { MatDrawer } from '@angular/material/sidenav';
   styleUrl: './side-nav.component.scss'
 })
 export class SideNavComponent {
-  // @ViewChild('drawer') drawer: MatDrawer | undefined;
+  buttonImage: string = './../../assets/img/hide-nav-black.png';
+
+  changeImage(isHovered: boolean): void {
+    this.buttonImage = isHovered ? './../../assets/img/hide-nav-blue.png' : './../../assets/img/hide-nav-black.png';
+  }
+
 }

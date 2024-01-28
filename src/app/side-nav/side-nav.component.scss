@@ -8,8 +8,8 @@
 
 .sidenav-container {
     border-radius: 1.875rem;
-    margin-left: 20px;
-    padding: 32px 30px;
+    margin-left: 1.25rem;
+    padding: 2rem 1.875rem;
 
 
     .channel-header {
@@ -18,9 +18,10 @@
         align-items: center;
         flex-direction: row;
         width: 19.125rem;
+        padding-bottom: 1.5625rem;
 
         p {
-            font-size: 24px;
+            font-size: 1.5rem;
             font-weight: 700;
         }
     }
@@ -35,19 +36,47 @@
     justify-content: center;
     writing-mode: vertical-lr;
     height: 21.6875rem;
-    width: 50px;
+    width: 3.125rem;
     align-items: center;
-    border-top-right-radius: 40px;
-    border-bottom-right-radius: 40px;
+    border-top-right-radius: 2.5rem;
+    border-bottom-right-radius: 2.5rem;
     border: unset;
     background: var(--White, #FFF);
-    box-shadow: 4px 4px 7px #0003;
+    box-shadow: .25rem .25rem .4375rem #0003;
     cursor: pointer;
 
     button {
         transform: rotate(180deg);
         background: var(--White, #FFF);
         border: none;
-        font-size: 20px;
+        font-size: 1.25rem;
+
+        &:hover {
+            color: #535AF1;
+            font-weight: 600;
+        }
+    }
+}
+
+.channels-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.choose-channels {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .choose-channel {
+        display: flex;
+        padding: 5px 10px 5px 0px;
+        align-items: center;
+        gap: 15px;
+
+        p{
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
     }
 }

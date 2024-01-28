@@ -1,18 +1,29 @@
 <mat-drawer-container class="sidenav-wrapper" autosize>
     <mat-drawer #drawer class="sidenav-container" mode="side">
-       <div class="channel-header">
-        <img src="./../../assets/img/channel-logo.png">
-        <p>Code learning</p>
-        <img src="./../../assets/img/edit-channel.png" alt="">
-       </div>
-       
-       
+        <div class="channel-header">
+            <img src="./../../assets/img/channel-logo.png">
+            <p>Code learning</p>
+            <img src="./../../assets/img/edit-channel.png" alt="">
+        </div>
+        <div class="channels-content">
+            <div class="choose-channels"> 
+                <div class="choose-channel">
+                    <img src="./../../assets/img/arrow-drop-down-black.png">
+                    <img src="./../../assets/img/workspaces-black.png">
+                    <p>Channels</p>
+                </div>
+                <img src="./../../assets/img/plus-black.png">
+            </div>    
+        </div>
+    
+
     </mat-drawer>
 </mat-drawer-container>
 
 <div class="sidenav-button">
-    <button type="button" mat-button (click)="drawer.toggle()">
+    <button type="button" mat-button (click)="drawer.toggle()" (mouseenter)="changeImage(true)"
+        (mouseleave)="changeImage(false)">
         Workspace-Menü schließen
-        <img src="./../../assets/img/hide-nav-black.png">
+        <img [src]="buttonImage">
     </button>
 </div>
