@@ -1,10 +1,9 @@
 .message-box{
-  position: fixed;
-  bottom: 65px;
-  padding: 0 35px 40px 35px;
-  width: 92%;
+  position: relative;
+  padding: 0 35px 10px 35px;
+  width: 100%;
   textarea{
-    width: 100%;
+    width:  calc(100% - 120px);;
     border-radius: 20px;
     border: 1px solid var(--ligth-purple-lines, #ADB0D9);
     height: 100px;
@@ -21,7 +20,7 @@
   display: flex;
   gap: 13px;
   position: absolute;
-  bottom: 60px;
+  bottom: 25px;
   left: 50px;
   width: 100%;
   img{
@@ -46,5 +45,6 @@ emoji-mart{
 
 .send{
   position: absolute;
-  right: 30px;
+  right: 150px;
+  bottom: -5px;
 }
