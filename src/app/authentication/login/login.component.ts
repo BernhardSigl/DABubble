@@ -20,6 +20,7 @@ import { AuthyService } from '../../firebase-services/authy.service';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { Firestore, addDoc, collection, doc, getDocs, query, updateDoc, } from '@angular/fire/firestore';
 import { User } from '../../classes/user.class'
+import { FirebaseService } from '../../firebase-services/firebase.service';
 
 @Component({
   selector: 'app-login',
@@ -99,6 +100,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private authyService: AuthyService,
     private ngZone: NgZone, // google
+    public firebase: FirebaseService, // push userId in firebase service
   ) { }
   isGuest: boolean | undefined;
 
@@ -169,7 +171,9 @@ export class LoginComponent implements OnInit {
   async redirect(userId: string) {
     this.ngZone.run(() => {
       console.log('Weiterleitung auf landing page mit id: ', userId);
-      // this.router.navigate([``]);
+      localStorage.clear();
+      localStorage.setItem('userId', userId);
+      this.router.navigate([`/main`]);
     });
   }
 
