@@ -110,9 +110,11 @@ export class LoginComponent implements OnInit {
     }
 
     //google
-    google.accounts.id.initialize({
-      client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
-      callback: (resp: any) => this.handleLogin(resp)
+    this.loadGoogleApi(() => {
+      google.accounts.id.initialize({
+        client_id: '48091826759-81j87796gcoeko02ls6hjvjbkunvaolj.apps.googleusercontent.com',
+        callback: (resp: any) => this.handleLogin(resp)
+      });
     });
   }
 
@@ -122,13 +124,27 @@ export class LoginComponent implements OnInit {
     const customGoogleButton = document.getElementById('google-btn');
     if (customGoogleButton) {
       customGoogleButton.addEventListener('click', () => {
-        google.accounts.id.prompt((response: any) => {
-          if (response.isNotDisplayed() || response.isSkippedMoment()) {
+        this.loadGoogleApi(() => {
+          google.accounts.id.prompt(() => {
             document.cookie = `g_state=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT`;
             google.accounts.id.prompt();
-          }
+          });
         });
       });
+    }
+  }
+
+  // google
+  private loadGoogleApi(callback: () => void): void {
+    if (typeof google === 'undefined' || !google.accounts) {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = callback;
+      document.head.appendChild(script);
+    } else {
+      callback();
     }
   }
 
@@ -186,6 +202,7 @@ export class LoginComponent implements OnInit {
       name: name,
       email: email,
       profileImg: profileImg,
+      status: false
     });
     await this.addUser().then((result: any) => {
       this.userId = result.id;

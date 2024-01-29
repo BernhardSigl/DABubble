@@ -4,6 +4,7 @@ export interface AppUser {
   userId?: string;
   profileImg?: string;
   password?: string;
+  // status?: boolean;
 }
 
 export class User {
@@ -12,13 +13,15 @@ export class User {
   profileImg?: string;
   userId?: string;
   password?: string;
+  status?: boolean
 
   constructor(obj?: any) {
     this.name = obj && obj.name ? obj.name : '';
     this.email = obj && obj.email ? obj.email : '';
     this.userId = obj && obj.userId ? obj.userId : '';
     this.profileImg = obj && obj.profileImg ? obj.profileImg : '';
-    this.password = obj && obj.password ? obj.password : '';
+    this.password = obj && obj.password ? obj.password : ''
+    this.status = obj.status || false;
   }
 
   toJson() {
@@ -28,6 +31,7 @@ export class User {
       userId: this.userId,
       profileImg: this.profileImg,
       password: this.password,
+      status: this.status
     }
   }
 }
