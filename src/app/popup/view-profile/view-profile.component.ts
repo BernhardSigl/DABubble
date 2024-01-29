@@ -8,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './view-profile.component.scss'
 })
 export class ViewProfileComponent {
+  onlineStatus = false;
+
 
 }
