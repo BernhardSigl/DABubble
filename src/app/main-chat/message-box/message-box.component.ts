@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component , ElementRef , ViewChild} from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
@@ -14,6 +14,10 @@ import { FormsModule } from '@angular/forms';
 export class MessageBoxComponent {
   public textArea: string = "";
   public isEmojiPickerVisible: boolean = false;
+  @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
+
+
+  constructor(private elementRef: ElementRef) {}
 
   toggleEmojiPicker() {
     this.isEmojiPickerVisible = !this.isEmojiPickerVisible;
@@ -21,5 +25,8 @@ export class MessageBoxComponent {
 
   addEmoji(event: { emoji: { native: any } }) {
     this.textArea += event.emoji.native;
+    this.isEmojiPickerVisible = false;
   }
+
+
 }
