@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { FirebaseService } from '../../firebase-services/firebase.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-view-profile',
@@ -8,7 +10,14 @@ import { Component } from '@angular/core';
   styleUrl: './view-profile.component.scss'
 })
 export class ViewProfileComponent {
-  onlineStatus = false;
+  constructor(
+    public firebase: FirebaseService,
+  ) {
+  }
+
+  async ngOnInit(): Promise<void> {
+    await this.firebase.ngOnInit();
+  }
 
 
 }

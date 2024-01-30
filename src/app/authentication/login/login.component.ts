@@ -184,11 +184,13 @@ export class LoginComponent implements OnInit {
   /**
    * Google: Redirect to landing page after successful google credentials
    */
-  async redirect(userId: string) {
-    this.ngZone.run(() => {
+  redirect(userId: string) {
+    this.ngZone.run(async () => {
       console.log('Weiterleitung auf landing page mit id: ', userId);
       localStorage.clear();
       localStorage.setItem('userId', userId);
+      await this.firebase.ngOnInit();
+      await this.firebase.online();
       this.router.navigate([`/main`]);
     });
   }
@@ -202,7 +204,8 @@ export class LoginComponent implements OnInit {
       name: name,
       email: email,
       profileImg: profileImg,
-      status: false
+      status: false,
+      statusChangeable: false
     });
     await this.addUser().then((result: any) => {
       this.userId = result.id;

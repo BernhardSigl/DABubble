@@ -5,6 +5,7 @@ export interface AppUser {
   profileImg?: string;
   password?: string;
   // status?: boolean;
+  // statusChangeable?: boolean;
 }
 
 export class User {
@@ -14,6 +15,7 @@ export class User {
   userId?: string;
   password?: string;
   status?: boolean
+  statusChangeable?: boolean;
 
   constructor(obj?: any) {
     this.name = obj && obj.name ? obj.name : '';
@@ -21,7 +23,8 @@ export class User {
     this.userId = obj && obj.userId ? obj.userId : '';
     this.profileImg = obj && obj.profileImg ? obj.profileImg : '';
     this.password = obj && obj.password ? obj.password : ''
-    this.status = obj.status || false;
+    this.status = obj && obj.status ? obj.status : false;
+    this.statusChangeable = obj && obj.statusChangeable ? obj.statusChangeable : false;
   }
 
   toJson() {
@@ -31,7 +34,8 @@ export class User {
       userId: this.userId,
       profileImg: this.profileImg,
       password: this.password,
-      status: this.status
+      status: this.status,
+      statusChangeable: this.statusChangeable
     }
   }
 }

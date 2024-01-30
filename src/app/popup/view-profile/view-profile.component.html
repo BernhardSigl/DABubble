@@ -13,10 +13,10 @@
         </div>
 
         <div class="name-and-status">
-            <h2 class="bold">Noah Braun</h2>
+            <h2 class="bold">{{ firebase.name }}</h2>
             <div class="horicontal status">
-                <img [src]="onlineStatus ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'">
-                <h5>{{ onlineStatus ? 'Online' : 'Abwesend' }}</h5>
+                <img [src]="firebase.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'">
+                <h5>{{ firebase.status ? 'Online' : 'Abwesend' }}</h5>
             </div>
         </div>
 
@@ -25,9 +25,10 @@
                 <img src="./../../../assets/img/mail-black.png">
                 <h5 class="bold">E-Mail Adresse</h5>
             </div>
-            <div class="email fs18">test</div>
+            <div class="email fs18">{{ firebase.email }}</div>
         </div>
-
+        <!-- <button (click)="firebase.online()">ONLINE</button>
+        <button (click)="firebase.offline()">OFFLINE</button> -->
 
     </div>
 
