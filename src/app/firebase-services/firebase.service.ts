@@ -11,6 +11,7 @@ export class FirebaseService {
   status!: boolean;
   statusChangeable!: boolean;
   email!: string;
+  profileImg!: string;
 
   usersArray: any[] = [];
   loggedInUserId!: string;
@@ -88,8 +89,6 @@ export class FirebaseService {
     this.status = loggedInUserInfo.status;
     this.statusChangeable = loggedInUserInfo.statusChangeable;
     this.email = loggedInUserInfo.email;
-
-    console.log('status', this.status);
-    console.log('statusChangeable', this.statusChangeable);
+    this.profileImg = loggedInUserInfo.profileImg;
   }
 }

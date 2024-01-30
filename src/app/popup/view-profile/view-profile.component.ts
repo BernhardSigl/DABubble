@@ -1,17 +1,19 @@
 import { Component } from '@angular/core';
 import { FirebaseService } from '../../firebase-services/firebase.service';
-import { ChangeDetectorRef } from '@angular/core';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-view-profile',
   standalone: true,
-  imports: [],
+  imports: [
+  ],
   templateUrl: './view-profile.component.html',
   styleUrl: './view-profile.component.scss'
 })
 export class ViewProfileComponent {
   constructor(
     public firebase: FirebaseService,
+    private sanitizer: DomSanitizer
   ) {
   }
 
@@ -19,5 +21,8 @@ export class ViewProfileComponent {
     await this.firebase.ngOnInit();
   }
 
-
+  getSafeProfileImageStyle(): SafeStyle {
+    const backgroundImage = `url('${this.firebase.profileImg}')`;
+    return this.sanitizer.bypassSecurityTrustStyle(backgroundImage);
+  }
 }

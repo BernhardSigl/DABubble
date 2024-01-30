@@ -9,7 +9,7 @@
         </div>
 
         <div class="profile-img-position">
-            <img src="./../../../assets/img/profile-1.png" class="profile-img">
+            <div [style.background-image]="'url(' + firebase.profileImg + ')'" class="profile-img"></div>
         </div>
 
         <div class="name-and-status">
@@ -25,7 +25,7 @@
                 <img src="./../../../assets/img/mail-black.png">
                 <h5 class="bold">E-Mail Adresse</h5>
             </div>
-            <div class="email fs18">{{ firebase.email }}</div>
+            <a href="mailto:{{ firebase.email }}" class="email fs18">{{ firebase.email }}</a>
         </div>
         <!-- <button (click)="firebase.online()">ONLINE</button>
         <button (click)="firebase.offline()">OFFLINE</button> -->

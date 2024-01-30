@@ -41,7 +41,10 @@
 
     .profile-img {
         height: 100%;
-        border-radius: 100%;
+        aspect-ratio: 1/1;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 50%;
     }
 }
 
