@@ -20,6 +20,7 @@ import { AuthyService } from '../../firebase-services/authy.service';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { Firestore, addDoc, collection, doc, getDocs, query, updateDoc, where, } from '@angular/fire/firestore';
 import { User } from '../../classes/user.class'
+import { FirebaseService } from '../../firebase-services/firebase.service';
 
 @Component({
   selector: 'app-login',
@@ -99,6 +100,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private authyService: AuthyService,
     private ngZone: NgZone, // google
+    public firebase: FirebaseService, // push userId in firebase service
   ) { }
   isGuest: boolean | undefined;
 
@@ -108,9 +110,11 @@ export class LoginComponent implements OnInit {
     }
 
     //google
-    google.accounts.id.initialize({
-      client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
-      callback: (resp: any) => this.handleLogin(resp)
+    this.loadGoogleApi(() => {
+      google.accounts.id.initialize({
+        client_id: '48091826759-81j87796gcoeko02ls6hjvjbkunvaolj.apps.googleusercontent.com',
+        callback: (resp: any) => this.handleLogin(resp)
+      });
     });
 
 
@@ -122,13 +126,27 @@ export class LoginComponent implements OnInit {
     const customGoogleButton = document.getElementById('google-btn');
     if (customGoogleButton) {
       customGoogleButton.addEventListener('click', () => {
-        google.accounts.id.prompt((response: any) => {
-          if (response.isNotDisplayed() || response.isSkippedMoment()) {
+        this.loadGoogleApi(() => {
+          google.accounts.id.prompt(() => {
             document.cookie = `g_state=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT`;
             google.accounts.id.prompt();
-          }
+          });
         });
       });
+    }
+  }
+
+  // google
+  private loadGoogleApi(callback: () => void): void {
+    if (typeof google === 'undefined' || !google.accounts) {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = callback;
+      document.head.appendChild(script);
+    } else {
+      callback();
     }
   }
 
@@ -168,10 +186,14 @@ export class LoginComponent implements OnInit {
   /**
    * Google: Redirect to landing page after successful google credentials
    */
-  async redirect(userId: string) {
-    this.ngZone.run(() => {
+  redirect(userId: string) {
+    this.ngZone.run(async () => {
       console.log('Weiterleitung auf landing page mit id: ', userId);
-      // this.router.navigate([``]);
+      localStorage.clear();
+      localStorage.setItem('userId', userId);
+      await this.firebase.ngOnInit();
+      await this.firebase.online();
+      this.router.navigate([`/main`]);
     });
   }
 
@@ -184,6 +206,8 @@ export class LoginComponent implements OnInit {
       name: name,
       email: email,
       profileImg: profileImg,
+      status: false,
+      statusChangeable: false
     });
     await this.addUser().then((result: any) => {
       this.userId = result.id;

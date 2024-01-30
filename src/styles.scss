@@ -20,6 +20,7 @@ body {
     --white: #fff;
     --secondary: #797EF3;
     --main-font: 'Nunito';
+    --third: #1381FF;
 }
 
 app-login {
@@ -44,6 +45,10 @@ input {
     line-height: normal;
 }
 
+.bold {
+    font-weight: 700;
+}
+
 h1,
 h2,
 h3,
@@ -62,7 +67,7 @@ h1 {
 }
 
 h2 {
-    font-size: 2.111rem;
+    font-size: 2rem; // 32px
 }
 
 // 20, 32 sind sehr selten und sollten einzeln benutzt werden
@@ -72,11 +77,39 @@ h3 {
 }
 
 h4 {
-    font-size: 1.444rem;
+    font-size: 1.5rem;
 }
 
 h5 {
-    font-size: 1.222rem;
+    font-size: 1.25rem; //20px
+}
+
+.fs18 {
+    font-size: 1.125rem;
+}
+
+.icon {
+    width: 1.5rem; // 24px
+    height: 1.5rem;
+    cursor: pointer;
+}
+
+.horicontal {
+    display: flex;
+    align-items: center;
+}
+
+.vertical {
+    display: flex;
+    justify-content: center;
+}
+
+.spaceBetween {
+    justify-content: space-between;
+}
+
+.boxShadow {
+    box-shadow: 0 .375rem .625rem 0 rgba(0, 0, 0, 0.20);
 }
 
 // media query 768px
