@@ -73,7 +73,7 @@ export class ChooseAvaterComponent implements OnInit {
       email: this.email,
       userId:'',
       profileImg: avatarSrc,
-      password: this.password,
+      password: '',
     });
     console.log(user)
 
@@ -87,7 +87,7 @@ export class ChooseAvaterComponent implements OnInit {
       email: this.email,
       userId: '',
       profileImg: this.profileImageSrc,
-      password: this.password,
+      password: '',
     });
 
     try {

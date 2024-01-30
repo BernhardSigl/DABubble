@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component , EventEmitter, Output} from '@angular/core';
 import { MessageBoxComponent } from '../main-chat/message-box/message-box.component';
 
 @Component({
@@ -10,4 +10,10 @@ import { MessageBoxComponent } from '../main-chat/message-box/message-box.compon
 })
 export class ThreadComponent {
 
+  @Output() closeThreadViewEvent = new EventEmitter<void>();
+
+  closeThreadView(): void {
+    console.log('closing')
+    this.closeThreadViewEvent.emit();
+  }
 }
