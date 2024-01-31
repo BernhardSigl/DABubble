@@ -22,10 +22,10 @@
     </header>
 
     <!--  Messages -->
-    <app-message-layout></app-message-layout>
+    <app-message-layout [userName]="userName" [userImage]="userImage"></app-message-layout>
 
     <!-- Message box -->
-    <app-message-box></app-message-box>
+    <app-message-box ></app-message-box>
   </section>
   <app-thread
     *ngIf="isThreadViewOpen"

@@ -25,7 +25,7 @@ export class AuthyService {
 
     try {
       const userCredential = await createUserWithEmailAndPassword(
-        this.auth as any,
+        this.auth ,
         user.email || '',
         user.password || ''
       );

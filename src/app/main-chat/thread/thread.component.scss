@@ -7,6 +7,8 @@
   width: 485px;
   justify-content: space-between;
   flex-direction: column;
+  margin-right: 20px;
+  position: relative;
   .thread-header{
     display: flex;
     justify-content: space-between;
@@ -30,3 +32,13 @@
   }
 }
 
+app-message-layout{
+  position: relative;
+  margin-top: auto;
+  display: flex;
+  justify-content: end;
+  gap: 30px;
+  margin-bottom: 38px;
+  flex-direction: column;
+  overflow-y: scroll;
+}

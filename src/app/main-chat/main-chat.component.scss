@@ -6,7 +6,7 @@
   .main-chat {
     flex-grow: 1;
     margin-top: 20px;
-    height: calc(80vh);
+    height: 80vh;
     background: var(--white);
     border-radius: 30px;
     width: 100%;
@@ -44,11 +44,15 @@
       }
     }}}
 
-    app-message-layout{
+    app-message-layout {
       position: relative;
       margin-top: auto;
       display: flex;
-      justify-content: end;
       gap: 30px;
+      flex-direction: column;
+      align-items: flex-end;
+      overflow-y: scroll;
+      max-height: 60vh;
       margin-bottom: 38px;
     }
+

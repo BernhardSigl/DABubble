@@ -1,5 +1,4 @@
-
-<div class="message-card">
+<div class="message-card" *ngFor="let message of messages$ | async">
   <div class="sent-date">
     <mat-divider class="one-divider"></mat-divider>
     <div class="btn-date">
@@ -8,23 +7,16 @@
     <mat-divider class="two-divider"></mat-divider>
   </div>
   <div class="content-container">
-  <div class="card-content">
-    <div class="time-name">
-      <p>15:06 Uhr</p>
-      <h3>Frederik Beck</h3>
+    <div class="card-content">
+      <div class="time-name">
+        <p>{{ message.time | date: 'HH:mm' }}</p>
+        <h3>{{ message.name }}</h3>
+      </div>
+      <img class="message-image" [src]="message.messageImage" alt="Message Image" *ngIf="message.messageImage" />
+      <div class="message" *ngFor="let msg of message.message">
+        {{ msg }}
+      </div>
     </div>
-
-    <div class="message">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-      blandit odio efficitur lectus vestibulum, quis accumsan ante
-      vulputate. Quisque tristique iaculis erat, eu faucibus lacus iaculis
-      ac.
-    </div>
+    <img class="card-profile-img" [src]="message.image" alt="User Image" />
   </div>
-  <img
-    class="card-profile-img"
-    src="../../assets/img/profile-2.png"
-    alt=""
-  />
-</div>
 </div>

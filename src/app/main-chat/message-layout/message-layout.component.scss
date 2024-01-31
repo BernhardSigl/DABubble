@@ -1,4 +1,5 @@
 .message-card {
+  width: 100%;
   .btn-date {
     display: flex;
     justify-content: center;
@@ -11,6 +12,23 @@
       background:  #fff;
     }
   }
+}.message-image {
+  width: 350px;
+  height: 350px;
+  object-fit: contain;
+}
+
+
+.current-user {
+  justify-content: flex-end;
+}
+
+.other-user {
+  justify-content: flex-start;
+}
+
+.other-user .message {
+  background-color: #eceeef;
 }
 
 .add-member {
@@ -47,23 +65,24 @@
 
 .content-container {
   display: flex;
+  justify-content: flex-end;
 }
 
 .sent-date {
   display: flex;
-  justify-content: center;
   align-items: center;
   margin-bottom: 35px;
+  justify-content: space-between;
 
   .one-divider {
     width: 40%;
-    position: absolute;
-    left: 40px !important;
+    // position: absolute;
+    // left: 20px !important;
   }
 
   .two-divider {
-    position: absolute;
+    // position: absolute;
     width: 40%;
-    right: 40px !important;
+    // right: 20px !important;
   }
 }

@@ -87,7 +87,7 @@ export class ChooseAvaterComponent implements OnInit {
       email: this.email,
       userId: '',
       profileImg: this.profileImageSrc,
-      password: '',
+      password: this.password,
     });
 
     try {

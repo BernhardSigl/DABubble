@@ -1,4 +1,8 @@
 <div class="message-box">
+  <div class="selected-file" *ngIf="selectedFile">
+    Selected file: {{ selectedFile.name }}
+  </div>
+
   <textarea
     class="textarea"
     placeholder="Nachricht an #Entwicklerteam"
@@ -6,7 +10,19 @@
   ></textarea>
 
   <div class="add-ons">
-    <img matTooltip="Add Image" src="../../../assets/img/add.png" class="add" />
+    <input
+      type="file"
+      accept="image/*"
+      (change)="onFileSelected($event)"
+      #fileInput
+      style="display: none"
+    />
+    <img
+      matTooltip="Add Image"
+      src="../../../assets/img/add.png"
+      class="add"
+      (click)="fileInput.click()"
+    />
     <mat-divider class="vertical-divider"></mat-divider>
     <img
       matTooltip="Open the emoji"
@@ -31,7 +47,7 @@
       src="../../../assets/img/send-dark-blue.png"
       alt=""
       class="send"
-
+      (click)="sendMessage()"
     />
   </div>
 </div>

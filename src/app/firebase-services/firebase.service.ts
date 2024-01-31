@@ -1,7 +1,8 @@
 declare var google: any;
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, doc, onSnapshot, query, setDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, onSnapshot, query, setDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { Message } from '../classes/message.class';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,29 @@ export class FirebaseService {
   async ngOnInit(): Promise<void> {
     await this.pullLoggedInUserId();
     await this.subAllUsers();
+    await this.subAllMessages();
+  }
+
+  async subAllMessages(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const q = query(this.getMessagesColRef());
+      onSnapshot(q, async (querySnapshot) => {
+        // Handle message changes here, if necessary
+        resolve();
+      });
+    });
+  }
+
+  getMessagesColRef() {
+    return collection(this.firestore, "messages");
+  }
+
+  async sendMessage(message: Message): Promise<void> {
+    try {
+      await addDoc(this.getMessagesColRef(), message.toJson());
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   }
 
   async subAllUsers(): Promise<void> {
