@@ -14,13 +14,13 @@ import { getDownloadURL, getStorage, ref } from 'firebase/storage';
   templateUrl: './message-layout.component.html',
   styleUrls: ['./message-layout.component.scss']
 })
-export class MessageLayoutComponent implements OnInit{
+export class MessageLayoutComponent implements OnInit {
   @Input() userId?: string;
   @Input() userName!: string;
   @Input() userImage!: string;
   messages$: Observable<Message[]> | undefined;
 
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore) { }
 
   ngOnInit(): void {
     this.loadMessages();
@@ -33,7 +33,7 @@ export class MessageLayoutComponent implements OnInit{
       onSnapshot(q, (querySnapshot) => {
         const messages: Message[] = [];
         querySnapshot.forEach(async doc => {
-          console.log('Document:', doc.data());
+          // console.log('Document:', doc.data());
           const messageData = doc.data() as Message;
           // Fetch download URL for message image
           if (messageData.messageImage) {
@@ -42,8 +42,8 @@ export class MessageLayoutComponent implements OnInit{
             messageData.messageImage = await getDownloadURL(imageRef);
           }
           messages.push(messageData);
-          console.log('Sender ID:', messageData.senderId);
-          console.log('Current User ID:', this.userId);
+          // console.log('Sender ID:', messageData.senderId);
+          // console.log('Current User ID:', this.userId);
         });
         observer.next(messages);
       });

@@ -1,35 +1,32 @@
-<div class="popup-position">
-    <div class="popup boxShadow">
+<div class="popup boxShadow">
 
-        <div class="horicontal spaceBetween">
-            <h4>Profil</h4>
-            <div class="icon">
-            </div>
-
+    <div class="horicontal spaceBetween">
+        <h4>Profil</h4>
+        <div class="icon">
         </div>
-
-        <div class="profile-img-position">
-            <div [style.background-image]="'url(' + firebase.profileImg + ')'" class="profile-img"></div>
-        </div>
-
-        <div class="name-and-status">
-            <h2 class="bold">{{ firebase.name }}</h2>
-            <div class="horicontal status">
-                <img [src]="firebase.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'">
-                <h5>{{ firebase.status ? 'Online' : 'Abwesend' }}</h5>
-            </div>
-        </div>
-
-        <div class="email-content">
-            <div class="email-img-and-email-title horicontal">
-                <img src="./../../../assets/img/mail-black.png">
-                <h5 class="bold">E-Mail Adresse</h5>
-            </div>
-            <a href="mailto:{{ firebase.email }}" class="email fs18">{{ firebase.email }}</a>
-        </div>
-        <!-- <button (click)="firebase.online()">ONLINE</button>
-        <button (click)="firebase.offline()">OFFLINE</button> -->
 
     </div>
+
+    <div class="profile-img-position">
+        <div [style.background-image]="'url(' + firebase.profileImg + ')'" class="profile-img"></div>
+    </div>
+
+    <div class="name-and-status">
+        <h2 class="bold">{{ firebase.name }}</h2>
+        <div class="horicontal status">
+            <img [src]="firebase.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'">
+            <h5>{{ firebase.status ? 'Online' : 'Abwesend' }}</h5>
+        </div>
+    </div>
+
+    <div class="email-content">
+        <div class="email-img-and-email-title horicontal">
+            <img src="./../../../assets/img/mail-black.png">
+            <h5 class="bold">E-Mail Adresse</h5>
+        </div>
+        <a href="mailto:{{ firebase.email }}" class="email fs18">{{ firebase.email }}</a>
+    </div>
+    <!-- <button (click)="firebase.online()">ONLINE</button>
+        <button (click)="firebase.offline()">OFFLINE</button> -->
 
 </div>
