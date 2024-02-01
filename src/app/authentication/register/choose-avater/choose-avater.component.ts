@@ -5,6 +5,7 @@ import { AuthyService } from '../../../firebase-services/authy.service';
 import { AppUser, User } from '../../../classes/user.class';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { Firestore, addDoc, collection, getDocs, query, } from '@angular/fire/firestore';
+import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
 
 
 
@@ -25,6 +26,7 @@ export class ChooseAvaterComponent implements OnInit {
   password:string='';
   firestore: Firestore = inject(Firestore);
   user!: User;
+  storage = getStorage();
   constructor(
     private route: ActivatedRoute,
     private avatarDataService: AvatarDataService,
@@ -40,72 +42,94 @@ export class ChooseAvaterComponent implements OnInit {
       this.password = params['password'];
     });
   }
-  handleFileSelect(event: any): void {
-    const file = event.target.files[0];
-    // Check if the selected file is an image
-    if (file && file.type.startsWith('image/')) {
-      // If avatars are chosen, reset the uploaded image and show the selected avatar
-      if (this.profileImageSrc !== '../../assets/img/profile.png') {
-        this.profileImageSrc = '';
-      }
-      // Display the selected image in .profile-img
-      this.profileImageSrc = URL.createObjectURL(file);
-    } else {
-      // Show alert for wrong format
-      alert('Wrong format chosen. Please select a valid image file.');
-    }
 
-    this.avatarDataService.setSelectedAvatar(this.profileImageSrc);
+  async handleFileSelect(event: any): Promise<void> {
+    const file = event.target.files[0];
+
+    if (file) {
+      try {
+        const reader = new FileReader();
+
+        reader.onload = async (e) => {
+          const dataURL = e.target?.result as string;
+          console.log(dataURL)
+
+          const storageRef = ref(this.storage, `profilePicture/${this.userName}_${file.name}`);
+          await uploadString(storageRef, dataURL, 'data_url');
+
+          const downloadURL = await getDownloadURL(storageRef);
+          this.profileImageSrc = downloadURL;
+        };
+
+        reader.readAsDataURL(file);
+      } catch (error) {
+        console.error('Error uploading avatar:', error);
+
+      }
+    } else {
+      alert('Please select a file.');
+    }
   }
+
+
 
   // Function to trigger file input click when "Datei hochladen" link is clicked
   triggerFileInput(): void {
     document.getElementById('uploadFile')?.click();
   }
 
-  handleAvatarSelect(avatarSrc: string): void {
+  async handleAvatarSelect(avatarSrc: string): Promise<void> {
     this.profileImageSrc = avatarSrc;
     this.avatarDataService.setSelectedAvatar(avatarSrc);
 
-    // Get user data from Firebase
-    const user = new User({
-      name: this.userName,
-      email: this.email,
-      userId:'',
-      profileImg: avatarSrc,
-      password: '',
-    });
-    console.log(user)
-
-    // Update user data in Firebase
-    // this.authyService.updateUserData(user);
-  }
-
-  async registerUser() {
     const user = new User({
       name: this.userName,
       email: this.email,
       userId: '',
-      profileImg: this.profileImageSrc,
-      password: this.password,
+      profileImg: avatarSrc,
+      password: '',
     });
 
     try {
-      const userCredential = await this.authyService.registerWithEmailAndPassword(user);
-      user.userId = userCredential.user?.uid; // Assign the generated userId
+      const storageRef = ref(this.storage, `profilePicture/${user.userId}`);
+      await uploadString(storageRef, avatarSrc, 'data_url');
 
-      // Set the class variable 'user' to the current user
-      this.user = user;
+      // Get the download URL of the uploaded image
+      const downloadURL = await getDownloadURL(storageRef);
+      user.profileImg = downloadURL;
 
-      await this.addUser().then((result: any) => {
-        console.log('User added to collection:', result);
-        // You can perform additional actions if needed
-      });
+      // Update user data in Firestore
+      await this.authyService.updateUserData(user);
     } catch (error) {
-      console.error(error);
-      alert('Registration failed. Please try again.');
+      console.error('Error uploading avatar:', error);
     }
   }
+
+
+async registerUser() {
+  const user = new User({
+    name: this.userName,
+    email: this.email,
+    userId: '',
+    profileImg: this.profileImageSrc, // Use uploaded image URL
+    password: this.password,
+  });
+
+  try {
+    const userCredential = await this.authyService.registerWithEmailAndPassword(user);
+    user.userId = userCredential.user?.uid;
+
+    this.user = user;
+
+    await this.addUser().then((result: any) => {
+      console.log('User added to collection:', result);
+    });
+  } catch (error) {
+    console.error(error);
+    alert('Registration failed. Please try again.');
+  }
+}
+
 
 async addUser() {
   // Check if 'user' is defined before adding it to the collection
@@ -130,6 +154,20 @@ async addUser() {
     return collection(this.firestore, "users");
   }
 
+  dataURLtoBlob(dataUrl: string): Blob {
+    const arr = dataUrl.split(',');
+    const mimeMatch = arr[0].match(/:(.*?);/);
+    if (!mimeMatch) return new Blob();
+
+    const mime = mimeMatch[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+  }
 
 
 
