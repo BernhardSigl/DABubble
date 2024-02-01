@@ -18,9 +18,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthyService } from '../../firebase-services/authy.service';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { Firestore, addDoc, collection, doc, getDocs, query, updateDoc, where, } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where} from '@angular/fire/firestore';
 import { User } from '../../classes/user.class'
 import { FirebaseService } from '../../firebase-services/firebase.service';
+import { DocumentReference } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,7 @@ import { FirebaseService } from '../../firebase-services/firebase.service';
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -309,14 +310,30 @@ export class LoginComponent implements OnInit {
 
   async login(email: string, password: string) {
     try {
+      // Authenticate user
       const userCredential = await this.authyService.loginWithEmailAndPassword(email, password);
       this.userId = userCredential.user?.uid;
-      console.log('UserID:', this.userId);
-      this.router.navigate(['/main'], {queryParams:{userId:this.userId}});
 
-      console.log('logged in');
+      // Query Firestore to find the document with matching userId
+      const querySnapshot = await getDocs(query(collection(this.firestore, "users"), where("userId", "==", this.userId)));
+
+      if (!querySnapshot.empty) {
+        const userDocSnapshot = querySnapshot.docs[0];
+
+        const docId = userDocSnapshot.id;
+        console.log(docId)
+
+        // Save the document ID to local storage
+        localStorage.setItem('docId', docId);
+
+        // Navigate to main page
+        this.router.navigate(['/main'], { queryParams: { userId: this.userId } });
+        console.log('logged in');
+      } else {
+        console.log('User document does not exist.');
+      }
     } catch (err: any) {
-
+      // Handle authentication errors
       if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
         window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
       } else {
@@ -324,6 +341,9 @@ export class LoginComponent implements OnInit {
       }
     }
   }
+
+
+
 
   playAnimation() {
     this.textState = 'hidden';

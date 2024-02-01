@@ -59,37 +59,34 @@ export class MessageBoxComponent {
   async sendMessage(): Promise<void> {
     if ((this.textArea.trim() !== '' || this.selectedFile) && (this.textArea !== '' || this.selectedFile)) {
         try {
-            console.log(this.userName, this.userImage);
             const newMessage = new Message();
             newMessage.name = this.userName;
             newMessage.time = Date.now();
             newMessage.message.push(this.textArea);
             newMessage.image = this.userImage;
             if (this.userId) {
-              console.log(this.userId)
               newMessage.senderId = this.userId;
-          } else {
-              console.log('not found')
-          }
+            }
 
             if (this.selectedFile) {
                 const storage = getStorage();
                 const storageRef = ref(storage, `files/${this.selectedFile.name}`);
 
-                // Read file contents as a data URL
                 const fileReader = new FileReader();
                 fileReader.onload = async (event) => {
                     try {
                         const fileDataUrl = event.target?.result as string;
 
-                        // Upload the file data URL to Firebase Storage
                         await uploadString(storageRef, fileDataUrl, 'data_url');
 
-                        // Update the message with the path of the uploaded file
                         newMessage.messageImage = `files/${this.selectedFile?.name}`;
-                        console.log(newMessage.messageImage)
-                        // Add the message to Firestore
-                        await addDoc(collection(this.firestore, 'messages'), newMessage.toJson());
+
+                        // Add the message to Firestore and retrieve the generated ID
+                        const messageRef = await addDoc(collection(this.firestore, 'messages'), newMessage.toJson());
+                        const messageId = messageRef.id;
+
+                        // Update the new message with the generated ID
+                        newMessage.messageId = messageId;
 
                         // Clear message input and selected file
                         this.textArea = '';
@@ -101,13 +98,11 @@ export class MessageBoxComponent {
                 fileReader.readAsDataURL(this.selectedFile);
             } else {
                 // If no file is selected, just add the message to Firestore
-                await addDoc(collection(this.firestore, 'messages'), newMessage.toJson());
-
+                const messageRef = await addDoc(collection(this.firestore, 'messages'), newMessage.toJson());
+                const messageId = messageRef.id;
+                newMessage.messageId= messageId;
                 // Clear message input
                 this.textArea = '';
-
-                // Append the message to the local array for immediate display
-                // this.messages$.push(newMessage);
             }
         } catch (error) {
             console.error('Error sending message:', error);

@@ -1,7 +1,6 @@
 .message-card {
   width: 100%;
 
-
   .btn-date {
     display: flex;
     justify-content: center;
@@ -11,21 +10,21 @@
       border-radius: 30px;
       border: 1px solid #adb0d9;
       padding: 5px 15px;
-      background:  #fff;
+      background: #fff;
     }
   }
-}.message-image {
+}
+.message-image {
   width: 350px;
   height: 350px;
   object-fit: contain;
 }
 
-
 .current-user {
   justify-content: flex-end;
 }
 
-.other-user .content-container{
+.other-user .content-container {
   flex-direction: row-reverse;
 }
 
@@ -36,8 +35,12 @@
   margin-left: 0;
 }
 
-.other-user .time-name{
+.other-user .time-name {
   flex-direction: row-reverse;
+}
+
+.other-user .emoji-reaction{
+  justify-content: flex-start;
 }
 
 .add-member {
@@ -77,8 +80,8 @@
   justify-content: flex-end;
   position: relative;
 
-  &:hover{
-    background: #ECEEFE;
+  &:hover {
+    background: #eceefe;
     transition: background 225ms ease-in-out;
   }
 }
@@ -100,4 +103,15 @@
     width: 40%;
     // right: 20px !important;
   }
+}
+
+.emoji-reaction {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+}
+
+emoji-mart{
+  position: absolute;
+  bottom:32px;
 }
