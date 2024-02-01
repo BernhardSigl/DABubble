@@ -117,8 +117,6 @@ export class LoginComponent implements OnInit {
         callback: (resp: any) => this.handleLogin(resp)
       });
     });
-
-
   }
 
 
@@ -192,7 +190,6 @@ export class LoginComponent implements OnInit {
       console.log('Weiterleitung auf landing page mit id: ', userId);
       localStorage.clear();
       localStorage.setItem('userId', userId);
-      await this.firebase.ngOnInit();
       await this.firebase.online();
       this.router.navigate([`/main`]);
     });
@@ -278,7 +275,7 @@ export class LoginComponent implements OnInit {
 
       this.router.navigate(['/main'], { queryParams: { userId: userId } });
       console.log('logged in as guest with ID: ', userId);
-    } catch(err: any) {
+    } catch (err: any) {
       if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
         window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
       } else {
@@ -287,13 +284,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
-
-
   async submit() {
-    console.log('CLICKED');
+    // console.log('CLICKED');
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
-
 
     if (this.loginForm.valid && typeof email === 'string' && typeof password === 'string') {
       this.loginForm.disable();
@@ -306,13 +300,12 @@ export class LoginComponent implements OnInit {
     }
   }
 
-
-
   async login(email: string, password: string) {
     try {
       // Authenticate user
       const userCredential = await this.authyService.loginWithEmailAndPassword(email, password);
       this.userId = userCredential.user?.uid;
+
 
       // Query Firestore to find the document with matching userId
       const querySnapshot = await getDocs(query(collection(this.firestore, "users"), where("userId", "==", this.userId)));
@@ -332,6 +325,14 @@ export class LoginComponent implements OnInit {
       } else {
         console.log('User document does not exist.');
       }
+
+      console.log('UserID login:', this.userId);
+      localStorage.clear();
+      localStorage.setItem('userId', this.userId);
+      await this.firebase.online();
+      this.router.navigate(['/main'], { queryParams: { userId: this.userId } });
+
+
     } catch (err: any) {
       // Handle authentication errors
       if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {

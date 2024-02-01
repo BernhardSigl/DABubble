@@ -25,10 +25,7 @@
     <app-message-layout [userId]="userId" [userName]="userName" [userImage]="userImage"></app-message-layout>
 
     <!-- Message box -->
-    <app-message-box  [userId]="userId"></app-message-box>
+    <app-message-box [userId]="userId"></app-message-box>
   </section>
-  <app-thread
-    *ngIf="isThreadViewOpen"
-    (closeThreadViewEvent)="closeThreadView()"
-  ></app-thread>
+  <app-thread *ngIf="isThreadViewOpen" (closeThreadViewEvent)="closeThreadView()"></app-thread>
 </div>

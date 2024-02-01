@@ -25,6 +25,8 @@ export class FirebaseService {
     await this.pullLoggedInUserId();
     await this.subAllUsers();
     await this.subAllMessages();
+    // console.log('1', this.usersArray);
+
   }
 
   async subAllMessages(): Promise<void> {
@@ -90,6 +92,7 @@ export class FirebaseService {
   }
 
   async online() {
+    await this.pullLoggedInUserId();
     await setDoc(this.getSingleUserDocRef(), { statusChangeable: false }, { merge: true });
     await this.ngOnInit();
   }
@@ -107,6 +110,7 @@ export class FirebaseService {
   }
 
   async getLoggedInUserInfos(): Promise<void> {
+    console.log(this.loggedInUserId);
     const loggedInUserInfo = this.usersArray.find(user => user.userId === this.loggedInUserId);
 
     this.name = loggedInUserInfo.name;
@@ -114,5 +118,6 @@ export class FirebaseService {
     this.statusChangeable = loggedInUserInfo.statusChangeable;
     this.email = loggedInUserInfo.email;
     this.profileImg = loggedInUserInfo.profileImg;
+
   }
 }

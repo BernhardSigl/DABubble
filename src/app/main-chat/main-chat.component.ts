@@ -10,7 +10,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { CommonModule } from '@angular/common';
 import { MessageLayoutComponent } from './message-layout/message-layout.component';
 import { ActivatedRoute } from '@angular/router';
-import { Firestore, addDoc, collection, getDocs, query, where} from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, getDocs, query, where } from '@angular/fire/firestore';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { UserListService } from '../firebase-services/user-list.service';
 import { user } from '@angular/fire/auth';
@@ -38,7 +38,7 @@ export class MainChatComponent implements OnInit {
   userImage: string = '';
   userId: string = '';
 
-  constructor(private firestore:Firestore,private route: ActivatedRoute, private userDataService: UserListService) {}
+  constructor(private firestore: Firestore, private route: ActivatedRoute, private userDataService: UserListService) { }
 
 
 

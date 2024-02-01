@@ -1,0 +1,22 @@
+.popup {
+    padding: 1.875rem; // 30px
+    display: flex;
+    flex-direction: column;
+    gap: .9375rem; // 15px
+    border-radius: 1.875rem 0 1.875rem 1.875rem; // 30px
+}
+
+h4 {
+    padding: .625rem 4.375rem; // 10px 70px
+    text-align: center;
+    width: 5.375rem; // 86px
+    border-radius: 6.25rem; // 100px
+    cursor: pointer;
+    font-weight: 600;
+
+    &:hover {
+        font-weight: 700px;
+        background-color: var(--background-color);
+        color: var(--purple);
+    }
+}
