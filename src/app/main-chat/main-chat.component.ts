@@ -13,6 +13,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Firestore, addDoc, collection, getDocs, query, where} from '@angular/fire/firestore';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { UserListService } from '../firebase-services/user-list.service';
+import { user } from '@angular/fire/auth';
 @Component({
   selector: 'app-main-chat',
   standalone: true,

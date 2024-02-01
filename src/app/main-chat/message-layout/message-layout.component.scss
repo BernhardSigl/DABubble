@@ -1,5 +1,7 @@
 .message-card {
   width: 100%;
+
+
   .btn-date {
     display: flex;
     justify-content: center;
@@ -23,12 +25,19 @@
   justify-content: flex-end;
 }
 
-.other-user {
-  justify-content: flex-start;
+.other-user .content-container{
+  flex-direction: row-reverse;
 }
 
 .other-user .message {
   background-color: #eceeef;
+  color: black;
+  border-radius: 0px 30px 30px 30px;
+  margin-left: 0;
+}
+
+.other-user .time-name{
+  flex-direction: row-reverse;
 }
 
 .add-member {
@@ -45,7 +54,7 @@
 
 .message {
   border-radius: 30px 0px 30px 30px;
-  background: #797ef3;
+  background-color: #797ef3;
   padding: 15px;
   max-width: 698px;
   margin-left: 30px;
@@ -66,6 +75,12 @@
 .content-container {
   display: flex;
   justify-content: flex-end;
+  position: relative;
+
+  &:hover{
+    background: #ECEEFE;
+    transition: background 225ms ease-in-out;
+  }
 }
 
 .sent-date {

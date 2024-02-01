@@ -1,14 +1,14 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Firestore, addDoc, collection } from '@angular/fire/firestore';
-import { FirebaseService } from '../../firebase-services/firebase.service';
+import { Firestore, addDoc, collection, query, orderBy, Timestamp, getFirestore, onSnapshot } from '@angular/fire/firestore';
 import { Message } from '../../classes/message.class';
 import { UserListService } from '../../firebase-services/user-list.service';
 import { getStorage, ref, uploadString } from 'firebase/storage';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-message-box',
@@ -22,12 +22,11 @@ export class MessageBoxComponent {
   public textArea: string = "";
   public isEmojiPickerVisible: boolean = false;
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
-
+  @Input() userId: string | undefined;
   constructor(
     private elementRef: ElementRef,
     private firestore: Firestore,
     private userDataService: UserListService,
-    private firebaseService: FirebaseService
   ) {
     this.getUserData();
   }
@@ -35,6 +34,8 @@ export class MessageBoxComponent {
   userName: string = '';
   userImage: string = '';
   selectedFile?: File;
+  sendButtonDisabled: boolean = true;
+  messages$!: Observable<Message[]>;
 
   getUserData(): void {
     this.userDataService.userName$.subscribe(userName => {
@@ -45,6 +46,7 @@ export class MessageBoxComponent {
     });
   }
 
+
   toggleEmojiPicker() {
     this.isEmojiPickerVisible = !this.isEmojiPickerVisible;
   }
@@ -54,16 +56,21 @@ export class MessageBoxComponent {
     this.isEmojiPickerVisible = false;
   }
 
-
   async sendMessage(): Promise<void> {
-    if (this.textArea.trim() !== '' || this.selectedFile) {
+    if ((this.textArea.trim() !== '' || this.selectedFile) && (this.textArea !== '' || this.selectedFile)) {
         try {
             console.log(this.userName, this.userImage);
             const newMessage = new Message();
             newMessage.name = this.userName;
             newMessage.time = Date.now();
-            newMessage.message.push(this.textArea); // Push the message content into the message array
+            newMessage.message.push(this.textArea);
             newMessage.image = this.userImage;
+            if (this.userId) {
+              console.log(this.userId)
+              newMessage.senderId = this.userId;
+          } else {
+              console.log('not found')
+          }
 
             if (this.selectedFile) {
                 const storage = getStorage();
@@ -98,6 +105,9 @@ export class MessageBoxComponent {
 
                 // Clear message input
                 this.textArea = '';
+
+                // Append the message to the local array for immediate display
+                // this.messages$.push(newMessage);
             }
         } catch (error) {
             console.error('Error sending message:', error);

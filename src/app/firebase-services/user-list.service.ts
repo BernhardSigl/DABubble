@@ -12,6 +12,7 @@ export class UserListService {
   userName$ = this.userNameSubject.asObservable();
   userImage$ = this.userImageSubject.asObservable();
 
+
   constructor(private firestore: Firestore) {}
 
   async fetchUserData(userId: string): Promise<void> {
@@ -24,9 +25,10 @@ export class UserListService {
         const userData = doc.data();
         const userName = userData['name'];
         const userImage = userData['profileImg'];
-
+        const userId = userData['userId']
         this.userNameSubject.next(userName);
         this.userImageSubject.next(userImage);
+
       });
     } catch (error) {
       console.error('Error fetching user data:', error);

@@ -267,21 +267,23 @@ export class LoginComponent implements OnInit {
   /**
    * Logs in as a guest user.
    */
-  loginAsGuest() {
+  async loginAsGuest() {
     const guestEmail = 'guest@guest.de';
     const guestPassword = 'guest1';
 
-    this.authyService.loginWithEmailAndPassword(guestEmail, guestPassword);
-    this.router.navigate(['/main']);
-    console.log('logged in');
-  } catch(err: any) {
+    try {
+      await this.authyService.loginWithEmailAndPassword(guestEmail, guestPassword);
+      const userId = 'jrfCjgm7qGf0EGAEisJO2kMNMRy2'; // Set the guest user ID
 
-    if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-      window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
-    } else {
-      window.alert('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+      this.router.navigate(['/main'], { queryParams: { userId: userId } });
+      console.log('logged in as guest with ID: ', userId);
+    } catch(err: any) {
+      if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
+      } else {
+        window.alert('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+      }
     }
-
   }
 
 

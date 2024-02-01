@@ -1,8 +1,8 @@
-<div class="message-card" *ngFor="let message of messages$ | async">
+<div class="message-card" *ngFor="let message of messages$ | async "[ngClass]="{'current-user': message.senderId === userId, 'other-user': message.senderId !== userId}">
   <div class="sent-date">
     <mat-divider class="one-divider"></mat-divider>
     <div class="btn-date">
-      <button>Heute</button>
+      <button>{{ message.time | date: 'M/d/yy' }}</button>
     </div>
     <mat-divider class="two-divider"></mat-divider>
   </div>
@@ -13,10 +13,18 @@
         <h3>{{ message.name }}</h3>
       </div>
       <img class="message-image" [src]="message.messageImage" alt="Message Image" *ngIf="message.messageImage" />
-      <div class="message" *ngFor="let msg of message.message">
-        {{ msg }}
+      <div class="message" *ngIf="message.message.length > 0">
+        <div *ngFor="let msg of message.message">
+          <div *ngIf="msg.trim() !== ''">{{ msg }}</div>
+        </div>
       </div>
     </div>
     <img class="card-profile-img" [src]="message.image" alt="User Image" />
+
+    <div  class="emoji-reaction">
+      <img src="../../../assets/img/add-reaction.png" alt="">
+    </div>
   </div>
+
+
 </div>
