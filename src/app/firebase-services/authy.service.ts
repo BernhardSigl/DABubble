@@ -7,6 +7,7 @@ import {
   getAuth,
   UserCredential,
   fetchSignInMethodsForEmail,
+  updateProfile,
 
 } from '@angular/fire/auth';
 import { AppUser } from '../classes/user.class';
@@ -67,4 +68,22 @@ export class AuthyService {
       throw error;
     }
   }
+
+  async updateUserData(user: AppUser) {
+    try {
+      const currentUser = this.auth.currentUser;
+      if (currentUser) {
+        await updateProfile(currentUser, {
+          displayName: user.name,
+          photoURL: user.profileImg
+        });
+      } else {
+        console.error('Current user is null. Unable to update user data.');
+      }
+    } catch (error) {
+      console.error('Error updating user data:', error);
+      throw error;
+    }
+  }
+
 }
