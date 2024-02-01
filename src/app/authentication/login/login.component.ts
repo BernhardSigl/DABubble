@@ -325,7 +325,7 @@ export class LoginComponent implements OnInit {
         console.log(docId)
 
         // Save the document ID to local storage
-        localStorage.setItem('docId', docId);
+        localStorage.setItem('userId', docId);
 
         // Navigate to main page
         this.router.navigate(['/main'], { queryParams: { userId: this.userId } });
