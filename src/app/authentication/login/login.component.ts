@@ -18,7 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthyService } from '../../firebase-services/authy.service';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where} from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
 import { User } from '../../classes/user.class'
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { DocumentReference } from '@angular/fire/firestore';
@@ -113,7 +113,7 @@ export class LoginComponent implements OnInit {
     //google
     this.loadGoogleApi(() => {
       google.accounts.id.initialize({
-        client_id: '48091826759-81j87796gcoeko02ls6hjvjbkunvaolj.apps.googleusercontent.com',
+        client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
         callback: (resp: any) => this.handleLogin(resp)
       });
     });
@@ -278,7 +278,7 @@ export class LoginComponent implements OnInit {
 
       this.router.navigate(['/main'], { queryParams: { userId: userId } });
       console.log('logged in as guest with ID: ', userId);
-    } catch(err: any) {
+    } catch (err: any) {
       if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
         window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
       } else {

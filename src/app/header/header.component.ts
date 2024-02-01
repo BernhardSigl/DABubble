@@ -60,7 +60,7 @@ export class HeaderComponent implements OnInit {
 
   headerDropdownMenu() {
     this.dialog.open(HeaderDropdownComponent, {
-      position: { top: '6.875rem', right: '1.25rem' } // Adjust the values as needed
+      position: { top: '6.875rem', right: '1.25rem' }
     });
   }
 
