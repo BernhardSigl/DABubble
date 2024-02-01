@@ -4,7 +4,7 @@ import { AvatarDataService } from '../../../firebase-services/avatar-data.servic
 import { AuthyService } from '../../../firebase-services/authy.service';
 import { AppUser, User } from '../../../classes/user.class';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { Firestore, addDoc, collection, getDocs, query, } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, getDocs, query, setDoc, DocumentReference, DocumentData } from '@angular/fire/firestore';
 
 
 
@@ -94,12 +94,11 @@ export class ChooseAvaterComponent implements OnInit {
       const userCredential = await this.authyService.registerWithEmailAndPassword(user);
       user.userId = userCredential.user?.uid; // Assign the generated userId
 
-      // Set the class variable 'user' to the current user
+
       this.user = user;
 
       await this.addUser().then((result: any) => {
         console.log('User added to collection:', result);
-        // You can perform additional actions if needed
       });
     } catch (error) {
       console.error(error);
@@ -107,16 +106,24 @@ export class ChooseAvaterComponent implements OnInit {
     }
   }
 
-async addUser() {
-  // Check if 'user' is defined before adding it to the collection
-  if (this.user) {
-    const docRef = await addDoc(this.getUsersColRef(), this.user.toJson());
-    return docRef;
-  } else {
-    console.error('User data is not defined.');
-    return null;
+  async addUser() {
+    // Check if 'user' is defined before adding it to the collection
+    if (this.user) {
+      try {
+        const userRef: DocumentReference<DocumentData> = doc(this.firestore, `users/${this.user.userId}`);
+        await setDoc(userRef, this.user.toJson());
+        console.log('User added to collection:', this.user);
+        return userRef;
+      } catch (error) {
+        console.error('Error adding user to collection:', error);
+        return null;
+      }
+    } else {
+      console.error('User data is not defined.');
+      return null;
+    }
   }
-}
+
 
 
   async getUsersDocRef() {
