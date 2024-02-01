@@ -23,7 +23,6 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    debugger;
     this.route.queryParams.subscribe(params=>{
       this.userId = params['userId'];
       console.log(this.userId)
