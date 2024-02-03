@@ -106,6 +106,8 @@ export class LoginComponent implements OnInit {
   isGuest: boolean | undefined;
 
   ngOnInit(): void {
+    this.clearStorage();
+
     if (!this.animationPlayed) {
       this.playAnimation();
     }
@@ -117,8 +119,6 @@ export class LoginComponent implements OnInit {
         callback: (resp: any) => this.handleLogin(resp)
       });
     });
-
-
   }
 
 
@@ -189,10 +189,7 @@ export class LoginComponent implements OnInit {
    */
   redirect(userId: string) {
     this.ngZone.run(async () => {
-      console.log('Weiterleitung auf landing page mit id: ', userId);
-      localStorage.clear();
       localStorage.setItem('userId', userId);
-      await this.firebase.ngOnInit();
       await this.firebase.online();
       this.router.navigate([`/main`]);
     });
@@ -322,10 +319,10 @@ export class LoginComponent implements OnInit {
 
         // Now you have the document snapshot, you can retrieve the document ID
         const docId = userDocSnapshot.id;
-        console.log(docId)
 
         // Save the document ID to local storage
         localStorage.setItem('userId', docId);
+        // await this.firebase.online();
 
         // Navigate to main page
         this.router.navigate(['/main'], { queryParams: { userId: this.userId } });
@@ -343,7 +340,10 @@ export class LoginComponent implements OnInit {
     }
   }
 
-
+  clearStorage() {
+    sessionStorage.clear();
+    localStorage.clear();
+  }
 
 
   playAnimation() {

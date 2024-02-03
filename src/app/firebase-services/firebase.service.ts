@@ -25,8 +25,6 @@ export class FirebaseService {
     await this.pullLoggedInUserId();
     await this.subAllUsers();
     await this.subAllMessages();
-    // console.log('1', this.usersArray);
-
   }
 
   async subAllMessages(): Promise<void> {
@@ -101,8 +99,6 @@ export class FirebaseService {
     await setDoc(this.getSingleUserDocRef(), { statusChangeable: true }, { merge: true });
     await this.ngOnInit();
     await new Promise<void>((resolve) => {
-      localStorage.removeItem('userId');
-      sessionStorage.clear();
       resolve();
     });
     google.accounts.id.disableAutoSelect();
@@ -110,7 +106,6 @@ export class FirebaseService {
   }
 
   async getLoggedInUserInfos(): Promise<void> {
-    console.log(this.loggedInUserId);
     const loggedInUserInfo = this.usersArray.find(user => user.userId === this.loggedInUserId);
 
     this.name = loggedInUserInfo.name;

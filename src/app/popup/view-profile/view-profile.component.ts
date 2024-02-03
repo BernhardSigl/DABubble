@@ -15,7 +15,7 @@ import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 export class ViewProfileComponent {
   constructor(
     public firebase: FirebaseService,
-    private sanitizer: DomSanitizer,
+    public sanitizer: DomSanitizer,
     public dialogRef: MatDialogRef<ViewProfileComponent>,
     public dialog: MatDialog
   ) {
