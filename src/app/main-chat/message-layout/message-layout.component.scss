@@ -94,14 +94,13 @@
 
   .one-divider {
     width: 40%;
-    // position: absolute;
-    // left: 20px !important;
+
   }
 
   .two-divider {
-    // position: absolute;
+
     width: 40%;
-    // right: 20px !important;
+
   }
 }
 
@@ -109,9 +108,22 @@
   display: flex;
   justify-content: flex-end;
   position: relative;
+  margin-top: 10px;
+  gap: 10px;
 }
 
 emoji-mart{
   position: absolute;
   bottom:32px;
+}
+
+.reactions-container{
+  display: flex;
+  gap: 10px;
+
+  .reactions{
+    border: 1px solid #8c91f7;
+    background-color: transparent;
+    border-radius: 10px;
+  }
 }

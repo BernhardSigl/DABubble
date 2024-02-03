@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MainChatComponent } from '../main-chat.component';
-import { Firestore, collection, query, orderBy, onSnapshot,doc } from '@angular/fire/firestore';
+import { Firestore, collection, query, orderBy, onSnapshot,doc, setDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Message } from '../../classes/message.class';
 import { CommonModule } from '@angular/common';
@@ -21,7 +21,7 @@ export class MessageLayoutComponent implements OnInit {
   messages$: Observable<Message[]> | undefined;
 
   public textArea: string = "";
-  public isEmojiPickerVisible: boolean = false;
+  public isEmojiPickerVisible: { [key: string]: boolean } = {};
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined
   constructor(private firestore: Firestore) {}
   selectedMessage: Message | null = null;
@@ -37,49 +37,82 @@ export class MessageLayoutComponent implements OnInit {
     const messagesCollection = collection(this.firestore, 'messages');
     const q = query(messagesCollection, orderBy('time', 'desc'));
     this.messages$ = new Observable<Message[]>(observer => {
-      onSnapshot(q, (querySnapshot) => {
-        const messages: Message[] = [];
-        querySnapshot.forEach(async doc => {
-
-          // console.log('Document:', doc.data());
-
-          const messageData = doc.data() as Message;
-          // Fetch download URL for message image
-          if (messageData.messageImage) {
-            const storage = getStorage();
-            const imageRef = ref(storage, messageData.messageImage as string);
-            messageData.messageImage = await getDownloadURL(imageRef);
-          }
-          messages.push(messageData);
-
-
-          // console.log('Sender ID:', messageData.senderId);
-          // console.log('Current User ID:', this.userId);
-
+        onSnapshot(q, (querySnapshot) => {
+            const messages: Message[] = [];
+            querySnapshot.forEach(async doc => {
+                const messageData = doc.data() as Message;
+                // Assign the document ID as the messageId
+                messageData.messageId = doc.id; // Assuming doc.id is the ID of the document
+                if (messageData.messageImage) {
+                    const storage = getStorage();
+                    const imageRef = ref(storage, messageData.messageImage as string);
+                    messageData.messageImage = await getDownloadURL(imageRef);
+                }
+                messages.push(messageData);
+            });
+            observer.next(messages);
         });
-        observer.next(messages);
-      });
+    });
+}
+
+
+toggleEmojiPicker(messageId: string) {
+  if (!this.isEmojiPickerVisible[messageId]) {
+    // If emoji picker is not visible, close all other emoji pickers
+    Object.keys(this.isEmojiPickerVisible).forEach(key => {
+      this.isEmojiPickerVisible[key] = false;
     });
   }
+  this.isEmojiPickerVisible[messageId] = !this.isEmojiPickerVisible[messageId];
+}
 
-  toggleEmojiPicker() {
-    this.isEmojiPickerVisible = !this.isEmojiPickerVisible;
-    // this.selectedMessage = messageId;
+onEmojiClick(event: any, message: Message) {
+  console.log("Selected emoji:", event.emoji.native);
+  this.addReaction(message, event.emoji.native);
+}
+
+
+
+addReaction(message: Message, emoji: string) {
+  console.log("Adding reaction to message:", message);
+  console.log("Selected emoji:", emoji);
+
+  if (!message.reactions) {
+      message.reactions = {}; // Ensure reactions object is initialized
   }
 
+  if (!emoji) {
+      console.error("Selected emoji is undefined");
+      return;
+  }
 
-  // addReaction(messageId: string, emoji: string) {
-  //   if (this.messages$) {
-  //     this.messages$.subscribe(messages => {
-  //       const message = messages.find(msg => msg.id === messageId);
-  //       if (message) {
-  //         message.addReaction(emoji);
-  //         const updatedMessages = [...messages];
-  //         this.firestore.doc(`messages/${messageId}`).update(message.toJson());
-  //       }
-  //     });
-  //   }
-  // }
+  if (!message.reactions[emoji]) {
+      message.reactions[emoji] = 1;
+  } else {
+      message.reactions[emoji]++;
+  }
+
+  this.updateMessageReactions(message);
+}
+
+
+updateMessageReactions(message: Message) {
+  console.log("Updating reactions in Firestore for message:", message);
+
+  const messageRef = doc(this.firestore, 'messages', message.messageId);
+  const reactionsData = message.reactions;
+
+  console.log("Reactions data:", reactionsData);
+
+  setDoc(messageRef, { reactions: reactionsData }, { merge: true })
+  // .then(() => {
+  //   console.log("Reactions updated successfully in Firestore.");
+  // })
+  // .catch(error => {
+  //   console.error("Error updating reactions in Firestore:", error);
+  // });
+}
+
 
 
 }
