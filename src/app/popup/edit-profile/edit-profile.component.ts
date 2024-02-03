@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef } from '@angular/core';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
@@ -17,14 +17,34 @@ import { FormsModule } from '@angular/forms';
 export class EditProfileComponent {
   inputName: string = '';
   inputEmail: string = '';
+  emailInputPlaceholder: string = '';
+  hideEditEmail: boolean = false;
 
   constructor(
     public firebase: FirebaseService,
     public dialogRef: MatDialogRef<EditProfileComponent>,
+    private elementRef: ElementRef,
+    private changeDetectorRef: ChangeDetectorRef
   ) { }
 
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
+  }
+
+  ngAfterViewInit(): void {
+    const emailInputElement: HTMLInputElement | null = this.elementRef.nativeElement.querySelector('.edit-email input');
+
+    if (emailInputElement) {
+      this.emailInputPlaceholder = emailInputElement.placeholder;
+      console.log('Placeholder für das E-Mail-Input-Feld:', this.emailInputPlaceholder);
+
+      if (this.emailInputPlaceholder.includes('gmail') || this.emailInputPlaceholder.includes('googlemail')) {
+        this.hideEditEmail = true;
+
+        // Benachrichtigen Sie Angular manuell über die Änderung
+        this.changeDetectorRef.detectChanges();
+      }
+    }
   }
 
   save() {
