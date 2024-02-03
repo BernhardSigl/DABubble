@@ -118,6 +118,13 @@ export class FirebaseService {
     this.statusChangeable = loggedInUserInfo.statusChangeable;
     this.email = loggedInUserInfo.email;
     this.profileImg = loggedInUserInfo.profileImg;
+  }
 
+  async changeName(newName: string): Promise<void> {
+    await setDoc(this.getSingleUserDocRef(), { name: newName }, { merge: true });
+  }
+
+  async changeEmail(newEmail: string): Promise<void> {
+    await setDoc(this.getSingleUserDocRef(), { email: newEmail }, { merge: true });
   }
 }

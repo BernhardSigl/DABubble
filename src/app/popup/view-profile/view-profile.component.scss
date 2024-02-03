@@ -1,15 +1,19 @@
+// .view-profile-dialog {
+//     @include dialogRadius(10px, 10px, 10px, 10px);
+// }
+
 .popup {
     max-width: 420px;
     width: 420px;
     padding: 40px;
     background-color: white;
-    border-radius: 30px;
-    gap: 45px;
+    border-radius: 1.875rem 0 1.875rem 1.875rem; // 30px
+    gap: 2.375rem; // 38ox
     display: flex;
     flex-direction: column;
 }
 
-.icon {
+.cross-icon {
     background-image: url('./../../../assets/img/cross-black.png');
     background-size: 1.5rem 1.5rem; // 24px
     background-repeat: no-repeat;
@@ -40,10 +44,20 @@
     }
 }
 
-.name-and-status {
+.name-edit-status {
     display: flex;
     flex-direction: column;
     gap: .9375rem; // 15px
+
+    .edit {
+        color: var(--purple);
+        cursor: pointer;
+        font-weight: 600;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
 
     .status {
         gap: .9375rem; // 15px
@@ -63,5 +77,6 @@
         margin-left: calc(1.25rem + 1.875rem);
         color: var(--third);
         cursor: pointer;
+        outline: none;
     }
 }

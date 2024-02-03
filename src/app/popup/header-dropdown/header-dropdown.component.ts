@@ -19,7 +19,10 @@ export class HeaderDropdownComponent {
 
   showProfile() {
     this.dialogRef.close();
-    this.dialog.open(ViewProfileComponent);
+    this.dialog.open(ViewProfileComponent, {
+      position: { top: '6.875rem', right: '1.25rem' },
+      panelClass: 'no-border-tr'
+    });
   }
 
   logOut() {

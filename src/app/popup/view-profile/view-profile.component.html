@@ -1,8 +1,8 @@
-<div class="popup boxShadow">
+<div class="popup">
 
     <div class="horicontal spaceBetween">
-        <h4>Profil</h4>
-        <div class="icon">
+        <h4 class="bold">Profil</h4>
+        <div class="icon-size-24 cross-icon" (click)="this.dialogRef.close();">
         </div>
 
     </div>
@@ -11,8 +11,12 @@
         <div [style.background-image]="'url(' + firebase.profileImg + ')'" class="profile-img"></div>
     </div>
 
-    <div class="name-and-status">
-        <h2 class="bold">{{ firebase.name }}</h2>
+    <div class="name-edit-status">
+        <div class="horicontal spaceBetween">
+            <h2 class="bold">{{ firebase.name }}</h2>
+            <span class="fs18 edit" (click)="editProfile()">Bearbeiten</span>
+        </div>
+
         <div class="horicontal status">
             <img [src]="firebase.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'">
             <h5>{{ firebase.status ? 'Online' : 'Abwesend' }}</h5>
@@ -26,7 +30,4 @@
         </div>
         <a href="mailto:{{ firebase.email }}" class="email fs18">{{ firebase.email }}</a>
     </div>
-    <!-- <button (click)="firebase.online()">ONLINE</button>
-        <button (click)="firebase.offline()">OFFLINE</button> -->
-
 </div>

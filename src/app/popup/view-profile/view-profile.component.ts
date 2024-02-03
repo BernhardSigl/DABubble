@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 
 @Component({
   selector: 'app-view-profile',
@@ -13,7 +15,9 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 export class ViewProfileComponent {
   constructor(
     public firebase: FirebaseService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    public dialogRef: MatDialogRef<ViewProfileComponent>,
+    public dialog: MatDialog
   ) {
   }
 
@@ -24,5 +28,13 @@ export class ViewProfileComponent {
   getSafeProfileImageStyle(): SafeStyle {
     const backgroundImage = `url('${this.firebase.profileImg}')`;
     return this.sanitizer.bypassSecurityTrustStyle(backgroundImage);
+  }
+
+  editProfile() {
+    this.dialogRef.close();
+    this.dialog.open(EditProfileComponent, {
+      position: { top: '6.875rem', right: '1.25rem' },
+      panelClass: 'no-border-tr'
+    });
   }
 }
