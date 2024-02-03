@@ -52,19 +52,31 @@ export class ChooseAvaterComponent implements OnInit {
 
         reader.onload = async (e) => {
           const dataURL = e.target?.result as string;
-          console.log(dataURL)
 
+          // Upload the image to Firebase Storage
           const storageRef = ref(this.storage, `profilePicture/${this.userName}_${file.name}`);
           await uploadString(storageRef, dataURL, 'data_url');
 
+          // Get the download URL of the uploaded image
           const downloadURL = await getDownloadURL(storageRef);
           this.profileImageSrc = downloadURL;
+
+          // Update user data in Firestore with the uploaded image URL
+          const user = new User({
+            name: this.userName,
+            email: this.email,
+            userId: '',
+            profileImg: downloadURL, // Use the uploaded image URL
+            password: '',
+          });
+
+          // Update user data in Firestore
+          await this.authyService.updateUserData(user);
         };
 
         reader.readAsDataURL(file);
       } catch (error) {
         console.error('Error uploading avatar:', error);
-
       }
     } else {
       alert('Please select a file.');
@@ -79,31 +91,29 @@ export class ChooseAvaterComponent implements OnInit {
   }
 
   async handleAvatarSelect(avatarSrc: string): Promise<void> {
+    // Update the profileImageSrc with the selected avatar
     this.profileImageSrc = avatarSrc;
-    this.avatarDataService.setSelectedAvatar(avatarSrc);
 
+    // Update the user's profileImg in Firestore
     const user = new User({
       name: this.userName,
       email: this.email,
       userId: '',
-      profileImg: avatarSrc,
+      profileImg: avatarSrc, // Use the selected image URL
       password: '',
     });
 
     try {
-      const storageRef = ref(this.storage, `profilePicture/${user.userId}`);
-      await uploadString(storageRef, avatarSrc, 'data_url');
-
-      // Get the download URL of the uploaded image
-      const downloadURL = await getDownloadURL(storageRef);
-      user.profileImg = downloadURL;
-
-      // Update user data in Firestore
-      await this.authyService.updateUserData(user);
+      // If the user is already registered, update their profileImg
+      if (this.user && this.user.userId) {
+        user.userId = this.user.userId;
+        await this.authyService.updateUserData(user);
+      }
     } catch (error) {
-      console.error('Error uploading avatar:', error);
+      console.error('Error updating user profileImg:', error);
     }
   }
+
 
 
 async registerUser() {

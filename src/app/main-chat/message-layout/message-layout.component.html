@@ -1,4 +1,4 @@
-<<div
+<div
   class="message-card"
   *ngFor="let message of messages$ | async"
   [ngClass]="{
@@ -33,13 +33,20 @@
           </div>
         </div>
         <div class="emoji-reaction">
-          <img src="../../../assets/img/add-reaction.png" (click)="toggleEmojiPicker()" alt="" />
+          <img src="../../../assets/img/add-reaction.png" (click)="toggleEmojiPicker(message.messageId)" alt="" />
+          <div class="reactions-container" >
+              <button *ngFor="let reaction of message.reactions | keyvalue" class="reactions">
+                  {{ reaction.key }} {{ reaction.value }}
+              </button>
+          </div>
           <emoji-mart
-          class="emoji-mart"
-          *ngIf="isEmojiPickerVisible"
-          title="Choose your emoji"
-        ></emoji-mart>
-        </div>
+              class="emoji-mart"
+              *ngIf="isEmojiPickerVisible[message.messageId]"
+              title="Choose your emoji"
+              (emojiClick)="onEmojiClick($event, message)"
+          ></emoji-mart>
+      </div>
+
       </div>
       <img class="card-profile-img" [src]="message.image" alt="User Image" />
     </div>
@@ -47,4 +54,4 @@
 
   </div>
 </div>
->
+
