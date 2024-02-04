@@ -89,8 +89,12 @@ export class MessageLayoutComponent implements OnInit {
     }
 
     this.updateMessageReactions(message);
+    this.closeEmojiPicker(message.messageId);
   }
-
+  closeEmojiPicker(messageId: string) {
+    // Hide the emoji picker for the specific message
+    this.isEmojiPickerVisible[messageId] = false;
+  }
   toggleReaction(message: Message, emoji: string) {
     if (!this.userId) {
       console.error("UserID is not defined.");

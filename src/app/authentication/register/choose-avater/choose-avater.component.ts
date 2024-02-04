@@ -4,7 +4,7 @@ import { AvatarDataService } from '../../../firebase-services/avatar-data.servic
 import { AuthyService } from '../../../firebase-services/authy.service';
 import { AppUser, User } from '../../../classes/user.class';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { Firestore, addDoc, collection, getDocs, query, } from '@angular/fire/firestore';
+import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDocs, query, setDoc, } from '@angular/fire/firestore';
 import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
 
 
@@ -144,8 +144,15 @@ async registerUser() {
 async addUser() {
   // Check if 'user' is defined before adding it to the collection
   if (this.user) {
-    const docRef = await addDoc(this.getUsersColRef(), this.user.toJson());
-    return docRef;
+    try {
+      const userRef: DocumentReference<DocumentData> = doc(this.firestore, `users/${this.user.userId}`);
+      await setDoc(userRef, this.user.toJson());
+      console.log('User added to collection:', this.user);
+      return userRef;
+    } catch (error) {
+      console.error('Error adding user to collection:', error);
+      return null;
+    }
   } else {
     console.error('User data is not defined.');
     return null;
