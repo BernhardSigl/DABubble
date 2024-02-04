@@ -267,15 +267,24 @@ export class LoginComponent implements OnInit {
    */
   async loginAsGuest() {
     const guestEmail = 'guest@guest.de';
-    const guestPassword = 'guest1';
+    const guestPassword = '123456';
 
     try {
+      // Authenticate as guest
       await this.authyService.loginWithEmailAndPassword(guestEmail, guestPassword);
-      const userId = 'jrfCjgm7qGf0EGAEisJO2kMNMRy2'; // Set the guest user ID
 
+      // Provide the guest user ID
+      const userId = 'e7zSK07HmreqlBdt7cibNEcjAQW2';
+
+      // Save the guest user ID to local storage
+      localStorage.setItem('userId', userId);
+
+      // Navigate to the main page with the guest user ID as a query parameter
       this.router.navigate(['/main'], { queryParams: { userId: userId } });
+
       console.log('logged in as guest with ID: ', userId);
     } catch (err: any) {
+      // Handle authentication errors
       if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
         window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
       } else {
@@ -283,6 +292,7 @@ export class LoginComponent implements OnInit {
       }
     }
   }
+
 
 
 
