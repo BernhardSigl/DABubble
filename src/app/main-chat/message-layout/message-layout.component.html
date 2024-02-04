@@ -1,0 +1,57 @@
+<div
+  class="message-card"
+  *ngFor="let message of messages$ | async"
+  [ngClass]="{
+    'current-user': message.senderId === userId,
+    'other-user': message.senderId !== userId
+  }"
+>
+  <div class="sent-date">
+    <mat-divider class="one-divider"></mat-divider>
+    <div class="btn-date">
+      <button>{{ message.time | date : "M/d/yy" }}</button>
+    </div>
+    <mat-divider class="two-divider"></mat-divider>
+  </div>
+
+  <div>
+    <div class="content-container">
+      <div class="card-content">
+        <div class="time-name">
+          <p>{{ message.time | date : "HH:mm" }}</p>
+          <h3>{{ message.name }}</h3>
+        </div>
+        <img
+          class="message-image"
+          [src]="message.messageImage"
+          alt="Message Image"
+          *ngIf="message.messageImage"
+        />
+        <div class="message" *ngIf="message.message.length > 0">
+          <div *ngFor="let msg of message.message">
+            <div *ngIf="msg.trim() !== ''">{{ msg }}</div>
+          </div>
+        </div>
+        <div class="emoji-reaction">
+          <img src="../../../assets/img/add-reaction.png" (click)="toggleEmojiPicker(message.messageId)" alt="" />
+          <div class="reactions-container" >
+              <button *ngFor="let reaction of message.reactions | keyvalue" class="reactions">
+                  {{ reaction.key }} {{ reaction.value }}
+              </button>
+          </div>
+          <emoji-mart
+              class="emoji-mart"
+              *ngIf="isEmojiPickerVisible[message.messageId]"
+              title="Choose your emoji"
+              (emojiClick)="onEmojiClick($event, message)"
+          ></emoji-mart>
+      </div>
+
+      </div>
+      <img class="card-profile-img" [src]="message.image" alt="User Image" />
+    </div>
+
+
+  </div>
+</div>
+

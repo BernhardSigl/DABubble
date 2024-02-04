@@ -18,8 +18,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthyService } from '../../firebase-services/authy.service';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { Firestore, addDoc, collection, doc, getDocs, query, updateDoc, where, } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
 import { User } from '../../classes/user.class'
+import { FirebaseService } from '../../firebase-services/firebase.service';
+import { DocumentReference } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +32,7 @@ import { User } from '../../classes/user.class'
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -99,21 +101,24 @@ export class LoginComponent implements OnInit {
   constructor(
     private authyService: AuthyService,
     private ngZone: NgZone, // google
+    public firebase: FirebaseService, // push userId in firebase service
   ) { }
   isGuest: boolean | undefined;
 
   ngOnInit(): void {
+    this.clearStorage();
+
     if (!this.animationPlayed) {
       this.playAnimation();
     }
 
     //google
-    google.accounts.id.initialize({
-      client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
-      callback: (resp: any) => this.handleLogin(resp)
+    this.loadGoogleApi(() => {
+      google.accounts.id.initialize({
+        client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
+        callback: (resp: any) => this.handleLogin(resp)
+      });
     });
-
-
   }
 
 
@@ -122,13 +127,27 @@ export class LoginComponent implements OnInit {
     const customGoogleButton = document.getElementById('google-btn');
     if (customGoogleButton) {
       customGoogleButton.addEventListener('click', () => {
-        google.accounts.id.prompt((response: any) => {
-          if (response.isNotDisplayed() || response.isSkippedMoment()) {
+        this.loadGoogleApi(() => {
+          google.accounts.id.prompt(() => {
             document.cookie = `g_state=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT`;
             google.accounts.id.prompt();
-          }
+          });
         });
       });
+    }
+  }
+
+  // google
+  private loadGoogleApi(callback: () => void): void {
+    if (typeof google === 'undefined' || !google.accounts) {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.onload = callback;
+      document.head.appendChild(script);
+    } else {
+      callback();
     }
   }
 
@@ -168,10 +187,11 @@ export class LoginComponent implements OnInit {
   /**
    * Google: Redirect to landing page after successful google credentials
    */
-  async redirect(userId: string) {
-    this.ngZone.run(() => {
-      console.log('Weiterleitung auf landing page mit id: ', userId);
-      // this.router.navigate([``]);
+  redirect(userId: string) {
+    this.ngZone.run(async () => {
+      localStorage.setItem('userId', userId);
+      await this.firebase.online();
+      this.router.navigate([`/main`]);
     });
   }
 
@@ -184,6 +204,8 @@ export class LoginComponent implements OnInit {
       name: name,
       email: email,
       profileImg: profileImg,
+      status: false,
+      statusChangeable: false
     });
     await this.addUser().then((result: any) => {
       this.userId = result.id;
@@ -243,21 +265,23 @@ export class LoginComponent implements OnInit {
   /**
    * Logs in as a guest user.
    */
-  loginAsGuest() {
+  async loginAsGuest() {
     const guestEmail = 'guest@guest.de';
     const guestPassword = 'guest1';
 
-    this.authyService.loginWithEmailAndPassword(guestEmail, guestPassword);
-    this.router.navigate(['/main']);
-    console.log('logged in');
-  } catch(err: any) {
+    try {
+      await this.authyService.loginWithEmailAndPassword(guestEmail, guestPassword);
+      const userId = 'jrfCjgm7qGf0EGAEisJO2kMNMRy2'; // Set the guest user ID
 
-    if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-      window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
-    } else {
-      window.alert('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+      this.router.navigate(['/main'], { queryParams: { userId: userId } });
+      console.log('logged in as guest with ID: ', userId);
+    } catch (err: any) {
+      if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+        window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
+      } else {
+        window.alert('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+      }
     }
-
   }
 
 
@@ -283,14 +307,31 @@ export class LoginComponent implements OnInit {
 
   async login(email: string, password: string) {
     try {
+      // Authenticate user
       const userCredential = await this.authyService.loginWithEmailAndPassword(email, password);
       this.userId = userCredential.user?.uid;
-      console.log('UserID:', this.userId);
-      this.router.navigate(['/main'], {queryParams:{userId:this.userId}});
 
-      console.log('logged in');
+      // Query Firestore to find the document with matching userId
+      const querySnapshot = await getDocs(query(collection(this.firestore, "users"), where("userId", "==", this.userId)));
+
+      if (!querySnapshot.empty) {
+        const userDocSnapshot = querySnapshot.docs[0];
+
+        // Now you have the document snapshot, you can retrieve the document ID
+        const docId = userDocSnapshot.id;
+
+        // Save the document ID to local storage
+        localStorage.setItem('userId', docId);
+        // await this.firebase.online();
+
+        // Navigate to main page
+        this.router.navigate(['/main'], { queryParams: { userId: this.userId } });
+        console.log('logged in');
+      } else {
+        console.log('User document does not exist.');
+      }
     } catch (err: any) {
-
+      // Handle authentication errors
       if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
         window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
       } else {
@@ -298,6 +339,12 @@ export class LoginComponent implements OnInit {
       }
     }
   }
+
+  clearStorage() {
+    sessionStorage.clear();
+    localStorage.clear();
+  }
+
 
   playAnimation() {
     this.textState = 'hidden';

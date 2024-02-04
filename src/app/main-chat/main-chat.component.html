@@ -1,2 +1,31 @@
 <app-header></app-header>
-<app-side-nav></app-side-nav>
+
+<div class="desktop-view">
+  <app-side-nav></app-side-nav>
+  <!-- Chat Header -->
+  <section class="main-chat">
+    <header class="header-chat">
+      <div class="left-side-header">
+        <p>#Entwicklerteam</p>
+        <img src="../../assets/img/arrow-drop-down-black.png" alt="" />
+      </div>
+
+      <div class="right-side-header">
+        <div class="profile-images">
+          <img src="../../assets/img/profile-1.png" alt="" />
+          <img src="../../assets/img/profile-2.png" alt="" />
+          <img src="../../assets/img/profile-3.png" alt="" />
+        </div>
+        <span class="profile-counts"> 3 </span>
+        <img class="add-member" src="../../assets/img/add-person.png" />
+      </div>
+    </header>
+
+    <!--  Messages -->
+    <app-message-layout [userId]="userId" [userName]="userName" [userImage]="userImage"></app-message-layout>
+
+    <!-- Message box -->
+    <app-message-box [userId]="userId"></app-message-box>
+  </section>
+  <app-thread *ngIf="isThreadViewOpen" (closeThreadViewEvent)="closeThreadView()"></app-thread>
+</div>

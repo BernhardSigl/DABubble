@@ -10,15 +10,21 @@ body {
     font-family: 'Nunito' !important;
     background-color: var(--background-color);
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 :root {
     --background-color: #ECEEFE;
     --primary: #444DF2;
     --black: #000;
+    --gray: #686868;
     --white: #fff;
     --secondary: #797EF3;
     --main-font: 'Nunito';
+    --third: #1381FF;
+    --purple: #535AF1;
+    --dark-purple: #8A8EF5;
+    --light-purple: #adb0d9;
 }
 
 app-login {
@@ -43,6 +49,10 @@ input {
     line-height: normal;
 }
 
+.bold {
+    font-weight: 700;
+}
+
 h1,
 h2,
 h3,
@@ -61,7 +71,7 @@ h1 {
 }
 
 h2 {
-    font-size: 2.111rem;
+    font-size: 2rem; // 32px
 }
 
 // 20, 32 sind sehr selten und sollten einzeln benutzt werden
@@ -71,17 +81,60 @@ h3 {
 }
 
 h4 {
-    font-size: 1.444rem;
+    font-size: 1.5rem; // 24px
 }
 
 h5 {
-    font-size: 1.222rem;
+    font-size: 1.25rem; //20px
 }
 
-// media query 768px
-// 22 17 20 font sizes
+.fs18 {
+    font-size: 1.125rem;
+}
 
+.icon-size-24 {
+    width: 1.5rem; // 24px
+    height: 1.5rem;
+    cursor: pointer;
+}
 
+.icon-size-30 {
+    width: 1.875rem; // 30px
+    height: 1.875rem;
+    cursor: pointer;
+}
+
+.horicontal {
+    display: flex;
+    align-items: center;
+}
+
+.vertical {
+    display: flex;
+    justify-content: center;
+}
+
+.spaceBetween {
+    justify-content: space-between;
+}
+
+.boxShadow {
+    box-shadow: 0 .375rem .625rem 0 rgba(0, 0, 0, 0.20);
+}
+
+// general dialog box-shadow
+.mat-mdc-dialog-container,
+.mdc-dialog__surface {
+    box-shadow: 0 .375rem .625rem 0 rgba(0, 0, 0, 0.20) !important;
+}
+
+// popup profile-dialogs and header dropdown:
+.no-border-tr .mat-mdc-dialog-container,
+.no-border-tr .mdc-dialog__surface {
+    border-radius: 1.875rem 0 1.875rem 1.875rem !important;
+    box-shadow: 0 .375rem .625rem 0 rgba(0, 0, 0, 0.20) !important;
+    overflow: hidden !important;
+}
 
 // fonts:
 @font-face {

@@ -1,0 +1,123 @@
+.popup {
+    max-width: 420px;
+    width: 420px;
+    padding: 40px;
+    background-color: white;
+    border-radius: 30px;
+    gap: 2.8125rem; // 45px
+    display: flex;
+    flex-direction: column;
+}
+
+.cross-icon {
+    background-image: url('./../../../assets/img/cross-black.png');
+    background-size: 1.5rem 1.5rem; // 24px
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 100%;
+    width: 2.5rem; // 40px
+    height: 2.5rem;
+
+    &:hover {
+        background-color: var(--background-color);
+        background-image: url('./../../../assets/img/cross-blue.png');
+    }
+}
+
+.profile-img-position {
+    width: 100%;
+    height: 12.5rem;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+
+    .profile-img {
+        height: 100%;
+        aspect-ratio: 1/1;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 50%;
+    }
+}
+
+.edit-name {
+    display: flex;
+    flex-direction: column;
+    gap: .9375rem; // 15px
+}
+
+.input-title {
+    gap: 1.25rem; // 20px
+}
+
+.edit-email {
+    display: flex;
+    flex-direction: column;
+    gap: .9375rem; // 15px
+    margin-top: -1.8125rem; // -29px
+
+    .email-img-and-email-title {
+        gap: 1.25rem; // 20px
+    }
+
+    .email {
+        margin-left: calc(1.25rem + 1.875rem);
+        color: var(--third);
+        cursor: pointer;
+        outline: none;
+    }
+}
+
+.cancel-save-btns {
+    display: flex;
+    justify-content: center;
+    gap: 2rem; // 32px
+
+    button {
+        border-radius: 5rem;
+        font-size: 1.125rem;
+        padding: 0.9rem 1rem;
+        border: none;
+        outline: none;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .save-btn {
+        background-color: var(--primary);
+
+        &:hover {
+            background-color: #797EF3;
+        }
+    }
+
+    .cancel-btn {
+        border: 1px solid var(--primary);
+        background-color: transparent;
+        color: var(--primary);
+
+        &:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+    }
+}
+
+input {
+    padding: .9375rem 1.25rem; // 15px 20px
+    border: 1px solid #ccc;
+    border-radius: 1.875rem; // 30px
+    outline: none;
+    border-color: var(--light-purple);
+    font-size: 18px;
+
+    &::placeholder {
+        color: var(--gray);
+    }
+
+    &:hover,
+    &:focus {
+        border-color: var(--dark-purple);
+    }
+}

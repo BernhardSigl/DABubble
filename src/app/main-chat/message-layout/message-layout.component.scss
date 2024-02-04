@@ -1,0 +1,129 @@
+.message-card {
+  width: 100%;
+
+  .btn-date {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    button {
+      border-radius: 30px;
+      border: 1px solid #adb0d9;
+      padding: 5px 15px;
+      background: #fff;
+    }
+  }
+}
+.message-image {
+  width: 350px;
+  height: 350px;
+  object-fit: contain;
+}
+
+.current-user {
+  justify-content: flex-end;
+}
+
+.other-user .content-container {
+  flex-direction: row-reverse;
+}
+
+.other-user .message {
+  background-color: #eceeef;
+  color: black;
+  border-radius: 0px 30px 30px 30px;
+  margin-left: 0;
+}
+
+.other-user .time-name {
+  flex-direction: row-reverse;
+}
+
+.other-user .emoji-reaction{
+  justify-content: flex-start;
+}
+
+.add-member {
+  border-radius: 10px;
+}
+
+.card-profile-img {
+  border-radius: 100%;
+  width: 70px;
+  height: 70px;
+  margin-right: 45px;
+  margin-left: 30px;
+}
+
+.message {
+  border-radius: 30px 0px 30px 30px;
+  background-color: #797ef3;
+  padding: 15px;
+  max-width: 698px;
+  margin-left: 30px;
+  color: white;
+}
+
+.time-name {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
+
+  p {
+    color: #686868;
+  }
+}
+
+.content-container {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+
+  &:hover {
+    background: #eceefe;
+    transition: background 225ms ease-in-out;
+  }
+}
+
+.sent-date {
+  display: flex;
+  align-items: center;
+  margin-bottom: 35px;
+  justify-content: space-between;
+
+  .one-divider {
+    width: 40%;
+
+  }
+
+  .two-divider {
+
+    width: 40%;
+
+  }
+}
+
+.emoji-reaction {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+emoji-mart{
+  position: absolute;
+  bottom:32px;
+}
+
+.reactions-container{
+  display: flex;
+  gap: 10px;
+
+  .reactions{
+    border: 1px solid #8c91f7;
+    background-color: transparent;
+    border-radius: 10px;
+  }
+}

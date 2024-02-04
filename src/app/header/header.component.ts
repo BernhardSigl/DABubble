@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AvatarDataService } from '../firebase-services/avatar-data.service';
-import { Firestore, addDoc, collection, getDocs, query, where} from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, getDocs, query, where } from '@angular/fire/firestore';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { AngularFireAuth } from '@angular/fire/compat/auth'; 
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { MatDialog } from '@angular/material/dialog';
+import { HeaderDropdownComponent } from '../popup/header-dropdown/header-dropdown.component';
 
 @Component({
   selector: 'app-header',
@@ -18,40 +20,53 @@ export class HeaderComponent implements OnInit {
   userId: string = '';
   userImage: string = '';
 
-  constructor(private firestore: Firestore,private route: ActivatedRoute) {
-   
+  constructor(
+    private firestore: Firestore,
+    private route: ActivatedRoute,
+    public dialog: MatDialog) {
   }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params=>{
       this.userId = params['userId'];
-      console.log(this.userId)
-      if(this.userId){
+      // console.log(this.userId)
+      if (this.userId) {
         this.getUserData(this.userId)
-      }else{
+      } else {
         console.error('userId parameter us undefined')
       }
     })
   }
 
   async getUserData(userId: string) {
-    try{
-      const usersCollection = collection(this.firestore,'users');
-      const q = query(usersCollection, where('userId','==', userId));
+    try {
+      const usersCollection = collection(this.firestore, 'users');
+      const q = query(usersCollection, where('userId', '==', userId));
       const querySnapshot = await getDocs(q);
-      querySnapshot.forEach(doc=>{
+      querySnapshot.forEach(doc => {
         const userData = doc.data();
         this.userName = userData['name'];
         this.userEmail = userData['email'];
         this.userImage = userData['profileImg'];
 
-        console.log(this.userName, this.userEmail, this.userImage)
+        // console.log(this.userName, this.userEmail, this.userImage)
       })
-      
+
     }
-    catch(err){
+    catch (err) {
       console.error(err)
     }
+  }
+
+  // async ngOnInit(): Promise<void> {
+  //   await this.firebase.ngOnInit();
+  // }
+
+  headerDropdownMenu() {
+    this.dialog.open(HeaderDropdownComponent, {
+      position: { top: '6.875rem', right: '1.25rem' },
+      panelClass: 'no-border-tr'
+    });
   }
 
 }
