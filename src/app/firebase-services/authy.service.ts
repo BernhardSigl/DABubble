@@ -8,16 +8,22 @@ import {
   UserCredential,
   fetchSignInMethodsForEmail,
   updateProfile,
-
+  sendSignInLinkToEmail,
+  isSignInWithEmailLink,
+  signInWithEmailLink
 } from '@angular/fire/auth';
 import { AppUser } from '../classes/user.class';
+import { FirebaseService } from './firebase.service';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthyService {
-  constructor(private auth: Auth) {
+  constructor(
+    private auth: Auth,
+    private firebase: FirebaseService,
+  ) {
 
     this.auth = getAuth();
   }
@@ -26,7 +32,7 @@ export class AuthyService {
 
     try {
       const userCredential = await createUserWithEmailAndPassword(
-        this.auth ,
+        this.auth,
         user.email || '',
         user.password || ''
       );
@@ -82,6 +88,48 @@ export class AuthyService {
       }
     } catch (error) {
       console.error('Error updating user data:', error);
+      throw error;
+    }
+  }
+
+  async changeEmailAuth(newEmail: string): Promise<void> {
+    this.firebase.pullLoggedInUserId();
+
+    try {
+      const currentUser = this.auth.currentUser;
+
+      if (currentUser && currentUser.email) {
+
+        const actionCodeSettings = {
+          url: `http://localhost:4200/main?userId=${this.firebase.loggedInUserId}`,
+          handleCodeInApp: true,
+        };
+
+        await sendSignInLinkToEmail(this.auth, newEmail, actionCodeSettings);
+
+        window.localStorage.setItem('emailForSignIn', newEmail);
+      } else {
+        throw new Error('User not authenticated or missing email.');
+      }
+    } catch (error) {
+      console.error('Error sending authentication link:', error);
+      throw error;
+    }
+  }
+
+  async completeEmailChange(): Promise<void> {
+    try {
+      const email = window.localStorage.getItem('emailForSignIn');
+
+      if (email && isSignInWithEmailLink(this.auth, window.location.href)) {
+        await signInWithEmailLink(this.auth, email, window.location.href);
+
+        window.localStorage.removeItem('emailForSignIn');
+      } else {
+        throw new Error('Invalid or missing email link.');
+      }
+    } catch (error) {
+      console.error('Error completing email change:', error);
       throw error;
     }
   }

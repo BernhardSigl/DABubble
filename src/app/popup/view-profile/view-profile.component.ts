@@ -25,13 +25,6 @@ export class ViewProfileComponent {
     await this.firebase.ngOnInit();
   }
 
-  getSafeProfileImageStyle(): SafeStyle {
-    console.log('hi');
-
-    const backgroundImage = `url('${this.firebase.profileImg}')`;
-    return this.sanitizer.bypassSecurityTrustStyle(backgroundImage);
-  }
-
   editProfile() {
     this.dialogRef.close();
     this.dialog.open(EditProfileComponent, {

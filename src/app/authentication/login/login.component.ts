@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit {
   isGuest: boolean | undefined;
 
   ngOnInit(): void {
-    this.clearStorage();
+    // this.clearStorage();
 
     if (!this.animationPlayed) {
       this.playAnimation();
@@ -115,7 +115,7 @@ export class LoginComponent implements OnInit {
     //google
     this.loadGoogleApi(() => {
       google.accounts.id.initialize({
-        client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
+        client_id: '440475341248-nm8fnltrne3hgtocjjoat1muv9cmu4gh.apps.googleusercontent.com',
         callback: (resp: any) => this.handleLogin(resp)
       });
     });

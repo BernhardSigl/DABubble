@@ -3,6 +3,7 @@ import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthyService } from '../../firebase-services/authy.service';
 
 @Component({
   selector: 'app-edit-profile',
@@ -24,7 +25,8 @@ export class EditProfileComponent {
     public firebase: FirebaseService,
     public dialogRef: MatDialogRef<EditProfileComponent>,
     private elementRef: ElementRef,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private auth: AuthyService
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -49,9 +51,10 @@ export class EditProfileComponent {
       this.firebase.changeName(this.inputName);
     }
 
-    if (this.inputEmail.trim() !== '') {
-      this.firebase.changeEmail(this.inputEmail);
-    }
+    // if (this.inputEmail.trim() !== '') {
+    //   this.firebase.changeEmail(this.inputEmail);
+    //   this.auth.changeEmailAuth(this.inputEmail);
+    // }
     this.dialogRef.close();
   }
 }

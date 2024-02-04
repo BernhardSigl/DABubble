@@ -14,6 +14,7 @@ import { Firestore, addDoc, collection, getDocs, query, where } from '@angular/f
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { UserListService } from '../firebase-services/user-list.service';
 import { user } from '@angular/fire/auth';
+import { AuthyService } from '../firebase-services/authy.service';
 @Component({
   selector: 'app-main-chat',
   standalone: true,
@@ -38,7 +39,7 @@ export class MainChatComponent implements OnInit {
   userImage: string = '';
   userId: string = '';
 
-  constructor(private firestore: Firestore, private route: ActivatedRoute, private userDataService: UserListService) { }
+  constructor(private firestore: Firestore, private route: ActivatedRoute, private userDataService: UserListService, private auth: AuthyService) { }
 
 
 
@@ -52,6 +53,12 @@ export class MainChatComponent implements OnInit {
         console.error('userId parameter is undefined');
       }
     });
+
+    // important for email change
+    const emailForSignIn = window.localStorage.getItem('emailForSignIn');
+    if (emailForSignIn) {
+      this.auth.completeEmailChange();
+    }
   }
 
   async getUserData(userId: string): Promise<void> {
