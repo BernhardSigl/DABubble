@@ -11,7 +11,8 @@
         <div class="header-profile horicontal" (click)="headerDropdownMenu()">
             <h2 class="bold name">{{ firebase.name }}</h2>
             <div class="profile-img-and-status">
-                <img class="profile-img" src="./../../assets/img/profile-1.png">
+                <!-- <img class="profile-img" src="./../../assets/img/profile-1.png"> -->
+                <div [style.background-image]="'url(' + firebase.profileImg + ')'" class="profile-img"></div>
                 <img [src]="firebase.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'"
                     class="status">
             </div>

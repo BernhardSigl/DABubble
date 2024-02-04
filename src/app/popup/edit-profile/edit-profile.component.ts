@@ -36,12 +36,9 @@ export class EditProfileComponent {
 
     if (emailInputElement) {
       this.emailInputPlaceholder = emailInputElement.placeholder;
-      console.log('Placeholder für das E-Mail-Input-Feld:', this.emailInputPlaceholder);
 
       if (this.emailInputPlaceholder.includes('gmail') || this.emailInputPlaceholder.includes('googlemail')) {
         this.hideEditEmail = true;
-
-        // Benachrichtigen Sie Angular manuell über die Änderung
         this.changeDetectorRef.detectChanges();
       }
     }

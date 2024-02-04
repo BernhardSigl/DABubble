@@ -332,7 +332,7 @@ export class LoginComponent implements OnInit {
 
         // Save the document ID to local storage
         localStorage.setItem('userId', docId);
-        // await this.firebase.online();
+        await this.firebase.online();
 
         // Navigate to main page
         this.router.navigate(['/main'], { queryParams: { userId: this.userId } });

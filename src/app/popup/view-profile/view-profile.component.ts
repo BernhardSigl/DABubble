@@ -26,6 +26,8 @@ export class ViewProfileComponent {
   }
 
   getSafeProfileImageStyle(): SafeStyle {
+    console.log('hi');
+
     const backgroundImage = `url('${this.firebase.profileImg}')`;
     return this.sanitizer.bypassSecurityTrustStyle(backgroundImage);
   }
