@@ -1,41 +1,59 @@
 <mat-drawer-container class="sidenav-wrapper" autosize>
-    <mat-drawer #drawer class="sidenav-container" mode="side">    
-            <div class="channel-header">
-                <img src="./../../assets/img/channel-logo.png">
-                <p>Code learning</p>
-                <img src="./../../assets/img/edit-channel.png" alt="">
-            </div>
-            <div class="channels-content">
-                <div class="choose-channels">
-                    <div class="choose-channel">
-                        <img src="./../../assets/img/arrow-drop-down-black.png">
-                        <img src="./../../assets/img/workspaces-black.png">
-                        <p>Channels</p>
+    <mat-drawer #drawer class="sidenav-container" mode="side">
+        <div class="channel-header">
+            <img src="./../../assets/img/channel-logo.png">
+            <p>Code learning</p>
+            <img src="./../../assets/img/edit-channel.png" alt="">
+        </div>
+        <div class="channels-content">
+            <div class="choose-channels">
+                <div class="choose-channel">
+                    <div class="open-channel" (mouseenter)="changeImagesChannel(true)"
+                        (mouseleave)="changeImagesChannel(false)">
+                        <img [src]="openMenuChannel">
+                        <div class="channel-title">
+                            <img [src]="workspaceChannel">
+                            <p>Channels</p>
+                        </div>
                     </div>
-                    <img src="./../../assets/img/plus-black.png">
+                    <img class="plus-channel" src="./../../assets/img/plus-black.png">
                 </div>
+
                 <div class="channel-overview">
                     <img src="./../../assets/img/tag-icon.png">
                     <p>Entwicklerteam</p>
                 </div>
-                <div class="add-channel">
-                    <img src="./../../assets/img/plus-circle-black.png">
+                <div class="add-channel" (mouseenter)="changeImagesChannel(true)"
+                    (mouseleave)="changeImagesChannel(false)">
+                    <img [src]="addChannelPlus">
                     <p>Channel hinzufügen</p>
                 </div>
-                <div class="direct-messages"> 
-                    <img src="./../../assets/img/arrow-drop-down-black.png">
-                    <img src=".//../../assets/img/account-circle-black.png">
+            </div>
+
+            <div class="messages-container" (mouseenter)="changeImageMessages(true)"
+                (mouseleave)="changeImageMessages(false)">
+                <div class="messages-header">
+                    <img [src]="openMenuMessage">
+                    <img [src]="directNewsImage">
                     <p>Direktnachrichten</p>
                 </div>
+                <div class="messages-users">
+                    <div class="messages-user" (click)="openMessage()">
+                        <img src="./../../assets/img/profile-1.png">
+                        <p>Daniel Schirmer (Du)</p>
+                    </div>
+
+                </div>
             </div>
-       
+        </div>
+
 
     </mat-drawer>
 </mat-drawer-container>
 
 <div class="sidenav-button">
-    <button type="button" mat-button (click)="drawer.toggle()" (mouseenter)="changeImage(true)"
-        (mouseleave)="changeImage(false)">
+    <button type="button" mat-button (click)="drawer.toggle()" (mouseenter)="changeImagesButton(true)"
+        (mouseleave)="changeImagesButton(false)">
         Workspace-Menü schließen
         <img [src]="buttonImage">
     </button>
