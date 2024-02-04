@@ -6,6 +6,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { MatDialog } from '@angular/material/dialog';
 import { HeaderDropdownComponent } from '../popup/header-dropdown/header-dropdown.component';
+import { FirebaseService } from '../firebase-services/firebase.service';
 
 @Component({
   selector: 'app-header',
@@ -14,53 +15,17 @@ import { HeaderDropdownComponent } from '../popup/header-dropdown/header-dropdow
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent implements OnInit {
-  userName: string = '';
-  userEmail: string = '';
-  userId: string = '';
-  userImage: string = '';
+export class HeaderComponent {
 
   constructor(
-    private firestore: Firestore,
-    private route: ActivatedRoute,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    public firebase: FirebaseService,
+  ) {
   }
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.userId = params['userId'];
-      // console.log(this.userId)
-      if (this.userId) {
-        this.getUserData(this.userId)
-      } else {
-        console.error('userId parameter us undefined')
-      }
-    })
+  async ngOnInit(): Promise<void> {
+    await this.firebase.ngOnInit();
   }
-
-  async getUserData(userId: string) {
-    try {
-      const usersCollection = collection(this.firestore, 'users');
-      const q = query(usersCollection, where('userId', '==', userId));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach(doc => {
-        const userData = doc.data();
-        this.userName = userData['name'];
-        this.userEmail = userData['email'];
-        this.userImage = userData['profileImg'];
-
-        // console.log(this.userName, this.userEmail, this.userImage)
-      })
-
-    }
-    catch (err) {
-      console.error(err)
-    }
-  }
-
-  // async ngOnInit(): Promise<void> {
-  //   await this.firebase.ngOnInit();
-  // }
 
   headerDropdownMenu() {
     this.dialog.open(HeaderDropdownComponent, {
