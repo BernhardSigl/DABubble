@@ -1,18 +1,47 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDrawer } from '@angular/material/sidenav';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-side-nav',
   standalone: true,
   imports: [
     MatSidenavModule,
-    MatDrawer
+    MatDrawer, 
+    CommonModule
   ],
   templateUrl: './side-nav.component.html',
-  styleUrl: './side-nav.component.scss'
+  styleUrl: './side-nav.component.scss',
+  animations: [
+    trigger('rotateAnimation', [
+      state('open', style({ transform: 'rotate(-90deg)' })),
+      state('closed', style({ transform: 'rotate(0deg)' })),
+      transition('open => closed', animate('100ms ease-in')),
+      transition('closed => open', animate('100ms ease-out'))
+    ])
+  ]
 })
-export class SideNavComponent {
+export class SideNavComponent implements OnInit {
+
+  isOpen = false;
+  isOpenSecond = false;
+
+  ngOnInit(): void {
+  }
+
+
+  toggleRotationChannel() {
+    this.isOpen = !this.isOpen;
+  }
+
+  toggleRotationMessage() {
+    this.isOpenSecond = !this.isOpenSecond;
+  }
+
+
+
   buttonImage: string = './../../assets/img/hide-nav-black.png';
   openMenuChannel: string = './../../assets/img/arrow-drop-down-black.png';
   workspaceChannel: string = './../../assets/img/workspaces-black.png';
@@ -39,7 +68,7 @@ export class SideNavComponent {
     this.buttonImage = isHovered ? './../../assets/img/hide-nav-blue.png' : './../../assets/img/hide-nav-black.png';
   }
 
-  openMessage(){
+  openMessage() {
     // this.isMessageOpened = true;
   }
 
