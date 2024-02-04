@@ -34,18 +34,21 @@
         </div>
         <div class="emoji-reaction">
           <img src="../../../assets/img/add-reaction.png" (click)="toggleEmojiPicker(message.messageId)" alt="" />
-          <div class="reactions-container" >
-              <button *ngFor="let reaction of message.reactions | keyvalue" class="reactions">
-                  {{ reaction.key }} {{ reaction.value }}
-              </button>
+          <div class="reactions-container">
+            <button *ngFor="let reaction of message.reactions | keyvalue" class="reactions"
+                    (click)="toggleReaction(message, reaction.key)">
+                {{ reaction.key }} {{ reaction.value }}
+            </button>
           </div>
+
           <emoji-mart
               class="emoji-mart"
               *ngIf="isEmojiPickerVisible[message.messageId]"
               title="Choose your emoji"
               (emojiClick)="onEmojiClick($event, message)"
           ></emoji-mart>
-      </div>
+        </div>
+
 
       </div>
       <img class="card-profile-img" [src]="message.image" alt="User Image" />
