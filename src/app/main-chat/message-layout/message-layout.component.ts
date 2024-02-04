@@ -91,35 +91,6 @@ export class MessageLayoutComponent implements OnInit {
     this.updateMessageReactions(message);
   }
 
-  // toggleReaction(message: Message, emoji: string) {
-  //   if (!this.userId) {
-  //     console.error("UserID is not defined.");
-  //     return;
-  //   }
-
-  //   const userId = this.userId;
-
-  //   // Check if the user has already reacted to the emoji
-  //   if (message.reactions && message.reactions[emoji]) {
-  //     if (message.reactions[emoji] === 1 && message.senderId === userId) {
-  //       // If the count is 1 and the current user reacted, delete the reaction
-  //       delete message.reactions[emoji];
-  //     } else {
-  //       // Decrement the count if the current user reacted, or do nothing if another user reacted
-  //       message.reactions[emoji]--;
-  //     }
-  //   } else {
-  //     // If the emoji reaction doesn't exist, increment the count
-  //     if (!message.reactions) {
-  //       message.reactions = {}; // Ensure reactions object is initialized
-  //     }
-  //     message.reactions[emoji] = 1;
-  //   }
-
-  //   // Update reactions in Firestore
-  //   this.updateMessageReactions(message);
-  // }
-
   toggleReaction(message: Message, emoji: string) {
     if (!this.userId) {
       console.error("UserID is not defined.");
