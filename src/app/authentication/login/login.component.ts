@@ -106,7 +106,7 @@ export class LoginComponent implements OnInit {
   isGuest: boolean | undefined;
 
   ngOnInit(): void {
-    // this.clearStorage();
+    this.clearStorage();
 
     if (!this.animationPlayed) {
       this.playAnimation();
@@ -278,7 +278,7 @@ export class LoginComponent implements OnInit {
 
       // Save the guest user ID to local storage
       localStorage.setItem('userId', userId);
-
+      await this.firebase.online();
       // Navigate to the main page with the guest user ID as a query parameter
       this.router.navigate(['/main'], { queryParams: { userId: userId } });
 
