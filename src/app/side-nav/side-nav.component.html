@@ -38,13 +38,18 @@
                     <p>Direktnachrichten</p>
                 </div>
                 <div *ngIf="!isOpenSecond" class="messages-users">
-                    <div class="messages-user" (click)="openMessage()">
-                        <img src="./../../assets/img/profile-1.png">
+                    <div class="messages-user " (click)="openMessage()">
+                        <div class="test">
+                            <img src="./../../assets/img/profile-1.png">
                         <p>Daniel Schirmer (Du)</p>
+                        </div>
                     </div>
                     <div class="messages-user">
-                        <img src="./../../assets/img/profile-1.png">
-                        <p>Test Tester</p>
+                        <div class="test">
+                            <img src="./../../assets/img/profile-1.png">
+                            <p>Test Tester</p>
+                        </div>
+                        
                     </div>
                 </div>
             </div>

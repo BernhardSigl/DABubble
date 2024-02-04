@@ -3,6 +3,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDrawer } from '@angular/material/sidenav';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
+import { Firestore } from 'firebase/firestore';
 
 @Component({
   selector: 'app-side-nav',
@@ -27,6 +28,13 @@ export class SideNavComponent implements OnInit {
 
   isOpen = false;
   isOpenSecond = false;
+  userName: string = '';
+  userEmail: string = '';
+  userId: string = '';
+  userImage: string = '';
+
+  // constructor(private firestore: Firestore) {
+  // }
 
   ngOnInit(): void {
   }

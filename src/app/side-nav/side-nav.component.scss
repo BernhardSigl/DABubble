@@ -182,14 +182,11 @@
         .messages-user {
             display: flex;
             gap: .9375rem;
-            padding: .25rem 1.25rem .25rem 1.25rem;
             align-items: center;
-            border-radius: 1.875rem;
-            transition: background-color 100ms ease-in;
+          
+           
 
-            &:message-opened{
-                background-color: #535AF1;
-            }
+            
 
             img {
                 border-radius: 1.875rem;
@@ -204,6 +201,18 @@
         }
 
     }
+}
+.test{
+    display: flex;
+    gap: .9375rem;
+    padding: .25rem 1.25rem .25rem 1.25rem;
+    align-items: center;
+    border-radius: 1.875rem;
+    transition: background-color 100ms ease-in;
 
-
+    &:hover{
+        background: var(--Bg-color, #ECEEFE);
+        cursor: pointer;
+        
+    }
 }
