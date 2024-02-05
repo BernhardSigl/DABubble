@@ -1,1 +1,37 @@
-<p>add-channel works!</p>
+<div class="popup">
+
+    <div class="dFlex spaceBetween">
+        <h4 class="bold">Channel erstellen</h4>
+        <div class="icon-size-24 cross-icon" (click)="this.dialogRef.close();">
+        </div>
+    </div>
+
+    <span class="fs18">
+        Channels dienen deinem Team zur Kommunikation. Am besten sollten sie themenbezogen sein #marketing zum Beispiel.
+    </span>
+
+    <div class="input-box">
+        <span class="fs18 bold">Channel-Name</span>
+        <div class="input-border horicontal">
+            <img src="./../../../assets/img/hashtag-grey.png" class="icon-size-23">
+            <input placeholder="z.B. Kooperationsprojekte" [(ngModel)]="channelName">
+        </div>
+    </div>
+
+    <div class="input-box">
+        <div>
+            <span class="fs18 bold">Beschreibung&nbsp;</span>
+            <span class="fs18 optional-text">(optional)</span>
+        </div>
+
+        <div class="input-border horicontal">
+            <input placeholder="Dein Text hier" [(ngModel)]="channelDescription">
+        </div>
+    </div>
+
+    <div class="dFlex spaceBetween">
+        <div></div>
+        <button class="create" (click)="addNewChannel()">Erstellen</button>
+    </div>
+
+</div>

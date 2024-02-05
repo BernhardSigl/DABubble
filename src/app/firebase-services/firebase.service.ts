@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Firestore, addDoc, collection, doc, onSnapshot, query, setDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Message } from '../classes/message.class';
+import { Channel } from '../classes/channel.class';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,8 @@ export class FirebaseService {
 
   usersArray: any[] = [];
   loggedInUserId!: string;
+
+  channel!: Channel;
 
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
@@ -121,5 +124,17 @@ export class FirebaseService {
 
   async changeEmail(newEmail: string): Promise<void> {
     await setDoc(this.getSingleUserDocRef(), { email: newEmail }, { merge: true });
+  }
+
+
+  // Channels:
+  async addChannel(newChannel: Channel) {
+    await addDoc(this.getChannelColRef(), newChannel.toJson()).then((result: any) => {
+      console.log("Document written with ID: ", result);
+    });
+  }
+
+  getChannelColRef() {
+    return collection(this.firestore, "channels");
   }
 }

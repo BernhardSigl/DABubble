@@ -27,7 +27,6 @@ export class ViewProfileComponent {
 
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
-    // this.userId = ;
   }
 
   editProfile() {

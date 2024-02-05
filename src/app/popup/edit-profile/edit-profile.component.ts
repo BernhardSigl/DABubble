@@ -51,10 +51,10 @@ export class EditProfileComponent {
       this.firebase.changeName(this.inputName);
     }
 
-    // if (this.inputEmail.trim() !== '') {
-    //   this.firebase.changeEmail(this.inputEmail);
-    //   this.auth.changeEmailAuth(this.inputEmail);
-    // }
+    if (this.inputEmail.trim() !== '') {
+      this.firebase.changeEmail(this.inputEmail);
+      this.auth.changeEmailAuth(this.inputEmail);
+    }
     this.dialogRef.close();
   }
 }

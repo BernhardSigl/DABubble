@@ -15,6 +15,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { UserListService } from '../firebase-services/user-list.service';
 import { user } from '@angular/fire/auth';
 import { AuthyService } from '../firebase-services/authy.service';
+import { AddChannelComponent } from '../popup/add-channel/add-channel.component';
 @Component({
   selector: 'app-main-chat',
   standalone: true,
@@ -28,7 +29,8 @@ import { AuthyService } from '../firebase-services/authy.service';
     CommonModule,
     MatDividerModule,
     MessageLayoutComponent,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    AddChannelComponent
   ],
   templateUrl: './main-chat.component.html',
   styleUrl: './main-chat.component.scss',
@@ -55,8 +57,11 @@ export class MainChatComponent implements OnInit {
     });
 
     // important for email change
+    console.log('1');
     const emailForSignIn = window.localStorage.getItem('emailForSignIn');
     if (emailForSignIn) {
+      console.log('2');
+
       this.auth.completeEmailChange();
     }
   }
