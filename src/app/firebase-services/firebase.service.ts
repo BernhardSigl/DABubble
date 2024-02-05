@@ -19,6 +19,7 @@ export class FirebaseService {
   loggedInUserId!: string;
 
   channel!: Channel;
+  channelsArray: any[] = [];
 
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
@@ -28,6 +29,7 @@ export class FirebaseService {
     await this.pullLoggedInUserId();
     await this.subAllUsers();
     await this.subAllMessages();
+    await this.subAllChannels();
   }
 
   async subAllMessages(): Promise<void> {
@@ -136,5 +138,19 @@ export class FirebaseService {
 
   getChannelColRef() {
     return collection(this.firestore, "channels");
+  }
+
+  async subAllChannels(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const q = query(this.getChannelColRef());
+      onSnapshot(q, async (querySnapshot) => {
+        this.channelsArray = [];
+        querySnapshot.forEach(async (doc) => {
+          const channelsData = doc.data();
+          this.channelsArray.push(channelsData);
+        });
+        resolve();
+      });
+    });
   }
 }
