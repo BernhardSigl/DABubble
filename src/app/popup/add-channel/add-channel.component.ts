@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Channel } from '../../classes/channel.class';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FirebaseService } from '../../firebase-services/firebase.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-add-channel',
   standalone: true,
   imports: [
     FormsModule,
+    CommonModule,
+    ReactiveFormsModule
   ],
   templateUrl: './add-channel.component.html',
   styleUrl: './add-channel.component.scss'
@@ -18,10 +21,18 @@ export class AddChannelComponent {
   channelName!: string;
   channelDescription!: string;
 
+  addChannelForm: FormGroup;
+
   constructor(
     public dialogRef: MatDialogRef<AddChannelComponent>,
-    private firebase: FirebaseService
-  ) { }
+    private firebase: FirebaseService,
+    private fb: FormBuilder
+  ) {
+    this.addChannelForm = this.fb.group({
+      channelName: ['', Validators.required],
+      channelDescription: ['']
+    });
+  }
 
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
@@ -29,8 +40,8 @@ export class AddChannelComponent {
 
   async addNewChannel() {
     const newChannel = new Channel({
-      channelName: this.channelName,
-      channelDescription: this.channelDescription,
+      channelName: this.addChannelForm.value.channelName,
+      channelDescription: this.addChannelForm.value.channelDescription,
       members: [],
       messages: [],
       createdBy: this.firebase.name,
