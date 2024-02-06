@@ -78,7 +78,7 @@ export class MainChatComponent implements OnInit {
   }
 
 
-  isThreadViewOpen = true;
+  isThreadViewOpen = false;
 
   closeThreadView(): void {
     this.isThreadViewOpen = false;
