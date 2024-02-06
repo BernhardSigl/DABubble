@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Channel } from '../../classes/channel.class';
 import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { CommonModule } from '@angular/common';
+import { AddMemberComponent } from '../add-member/add-member.component';
 
 @Component({
   selector: 'app-add-channel',
@@ -17,7 +18,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './add-channel.component.scss'
 })
 export class AddChannelComponent {
-  channel!: Channel;
   channelName!: string;
   channelDescription!: string;
 
@@ -25,8 +25,8 @@ export class AddChannelComponent {
 
   constructor(
     public dialogRef: MatDialogRef<AddChannelComponent>,
-    private firebase: FirebaseService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public dialog: MatDialog
   ) {
     this.addChannelForm = this.fb.group({
       channelName: ['', Validators.required],
@@ -34,20 +34,16 @@ export class AddChannelComponent {
     });
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.firebase.ngOnInit();
+  addMember() {
+    if (this.addChannelForm.value.channelName.trim() !== '') {
+      this.dialog.open(AddMemberComponent, {
+        panelClass: 'border',
+        data: {
+          channelName: this.addChannelForm.value.channelName,
+          channelDescription: this.addChannelForm.value.channelDescription,
+        }
+      });
+      this.dialogRef.close();
+    }
   }
-
-  async addNewChannel() {
-    const newChannel = new Channel({
-      channelName: this.addChannelForm.value.channelName,
-      channelDescription: this.addChannelForm.value.channelDescription,
-      members: [],
-      messages: [],
-      createdBy: this.firebase.name,
-    });
-    await this.firebase.addChannel(newChannel);
-    this.dialogRef.close();
-  }
-
 }

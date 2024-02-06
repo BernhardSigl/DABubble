@@ -23,7 +23,8 @@ export class FirebaseService {
 
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
-  constructor() { }
+  constructor(
+  ) { }
 
   async ngOnInit(): Promise<void> {
     await this.pullLoggedInUserId();
@@ -128,6 +129,7 @@ export class FirebaseService {
     await setDoc(this.getSingleUserDocRef(), { email: newEmail }, { merge: true });
   }
 
+  // Email Change:
 
   // Channels:
   async addChannel(newChannel: Channel) {

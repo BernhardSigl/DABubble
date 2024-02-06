@@ -1,0 +1,12 @@
+<div class="members-list-box" *ngIf="checkboxAddSpecific">
+    <div class="members-list-scroll-box">
+        <div class="members-list" *ngFor="let user of firebase.usersArray">
+            <div class="profile-img-and-status">
+                <div [style.background-image]="'url(' + user.profileImg + ')'" class="profile-img"></div>
+                <img [src]="user.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'"
+                    class="status">
+            </div>
+            <span>{{ user.name }}</span>
+        </div>
+    </div>
+</div>

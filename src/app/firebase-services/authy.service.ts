@@ -10,7 +10,7 @@ import {
   updateProfile,
   sendSignInLinkToEmail,
   isSignInWithEmailLink,
-  signInWithEmailLink
+  signInWithEmailLink,
 } from '@angular/fire/auth';
 import { AppUser } from '../classes/user.class';
 import { FirebaseService } from './firebase.service';
@@ -122,14 +122,20 @@ export class AuthyService {
       const email = window.localStorage.getItem('emailForSignIn');
 
       if (email && isSignInWithEmailLink(this.auth, window.location.href)) {
-        await signInWithEmailLink(this.auth, email, window.location.href);
+        const user = this.auth.currentUser;
 
-        window.localStorage.removeItem('emailForSignIn');
+        if (user) {
+          await (user as any).updateEmail(email);
+          window.localStorage.removeItem('emailForSignIn');
+        } else {
+          console.error('Error: Current user not found.');
+        }
       }
     } catch (error) {
       console.error('Error completing email change:', error);
       throw error;
     }
   }
+
 
 }

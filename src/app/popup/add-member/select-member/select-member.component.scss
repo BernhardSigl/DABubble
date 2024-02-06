@@ -1,0 +1,44 @@
+.members-list-box {
+    padding: 2.5rem; // 40px
+    background-color: white;
+    box-sizing: border-box;
+
+    .members-list-scroll-box {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        max-height: 12.0625rem; // 193px
+        max-height: calc(3.125rem + 3.125rem + .8125rem);
+        gap: 0.8125rem; // 13px
+    }
+
+    .members-list {
+        display: flex;
+        gap: .8125rem; // 13px
+
+    }
+}
+
+.profile-img-and-status {
+    width: 3.125rem; // 50px
+    height: 3.125rem;
+    position: relative;
+
+    .profile-img {
+        height: 100%;
+        aspect-ratio: 1/1;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 50%;
+    }
+
+    .status {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border: 2px solid var(--background-color);
+        border-radius: 100%;
+        width: .875rem; // 14px
+        height: .875rem; // 14px
+    }
+}

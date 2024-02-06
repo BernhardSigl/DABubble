@@ -79,9 +79,9 @@ export class EditProfileComponent {
     }
 
     if (this.inputEmail.trim() !== '' && this.isEmailValid) {
-      // this.firebase.changeEmail(this.inputEmail);
-      // this.auth.changeEmailAuth(this.inputEmail);
-      // this.sentMailPopup();
+      this.firebase.changeEmail(this.inputEmail);
+      this.auth.changeEmailAuth(this.inputEmail);
+      this.sentMailPopup();
       this.dialogRef.close();
     }
   }

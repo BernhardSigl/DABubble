@@ -15,8 +15,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { UserListService } from '../firebase-services/user-list.service';
 import { user } from '@angular/fire/auth';
 import { AuthyService } from '../firebase-services/authy.service';
-import { AddChannelComponent } from '../popup/add-channel/add-channel.component';
-import { EmailSentComponent } from '../popup/email-sent/email-sent.component';
+
 @Component({
   selector: 'app-main-chat',
   standalone: true,
@@ -31,8 +30,6 @@ import { EmailSentComponent } from '../popup/email-sent/email-sent.component';
     MatDividerModule,
     MessageLayoutComponent,
     AngularFirestoreModule,
-    AddChannelComponent,
-    EmailSentComponent
   ],
   templateUrl: './main-chat.component.html',
   styleUrl: './main-chat.component.scss',
