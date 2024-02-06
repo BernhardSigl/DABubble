@@ -125,8 +125,6 @@ export class AuthyService {
         await signInWithEmailLink(this.auth, email, window.location.href);
 
         window.localStorage.removeItem('emailForSignIn');
-      } else {
-        throw new Error('Invalid or missing email link.');
       }
     } catch (error) {
       console.error('Error completing email change:', error);
