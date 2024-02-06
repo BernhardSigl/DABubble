@@ -4,26 +4,37 @@ import { AvatarDataService } from '../../../firebase-services/avatar-data.servic
 import { AuthyService } from '../../../firebase-services/authy.service';
 import { AppUser, User } from '../../../classes/user.class';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { DocumentData, DocumentReference, Firestore, addDoc, collection, doc, getDocs, query, setDoc, } from '@angular/fire/firestore';
-import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
-
-
+import {
+  DocumentData,
+  DocumentReference,
+  Firestore,
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+} from '@angular/fire/firestore';
+import {
+  getStorage,
+  ref,
+  uploadString,
+  getDownloadURL,
+} from 'firebase/storage';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-choose-avater',
   standalone: true,
-  imports: [
-    RouterModule,
-    AngularFirestoreModule
-  ],
+  imports: [RouterModule, AngularFirestoreModule],
   templateUrl: './choose-avater.component.html',
   styleUrl: './choose-avater.component.scss',
 })
 export class ChooseAvaterComponent implements OnInit {
   profileImageSrc: string = '../../assets/img/profile.png';
   userName: string = '';
-  email:string='';
-  password:string='';
+  email: string = '';
+  password: string = '';
   firestore: Firestore = inject(Firestore);
   user!: User;
   storage = getStorage();
@@ -31,7 +42,8 @@ export class ChooseAvaterComponent implements OnInit {
     private route: ActivatedRoute,
     private avatarDataService: AvatarDataService,
     private authyService: AuthyService,
-    private router:Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -54,7 +66,10 @@ export class ChooseAvaterComponent implements OnInit {
           const dataURL = e.target?.result as string;
 
           // Upload the image to Firebase Storage
-          const storageRef = ref(this.storage, `profilePicture/${this.userName}_${file.name}`);
+          const storageRef = ref(
+            this.storage,
+            `profilePicture/${this.userName}_${file.name}`
+          );
           await uploadString(storageRef, dataURL, 'data_url');
 
           // Get the download URL of the uploaded image
@@ -82,8 +97,6 @@ export class ChooseAvaterComponent implements OnInit {
       alert('Please select a file.');
     }
   }
-
-
 
   // Function to trigger file input click when "Datei hochladen" link is clicked
   triggerFileInput(): void {
@@ -114,51 +127,59 @@ export class ChooseAvaterComponent implements OnInit {
     }
   }
 
-
-
-async registerUser() {
-  const user = new User({
-    name: this.userName,
-    email: this.email,
-    userId: '',
-    profileImg: this.profileImageSrc, // Use uploaded image URL
-    password: this.password,
-  });
-
-  try {
-    const userCredential = await this.authyService.registerWithEmailAndPassword(user);
-    user.userId = userCredential.user?.uid;
-
-    this.user = user;
-
-    await this.addUser().then((result: any) => {
-      console.log('User added to collection:', result);
+  async registerUser() {
+    const user = new User({
+      name: this.userName,
+      email: this.email,
+      userId: '',
+      profileImg: this.profileImageSrc, // Use uploaded image URL
+      password: this.password,
     });
-  } catch (error) {
-    console.error(error);
-    alert('Registration failed. Please try again.');
-  }
-}
 
-
-async addUser() {
-  // Check if 'user' is defined before adding it to the collection
-  if (this.user) {
     try {
-      const userRef: DocumentReference<DocumentData> = doc(this.firestore, `users/${this.user.userId}`);
-      await setDoc(userRef, this.user.toJson());
-      console.log('User added to collection:', this.user);
-      return userRef;
+      const userCredential =
+        await this.authyService.registerWithEmailAndPassword(user);
+      user.userId = userCredential.user?.uid;
+
+      this.user = user;
+
+      await this.addUser().then((result: any) => {
+        this.snackBar.open('Successfully Registered', 'Close', {
+          duration: 3000, // Duration the toast is shown (in milliseconds)
+          horizontalPosition: 'center', // Position of the toast
+          verticalPosition: 'bottom',
+        });
+        console.log('User added to collection:', result);
+      });
     } catch (error) {
-      console.error('Error adding user to collection:', error);
+      this.snackBar.open('Registration failed. Please try again.', 'Close', {
+        duration: 3000, // Duration the toast is shown (in milliseconds)
+        horizontalPosition: 'center', // Position of the toast
+        verticalPosition: 'bottom',
+      });
+    }
+  }
+
+  async addUser() {
+    // Check if 'user' is defined before adding it to the collection
+    if (this.user) {
+      try {
+        const userRef: DocumentReference<DocumentData> = doc(
+          this.firestore,
+          `users/${this.user.userId}`
+        );
+        await setDoc(userRef, this.user.toJson());
+        console.log('User added to collection:', this.user);
+        return userRef;
+      } catch (error) {
+        console.error('Error adding user to collection:', error);
+        return null;
+      }
+    } else {
+      console.error('User data is not defined.');
       return null;
     }
-  } else {
-    console.error('User data is not defined.');
-    return null;
   }
-}
-
 
   async getUsersDocRef() {
     const q = query(this.getUsersColRef());
@@ -166,9 +187,8 @@ async addUser() {
     return querySnapshot;
   }
 
-
   getUsersColRef() {
-    return collection(this.firestore, "users");
+    return collection(this.firestore, 'users');
   }
 
   dataURLtoBlob(dataUrl: string): Blob {
@@ -185,7 +205,4 @@ async addUser() {
     }
     return new Blob([u8arr], { type: mime });
   }
-
-
-
 }

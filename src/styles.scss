@@ -204,3 +204,8 @@ h5 {
     font-weight: 700;
     src: url('./assets/fonts/nunito-v26-latin-700italic.woff2') format('woff2');
 }
+
+simple-snack-bar{
+  background-color: var(--primary);
+  padding-right: 0 !important;
+}
