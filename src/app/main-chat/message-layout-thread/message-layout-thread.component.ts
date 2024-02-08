@@ -1,4 +1,12 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MainChatComponent } from '../main-chat.component';
 import {
@@ -18,8 +26,9 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { user } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
 import { map } from 'rxjs/operators';
+
 @Component({
-  selector: 'app-message-layout',
+  selector: 'app-message-layout-thread',
   standalone: true,
   imports: [
     MatDividerModule,
@@ -27,77 +36,34 @@ import { map } from 'rxjs/operators';
     CommonModule,
     PickerModule,
     FormsModule,
+    MessageLayoutThreadComponent,
   ],
-  templateUrl: './message-layout.component.html',
-  styleUrls: ['./message-layout.component.scss'],
+  templateUrl: './message-layout-thread.component.html',
+  styleUrl: './message-layout-thread.component.scss',
 })
-export class MessageLayoutComponent implements OnInit {
+export class MessageLayoutThreadComponent implements OnInit {
   @Input() userId?: string;
   @Input() userName!: string;
   @Input() userImage!: string;
+  @Output() messageSelected: EventEmitter<Message> = new EventEmitter<Message>();
 
+  private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<Message[]>([]);
+  messages$: Observable<Message[]> = this.messagesSubject.asObservable();
   isHovered: { [key: string]: boolean } = {};
-  public textArea: string = '';
   public isEmojiPickerVisible: { [key: string]: boolean } = {};
   public isEditingEnabled: { [key: string]: boolean } = {};
   public isEditEnabled: { [key: string]: boolean } = {};
   public editedMessage: { [key: string]: string } = {};
-  public selectedMessage: Message | null = null;
-  public isThreadViewOpen: boolean = false;
-  private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
-    Message[]
-  >([]);
-  messages$: Observable<Message[]> = this.messagesSubject.asObservable();
-  @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
+  selectedMessage: Message | null = null;
+
   constructor(private firestore: Firestore) {}
 
-  ngOnInit(): void {
-    this.loadMessages();
-  }
+  ngOnInit(): void {}
 
-  public openThreadView(message: Message): void {
-    console.log('Opening thread view for message:', message);
+  openThreadView(message: Message): void {
+    console.log(message)
     this.selectedMessage = message;
-    this.isThreadViewOpen = true;
-}
-
-
-  // Method to close the thread view
-  public closeThreadView(): void {
-    this.isThreadViewOpen = false;
-    this.selectedMessage = null;
-  }
-
-    // Method to send a message within the thread
-    public sendMessageInThread(message: string): void {
-      if (this.selectedMessage) {
-        // Append the message to the thread of the selected message
-        this.selectedMessage.thread.push(message);
-        // Save the updated message in your database (Firebase, etc.)
-        // You'll need to implement the saving logic based on your backend setup
-      }
-    }
-
-
-  loadMessages(): void {
-    const messagesCollection = collection(this.firestore, 'messages');
-    const q = query(messagesCollection, orderBy('time', 'desc'));
-    this.messages$ = new Observable<Message[]>((observer) => {
-      onSnapshot(q, (querySnapshot) => {
-        const messages: Message[] = [];
-        querySnapshot.forEach(async (doc) => {
-          const messageData = doc.data() as Message;
-          messageData.messageId = doc.id;
-          if (messageData.messageImage) {
-            const storage = getStorage();
-            const imageRef = ref(storage, messageData.messageImage as string);
-            messageData.messageImage = await getDownloadURL(imageRef);
-          }
-          messages.push(messageData);
-        });
-        observer.next(messages);
-      });
-    });
+    this.messageSelected.emit(message);
   }
 
   toggleEmojiPicker(messageId: string) {

@@ -15,6 +15,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { UserListService } from '../firebase-services/user-list.service';
 import { user } from '@angular/fire/auth';
 import { AuthyService } from '../firebase-services/authy.service';
+import { Message } from '../classes/message.class';
 
 @Component({
   selector: 'app-main-chat',
@@ -39,10 +40,25 @@ export class MainChatComponent implements OnInit {
   userName: string = '';
   userImage: string = '';
   userId: string = '';
-
+  selectedMessage: Message | null = null;
   constructor(private firestore: Firestore, private route: ActivatedRoute, private userDataService: UserListService, private auth: AuthyService) { }
+  isThreadViewOpen = true;
+
+  public openThreadView(message: Message): void {
+    this.selectedMessage = message;
+    this.isThreadViewOpen = true;
+  }
 
 
+
+  closeThreadView(): void {
+    this.isThreadViewOpen = false;
+  }
+
+
+  onMessageSelected(message: Message): void {
+    this.selectedMessage = message;
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -74,11 +90,6 @@ export class MainChatComponent implements OnInit {
   }
 
 
-  isThreadViewOpen = false;
-
-  closeThreadView(): void {
-    this.isThreadViewOpen = false;
-  }
 
 
 }
