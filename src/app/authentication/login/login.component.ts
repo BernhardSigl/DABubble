@@ -110,9 +110,7 @@ export class LoginComponent implements OnInit {
   isGuest: boolean | undefined;
 
   ngOnInit(): void {
-    this.clearStorage();
-
-    if (!this.animationPlayed) {
+        if (!this.animationPlayed) {
       this.playAnimation();
     }
 
@@ -193,6 +191,7 @@ export class LoginComponent implements OnInit {
    */
   redirect(userId: string) {
     this.ngZone.run(async () => {
+      this.clearStorage();
       localStorage.setItem('userId', userId);
       await this.firebase.online();
       this.router.navigate([`/main`]);
@@ -276,7 +275,7 @@ export class LoginComponent implements OnInit {
     try {
       // Authenticate as guest
       await this.authyService.loginWithEmailAndPassword(guestEmail, guestPassword);
-
+      this.clearStorage();
       // Provide the guest user ID
       const userId = 'e7zSK07HmreqlBdt7cibNEcjAQW2';
 
@@ -350,7 +349,7 @@ export class LoginComponent implements OnInit {
 
         // Now you have the document snapshot, you can retrieve the document ID
         const docId = userDocSnapshot.id;
-
+        this.clearStorage();
         // Save the document ID to local storage
         localStorage.setItem('userId', docId);
         await this.firebase.online();
