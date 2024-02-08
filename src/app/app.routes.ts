@@ -5,14 +5,35 @@ import { ChooseAvaterComponent } from './authentication/register/choose-avater/c
 import { MainChatComponent } from './main-chat/main-chat.component';
 import { ForgetPasswordComponent } from './authentication/forget-password/forget-password.component';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
-import { AuthGuard } from './firebase-services/auth.guard';
+import { canActivate, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
+
+const redirectLoggedIn = () => redirectUnauthorizedTo(['login']);
+const redirectToMain = () => redirectLoggedInTo(['main']);
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  {path:'login', component:LoginComponent},
-  {path:'register', component:RegisterComponent},
-  {path:'chooseAvatar', component:ChooseAvaterComponent},
-  {path:'main', component:MainChatComponent,canActivate: [AuthGuard] },
-  {path:'forgot', component:ForgetPasswordComponent},
-  {path:'reset', component:ResetPasswordComponent}
+
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [redirectToMain],
+  },
+  {
+    path: '',
+    redirectTo: 'main',
+    pathMatch: 'full',
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+  },
+  {
+    path: 'main',
+    component: MainChatComponent,
+    canActivate: [redirectLoggedIn],
+  },
+  { path: 'chooseAvatar',
+    component: ChooseAvaterComponent,
+    canActivate: [redirectLoggedIn], // This ensures that the user can only access choose-avatar after logging in.
+  },
+  { path: '**', redirectTo: 'login' },
 ];
