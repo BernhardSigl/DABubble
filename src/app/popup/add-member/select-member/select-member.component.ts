@@ -27,11 +27,9 @@ export class SelectMemberComponent {
 
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
-
-    setInterval(() => {
-      console.log(this.checkboxAddSpecific);
-
-    }, 1000);
   }
 
+  stopClose(event: MouseEvent) {   
+    event.stopPropagation();
+  }
 }

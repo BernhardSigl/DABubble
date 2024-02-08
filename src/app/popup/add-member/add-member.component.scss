@@ -59,7 +59,7 @@
         outline: none;
         border-color: var(--light-purple);
         font-size: 18px;
-        width: 100%;
+        width: 100%; // 100% - 80px
         box-sizing: border-box;
 
         &::placeholder {

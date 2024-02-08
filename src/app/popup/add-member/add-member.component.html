@@ -1,4 +1,4 @@
-<div class="popup">
+<div class="popup" (click)="closeSelectMemberDialog()">
 
     <div class="dFlex spaceBetween">
         <h4 class="bold">Channel erstellen</h4>
@@ -20,7 +20,7 @@
 
     <div class="input-box" *ngIf="checkboxAddSpecific">
         <input placeholder="Name eingeben" [ngClass]="{'input-slide-down': checkboxAddSpecific}"
-            (click)="selectMember()">
+            (click)="selectMemberBehaviour($event)" id="inputField">
     </div>
 
     <div class="dFlex spaceBetween">
