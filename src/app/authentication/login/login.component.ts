@@ -194,7 +194,7 @@ export class LoginComponent implements OnInit {
       this.clearStorage();
       localStorage.setItem('userId', userId);
       await this.firebase.online();
-      this.router.navigate([`/main`]);
+      this.router.navigate(['/main'], { queryParams: { userId } });
     });
   }
 

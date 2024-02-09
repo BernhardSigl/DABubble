@@ -71,6 +71,60 @@
             border-color: var(--dark-purple);
         }
     }
+
+    #inputField {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 0.9375rem 1.25rem;
+        height: 3.5rem;
+        box-sizing: border-box;
+        display:flex;
+        align-items: center;
+    }
+}
+
+.spaceBetweenMembers {
+    gap: 15px;
+}
+
+.userNameInputField {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 9.375rem; // 150px
+    cursor: default;
+}
+
+.deleteMember {
+    width: 1.875rem; // 30px
+    height: 1.875rem; // 30px
+    background: url('./../../../assets/img/cross-black.png');
+    background-repeat: no-repeat;
+    cursor: pointer;
+    background-position: center;
+    background-size: 1.0625rem; // 17px
+    margin-left: .3125rem; // 5px
+
+    &:hover {
+        background: url('./../../../assets/img/cross-blue.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 1.1875rem; // 19px
+    }
+}
+
+.addedMembers{
+   padding: .1875rem 1.25rem; // 3px 20px
+   border-radius: 2.1875rem; // 35px
+   background-color: var(--background-color);
+}
+
+.profile-img-small {
+    width: 2.125rem; // 34px
+    height: 2.125rem; // 34px
+    border-radius: 50%;
+    margin-right: .9375rem; // 15px
 }
 
 .input-slide-down {

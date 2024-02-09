@@ -4,12 +4,15 @@ import { FirebaseService } from '../../firebase-services/firebase.service';
 import { Channel } from '../../classes/channel.class';
 import { CommonModule } from '@angular/common';
 import { SelectMemberComponent } from './select-member/select-member.component';
+import { FormsModule } from '@angular/forms';
+import { MemberServiceService } from '../member-service/member-service.service';
 
 @Component({
   selector: 'app-add-member',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule 
   ],
   templateUrl: './add-member.component.html',
   styleUrl: './add-member.component.scss'
@@ -25,6 +28,7 @@ export class AddMemberComponent {
     public dialogRef: MatDialogRef<AddMemberComponent>,
     public dialog: MatDialog,
     public firebase: FirebaseService,
+    public memberService: MemberServiceService,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private elementRef: ElementRef, // for background click
   ) {
@@ -34,10 +38,8 @@ export class AddMemberComponent {
     await this.firebase.ngOnInit();
     this.addResizeListener();
     this.addBackgroundClickListener();
-    setInterval(() => {
-      console.log(this.selectMemberDialogOpen);
-      
-    }, 1000);
+    this.memberService.selectedUsers = [];
+    this.memberService.selectedUserName = '';
   }
 
   toggleCheckbox(selection: string) {
@@ -60,8 +62,12 @@ export class AddMemberComponent {
     });
 
     if (this.checkboxAddAll) {
-      for (const user of this.firebase.usersArray) {
-        newChannel.members.push(user.name);
+      for (const userAll of this.firebase.usersArray) {
+        newChannel.members.push(userAll);
+      }
+    } else if (this.checkboxAddSpecific){
+      for (const userSpecific of this.memberService.selectedUsers) {
+        newChannel.members.push(userSpecific);
       }
     }
 

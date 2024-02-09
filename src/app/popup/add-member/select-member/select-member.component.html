@@ -1,6 +1,7 @@
 <div class="members-list-box" *ngIf="checkboxAddSpecific" (click)="stopClose($event)">
     <div class="members-list-scroll-box scroll-bar">
-        <div class="members-list horicontal" *ngFor="let user of firebase.usersArray">
+        <div class="members-list horicontal" (click)="selectUser(user)"
+        *ngFor="let user of firebase.usersArray" [style.background-color]="user.selected ? 'var(--primary)' : 'white'">
             <div class="profile-img-and-status">
                 <div [style.background-image]="'url(' + user.profileImg + ')'" class="profile-img"></div>
                 <img [src]="user.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'"
