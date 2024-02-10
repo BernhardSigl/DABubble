@@ -56,17 +56,17 @@ export class MessageLayoutComponent implements OnInit {
   }
 
   public openThreadView(message: Message): void {
+    debugger;
     console.log('Opening thread view for message:', message);
-    this.selectedMessage = message;
+
+    // Set isThreadViewOpen to true to force the thread view to open
     this.isThreadViewOpen = true;
-}
+    console.log('isThreadViewOpen:', this.isThreadViewOpen); // Log the value for debugging
 
-
-  // Method to close the thread view
-  public closeThreadView(): void {
-    this.isThreadViewOpen = false;
-    this.selectedMessage = null;
+    // Assign the clicked message to the selectedMessage property
+    this.selectedMessage = message;
   }
+
 
     // Method to send a message within the thread
     public sendMessageInThread(message: string): void {
