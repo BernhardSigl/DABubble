@@ -1,10 +1,11 @@
 <div
-  class="message-card"
+  class="message-card "
   *ngFor="let message of messages$ | async"
   [ngClass]="{
     'current-user': message.senderId === userId,
     'other-user': message.senderId !== userId
   }"
+
 >
   <div class="sent-date">
     <mat-divider class="one-divider"></mat-divider>

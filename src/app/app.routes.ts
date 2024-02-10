@@ -33,7 +33,7 @@ export const routes: Routes = [
   },
   { path: 'chooseAvatar',
     component: ChooseAvaterComponent,
-    canActivate: [redirectLoggedIn], // This ensures that the user can only access choose-avatar after logging in.
+    canActivate: [redirectLoggedIn],
   },
   { path: '**', redirectTo: 'login' },
 ];

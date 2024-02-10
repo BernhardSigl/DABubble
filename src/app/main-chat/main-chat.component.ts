@@ -42,7 +42,7 @@ export class MainChatComponent implements OnInit {
   userId: string = '';
   selectedMessage: Message | null = null;
   constructor(private firestore: Firestore, private route: ActivatedRoute, private userDataService: UserListService, private auth: AuthyService) { }
-  isThreadViewOpen = true;
+  isThreadViewOpen = false;
 
   public openThreadView(message: Message): void {
     this.selectedMessage = message;
