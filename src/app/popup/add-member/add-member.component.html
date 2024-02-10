@@ -19,23 +19,25 @@
     </div>
 
     <div class="input-box" *ngIf="checkboxAddSpecific">
-        <input placeholder="Name eingeben" [ngClass]="{'input-slide-down': checkboxAddSpecific}"
-            (click)="selectMemberBehaviour($event)" [attr.placeholder]="memberService.selectedUserName ? '' : 'Name eingeben'">
-            <div id="inputField">
-                <div class="dFlex spaceBetweenMembers">
-                    <div *ngFor="let user of memberService.selectedUsers" class="addedMembers">
-                        <div class="horicontal">
-                            <img [src]="user.profileImg" class="profile-img-small" alt="Profilbild">
-                            <span class="fs18 userNameInputField">{{ user.name }}</span>
-                            <div class="deleteMember"></div>
-                        </div>
+
+        <div #membersField class="members-field">
+            <div class="dFlex member-scroll-box scroll-bar">
+                <div *ngFor="let user of memberService.selectedUsers" class="addedMembers" [ngClass]="{'input-slide-down': checkboxAddSpecific}">
+                    <div class="horicontal">
+                        <img [src]="user.profileImg" class="profile-img-small" alt="Profilbild">
+                        <span class="fs18 userName">{{ user.name }}</span>
+                        <div class="deleteMember" (click)="removeUser(user)"></div>
                     </div>
                 </div>
-
             </div>
-    </div>
+        </div>
 
-    <div class="dFlex spaceBetween">
+        <input placeholder="Name eingeben" [ngClass]="{'input-slide-down': checkboxAddSpecific}"
+        id="inputField" (click)="selectMemberBehaviour($event)" (input)="filterSelectedUsers()" [(ngModel)]="inputValue">
+
+    </div> 
+
+    <div class="dFlex spaceBetween" id="createBtn">
         <div></div>
         <button class="create" (click)="addNewChannel()" [disabled]="!checkboxAddAll && !checkboxAddSpecific">Erstellen</button>
     </div>

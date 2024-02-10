@@ -50,18 +50,20 @@
 
 .input-box {
     width: 100%;
-    position: relative;
+    cursor: pointer;
 
     input {
         padding: .9375rem 1.25rem; // 15px 20px
-        border: 1px solid #ccc;
+        border: .0625rem solid #ccc; // 1px
         border-radius: 1.875rem; // 30px
         outline: none;
         border-color: var(--light-purple);
-        font-size: 18px;
-        width: 100%; // 100% - 80px
+        font-size: 1.125rem; // 18px
+        min-width: 100%;
+        max-width: 100%;
         box-sizing: border-box;
-
+        cursor: pointer;
+ 
         &::placeholder {
             color: var(--gray);
         }
@@ -71,29 +73,38 @@
             border-color: var(--dark-purple);
         }
     }
-
-    #inputField {
-        position: absolute;
-        top: 0;
-        left: 0;
-        padding: 0.9375rem 1.25rem;
-        height: 3.5rem;
-        box-sizing: border-box;
-        display:flex;
-        align-items: center;
-    }
 }
 
-.spaceBetweenMembers {
-    gap: 15px;
+.members-field{
+    padding: 0 0 .9375rem 0; // 15px
+        cursor: default;
 }
 
-.userNameInputField {
+#membersField {
+    display: flex;
+    align-items: flex-start;
+    max-width: calc(100% - 2.5rem);
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 95px;
+    display: none;
+
+}
+
+.member-scroll-box {
+    gap: .9375rem; // 15px
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    max-height: 5.9375rem; // 95px
+    overflow-y: auto;
+}
+
+.userName {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 9.375rem; // 150px
-    cursor: default;
+    cursor: default !important;
 }
 
 .deleteMember {
@@ -118,6 +129,8 @@
    padding: .1875rem 1.25rem; // 3px 20px
    border-radius: 2.1875rem; // 35px
    background-color: var(--background-color);
+   height: 2.5rem; // 40px
+   box-sizing: border-box;
 }
 
 .profile-img-small {
@@ -125,6 +138,7 @@
     height: 2.125rem; // 34px
     border-radius: 50%;
     margin-right: .9375rem; // 15px
+    cursor: default;
 }
 
 .input-slide-down {
