@@ -20,11 +20,23 @@
 
     <div class="input-box" *ngIf="checkboxAddSpecific">
         <input placeholder="Name eingeben" [ngClass]="{'input-slide-down': checkboxAddSpecific}"
-            (click)="selectMemberBehaviour($event)" id="inputField">
+            (click)="selectMemberBehaviour($event)" [attr.placeholder]="memberService.selectedUserName ? '' : 'Name eingeben'">
+            <div id="inputField">
+                <div class="dFlex spaceBetweenMembers">
+                    <div *ngFor="let user of memberService.selectedUsers" class="addedMembers">
+                        <div class="horicontal">
+                            <img [src]="user.profileImg" class="profile-img-small" alt="Profilbild">
+                            <span class="fs18 userNameInputField">{{ user.name }}</span>
+                            <div class="deleteMember"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
     </div>
 
     <div class="dFlex spaceBetween">
         <div></div>
-        <button class="create" (click)="addNewChannel()">Erstellen</button>
+        <button class="create" (click)="addNewChannel()" [disabled]="!checkboxAddAll && !checkboxAddSpecific">Erstellen</button>
     </div>
 </div>

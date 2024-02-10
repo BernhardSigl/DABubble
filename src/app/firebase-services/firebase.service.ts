@@ -134,7 +134,6 @@ export class FirebaseService {
   // Channels:
   async addChannel(newChannel: Channel) {
     await addDoc(this.getChannelColRef(), newChannel.toJson()).then((result: any) => {
-      console.log("Document written with ID: ", result);
     });
   }
 
