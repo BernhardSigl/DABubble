@@ -17,6 +17,7 @@
         cursor: pointer;
         padding: .25rem 1.25rem; // 4px 20px
         border-radius: 30px;
+        margin-right: .25rem; // 4px
 
         &:not([style*="--primary"]) {
             &:hover {
@@ -48,4 +49,12 @@
         width: .875rem; // 14px
         height: .875rem; // 14px
     }
+}
+
+.scroll-bar {
+    margin: 0 0 0 4px;
+}
+
+.userName {
+    min-width: 150px;
 }

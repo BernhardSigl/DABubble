@@ -25,7 +25,7 @@
                 <div *ngFor="let user of memberService.selectedUsers" class="addedMembers" [ngClass]="{'input-slide-down': checkboxAddSpecific}">
                     <div class="horicontal">
                         <img [src]="user.profileImg" class="profile-img-small" alt="Profilbild">
-                        <span class="fs18 userName">{{ user.name }}</span>
+                        <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
                         <div class="deleteMember" (click)="removeUser(user)"></div>
                     </div>
                 </div>

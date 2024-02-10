@@ -10,7 +10,7 @@
                 <img [src]="user.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'"
                     class="status">
             </div>
-            <span *ngIf="isMatchingFilter(user)">{{ user.name }}</span>
+            <span *ngIf="isMatchingFilter(user)" class="fs18 userName maxNameLenth">{{ user.name }}</span>
 
     </div>
     </div>
