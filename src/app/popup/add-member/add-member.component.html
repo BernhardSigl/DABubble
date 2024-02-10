@@ -20,7 +20,7 @@
 
     <div class="input-box" *ngIf="checkboxAddSpecific">
 
-        <div #membersField class="members-field">
+        <div #membersField class="members-field" [style.padding-bottom.rem]="memberService.selectedUsers.length === 0 ? 0 : 1.25">
             <div class="dFlex member-scroll-box scroll-bar">
                 <div *ngFor="let user of memberService.selectedUsers" class="addedMembers" [ngClass]="{'input-slide-down': checkboxAddSpecific}">
                     <div class="horicontal">

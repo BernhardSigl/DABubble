@@ -49,17 +49,9 @@ export class AddMemberComponent {
     if (selection === 'all') {
       this.checkboxAddAll = !this.checkboxAddAll;
       this.checkboxAddSpecific = false;
-      this.changeMembersListStyle('none');
     } else if (selection === 'specific') {
       this.checkboxAddSpecific = !this.checkboxAddSpecific;
       this.checkboxAddAll = false;
-      this.changeMembersListStyle('flex'); // 110 px
-    }
-  }
-
-  changeMembersListStyle(show: string) {
-    if (this.membersField) {
-      this.membersField.style.display = `${show}`;
     }
   }
 
