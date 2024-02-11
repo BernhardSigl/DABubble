@@ -8,11 +8,50 @@
         <div class="channels-content">
             <div class="choose-channels">
                 <div class="choose-channel">
-                    <img src="./../../assets/img/arrow-drop-down-black.png">
-                    <img src="./../../assets/img/workspaces-black.png">
-                    <p>Channels</p>
+                    <div class="open-channel"  (mouseenter)="changeImagesChannel(true)"
+                        (mouseleave)="changeImagesChannel(false)">
+                        <img (click)="toggleRotationChannel()"  [@rotateAnimation]="isOpen ? 'open' : 'closed'" [src]="openMenuChannel">
+                        <div class="channel-title">
+                            <img [src]="workspaceChannel">
+                            <p>Channels</p>
+                        </div>
+                    </div>
+                    <img class="plus-channel" src="./../../assets/img/plus-black.png">
                 </div>
-                <img src="./../../assets/img/plus-black.png" (click)="openAddChannels()">
+
+                <div *ngIf="!isOpen" class="channel-overview">
+                    <img src="./../../assets/img/tag-icon.png">
+                    <p>Entwicklerteam</p>
+                </div>
+                <div *ngIf="!isOpen" class="add-channel" (mouseenter)="changeImagesChannel(true)"
+                    (mouseleave)="changeImagesChannel(false)">
+                    <img [src]="addChannelPlus">
+                    <p>Channel hinzufügen</p>
+                </div>
+            </div>
+
+            <div class="messages-container" (mouseenter)="changeImageMessages(true)"
+                (mouseleave)="changeImageMessages(false)">
+                <div class="messages-header">
+                    <img (click)="toggleRotationMessage()"  [@rotateAnimation]="isOpenSecond ? 'open' : 'closed'" [src]="openMenuMessage">
+                    <img [src]="directNewsImage">
+                    <p>Direktnachrichten</p>
+                </div>
+                <div *ngIf="!isOpenSecond" class="messages-users">
+                    <div class="messages-user " (click)="openMessage()">
+                        <div class="test">
+                            <img src="./../../assets/img/profile-1.png">
+                        <p>Daniel Schirmer (Du)</p>
+                        </div>
+                    </div>
+                    <div class="messages-user">
+                        <div class="test">
+                            <img src="./../../assets/img/profile-1.png">
+                            <p>Test Tester</p>
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -21,8 +60,8 @@
 </mat-drawer-container>
 
 <div class="sidenav-button">
-    <button type="button" mat-button (click)="drawer.toggle()" (mouseenter)="changeImage(true)"
-        (mouseleave)="changeImage(false)">
+    <button type="button" mat-button (click)="drawer.toggle()" (mouseenter)="changeImagesButton(true)"
+        (mouseleave)="changeImagesButton(false)">
         Workspace-Menü schließen
         <img [src]="buttonImage">
     </button>

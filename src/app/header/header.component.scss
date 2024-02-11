@@ -1,36 +1,37 @@
-.header-wrapper {
-    display: flex;
-    margin: 1.5625rem 2.125rem 0 2.8125rem; // 25px 0 34px 45px
-}
+// .header-wrapper {
+//     display: flex;
+//     margin: 1.5625rem 2.125rem 0 2.8125rem; // 25px 0 34px 45px
+// }
 
-.header-logo {
-    width: 15.1319rem; // 242.11px
-    height: 4.375rem; // 70px
-}
+// .header-logo {
+//     width: 15.1319rem; // 242.11px
+//     height: 4.375rem; // 70px
+// }
 
-.header-input {
-    display: flex;
-    width: 61.8125rem; // 989px
-    box-sizing: border-box;
-    padding: 1.1563rem 2.8125rem; // 18.5px 45px
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 2.625rem;
-    background: var(--White, #FFF);
+// .header-input {
+//     display: flex;
+//     width: 61.8125rem; // 989px
+//     box-sizing: border-box;
+//     padding: 1.1563rem 2.8125rem; // 18.5px 45px
+//     justify-content: space-between;
+//     align-items: center;
+//     border-radius: 2.625rem;
+//     background: var(--White, #FFF);
 
-    input {
-        color: black;
-        font-size: 24px;
-        border: none;
-        outline: none;
-        width: 100%;
-        padding: 0;
+//     input {
+//         color: black;
+//         font-size: 24px;
+//         border: none;
+//         outline: none;
+//         width: 100%;
+//         padding: 0;
 
-        input::placeholder {
-            color: var(--Text-gray, #686868);
-        }
-    }
-}
+//         input::placeholder {
+//             color: var(--Text-gray, #686868);
+//         }
+//     }
+// }
+
 
 .header-profile {
     gap: 1.25rem; // 20px
@@ -66,6 +67,36 @@
             border: 2px solid var(--background-color);
             border-radius: 100%;
         }
+    }
+  }
+
+.header-profil {
+    display: flex;
+    width: auto ;
+    align-items: center;
+    gap: 1.25rem;
+    cursor: pointer;
+
+    p {
+        color: var(--Black, #000);
+        font-family: Nunito;
+        font-size: 2rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+
+    .profil-img {
+        width: 4.375rem;
+        height: 4.375rem;
+        flex-shrink: 0;
+        border-radius: 100%;
+    }
+
+    .logout-img {
+        width: 1.875rem;
+        height: 1.875rem;
+        flex-shrink: 0;
     }
 
 }
