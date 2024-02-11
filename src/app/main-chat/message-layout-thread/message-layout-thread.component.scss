@@ -1,32 +1,54 @@
-.thread-card{
+.thread-card {
   width: 100%;
   padding: 20px;
 }
 
-.selected-msg-container{
+.selected-msg-container {
   display: flex;
-  flex-direction: row-reverse;
 
-
-  .thread-profile-img{
+  .thread-profile-img {
     width: 70px;
     height: 70px;
     margin-right: 45px;
     margin-left: 15px;
-    img{
+    img {
       border-radius: 100%;
     }
   }
 }
 
-.name-time{
+.thread-messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.thread-msg-container {
+  display: flex;
+  flex-direction: row-reverse;
+  .thread-profile-img {
+    width: 70px;
+    height: 70px;
+    margin-right: 45px;
+    margin-left: 15px;
+    img {
+      border-radius: 100%;
+    }
+  }
+}
+
+.other-user .thread-msg-container {
+  flex-direction: row;
+}
+
+.name-time {
   display: flex;
   align-items: center;
-  gap:30px;
-h3{
-  font-weight: 800;
-}
-  p{
+  gap: 30px;
+  h3 {
+    font-weight: 800;
+  }
+  p {
     color: #686868;
     font-size: 14px;
   }
@@ -50,7 +72,7 @@ h3{
   justify-content: flex-end;
 }
 
-.other-user .selected-msg-container{
+.current-user .selected-msg-container .thread-msg-container {
   flex-direction: row;
 }
 
@@ -65,17 +87,16 @@ h3{
   flex-direction: row-reverse;
 }
 
-.other-user .emoji-reaction{
+.other-user .emoji-reaction {
   justify-content: flex-start;
 }
 
-.divider{
+.divider {
   display: flex;
   align-items: center;
   gap: 35px;
   padding-left: 30px;
-  mat-divider{
+  mat-divider {
     width: 70%;
   }
 }
-

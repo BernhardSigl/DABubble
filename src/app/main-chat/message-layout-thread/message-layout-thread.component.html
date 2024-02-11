@@ -29,3 +29,39 @@
   <mat-divider></mat-divider>
 </div>
 
+<!--
+<div *ngIf="threadMessages.length > 0">
+  <p>Thread Messages:</p>
+  <ul>
+    <li *ngFor="let message of threadMessages">{{ message.message }}</li>
+  </ul>
+</div> -->
+<div *ngIf="threadMessages.length > 0">
+  <div class="thread-messages-list">
+    <div *ngFor="let message of threadMessages" class="thread-message" [ngClass]="{
+      'current-user': message.senderId === userId,
+      'other-user': message.senderId !== userId
+    }">
+      <div class="thread-msg-container">
+        <div class="thread-profile-img">
+          <img src="{{ message.image }}" alt="" width="70px" />
+        </div>
+        <div class="msg-content">
+          <div class="name-time">
+            <h3>{{ message.name }}</h3>
+            <p>{{ message.time | date: 'HH:mm' }}</p>
+          </div>
+
+          <img
+            class="message-image"
+            [src]="message.messageImage"
+            alt="Message Image"
+            *ngIf="message.messageImage"
+          />
+
+          <div class="message">{{ message.message }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -45,18 +45,33 @@ import { DrawerService } from '../../firebase-services/drawer.service';
 })
 export class MessageLayoutThreadComponent implements OnInit {
   @Input() userId?: string;
-  constructor(private threadService: DrawerService) {}
+  constructor(private threadService: DrawerService, private firestore: Firestore) {}
   selectedMessage: Message | null = null;
+  threadMessages: Message[] = [];
 
   ngOnInit() {
-    this.threadService.selectedMessageChanged.subscribe(
-      (selectedMessage: Message | null) => {
-        if (selectedMessage) {
-          this.selectedMessage = selectedMessage;
-          console.log(selectedMessage)
-
-        }
+    this.threadService.selectedMessageChanged.subscribe((selectedMessage: Message | null) => {
+      if (selectedMessage) {
+        this.selectedMessage = selectedMessage;
+        console.log(selectedMessage);
+        this.fetchThreadMessages(selectedMessage.messageId);
       }
-    );
+    });
+  }
+
+  fetchThreadMessages(messageId: string): void {
+    const threadsRef = collection(this.firestore, `messages/${messageId}/threads`);
+    const q = query(threadsRef, orderBy('time')); // Assuming you have a 'time' field for ordering
+
+    onSnapshot(q, (querySnapshot) => {
+      this.threadMessages = [];
+      querySnapshot.forEach((doc) => {
+        const message = { messageId: doc.id, ...doc.data() } as Message; // Add the doc.id as messageId if needed
+        this.threadMessages.push(message);
+      });
+      console.log(this.threadMessages); // For debugging
+    }, error => {
+      console.error("Error fetching thread messages:", error);
+    });
   }
 }
