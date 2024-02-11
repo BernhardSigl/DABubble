@@ -55,6 +55,7 @@
     flex-direction: column;
     gap: .9375rem; // 15px
     margin-top: -1.8125rem; // -29px
+    position: relative;
 
     .email-img-and-email-title {
         gap: 1.25rem; // 20px
@@ -66,12 +67,22 @@
         cursor: pointer;
         outline: none;
     }
+
+    mat-error {
+        position: absolute;
+        top: 115%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: red !important;
+        width: 291px;
+    }
 }
 
 .cancel-save-btns {
     display: flex;
     justify-content: center;
     gap: 2rem; // 32px
+    position: relative;
 
     button {
         border-radius: 5rem;
@@ -101,6 +112,15 @@
             background-color: var(--primary);
             color: white;
         }
+    }
+
+    mat-error {
+        position: absolute;
+        top: 133%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: red !important;
+        width: 322px;
     }
 }
 

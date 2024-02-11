@@ -1,1 +1,44 @@
-<p>add-member works!</p>
+<div class="popup" (click)="closeSelectMemberDialog()">
+
+    <div class="dFlex spaceBetween">
+        <h4 class="bold">Channel erstellen</h4>
+        <div class="icon-size-24 cross-icon" (click)="this.dialogRef.close();">
+        </div>
+    </div>
+
+    <div class="horicontal" (click)="toggleCheckbox('all')">
+        <img [src]="checkboxAddAll ? './../../../assets/img/dot-checked.png' : './../../../assets/img/dot-unchecked.png'"
+            class="icon-size-20">
+        <span class="fs18">Alle Mitglieder von <span style="color: var(--purple)">Office Team</span> hinzufügen</span>
+    </div>
+
+    <div class="horicontal" (click)="toggleCheckbox('specific')">
+        <img [src]="checkboxAddSpecific ? './../../../assets/img/dot-checked.png' : './../../../assets/img/dot-unchecked.png'"
+            class="icon-size-20">
+        <span class="fs18">Bestimme Leute hinzufügen</span>
+    </div>
+
+    <div class="input-box" *ngIf="checkboxAddSpecific">
+
+        <div #membersField class="members-field" [style.padding-bottom.rem]="memberService.selectedUsers.length === 0 ? 0 : 1.25">
+            <div class="dFlex member-scroll-box scroll-bar">
+                <div *ngFor="let user of memberService.selectedUsers" class="addedMembers" [ngClass]="{'input-slide-down': checkboxAddSpecific}">
+                    <div class="horicontal">
+                        <img [src]="user.profileImg" class="profile-img-small" alt="Profilbild">
+                        <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
+                        <div class="deleteMember" (click)="removeUser(user)"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <input placeholder="Name eingeben" [ngClass]="{'input-slide-down': checkboxAddSpecific}"
+        id="inputField" (click)="selectMemberBehaviour($event)" (input)="filterSelectedUsers()" [(ngModel)]="inputValue">
+
+    </div> 
+
+    <div class="dFlex spaceBetween" id="createBtn">
+        <div></div>
+        <button class="create" (click)="addNewChannel()" [disabled]="!checkboxAddAll && !checkboxAddSpecific">Erstellen</button>
+    </div>
+</div>

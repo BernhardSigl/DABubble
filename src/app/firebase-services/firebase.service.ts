@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Firestore, addDoc, collection, doc, onSnapshot, query, setDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Message } from '../classes/message.class';
+import { Channel } from '../classes/channel.class';
 
 @Injectable({
   providedIn: 'root'
@@ -17,14 +18,19 @@ export class FirebaseService {
   usersArray: any[] = [];
   loggedInUserId!: string;
 
+  channel!: Channel;
+  channelsArray: any[] = [];
+
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
-  constructor() { }
+  constructor(
+  ) { }
 
   async ngOnInit(): Promise<void> {
     await this.pullLoggedInUserId();
     await this.subAllUsers();
     await this.subAllMessages();
+    await this.subAllChannels();
   }
 
   async subAllMessages(): Promise<void> {
@@ -121,5 +127,31 @@ export class FirebaseService {
 
   async changeEmail(newEmail: string): Promise<void> {
     await setDoc(this.getSingleUserDocRef(), { email: newEmail }, { merge: true });
+  }
+
+  // Email Change:
+
+  // Channels:
+  async addChannel(newChannel: Channel) {
+    await addDoc(this.getChannelColRef(), newChannel.toJson()).then((result: any) => {
+    });
+  }
+
+  getChannelColRef() {
+    return collection(this.firestore, "channels");
+  }
+
+  async subAllChannels(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const q = query(this.getChannelColRef());
+      onSnapshot(q, async (querySnapshot) => {
+        this.channelsArray = [];
+        querySnapshot.forEach(async (doc) => {
+          const channelsData = doc.data();
+          this.channelsArray.push(channelsData);
+        });
+        resolve();
+      });
+    });
   }
 }

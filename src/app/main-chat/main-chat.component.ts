@@ -14,6 +14,9 @@ import { Firestore, addDoc, collection, getDocs, query, where } from '@angular/f
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { UserListService } from '../firebase-services/user-list.service';
 import { user } from '@angular/fire/auth';
+import { AuthyService } from '../firebase-services/authy.service';
+import { Message } from '../classes/message.class';
+
 @Component({
   selector: 'app-main-chat',
   standalone: true,
@@ -27,7 +30,7 @@ import { user } from '@angular/fire/auth';
     CommonModule,
     MatDividerModule,
     MessageLayoutComponent,
-    AngularFirestoreModule
+    AngularFirestoreModule,
   ],
   templateUrl: './main-chat.component.html',
   styleUrl: './main-chat.component.scss',
@@ -37,10 +40,25 @@ export class MainChatComponent implements OnInit {
   userName: string = '';
   userImage: string = '';
   userId: string = '';
+  selectedMessage: Message | null = null;
+  constructor(private firestore: Firestore, private route: ActivatedRoute, private userDataService: UserListService, private auth: AuthyService) { }
+  isThreadViewOpen = false;
 
-  constructor(private firestore: Firestore, private route: ActivatedRoute, private userDataService: UserListService) { }
+  public openThreadView(message: Message): void {
+    this.selectedMessage = message;
+    this.isThreadViewOpen = true;
+  }
 
 
+
+  closeThreadView(): void {
+    this.isThreadViewOpen = false;
+  }
+
+
+  onMessageSelected(message: Message): void {
+    this.selectedMessage = message;
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -52,6 +70,12 @@ export class MainChatComponent implements OnInit {
         console.error('userId parameter is undefined');
       }
     });
+
+    // important for email change
+    const emailForSignIn = window.localStorage.getItem('emailForSignIn');
+    if (emailForSignIn) {
+      this.auth.completeEmailChange();
+    }
   }
 
   async getUserData(userId: string): Promise<void> {
@@ -66,11 +90,6 @@ export class MainChatComponent implements OnInit {
   }
 
 
-  isThreadViewOpen = true;
-
-  closeThreadView(): void {
-    this.isThreadViewOpen = false;
-  }
 
 
 }

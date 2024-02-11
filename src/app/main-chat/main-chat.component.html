@@ -22,10 +22,12 @@
     </header>
 
     <!--  Messages -->
-    <app-message-layout [userId]="userId" [userName]="userName" [userImage]="userImage"></app-message-layout>
+    <app-message-layout class="scroll-bar" [userId]="userId" [userName]="userName" [userImage]="userImage"></app-message-layout>
 
     <!-- Message box -->
     <app-message-box [userId]="userId"></app-message-box>
   </section>
-  <app-thread *ngIf="isThreadViewOpen" (closeThreadViewEvent)="closeThreadView()"></app-thread>
+  <div *ngIf="isThreadViewOpen">
+    <app-thread [selectedMessage]="selectedMessage" [userId]="userId" (closeThreadViewEvent)="closeThreadView()"></app-thread>
+  </div>
 </div>

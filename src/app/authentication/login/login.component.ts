@@ -22,6 +22,8 @@ import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, updateDoc, 
 import { User } from '../../classes/user.class'
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { DocumentReference } from '@angular/fire/firestore';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-login',
@@ -33,6 +35,7 @@ import { DocumentReference } from '@angular/fire/firestore';
     ReactiveFormsModule,
     RouterModule,
     AngularFirestoreModule,
+
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -102,13 +105,12 @@ export class LoginComponent implements OnInit {
     private authyService: AuthyService,
     private ngZone: NgZone, // google
     public firebase: FirebaseService, // push userId in firebase service
+    private snackBar: MatSnackBar
   ) { }
   isGuest: boolean | undefined;
 
   ngOnInit(): void {
-    this.clearStorage();
-
-    if (!this.animationPlayed) {
+        if (!this.animationPlayed) {
       this.playAnimation();
     }
 
@@ -189,9 +191,10 @@ export class LoginComponent implements OnInit {
    */
   redirect(userId: string) {
     this.ngZone.run(async () => {
+      this.clearStorage();
       localStorage.setItem('userId', userId);
       await this.firebase.online();
-      this.router.navigate([`/main`]);
+      this.router.navigate(['/main'], { queryParams: { userId } });
     });
   }
 
@@ -267,22 +270,49 @@ export class LoginComponent implements OnInit {
    */
   async loginAsGuest() {
     const guestEmail = 'guest@guest.de';
-    const guestPassword = 'guest1';
+    const guestPassword = '123456';
 
     try {
+      // Authenticate as guest
       await this.authyService.loginWithEmailAndPassword(guestEmail, guestPassword);
-      const userId = 'jrfCjgm7qGf0EGAEisJO2kMNMRy2'; // Set the guest user ID
+      this.clearStorage();
+      // Provide the guest user ID
+      const userId = 'e7zSK07HmreqlBdt7cibNEcjAQW2';
 
+      // Save the guest user ID to local storage
+      localStorage.setItem('userId', userId);
+      await this.firebase.online();
+      // Navigate to the main page with the guest user ID as a query parameter
       this.router.navigate(['/main'], { queryParams: { userId: userId } });
+            // Display toast notification
+      this.snackBar.open('Successfully logged in', 'Close', {
+        duration: 3000, // Duration the toast is shown (in milliseconds)
+        horizontalPosition: 'center', // Position of the toast
+        verticalPosition: 'bottom'
+
+    });
+
       console.log('logged in as guest with ID: ', userId);
     } catch (err: any) {
+      // Handle authentication errors
       if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-        window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
+
+        this.snackBar.open('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.', 'Close', {
+          duration: 5000, // Duration the toast is shown (in milliseconds)
+          horizontalPosition: 'center', // Position of the toast
+          verticalPosition: 'top'}
+        );
       } else {
-        window.alert('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+
+        this.snackBar.open('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.', 'Close', {
+          duration: 5000, // Duration the toast is shown (in milliseconds)
+          horizontalPosition: 'center', // Position of the toast
+          verticalPosition: 'bottom'
+      });
       }
     }
   }
+
 
 
 
@@ -319,13 +349,19 @@ export class LoginComponent implements OnInit {
 
         // Now you have the document snapshot, you can retrieve the document ID
         const docId = userDocSnapshot.id;
-
+        this.clearStorage();
         // Save the document ID to local storage
         localStorage.setItem('userId', docId);
-        // await this.firebase.online();
-
+        await this.firebase.online();
+        debugger;
         // Navigate to main page
         this.router.navigate(['/main'], { queryParams: { userId: this.userId } });
+        this.snackBar.open('Successfully logged in', '', {
+          duration: 3000, // Duration the toast is shown (in milliseconds)
+          horizontalPosition: 'center', // Position of the toast
+          verticalPosition: 'bottom',
+
+        });
         console.log('logged in');
       } else {
         console.log('User document does not exist.');
@@ -333,9 +369,17 @@ export class LoginComponent implements OnInit {
     } catch (err: any) {
       // Handle authentication errors
       if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-        window.alert('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.');
+        this.snackBar.open('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.', 'Close', {
+          duration: 5000, // Duration the toast is shown (in milliseconds)
+          horizontalPosition: 'center', // Position of the toast
+          verticalPosition: 'top'}
+        );
       } else {
-        window.alert('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+        this.snackBar.open('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.', 'Close', {
+          duration: 5000, // Duration the toast is shown (in milliseconds)
+          horizontalPosition: 'center', // Position of the toast
+          verticalPosition: 'bottom'
+      });
       }
     }
   }

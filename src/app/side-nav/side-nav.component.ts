@@ -1,16 +1,20 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatDrawer } from '@angular/material/sidenav';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Firestore } from 'firebase/firestore';
+import { Component, ViewChild, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDrawer } from '@angular/material/sidenav';
+import { AddChannelComponent } from '../popup/add-channel/add-channel.component';
+
 
 @Component({
   selector: 'app-side-nav',
   standalone: true,
   imports: [
     MatSidenavModule,
-    MatDrawer, 
+    MatDrawer,
+    AddChannelComponent,
     CommonModule
   ],
   templateUrl: './side-nav.component.html',
@@ -25,6 +29,7 @@ import { Firestore } from 'firebase/firestore';
   ]
 })
 export class SideNavComponent implements OnInit {
+
 
   isOpen = false;
   isOpenSecond = false;
@@ -72,12 +77,23 @@ export class SideNavComponent implements OnInit {
   }
 
 
-  changeImagesButton(isHovered: boolean): void {
+  changeImagesButton(isHovered: boolean): void {}
+
+  constructor(
+    public dialog: MatDialog,
+  ) { }
+
+  openAddChannels() {
+    this.dialog.open(AddChannelComponent, {
+      panelClass: 'border'
+    });
+  }
+
+  changeImage(isHovered: boolean): void {
     this.buttonImage = isHovered ? './../../assets/img/hide-nav-blue.png' : './../../assets/img/hide-nav-black.png';
   }
 
   openMessage() {
     // this.isMessageOpened = true;
   }
-
 }

@@ -1,0 +1,160 @@
+.popup {
+    padding: 2.5rem; // 40px
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; // 20px
+    width: 44.375rem; // 710px
+}
+
+.cross-icon {
+    background-image: url('./../../../assets/img/cross-black.png');
+    background-size: 1.5rem 1.5rem; // 24px
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 100%;
+    width: 2.5rem; // 40px
+    height: 2.5rem;
+
+    &:hover {
+        background-color: var(--background-color);
+        background-image: url('./../../../assets/img/cross-blue.png');
+    }
+}
+
+.icon-size-20 {
+    margin-right: 1.25rem; // 20px
+}
+
+.create {
+    background-color: var(--primary);
+    border-radius: 5rem; // 80px
+    font-size: 1.125rem; // 18px
+    padding: .75rem 1.5625rem; // 12px 25px
+    border: none;
+    outline: none;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    width: 7.8125rem; // 125px
+
+    &:hover {
+        background-color: #797EF3;
+    }
+}
+
+.horicontal {
+    span {
+        cursor: pointer;
+    }
+}
+
+.input-box {
+    width: 100%;
+    cursor: pointer;
+
+    input {
+        padding: .9375rem 1.25rem; // 15px 20px
+        border: .0625rem solid #ccc; // 1px
+        border-radius: 1.875rem; // 30px
+        outline: none;
+        border-color: var(--light-purple);
+        font-size: 1.125rem; // 18px
+        min-width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        cursor: pointer;
+ 
+        &::placeholder {
+            color: var(--gray);
+        }
+
+        &:hover,
+        &:focus {
+            border-color: var(--dark-purple);
+        }
+    }
+}
+
+.members-field{
+    padding: 0 0 .9375rem 0; // 15px
+        cursor: default;
+}
+
+#membersField {
+    display: flex;
+    align-items: flex-start;
+    max-width: calc(100% - 2.5rem);
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 95px;
+    display: none;
+
+}
+
+.member-scroll-box {
+    gap: .9375rem; // 15px
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    max-height: 5.9375rem; // 95px
+    overflow-y: auto;
+}
+
+.userName {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 9.375rem; // 150px
+    cursor: default !important;
+}
+
+.deleteMember {
+    width: 1.875rem; // 30px
+    height: 1.875rem; // 30px
+    background: url('./../../../assets/img/cross-black.png');
+    background-repeat: no-repeat;
+    cursor: pointer;
+    background-position: center;
+    background-size: 1.0625rem; // 17px
+    margin-left: .3125rem; // 5px
+
+    &:hover {
+        background: url('./../../../assets/img/cross-blue.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 1.1875rem; // 19px
+    }
+}
+
+.addedMembers{
+   padding: .1875rem 1.25rem; // 3px 20px
+   border-radius: 2.1875rem; // 35px
+   background-color: var(--background-color);
+   height: 2.5rem; // 40px
+   box-sizing: border-box;
+}
+
+.profile-img-small {
+    width: 2.125rem; // 34px
+    height: 2.125rem; // 34px
+    border-radius: 50%;
+    margin-right: .9375rem; // 15px
+    cursor: default;
+}
+
+.input-slide-down {
+    animation: slideDown 0.5s ease forwards;
+    opacity: 0;
+    transform: translateY(-100%);
+}
+
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0%);
+    }
+}

@@ -1,4 +1,4 @@
-import { Component , OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { AuthyService } from '../../firebase-services/authy.service';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-forget-password',
   standalone: true,
@@ -15,22 +15,23 @@ import { AuthyService } from '../../firebase-services/authy.service';
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    MatInputModule
+
+    MatInputModule,
   ],
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.scss',
 })
-export class ForgetPasswordComponent implements OnInit{
-
+export class ForgetPasswordComponent implements OnInit {
   emailForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-  })
+  });
 
-  constructor(private authService:AuthyService){}
+  constructor(
+    private authService: AuthyService,
+    private snackBar: MatSnackBar
+  ) {}
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 
   async sendResetEmail() {
     const email = this.emailForm.get('email')?.value;
@@ -41,12 +42,33 @@ export class ForgetPasswordComponent implements OnInit{
 
         if (emailExists) {
           await this.authService.forgotPassword(email);
-          console.log('Reset email sent successfully');
+          this.snackBar.open('Email sent to reset', 'Close', {
+            duration: 3000, // Duration the toast is shown (in milliseconds)
+            horizontalPosition: 'center', // Position of the toast
+            verticalPosition: 'bottom',
+          });
         } else {
-          console.log('Email is not registered in the system.');
+          this.snackBar.open(
+            'Email is not registered in the system.',
+            'Close',
+            {
+              duration: 3000, // Duration the toast is shown (in milliseconds)
+              horizontalPosition: 'center', // Position of the toast
+              verticalPosition: 'bottom',
+            }
+          );
         }
       } catch (error) {
         console.error('Error:', error);
+        this.snackBar.open(
+          'Error sending mail',
+          'Close',
+          {
+            duration: 3000, // Duration the toast is shown (in milliseconds)
+            horizontalPosition: 'center', // Position of the toast
+            verticalPosition: 'bottom',
+          }
+        );
       }
     }
   }

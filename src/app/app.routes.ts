@@ -5,13 +5,35 @@ import { ChooseAvaterComponent } from './authentication/register/choose-avater/c
 import { MainChatComponent } from './main-chat/main-chat.component';
 import { ForgetPasswordComponent } from './authentication/forget-password/forget-password.component';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
+import { canActivate, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
+
+const redirectLoggedIn = () => redirectUnauthorizedTo(['login']);
+const redirectToMain = () => redirectLoggedInTo(['main']);
 
 export const routes: Routes = [
-  {path:'', component:LoginComponent},
-  {path:'login', component:LoginComponent},
-  {path:'register', component:RegisterComponent},
-  {path:'chooseAvatar', component:ChooseAvaterComponent},
-  {path:'main', component:MainChatComponent},
-  {path:'forgot', component:ForgetPasswordComponent},
-  {path:'reset', component:ResetPasswordComponent}
+
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [redirectToMain],
+  },
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full',
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+  },
+  {
+    path: 'main',
+    component: MainChatComponent,
+    canActivate: [redirectLoggedIn],
+  },
+  { path: 'chooseAvatar',
+    component: ChooseAvaterComponent,
+    canActivate: [redirectLoggedIn],
+  },
+  { path: '**', redirectTo: 'login' },
 ];

@@ -1,4 +1,4 @@
-<div class="popup boxShadow">
+<form #editProfileForm="ngForm" (ngSubmit)="save()" novalidate class="popup boxShadow">
 
     <div class="horicontal spaceBetween">
         <h4 class="bold">Dein Profil bearbeiten</h4>
@@ -16,7 +16,7 @@
             <img src="./../../../assets/img/account-circle-black.png" class="icon-size-30">
             <h5 class="bold">Vollständiger Name</h5>
         </div>
-        <input [placeholder]="firebase.name" [(ngModel)]="inputName">
+        <input [placeholder]="firebase.name" [(ngModel)]="inputName" name="inputName">
     </div>
 
     <div class="edit-email" *ngIf="!hideEditEmail">
@@ -24,11 +24,24 @@
             <img src="./../../../assets/img/mail-black.png">
             <h5 class="bold">E-Mail Adresse</h5>
         </div>
-        <input [placeholder]="firebase.email" [(ngModel)]="inputEmail">
+        <input [placeholder]="firebase.email" [(ngModel)]="inputEmail" name="inputEmail"
+            (ngModelChange)="resetEmailErrorMsg()">
+        <mat-error *ngIf="editProfileForm.submitted && 
+        editProfileForm.controls['inputEmail'].touched && 
+        inputEmail !== '' && 
+        !isEmailValid">
+            Diese E-Mail-Adresse ist leider ungültig.
+        </mat-error>
     </div>
 
     <div class="cancel-save-btns">
         <button class="cancel-btn" (click)="this.dialogRef.close();">Abbrechen</button>
-        <button class="save-btn" (click)="save()">Speichern</button>
+        <button class="save-btn" type="submit" [disabled]="editProfileForm.invalid">Speichern</button>
+        <mat-error class="empty-field-error"
+            *ngIf="editProfileForm.submitted && inputName === '' && inputEmail === ''">Mindestens ein Feld muss
+            ausgefüllt werden</mat-error>
     </div>
-</div>
+
+
+
+</form>
