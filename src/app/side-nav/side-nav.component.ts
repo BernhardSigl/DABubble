@@ -3,11 +3,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDrawer } from '@angular/material/sidenav';
 import { AddChannelComponent } from '../popup/add-channel/add-channel.component';
+import { FirebaseService } from '../firebase-services/firebase.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-side-nav',
   standalone: true,
   imports: [
+    CommonModule,
     MatSidenavModule,
     MatDrawer,
     AddChannelComponent,
@@ -20,7 +23,14 @@ export class SideNavComponent {
 
   constructor(
     public dialog: MatDialog,
+    public firebase: FirebaseService,
   ) { }
+
+  async ngOnInit(): Promise<void> {
+    await this.firebase.ngOnInit();
+    console.log(this.firebase.channelsArray);
+    
+  }
 
   openAddChannels() {
     this.dialog.open(AddChannelComponent, {

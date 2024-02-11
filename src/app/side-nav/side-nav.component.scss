@@ -80,3 +80,37 @@
         }
     }
 }
+
+.channel-area {
+    display:flex;
+    flex-direction: column;
+    gap: .8125rem; // 13px
+    padding: 1.5625rem 0; // 25px
+
+   .channel {
+    padding: 0 .9375rem; // 15px
+    gap: .625rem; // 10px
+
+    .hashtag-and-name{
+        gap: .625rem; // 10px
+        padding: .25rem 1.25rem; // 4px 20px
+        cursor: pointer;
+
+        .hashtag {
+            background-image: url('./../../assets/img/hashtag-black.png');
+            background-size: 1.0694rem 1.0406rem; // 17.1104px 16.6496px
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        border-radius: 1.25rem; // 20px
+        &:hover {
+            background-color: var(--background-color);
+            color: var(--purple);
+            .hashtag {
+                background-image: url('./../../assets/img/hashtag-blue.png');
+            }
+        }
+    }
+} 
+}

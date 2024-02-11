@@ -16,6 +16,14 @@
             </div>
         </div>
 
+        <div class="channel-area">
+            <div *ngFor="let channel of firebase.channelsArray" class="channel">
+                <div class="hashtag-and-name horicontal">
+                    <div class="icon-size-24 hashtag"></div>
+                    <span class="fs18 channel-name bold">{{ channel.channelName }}</span>
+                </div>
+            </div>
+        </div>
 
     </mat-drawer>
 </mat-drawer-container>
