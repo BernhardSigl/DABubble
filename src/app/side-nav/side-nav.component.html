@@ -24,7 +24,7 @@
                     <p>Entwicklerteam</p>
                 </div> -->
 
-                <div class="channel-area">
+                <div class="channel-area" [ngStyle]="{'display': firebase.channelsArray.length === 0 ? 'none' : 'flex'}">
                     <div *ngFor="let channel of firebase.channelsArray" class="channel">
                         <div class="hashtag-and-name horicontal">
                             <div class="icon-size-24 hashtag"></div>
@@ -34,7 +34,7 @@
                 </div>
 
                 <div *ngIf="!isOpen" class="add-channel" (mouseenter)="changeImagesChannel(true)"
-                    (mouseleave)="changeImagesChannel(false)">
+                    (mouseleave)="changeImagesChannel(false)" (click)="openAddChannels()">
                     <img [src]="addChannelPlus">
                     <p>Channel hinzufügen</p>
                 </div>

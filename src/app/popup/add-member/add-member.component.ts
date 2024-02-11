@@ -62,6 +62,7 @@ export class AddMemberComponent {
       members: [],
       messages: [],
       createdBy: this.firebase.name,
+      channelIsActive: true,
     });
 
     if (this.checkboxAddAll) {
