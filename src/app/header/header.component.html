@@ -1,17 +1,32 @@
-<div class="header-wrapper">
-    <div class="header-logo">
-        <img src="./../../assets/img/text-logo.png">
-    </div>
-    <div class="header-input">
-        <input type="text" placeholder="Code learning durchsuchen">
-        <img src="./../../assets/img/search.png">
-    </div>
+<!--<div class="header-wrapper">
+  <div class="header-logo">
+      <img src="./../../assets/img/text-logo.png">
 
+  <div class="header-profil" (click)="headerDropdownMenu()">
+      <! <p>{{ firebase.name }}</p> -->
+      <!-- <img class="profil-img" src="./../../assets/img/profile-1.png">
+      <img class="logout-img" src="./../../assets/img/keyboard-arrow-down-black.png"> -->
 
+<div class="header-wrapper spaceBetween horicontal">
 
-    <div class="header-profil" (click)="headerDropdownMenu()">
-        <!-- <p>{{ firebase.name }}</p> -->
-        <img class="profil-img" src="./../../assets/img/profile-1.png">
-        <img class="logout-img" src="./../../assets/img/keyboard-arrow-down-black.png">
-    </div>
+  <img src="./../../assets/img/text-logo.png" class="header-logo">
+
+  <div class="horicontal">
+      <div class="header-input">
+          <input type="text" placeholder="Code learning durchsuchen">
+          <img src="./../../assets/img/search.png" class="icon-size-35">
+      </div>
+
+      <div class="header-profile horicontal" (click)="headerDropdownMenu()">
+          <h2 class="bold name">{{ firebase.name }}</h2>
+          <div class="profile-img-and-status">
+              <div [style.background-image]="'url(' + firebase.profileImg + ')'" class="profile-img"></div>
+              <img [src]="firebase.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'"
+                  class="status">
+          </div>
+
+          <img class="icon-size-30" src="./../../assets/img/keyboard-arrow-down-black.png">
+      </div>
+
+  </div>
 </div>
