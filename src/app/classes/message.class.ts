@@ -3,25 +3,56 @@ export class Message {
   public name: string = '';
   public time: number | string = '';
   public message: string[] = [];
-  public thread: string[] = [];
+  public threads: Thread[] = [];
   public image: string = '';
-  public messageImage: string | File = '';
+  public messageImage: string | undefined = '';
   public senderId: string = '';
   public reactions: { [key: string]: any } = {};
   public users: { [key: string]: number } = {};
+  public reactionsByUser?: { [userId: string]: string };
 
   public toJson() {
-    return {
+    const json: any = {
       messageId: this.messageId,
       name: this.name,
       time: this.time,
       message: this.message,
-      thread: this.thread,
+      threads: this.threads.map(thread => thread.toJson()), // Convert threads to JSON
       image: this.image,
-      messageImage: this.messageImage,
       senderId: this.senderId,
       reactions: this.reactions,
-      users: this.users
+      users: this.users,
+    };
+
+    if (this.messageImage !== undefined) {
+      json.messageImage = this.messageImage;
+    }
+
+    if (this.reactionsByUser !== undefined) {
+      json.reactionsByUser = this.reactionsByUser;
+    }
+
+    return json;
+  }
+}
+
+
+export class Thread {
+  public threadId: string = '';
+  public name: string = '';
+  public time: number | string = '';
+  public messages: Message[] = [];
+  public messageImage: string | undefined ='';
+  public senderId:string='';
+  public toJson() {
+    return {
+      threadId: this.threadId,
+      name: this.name,
+      time: this.time,
+      messages: this.messages.map(message => message.toJson()),
+      messageImage: this.messageImage,
+      senderId: this.senderId,
     };
   }
 }
+

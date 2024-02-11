@@ -39,5 +39,17 @@ app-message-layout-thread{
   gap: 30px;
   margin-bottom: 38px;
   flex-direction: column;
+  height: 100%;
   overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+mat-drawer-container{
+  visibility: hidden;
+
+
+}
+
+mat-drawer{
+  overflow-x: hidden;
 }

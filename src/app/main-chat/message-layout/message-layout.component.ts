@@ -18,6 +18,9 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { user } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
 import { map } from 'rxjs/operators';
+
+import { MatDrawer } from '@angular/material/sidenav';
+import { DrawerService } from '../../firebase-services/drawer.service';
 @Component({
   selector: 'app-message-layout',
   standalone: true,
@@ -27,6 +30,8 @@ import { map } from 'rxjs/operators';
     CommonModule,
     PickerModule,
     FormsModule,
+    MatDrawer,
+
   ],
   templateUrl: './message-layout.component.html',
   styleUrls: ['./message-layout.component.scss'],
@@ -35,6 +40,7 @@ export class MessageLayoutComponent implements OnInit {
   @Input() userId?: string;
   @Input() userName!: string;
   @Input() userImage!: string;
+  @ViewChild('drawer') drawer!: MatDrawer;
 
   isHovered: { [key: string]: boolean } = {};
   public textArea: string = '';
@@ -43,40 +49,26 @@ export class MessageLayoutComponent implements OnInit {
   public isEditEnabled: { [key: string]: boolean } = {};
   public editedMessage: { [key: string]: string } = {};
   public selectedMessage: Message | null = null;
-  public isThreadViewOpen: boolean = false;
+
   private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
     Message[]
   >([]);
   messages$: Observable<Message[]> = this.messagesSubject.asObservable();
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore, private drawerService:DrawerService) {}
 
   ngOnInit(): void {
     this.loadMessages();
   }
 
-  public openThreadView(message: Message): void {
-    debugger;
-    console.log('Opening thread view for message:', message);
-
-    // Set isThreadViewOpen to true to force the thread view to open
-    this.isThreadViewOpen = true;
-    console.log('isThreadViewOpen:', this.isThreadViewOpen); // Log the value for debugging
-
-    // Assign the clicked message to the selectedMessage property
-    this.selectedMessage = message;
+  openThread(message:Message): void {
+    this.drawerService.openDrawer(message);
+    this.drawerService.setSelectedMessage(message);
+    console.log(message)
   }
 
 
-    // Method to send a message within the thread
-    public sendMessageInThread(message: string): void {
-      if (this.selectedMessage) {
-        // Append the message to the thread of the selected message
-        this.selectedMessage.thread.push(message);
-        // Save the updated message in your database (Firebase, etc.)
-        // You'll need to implement the saving logic based on your backend setup
-      }
-    }
+
 
 
   loadMessages(): void {
@@ -148,24 +140,21 @@ export class MessageLayoutComponent implements OnInit {
     const userId = this.userId;
 
     if (message.reactions && message.reactions[emoji]) {
-      if (message.senderId === userId) {
-        if (message.reactions[emoji] === 1) {
-          delete message.reactions[emoji];
-        } else {
-          message.reactions[emoji]--;
-        }
+      if (message.senderId === userId && message.reactions[emoji] > 0) {
+        message.reactions[emoji]--; // Decrease count if same user reacts with the same emoji
       } else {
-        message.reactions[emoji]++;
+        message.reactions[emoji]++; // Increase count if different user reacts or same user reacts differently
       }
     } else {
       if (!message.reactions) {
         message.reactions = {};
       }
-      message.reactions[emoji] = message.senderId === userId ? 1 : 1;
+      message.reactions[emoji] = 1; // Initialize count if emoji is reacted for the first time
     }
 
     this.updateMessageReactions(message);
-  }
+}
+
 
   updateMessageReactions(message: Message) {
     const messageRef = doc(this.firestore, 'messages', message.messageId);

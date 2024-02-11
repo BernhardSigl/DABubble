@@ -1,0 +1,31 @@
+<div class="thread-card" *ngIf="selectedMessage"   [ngClass]="{
+  'current-user': selectedMessage.senderId === userId,
+  'other-user': selectedMessage.senderId !== userId
+}">
+  <div class="selected-msg-container">
+    <div class="thread-profile-img">
+      <img src="{{ selectedMessage.image }}" alt="" width="70px" />
+    </div>
+    <div class="msg-content">
+      <div class="name-time">
+        <h3>{{ selectedMessage.name }}</h3>
+        <p>{{ selectedMessage.time | date : "HH:mm" }}</p>
+      </div>
+
+      <img
+        class="message-image"
+        [src]="selectedMessage.messageImage"
+        alt="Message Image"
+        *ngIf="selectedMessage.messageImage"
+      />
+
+      <div class="message">{{selectedMessage.message}}</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider" *ngIf="selectedMessage">
+  <p>2 Antworten</p>
+  <mat-divider></mat-divider>
+</div>
+

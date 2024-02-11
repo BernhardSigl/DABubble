@@ -75,7 +75,7 @@
               (click)="toggleEmojiPicker(message.messageId)"
               alt=""
             />
-            <img src="../../../assets/img/thread.png" alt=""  (click)="openThreadView(message)"/>
+            <img src="../../../assets/img/thread.png" alt=""  (click)="openThread(message)" />
             <img
               *ngIf="message.senderId === userId"
               src="../../../assets/img/three-dots-vertical.png"

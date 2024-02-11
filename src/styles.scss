@@ -243,3 +243,13 @@ simple-snack-bar{
   background-color: var(--primary);
   padding-right: 0 !important;
 }
+
+.mat-drawer-backdrop.mat-drawer-shown {
+  visibility: hidden !important;
+  background-color: transparent !important;
+}
+
+.mat-drawer-inner-container {
+  overflow-x: hidden;
+  display: contents;
+}

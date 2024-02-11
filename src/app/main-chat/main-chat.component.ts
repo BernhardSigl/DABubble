@@ -42,19 +42,6 @@ export class MainChatComponent implements OnInit {
   userId: string = '';
   selectedMessage: Message | null = null;
   constructor(private firestore: Firestore, private route: ActivatedRoute, private userDataService: UserListService, private auth: AuthyService) { }
-  isThreadViewOpen = false;
-
-  public openThreadView(message: Message): void {
-    this.selectedMessage = message;
-    this.isThreadViewOpen = true;
-  }
-
-
-
-  closeThreadView(): void {
-    this.isThreadViewOpen = false;
-  }
-
 
   onMessageSelected(message: Message): void {
     this.selectedMessage = message;

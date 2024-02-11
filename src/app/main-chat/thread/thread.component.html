@@ -1,15 +1,17 @@
-<section class="thread-view" >
-  <header class="thread-header">
-    <div class="left-thread-side">
-      <h2>Thread</h2>
-      <a>#Entwicklerteam</a>
-    </div>
-    <div class="right-thread-side">
-      <img src="../../assets/img/close.png" alt="" (click)="closeThreadView()">
-    </div>
-  </header>
+<mat-drawer-container >
+  <mat-drawer #drawer [opened]="isOpen" class="thread-view">
+    <header class="thread-header">
+      <div class="left-thread-side">
+        <h2>Thread</h2>
+        <a>#Entwicklerteam</a>
+      </div>
+      <div class="right-thread-side">
+        <img src="../../assets/img/close.png" alt="" (click)="toggleThread()">
+      </div>
+    </header>
 
-  <app-message-layout-thread [userId]="userId" ></app-message-layout-thread>
+    <app-message-layout-thread [userId]="userId"></app-message-layout-thread>
 
-  <app-message-box></app-message-box>
-</section>
+    <app-message-box-thread [userId]="userId"></app-message-box-thread>
+  </mat-drawer>
+</mat-drawer-container>

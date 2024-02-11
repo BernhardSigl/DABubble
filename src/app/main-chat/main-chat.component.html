@@ -27,7 +27,7 @@
     <!-- Message box -->
     <app-message-box [userId]="userId"></app-message-box>
   </section>
-  <div *ngIf="isThreadViewOpen">
-    <app-thread [selectedMessage]="selectedMessage" [userId]="userId" (closeThreadViewEvent)="closeThreadView()"></app-thread>
+  <div >
+    <app-thread [selectedMessage]="selectedMessage" [userId]="userId" ></app-thread>
   </div>
 </div>
