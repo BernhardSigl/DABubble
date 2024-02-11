@@ -1,6 +1,6 @@
 declare var google: any;
 import { Injectable, inject } from '@angular/core';
-import { Firestore, addDoc, collection, doc, onSnapshot, query, setDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, getDocs, onSnapshot, query, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Message } from '../classes/message.class';
 import { Channel } from '../classes/channel.class';
@@ -152,6 +152,13 @@ export class FirebaseService {
         });
         resolve();
       });
+    });
+  }
+
+  async channelIsActiveToFalse(): Promise<void> {
+    const querySnapshot = await getDocs(this.getChannelColRef());
+    querySnapshot.forEach(async doc => {
+      await updateDoc(doc.ref, { channelIsActive: false });
     });
   }
 }

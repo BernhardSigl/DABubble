@@ -241,11 +241,20 @@
         border-radius: 1.25rem; // 20px
         &:hover {
             background-color: var(--background-color);
-            color: var(--purple);
             .hashtag {
                 background-image: url('./../../assets/img/hashtag-blue.png');
             }
         }
     }
-} 
 }
+
+.channelIsActive {
+    background-color: var(--background-color);
+    color: var(--purple);
+    .hashtag {
+        background-image: url('./../../assets/img/hashtag-blue.png') !important;
+    }
+    }
+
+}
+

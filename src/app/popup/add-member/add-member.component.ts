@@ -56,6 +56,9 @@ export class AddMemberComponent {
   }
 
   async addNewChannel() {
+    localStorage.removeItem('channelName');
+    localStorage.setItem('channelName', this.data.channelName);
+
     const newChannel = new Channel({
       channelName: this.data.channelName,
       channelDescription: this.data.channelDescription,
@@ -65,6 +68,13 @@ export class AddMemberComponent {
       channelIsActive: true,
     });
 
+    this.pushMembersInChannel(newChannel);
+
+    await this.firebase.addChannel(newChannel);
+    this.dialogRef.close();
+  }
+
+  pushMembersInChannel(newChannel: any) {   
     if (this.checkboxAddAll) {
       for (const userAll of this.firebase.usersArray) {
         newChannel.members.push(userAll);
@@ -74,9 +84,6 @@ export class AddMemberComponent {
         newChannel.members.push(userSpecific);
       }
     }
-
-    await this.firebase.addChannel(newChannel);
-    this.dialogRef.close();
   }
 
   selectMemberBehaviour(event: MouseEvent) {

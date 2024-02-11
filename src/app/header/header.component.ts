@@ -28,27 +28,9 @@ export class HeaderComponent implements OnInit {
     public dialog: MatDialog) {
   }
 
-  // ngOnInit() {
-  //   this.route.queryParams.subscribe(params=>{
-  //     this.userId = params['userId'];
-  //     // console.log(this.userId)
-  //     if (this.userId) {
-  //       this.getUserData(this.userId)
-  //     } else {
-  //       console.error('userId parameter us undefined')
-  //     }
-  //   })
-  // }
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
   }
-
-
-
-
-  // async ngOnInit(): Promise<void> {
-  //   await this.firebase.ngOnInit();
-  // }
 
   headerDropdownMenu() {
     this.dialog.open(HeaderDropdownComponent, {

@@ -19,14 +19,11 @@
                     <img class="plus-channel" src="./../../assets/img/plus-black.png" (click)="openAddChannels()">
                 </div>
 
-                <!-- <div *ngIf="!isOpen" class="channel-overview">
-                    <img src="./../../assets/img/tag-icon.png">
-                    <p>Entwicklerteam</p>
-                </div> -->
-
                 <div class="channel-area" [ngStyle]="{'display': firebase.channelsArray.length === 0 ? 'none' : 'flex'}">
                     <div *ngFor="let channel of firebase.channelsArray" class="channel">
-                        <div class="hashtag-and-name horicontal">
+                        <div class="hashtag-and-name horicontal"
+                        [ngClass]="{'channelIsActive': isActiveChannel(channel.channelName)}"
+                        (click)="channelNameToLocalStorage(channel.channelName)">
                             <div class="icon-size-24 hashtag"></div>
                             <span class="fs18 channel-name bold">{{ channel.channelName }}</span>
                         </div>

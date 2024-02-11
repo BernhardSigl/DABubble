@@ -91,4 +91,16 @@ export class SideNavComponent implements OnInit {
     // this.isMessageOpened = true;
   }
 
+  channelNameToLocalStorage(channelName: string): void  {
+    if (localStorage.getItem('channelName')) {
+      localStorage.setItem('channelName', channelName);
+  } else {
+      localStorage.setItem('channelName', channelName);
+  }
+  }
+
+  isActiveChannel(channelName: string): boolean {
+    return localStorage.getItem('channelName') === channelName;
+}
+
 }

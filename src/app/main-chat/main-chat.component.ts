@@ -6,16 +6,13 @@ import { FormsModule } from '@angular/forms';
 import { ThreadComponent } from './thread/thread.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-// import { ViewProfileComponent } from '../popup/view-profile/view-profile.component';
 import { CommonModule } from '@angular/common';
 import { MessageLayoutComponent } from './message-layout/message-layout.component';
-import { ActivatedRoute } from '@angular/router';
-import { Firestore, addDoc, collection, getDocs, query, where } from '@angular/fire/firestore';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { UserListService } from '../firebase-services/user-list.service';
-import { user } from '@angular/fire/auth';
 import { AuthyService } from '../firebase-services/authy.service';
 import { Message } from '../classes/message.class';
+import { FirebaseService } from '../firebase-services/firebase.service';
 
 @Component({
   selector: 'app-main-chat',
@@ -41,22 +38,20 @@ export class MainChatComponent implements OnInit {
   userImage: string = '';
   userId: string = '';
   selectedMessage: Message | null = null;
-  constructor(private firestore: Firestore, private route: ActivatedRoute, private userDataService: UserListService, private auth: AuthyService) { }
+  constructor(
+    private userDataService: UserListService,
+    private auth: AuthyService,
+    public firebase: FirebaseService,
+    ) { }
 
   onMessageSelected(message: Message): void {
     this.selectedMessage = message;
   }
 
-  ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.userId = params['userId'];
-      console.log(this.userId);
-      if (this.userId) {
-        this.getUserData(this.userId);
-      } else {
-        console.error('userId parameter is undefined');
-      }
-    });
+  async ngOnInit(): Promise<void>{
+    await this.firebase.ngOnInit();
+    this.userId = this.firebase.loggedInUserId;
+    this.getUserData(this.userId);
 
     // important for email change
     const emailForSignIn = window.localStorage.getItem('emailForSignIn');
@@ -69,14 +64,9 @@ export class MainChatComponent implements OnInit {
     await this.userDataService.fetchUserData(userId);
     this.userDataService.userName$.subscribe(userName => {
       this.userName = userName;
-      console.log(this.userName)
     });
     this.userDataService.userImage$.subscribe(userImage => {
       this.userImage = userImage;
     });
   }
-
-
-
-
 }
