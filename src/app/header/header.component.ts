@@ -15,17 +15,40 @@ import { FirebaseService } from '../firebase-services/firebase.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+  userName: string = '';
+  userEmail: string = '';
+  userId: string = '';
+  userImage: string = '';
 
   constructor(
-    public dialog: MatDialog,
+    private firestore: Firestore,
+    private route: ActivatedRoute,
     public firebase: FirebaseService,
-  ) {
+    public dialog: MatDialog) {
   }
 
+  // ngOnInit() {
+  //   this.route.queryParams.subscribe(params=>{
+  //     this.userId = params['userId'];
+  //     // console.log(this.userId)
+  //     if (this.userId) {
+  //       this.getUserData(this.userId)
+  //     } else {
+  //       console.error('userId parameter us undefined')
+  //     }
+  //   })
+  // }
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
   }
+
+
+
+
+  // async ngOnInit(): Promise<void> {
+  //   await this.firebase.ngOnInit();
+  // }
 
   headerDropdownMenu() {
     this.dialog.open(HeaderDropdownComponent, {

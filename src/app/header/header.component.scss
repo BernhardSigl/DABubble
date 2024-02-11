@@ -32,6 +32,7 @@
     }
 }
 
+
 .header-profile {
     gap: 1.25rem; // 20px
     cursor: pointer;
@@ -66,6 +67,36 @@
             border: 2px solid var(--background-color);
             border-radius: 100%;
         }
+    }
+  }
+
+.header-profil {
+    display: flex;
+    width: auto ;
+    align-items: center;
+    gap: 1.25rem;
+    cursor: pointer;
+
+    p {
+        color: var(--Black, #000);
+        font-family: Nunito;
+        font-size: 2rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+
+    .profil-img {
+        width: 4.375rem;
+        height: 4.375rem;
+        flex-shrink: 0;
+        border-radius: 100%;
+    }
+
+    .logout-img {
+        width: 1.875rem;
+        height: 1.875rem;
+        flex-shrink: 0;
     }
 
 }
