@@ -6,8 +6,10 @@ import { Injectable } from '@angular/core';
 export class MemberServiceService {
   selectedUserName: string = '';
   selectedUsers: any[] = [];
+  filteredUsers: string = '';
 
-  constructor() { }
+  constructor() { 
+  }
 
   updateMember() { 
         if (this.selectedUsers) {
@@ -15,3 +17,4 @@ export class MemberServiceService {
     }
   }
 }
+

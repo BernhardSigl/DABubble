@@ -23,6 +23,8 @@ export class AddMemberComponent {
   checkboxAddSpecific: boolean = false;
   selectMemberDialogRef!: MatDialogRef<SelectMemberComponent>;
   selectMemberDialogOpen: boolean = false;
+  membersField: HTMLElement | null = null;
+  inputValue: string = '';
 
   constructor(
     public dialogRef: MatDialogRef<AddMemberComponent>,
@@ -43,6 +45,7 @@ export class AddMemberComponent {
   }
 
   toggleCheckbox(selection: string) {
+    
     if (selection === 'all') {
       this.checkboxAddAll = !this.checkboxAddAll;
       this.checkboxAddSpecific = false;
@@ -77,14 +80,18 @@ export class AddMemberComponent {
 
   selectMemberBehaviour(event: MouseEvent) {
     event.stopPropagation();
-if (!this.selectMemberDialogOpen) {
+    if (!this.selectMemberDialogOpen) {
       this.selectMember();
       this.selectMemberDialogOpen = true;
     }
   }
 
+  filterSelectedUsers() {
+    this.memberService.filteredUsers = this.inputValue.toLowerCase();
+  }
+
   selectMember() {
-    const inputField = document.getElementById('inputField');
+    const inputField = document.getElementById('inputField') as HTMLInputElement;
     if (inputField) {
       const rect = inputField.getBoundingClientRect();
       this.selectMemberDialogRef = this.dialog.open(SelectMemberComponent, {
@@ -92,6 +99,9 @@ if (!this.selectMemberDialogOpen) {
         data: {
           checkboxAddAll: this.checkboxAddAll,
           checkboxAddSpecific: this.checkboxAddSpecific,
+          top: `${rect.bottom}px`,
+          left: `${rect.left}px`,
+          updateDialogPosition: () => this.updateDialogPosition(),
         },
         backdropClass: 'transparent-backdrop',
         position: {
@@ -101,6 +111,17 @@ if (!this.selectMemberDialogOpen) {
       });
     }
   }
+
+  updateDialogPosition() {
+    const inputField = document.getElementById('inputField');
+    if (inputField && this.selectMemberDialogRef) {
+        const rect = inputField.getBoundingClientRect();
+        this.selectMemberDialogRef.updatePosition({
+            top: `${rect.bottom}px`,
+            left: `${rect.left}px`
+        });
+    }
+}
 
   closeSelectMemberDialog(){  
     if (this.selectMemberDialogOpen) {
@@ -122,5 +143,13 @@ if (!this.selectMemberDialogOpen) {
         this.closeSelectMemberDialog();
       }
     });
+  }
+
+  removeUser(userToRemove: any) {
+    const index = this.memberService.selectedUsers.indexOf(userToRemove);
+    console.log(index);
+    if (index !== -1) {
+      this.memberService.selectedUsers.splice(index, 1);
+    }
   }
 }

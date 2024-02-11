@@ -35,7 +35,7 @@ export class SelectMemberComponent {
           compareArrays.selected = true;
       }
       }
-    } 
+    }   
   }
 
   stopClose(event: MouseEvent) {   
@@ -61,6 +61,25 @@ export class SelectMemberComponent {
       user.selected = false;
     }
     this.memberService.updateMember();
+    setTimeout(() => this.data.updateDialogPosition(), 1);
   }
-  
+
+  isMatchingFilter(user: any) {
+    const filterValue = this.memberService.filteredUsers.trim().toLowerCase();
+    if (filterValue === '') {
+        const filterElement = document.getElementById(`filter_${user.userId}`);
+        if (filterElement) {
+            filterElement.style.display = 'flex';
+        }
+        return true;
+    } else {
+        const isMatch = user.name.toLowerCase().includes(filterValue);
+        const filterElement = document.getElementById(`filter_${user.userId}`);
+        if (filterElement) {
+            filterElement.style.display = isMatch ? 'flex' : 'none';
+        }
+        return isMatch;
+    }
+}
+
 }
