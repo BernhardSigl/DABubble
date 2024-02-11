@@ -39,7 +39,6 @@ export class Channel {
     members: any[] = [];
     messages: any[] = [];
     createdBy: string;
-    channelIsActive: boolean;
 
     constructor(obj?: any) {
         this.channelName = obj && obj.channelName ? obj.channelName : '';
@@ -47,7 +46,6 @@ export class Channel {
         this.members = obj && obj.members ? obj.members : '';
         this.messages = obj && obj.messages ? obj.messages : '';
         this.createdBy = obj && obj.createdBy ? obj.createdBy : '';
-        this.channelIsActive = obj && obj.channelIsActive ? obj.channelIsActive : '';
     }
 
     toJson() {
@@ -57,7 +55,6 @@ export class Channel {
             members: this.members,
             messages: this.messages,
             createdBy: this.createdBy,
-            channelIsActive: this.channelIsActive,
         }
     }
 }

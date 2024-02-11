@@ -38,6 +38,8 @@ export class MainChatComponent implements OnInit {
   userImage: string = '';
   userId: string = '';
   selectedMessage: Message | null = null;
+  filteredChannelsArray: any[] = [];
+
   constructor(
     private userDataService: UserListService,
     private auth: AuthyService,
@@ -52,6 +54,11 @@ export class MainChatComponent implements OnInit {
     await this.firebase.ngOnInit();
     this.userId = this.firebase.loggedInUserId;
     this.getUserData(this.userId);
+    
+    const storedChannelName = localStorage.getItem('channelName');
+    if (localStorage.getItem('channelName')) {
+      this.filteredChannelsArray = this.firebase.channelsArray.filter(channel => channel.channelName === storedChannelName);
+    }
 
     // important for email change
     const emailForSignIn = window.localStorage.getItem('emailForSignIn');

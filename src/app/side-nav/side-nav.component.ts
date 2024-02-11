@@ -44,7 +44,18 @@ export class SideNavComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    await this.firebase.ngOnInit();   
+    await this.firebase.ngOnInit(); 
+    this.selectLastOpenedChannel();
+  }
+
+  selectLastOpenedChannel() {
+    const currentChannel = this.firebase.loggedInUserArray[0].activeChannel;
+    if (currentChannel) {
+      const channelToSelect = this.firebase.channelsArray.find(channel => channel.channelName === currentChannel);
+      if (channelToSelect) {
+        this.firebase.activeChannel(channelToSelect.channelName);
+      }
+    }  
   }
 
   openAddChannels() {
@@ -90,17 +101,4 @@ export class SideNavComponent implements OnInit {
   openMessage() {
     // this.isMessageOpened = true;
   }
-
-  channelNameToLocalStorage(channelName: string): void  {
-    if (localStorage.getItem('channelName')) {
-      localStorage.setItem('channelName', channelName);
-  } else {
-      localStorage.setItem('channelName', channelName);
-  }
-  }
-
-  isActiveChannel(channelName: string): boolean {
-    return localStorage.getItem('channelName') === channelName;
-}
-
 }

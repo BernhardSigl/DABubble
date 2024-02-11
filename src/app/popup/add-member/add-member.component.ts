@@ -65,7 +65,6 @@ export class AddMemberComponent {
       members: [],
       messages: [],
       createdBy: this.firebase.name,
-      channelIsActive: true,
     });
 
     this.pushMembersInChannel(newChannel);

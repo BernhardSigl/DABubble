@@ -16,6 +16,7 @@ export class User {
   password?: string;
   status?: boolean
   statusChangeable?: boolean;
+  activeChannel?: string;
 
   constructor(obj?: any) {
     this.name = obj && obj.name ? obj.name : '';
@@ -25,6 +26,7 @@ export class User {
     this.password = obj && obj.password ? obj.password : ''
     this.status = obj && obj.status ? obj.status : false;
     this.statusChangeable = obj && obj.statusChangeable ? obj.statusChangeable : false;
+    this.activeChannel = obj && obj.activeChannel ? obj.activeChannel : ''
   }
 
   toJson() {
@@ -35,7 +37,8 @@ export class User {
       profileImg: this.profileImg,
       password: this.password,
       status: this.status,
-      statusChangeable: this.statusChangeable
+      statusChangeable: this.statusChangeable,
+      activeChannel: this.activeChannel,
     }
   }
 }

@@ -17,9 +17,11 @@ export class FirebaseService {
 
   usersArray: any[] = [];
   loggedInUserId!: string;
+  loggedInUserArray: any[] = [];
 
   channel!: Channel;
   channelsArray: any[] = [];
+  currentChannel!: string;
 
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
@@ -29,6 +31,7 @@ export class FirebaseService {
   async ngOnInit(): Promise<void> {
     await this.pullLoggedInUserId();
     await this.subAllUsers();
+    await this.loggedInUserData();
     await this.subAllMessages();
     await this.subAllChannels();
   }
@@ -85,6 +88,10 @@ export class FirebaseService {
 
   async pullLoggedInUserId(): Promise<void> {
     this.loggedInUserId = await Promise.resolve(localStorage.getItem('userId') || '');
+  }
+
+  async loggedInUserData(): Promise<void> {
+    this.loggedInUserArray = this.usersArray.filter(user => user.userId === this.loggedInUserId);
   }
 
   async setOnlineStatus(): Promise<void> {
@@ -155,10 +162,8 @@ export class FirebaseService {
     });
   }
 
-  async channelIsActiveToFalse(): Promise<void> {
-    const querySnapshot = await getDocs(this.getChannelColRef());
-    querySnapshot.forEach(async doc => {
-      await updateDoc(doc.ref, { channelIsActive: false });
-    });
+  async activeChannel(activeChannel: string): Promise<void> {
+    this.currentChannel = activeChannel;
+    await setDoc(this.getSingleUserDocRef(), { activeChannel: activeChannel }, { merge: true });
   }
 }

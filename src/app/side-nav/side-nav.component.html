@@ -21,9 +21,8 @@
 
                 <div class="channel-area" [ngStyle]="{'display': firebase.channelsArray.length === 0 ? 'none' : 'flex'}">
                     <div *ngFor="let channel of firebase.channelsArray" class="channel">
-                        <div class="hashtag-and-name horicontal"
-                        [ngClass]="{'channelIsActive': isActiveChannel(channel.channelName)}"
-                        (click)="channelNameToLocalStorage(channel.channelName)">
+                        <div class="hashtag-and-name horicontal" [ngClass]="{'channelIsActive': channel.channelName === firebase.currentChannel}"
+                        (click)="firebase.activeChannel(channel.channelName)">
                             <div class="icon-size-24 hashtag"></div>
                             <span class="fs18 channel-name bold">{{ channel.channelName }}</span>
                         </div>
@@ -58,15 +57,6 @@
                         </div>
                         
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="channel-area">
-            <div *ngFor="let channel of firebase.channelsArray" class="channel">
-                <div class="hashtag-and-name horicontal">
-                    <div class="icon-size-24 hashtag"></div>
-                    <span class="fs18 channel-name bold">{{ channel.channelName }}</span>
                 </div>
             </div>
         </div>
