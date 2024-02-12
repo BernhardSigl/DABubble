@@ -13,6 +13,8 @@ import { UserListService } from '../firebase-services/user-list.service';
 import { AuthyService } from '../firebase-services/authy.service';
 import { Message } from '../classes/message.class';
 import { FirebaseService } from '../firebase-services/firebase.service';
+import { AddMembersRetrospectivelyComponent } from '../popup/add-members-retrospectively/add-members-retrospectively.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-main-chat',
@@ -28,6 +30,7 @@ import { FirebaseService } from '../firebase-services/firebase.service';
     MatDividerModule,
     MessageLayoutComponent,
     AngularFirestoreModule,
+    AddMembersRetrospectivelyComponent
   ],
   templateUrl: './main-chat.component.html',
   styleUrl: './main-chat.component.scss',
@@ -38,12 +41,12 @@ export class MainChatComponent implements OnInit {
   userImage: string = '';
   userId: string = '';
   selectedMessage: Message | null = null;
-  filteredChannelsArray: any[] = [];
 
   constructor(
     private userDataService: UserListService,
     private auth: AuthyService,
     public firebase: FirebaseService,
+    public dialog: MatDialog
     ) { }
 
   onMessageSelected(message: Message): void {
@@ -54,7 +57,6 @@ export class MainChatComponent implements OnInit {
     await this.firebase.ngOnInit();
     this.userId = this.firebase.loggedInUserId;
     this.getUserData(this.userId);
-    console.log(this.firebase.channelProfileImages);
    
     // important for email change
     const emailForSignIn = window.localStorage.getItem('emailForSignIn');
@@ -70,6 +72,13 @@ export class MainChatComponent implements OnInit {
     });
     this.userDataService.userImage$.subscribe(userImage => {
       this.userImage = userImage;
+    });
+  }
+
+  addMemberDropdown() {
+    this.dialog.open(AddMembersRetrospectivelyComponent, {
+      position: { top: '210px', right: '550px' },
+      panelClass: 'no-border-tr',
     });
   }
 }

@@ -22,10 +22,9 @@ export class HeaderComponent implements OnInit {
   userImage: string = '';
 
   constructor(
-    private firestore: Firestore,
-    private route: ActivatedRoute,
     public firebase: FirebaseService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog
+    ) {
   }
 
   async ngOnInit(): Promise<void> {

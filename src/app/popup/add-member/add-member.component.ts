@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { Channel } from '../../classes/channel.class';
 import { CommonModule } from '@angular/common';
-import { SelectMemberComponent } from './select-member/select-member.component';
+import { SelectMemberComponent } from '../select-member/select-member.component';
 import { FormsModule } from '@angular/forms';
 import { MemberServiceService } from '../member-service/member-service.service';
 
@@ -65,6 +65,7 @@ export class AddMemberComponent {
       members: [],
       messages: [],
       createdBy: this.firebase.name,
+      channelId: '',
     });
 
     this.pushMembersInChannel(newChannel);
@@ -154,7 +155,6 @@ export class AddMemberComponent {
 
   removeUser(userToRemove: any) {
     const index = this.memberService.selectedUsers.indexOf(userToRemove);
-    console.log(index);
     if (index !== -1) {
       this.memberService.selectedUsers.splice(index, 1);
     }

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-import { FirebaseService } from '../../../firebase-services/firebase.service';
+import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MemberServiceService } from '../../member-service/member-service.service';
+import { MemberServiceService } from '../member-service/member-service.service';
 
 @Component({
   selector: 'app-select-member',

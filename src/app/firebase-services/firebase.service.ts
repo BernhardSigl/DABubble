@@ -20,9 +20,11 @@ export class FirebaseService {
   loggedInUserArray: any[] = [];
 
   channel!: Channel;
+  channelId!: string;
   channelsArray: any[] = [];
   currentChannelData: any[] = [];
   currentChannelName!: string;
+  currentChannelId!: string;
   channelCreatedBy!: string;
   channelDescription!: string;
   channelMembers: any[] = [];
@@ -148,11 +150,31 @@ export class FirebaseService {
   // Channels:
   async addChannel(newChannel: Channel) {
     await addDoc(this.getChannelColRef(), newChannel.toJson()).then((result: any) => {
+      this.channelId = result.id;
+      newChannel.channelId = this.channelId;
+      this.saveChannelId(newChannel);
     });
+  }
+
+  async saveChannelId(newChannel: Channel) {
+    let docRef = this.getSingleChannelDocRef();
+    await updateDoc(docRef, newChannel.toJson());
+  }
+
+  async updateChannel(updatedMembers: any) {
+    await setDoc(this.currentOnClickedSingleChannelDocRef(), { members: updatedMembers }, { merge: true });
   }
 
   getChannelColRef() {
     return collection(this.firestore, "channels");
+  }
+
+  getSingleChannelDocRef() {
+    return doc(this.getChannelColRef(), this.channelId);
+  }
+
+  currentOnClickedSingleChannelDocRef() {
+    return doc(this.getChannelColRef(), this.currentChannelId);
   }
 
   async subAllChannels(): Promise<void> {
@@ -186,7 +208,8 @@ export class FirebaseService {
     this.channelMembers = this.currentChannelData[0].members;
     this.channelCreatedBy = this.currentChannelData[0].createdBy;
     this.channelDescription = this.currentChannelData[0].description;
-    this.channelProfileImages = this.channelMembers = this.currentChannelData[0].members.map((member: any) => member.profileImg);
+    this.currentChannelId = this.currentChannelData[0].channelId;
+    this.channelProfileImages = this.currentChannelData[0].members.map((member: any) => member.profileImg);
   }
 
   async activeChannelData(): Promise<void> {
