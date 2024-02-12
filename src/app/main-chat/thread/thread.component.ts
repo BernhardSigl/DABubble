@@ -26,7 +26,7 @@ import { MessageBoxThreadComponent } from './message-box-thread/message-box-thre
     MessageLayoutThreadComponent,
     MatSidenavModule,
     MatDrawer,
-    MessageBoxThreadComponent
+    MessageBoxThreadComponent,
   ],
   templateUrl: './thread.component.html',
   styleUrl: './thread.component.scss',
@@ -39,16 +39,15 @@ export class ThreadComponent implements OnInit {
   @ViewChild('drawer') drawer!: MatDrawer;
   threadMessages: string[] = [];
   isOpen = true;
-
+  threadId: string = '';
   constructor(private drawerService: DrawerService) {}
 
   ngOnInit(): void {
     this.drawerService.isOpen$.subscribe((isOpen) => {
       this.isOpen = isOpen;
     });
-    console.log(this.userId)
-  }
 
+  }
 
   toggleThread(): void {
     this.isOpen = !this.isOpen;
@@ -58,5 +57,12 @@ export class ThreadComponent implements OnInit {
   sendMessage(message: string): void {
     this.threadMessages.push(message);
     // Emit an event to notify the parent component that a message has been sent
+  }
+
+  handleThreadId(threadId: string) {
+    // Handle the received threadId here
+    console.log('Received threadId:', threadId);
+    // You can use this threadId as needed in your component logic
+    this.threadId = threadId;
   }
 }
