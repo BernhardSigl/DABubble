@@ -5,19 +5,31 @@
   <!-- Chat Header -->
   <section class="main-chat">
     <header class="header-chat">
+
       <div class="left-side-header">
-        <p>{{ firebase.currentChannel }}</p>
-        <img src="../../assets/img/arrow-drop-down-black.png" alt="" />
+          <div class="channel">
+              <div class="hashtag-and-name horicontal">
+                  <div class="icon-size-24 hashtag"></div>
+                  <h4 class="channel-name bold">{{ firebase.currentChannelName }}</h4>
+                  <div class="arrow-down-img"></div>
+                  <!-- <img src="./../../assets/img/keyboard-arrow-down-black.png"> -->
+              </div>
+          </div>
       </div>
 
       <div class="right-side-header">
-        <div class="profile-images">
-          <img src="../../assets/img/profile-1.png" alt="" />
-          <img src="../../assets/img/profile-2.png" alt="" />
-          <img src="../../assets/img/profile-3.png" alt="" />
+        <div class="profile-images horicontal">
+
+          <ng-container *ngFor="let image of firebase.channelProfileImages; let i=index">
+            <img *ngIf="i < 3" [src]="image" alt="Profile Image" />
+          </ng-container>
+          <ng-container *ngIf="firebase.channelProfileImages.length > 3">
+            <h3 class="profile-counts">{{ firebase.channelProfileImages.length - 3 }}</h3>
+          </ng-container>
+
         </div>
-        <span class="profile-counts"> 3 </span>
-        <img class="add-member" src="../../assets/img/add-person.png" />
+        <div class="add-member"></div>
+        
       </div>
     </header>
 

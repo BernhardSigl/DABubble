@@ -54,12 +54,8 @@ export class MainChatComponent implements OnInit {
     await this.firebase.ngOnInit();
     this.userId = this.firebase.loggedInUserId;
     this.getUserData(this.userId);
-    
-    const storedChannelName = localStorage.getItem('channelName');
-    if (localStorage.getItem('channelName')) {
-      this.filteredChannelsArray = this.firebase.channelsArray.filter(channel => channel.channelName === storedChannelName);
-    }
-
+    console.log(this.firebase.channelProfileImages);
+   
     // important for email change
     const emailForSignIn = window.localStorage.getItem('emailForSignIn');
     if (emailForSignIn) {

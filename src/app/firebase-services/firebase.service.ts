@@ -21,7 +21,13 @@ export class FirebaseService {
 
   channel!: Channel;
   channelsArray: any[] = [];
-  currentChannel!: string;
+  currentChannelData: any[] = [];
+  currentChannelName!: string;
+  channelCreatedBy!: string;
+  channelDescription!: string;
+  channelMembers: any[] = [];
+  channelMessages:  any[] = [];
+  channelProfileImages:  any[] = [];
 
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
@@ -34,6 +40,7 @@ export class FirebaseService {
     await this.loggedInUserData();
     await this.subAllMessages();
     await this.subAllChannels();
+    await this.selectLastOpenedChannel();
   }
 
   async subAllMessages(): Promise<void> {
@@ -162,8 +169,27 @@ export class FirebaseService {
     });
   }
 
-  async activeChannel(activeChannel: string): Promise<void> {
-    this.currentChannel = activeChannel;
-    await setDoc(this.getSingleUserDocRef(), { activeChannel: activeChannel }, { merge: true });
+  async selectLastOpenedChannel() {
+    const currentChannelName = this.loggedInUserArray[0].activeChannelName;
+    if (currentChannelName) {
+      const channelToSelect = this.channelsArray.find(channel => channel.channelName === currentChannelName);
+      if (channelToSelect) {
+        await this.activeChannelName(channelToSelect.channelName);
+      }
+    }  
+  }
+
+  async activeChannelName(activeChannelName: string): Promise<void> {
+    this.currentChannelName = activeChannelName;
+    await setDoc(this.getSingleUserDocRef(), { activeChannelName: activeChannelName }, { merge: true });
+    await this.activeChannelData();
+    this.channelMembers = this.currentChannelData[0].members;
+    this.channelCreatedBy = this.currentChannelData[0].createdBy;
+    this.channelDescription = this.currentChannelData[0].description;
+    this.channelProfileImages = this.channelMembers = this.currentChannelData[0].members.map((member: any) => member.profileImg);
+  }
+
+  async activeChannelData(): Promise<void> {
+    this.currentChannelData = this.channelsArray.filter(channel => channel.channelName === this.currentChannelName);
   }
 }
