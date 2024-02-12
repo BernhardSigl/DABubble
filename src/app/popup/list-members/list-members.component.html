@@ -1,0 +1,31 @@
+<div class="popup">
+
+    <div class="spaceBetween horicontal title">
+        <h4 class="bold">Mitglieder</h4>
+        <div class="icon-size-24 cross-icon" (click)="this.dialogRef.close();">
+        </div>
+    </div>
+
+    <div class="members-list-box">
+        <div class="members-list-scroll-box scroll-bar">
+            <div class="members-list horicontal"
+            *ngFor="let user of firebase.usersArray">
+    
+                <div class="profile-img-and-status">
+                    <div [style.background-image]="'url(' + user.profileImg + ')'" class="profile-img"></div>
+                    <img [src]="user.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'"
+                        class="status">
+                </div>
+
+                <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
+    
+        </div>
+        </div>
+    </div>
+
+    <div class="add-member-box horicontal" (click)="addMemberDropdown()">
+        <div class="add-member"></div>
+        <span class="fs18">Mitglieder hinzufügen</span>
+    </div>
+
+</div>

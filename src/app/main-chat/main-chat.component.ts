@@ -15,6 +15,7 @@ import { Message } from '../classes/message.class';
 import { FirebaseService } from '../firebase-services/firebase.service';
 import { AddMembersRetrospectivelyComponent } from '../popup/add-members-retrospectively/add-members-retrospectively.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ListMembersComponent } from '../popup/list-members/list-members.component';
 
 @Component({
   selector: 'app-main-chat',
@@ -30,7 +31,8 @@ import { MatDialog } from '@angular/material/dialog';
     MatDividerModule,
     MessageLayoutComponent,
     AngularFirestoreModule,
-    AddMembersRetrospectivelyComponent
+    AddMembersRetrospectivelyComponent,
+    ListMembersComponent
   ],
   templateUrl: './main-chat.component.html',
   styleUrl: './main-chat.component.scss',
@@ -78,6 +80,13 @@ export class MainChatComponent implements OnInit {
   addMemberDropdown() {
     this.dialog.open(AddMembersRetrospectivelyComponent, {
       position: { top: '210px', right: '550px' },
+      panelClass: 'no-border-tr',
+    });
+  }
+
+  listMembers() {
+    this.dialog.open(ListMembersComponent, {
+      position: { top: '210px', right: '650px' },
       panelClass: 'no-border-tr',
     });
   }
