@@ -160,6 +160,13 @@ h5 {
     overflow: hidden !important;
 }
 
+// popup profile-dialogs and header dropdown:
+.no-border-tl .mat-mdc-dialog-container,
+.no-border-tl .mdc-dialog__surface {
+    border-radius: 0 1.875rem 1.875rem 1.875rem !important;
+    overflow: hidden !important;
+}
+
 // popup channels:
 .border .mat-mdc-dialog-container,
 .border .mdc-dialog__surface {

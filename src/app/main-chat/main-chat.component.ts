@@ -16,6 +16,7 @@ import { FirebaseService } from '../firebase-services/firebase.service';
 import { AddMembersRetrospectivelyComponent } from '../popup/add-members-retrospectively/add-members-retrospectively.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ListMembersComponent } from '../popup/list-members/list-members.component';
+import { EditChannelComponent } from '../popup/edit-channel/edit-channel.component';
 
 @Component({
   selector: 'app-main-chat',
@@ -32,7 +33,8 @@ import { ListMembersComponent } from '../popup/list-members/list-members.compone
     MessageLayoutComponent,
     AngularFirestoreModule,
     AddMembersRetrospectivelyComponent,
-    ListMembersComponent
+    ListMembersComponent,
+    EditChannelComponent
   ],
   templateUrl: './main-chat.component.html',
   styleUrl: './main-chat.component.scss',
@@ -88,6 +90,13 @@ export class MainChatComponent implements OnInit {
     this.dialog.open(ListMembersComponent, {
       position: { top: '210px', right: '650px' },
       panelClass: 'no-border-tr',
+    });
+  }
+
+  showChannelInfo() {
+    this.dialog.open(EditChannelComponent, {
+      position: { top: '210px', right: '500px' },
+      panelClass: 'no-border-tl',
     });
   }
 }

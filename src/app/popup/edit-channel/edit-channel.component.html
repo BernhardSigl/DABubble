@@ -1,1 +1,48 @@
-<p>edit-channel works!</p>
+<div class="popup">
+
+    <div class="spaceBetween horicontal">
+        <div class="channel">
+            <div class="hashtag-and-name horicontal">
+                <div class="icon-size-24 hashtag"></div>
+                <h4 class="channel-name bold">{{ firebase.currentChannelName }}</h4>
+            </div>
+        </div>
+        <div class="icon-size-24 cross-icon" (click)="this.dialogRef.close();">
+        </div>
+    </div>
+
+    <div class="custom-frame">
+        <div class="horicontal spaceBetween">
+            <span class="fs18 bold">Channel-Name</span>
+            <span class="fs18 edit-text">Bearbeiten</span>
+        </div>
+
+        <div class="channel-small">
+            <div class="hashtag-and-name-small horicontal">
+                <div class="icon-size-24 hashtag-small"></div>
+                <span class="channel-name fs18">{{ firebase.currentChannelName }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="custom-frame">
+        <div class="horicontal spaceBetween">
+            <span class="fs18 bold">Beschreibung</span>
+            <span class="fs18 edit-text">Bearbeiten</span>
+        </div>
+
+        <span class="fs18">{{ firebase.channelDescription }}</span>
+
+        <mat-divider></mat-divider>
+
+        <span class="fs18 bold">Erstellt von</span>
+
+        <h4 class="created-by-text">{{ firebase.channelCreatedBy }}</h4>
+    </div>
+
+    <div class="dFlex spaceBetween">
+        <div></div>
+        <button class="leave-channel">Channel verlassen</button>
+    </div>
+
+</div>

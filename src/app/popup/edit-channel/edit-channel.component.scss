@@ -1,0 +1,93 @@
+.popup {
+    width: 54.5rem; // 872px
+    padding: 2.5rem; // 40px
+    box-sizing: border-box;
+    gap: 1.25rem; // 20px
+    display:flex;
+    flex-direction: column;
+}
+
+.cross-icon {
+    background-image: url('./../../../assets/img/cross-black.png');
+    background-size: 1.5rem 1.5rem; // 24px
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 100%;
+    width: 2.5rem; // 40px
+    height: 2.5rem;
+
+    &:hover {
+        background-color: var(--background-color);
+        background-image: url('./../../../assets/img/cross-blue.png');
+    }
+}
+
+.channel {
+    gap: .625rem; // 10px
+
+    .hashtag-and-name{
+        gap: .625rem; // 10px
+
+        .hashtag {
+            background-image: url('./../../../assets/img/hashtag-black.png');
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    }
+}
+
+.custom-frame {
+    padding: 1.25rem; // 20px
+    box-sizing: border-box;
+    border: solid 1px var(--light-purple);
+    border-radius: 1.25rem; // 20px
+    display:flex;
+    flex-direction: column;
+    gap: 1.25rem; // 20px
+}
+
+    .edit-text {
+        color: var(--purple);
+        cursor: pointer;
+        font-weight: 600;
+        &:hover {
+            transform: scale(1.01);
+        }
+    }
+
+    .channel-small {
+        gap: .625rem; // 10px
+    
+        .hashtag-and-name-small{
+            gap: .625rem; // 10px
+    
+            .hashtag-small {
+                background-image: url('./../../../assets/img/hashtag-black.png');
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: 1.0294rem 1rem; // 16.47px 16px
+                cursor: default;
+            }
+        }
+    }
+
+    .created-by-text {
+        color: var(--purple);
+    }
+
+    .leave-channel {
+        background-color: var(--primary);
+        border-radius: 5rem; // 80px
+        font-size: 1.125rem; // 18px
+        padding: .75rem 1.5625rem; // 12px 25px
+        border: none;
+        outline: none;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        width: auto;
+    
+        &:hover {
+            background-color: #797EF3;
+        }
+    }
