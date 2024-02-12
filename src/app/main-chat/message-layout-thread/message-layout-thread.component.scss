@@ -54,6 +54,12 @@
   }
 }
 
+.msg-content{
+  display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
 .message {
   border-radius: 30px 0px 30px 30px;
   background-color: #797ef3;
@@ -63,9 +69,10 @@
   color: white;
 }
 .message-image {
-  width: 350px;
-  height: 350px;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
+  background-color: white;
 }
 
 .current-user {
@@ -98,5 +105,14 @@
   padding-left: 30px;
   mat-divider {
     width: 70%;
+  }
+}
+
+
+.thread-message{
+
+  &:hover{
+    background: #eceefe;
+    transition: background 225ms ease-in-out;
   }
 }

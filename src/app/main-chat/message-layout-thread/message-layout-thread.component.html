@@ -29,13 +29,6 @@
   <mat-divider></mat-divider>
 </div>
 
-<!--
-<div *ngIf="threadMessages.length > 0">
-  <p>Thread Messages:</p>
-  <ul>
-    <li *ngFor="let message of threadMessages">{{ message.message }}</li>
-  </ul>
-</div> -->
 <div *ngIf="threadMessages.length > 0">
   <div class="thread-messages-list">
     <div *ngFor="let message of threadMessages" class="thread-message" [ngClass]="{

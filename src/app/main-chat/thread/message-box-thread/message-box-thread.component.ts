@@ -21,9 +21,10 @@ import {
 } from '@angular/fire/firestore';
 import { Message, Thread } from '../../../classes/message.class';
 import { UserListService } from '../../../firebase-services/user-list.service';
-import { getStorage, ref, uploadString } from 'firebase/storage';
+import { getDownloadURL, getStorage, ref, uploadString } from 'firebase/storage';
 import { Observable } from 'rxjs';
 import { DrawerService } from '../../../firebase-services/drawer.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-message-box-thread',
@@ -34,6 +35,7 @@ import { DrawerService } from '../../../firebase-services/drawer.service';
     PickerModule,
     CommonModule,
     FormsModule,
+
   ],
   templateUrl: './message-box-thread.component.html',
   styleUrl: './message-box-thread.component.scss',
@@ -51,7 +53,8 @@ export class MessageBoxThreadComponent implements OnInit{
     private elementRef: ElementRef,
     private firestore: Firestore,
     private userDataService: UserListService,
-    private threadService:DrawerService
+    private threadService:DrawerService,
+    private snackBar: MatSnackBar
   ) {
     this.getUserData();
   }
@@ -102,7 +105,12 @@ export class MessageBoxThreadComponent implements OnInit{
       await this.handleFileUploadIfNeeded(newThreadMessage);
       this.clearInputFields();
     } catch (error) {
-      console.error('Error sending message:', error);
+      this.snackBar.open('Cannot send empty message', '', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom'
+
+    });
     }
   }
 
@@ -127,17 +135,23 @@ export class MessageBoxThreadComponent implements OnInit{
 
   async handleFileUploadIfNeeded(newThreadMessage: Message): Promise<void> {
     if (this.selectedFile) {
-      await this.uploadFile(newThreadMessage);
+      const downloadURL = await this.uploadFile(newThreadMessage);
+      newThreadMessage.messageImage = downloadURL; // Set the download URL in the message
     }
     await this.updateOrCreateThread(newThreadMessage, this.selectedMessage!.messageId);
   }
 
-  async uploadFile(newThreadMessage: Message): Promise<void> {
-    const storageRef = ref(getStorage(), `files/${this.selectedFile!.name}`);
+
+  async uploadFile(newThreadMessage: Message): Promise<string> {
+    const storage = getStorage();
+    const storageRef = ref(storage, `files/${this.selectedFile!.name}`);
     const fileDataUrl = await this.readFile(this.selectedFile!);
     await uploadString(storageRef, fileDataUrl, 'data_url');
-    newThreadMessage.messageImage = `files/${this.selectedFile!.name}`;
+    const downloadURL = await getDownloadURL(storageRef); // Get the download URL of the uploaded file
+    newThreadMessage.messageImage = downloadURL; // Set the download URL in the message
+    return downloadURL; // Return the download URL
   }
+
 
   readFile(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
