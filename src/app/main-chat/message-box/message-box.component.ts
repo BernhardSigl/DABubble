@@ -57,57 +57,74 @@ export class MessageBoxComponent {
   }
 
   async sendMessage(): Promise<void> {
-    if ((this.textArea.trim() !== '' || this.selectedFile) && (this.textArea !== '' || this.selectedFile)) {
+    const isTextAreaNotEmpty = this.textArea.trim() !== '';
+    const isFileSelected = !!this.selectedFile;
+
+    if ((isTextAreaNotEmpty || isFileSelected) && (this.textArea !== '' || isFileSelected)) {
         try {
             const newMessage = new Message();
             newMessage.name = this.userName;
             newMessage.time = Date.now();
             newMessage.message.push(this.textArea);
             newMessage.image = this.userImage;
+
             if (this.userId) {
-              newMessage.senderId = this.userId;
+                newMessage.senderId = this.userId;
             }
 
             if (this.selectedFile) {
-                const storage = getStorage();
-                const storageRef = ref(storage, `files/${this.selectedFile.name}`);
-
-                const fileReader = new FileReader();
-                fileReader.onload = async (event) => {
-                    try {
-                        const fileDataUrl = event.target?.result as string;
-
-                        await uploadString(storageRef, fileDataUrl, 'data_url');
-
-                        newMessage.messageImage = `files/${this.selectedFile?.name}`;
-
-                        // Add the message to Firestore and retrieve the generated ID
-                        const messageRef = await addDoc(collection(this.firestore, 'messages'), newMessage.toJson());
-                        const messageId = messageRef.id;
-
-                        // Update the new message with the generated ID
-                        newMessage.messageId = messageId;
-
-                        // Clear message input and selected file
-                        this.textArea = '';
-                        this.selectedFile = undefined;
-                    } catch (error) {
-                        console.error('Error uploading file:', error);
-                    }
-                };
-                fileReader.readAsDataURL(this.selectedFile);
+                await this.uploadSelectedFile(newMessage);
             } else {
-                // If no file is selected, just add the message to Firestore
-                const messageRef = await addDoc(collection(this.firestore, 'messages'), newMessage.toJson());
-                const messageId = messageRef.id;
-                newMessage.messageId= messageId;
-                // Clear message input
-                this.textArea = '';
+                await this.addMessageToFirestore(newMessage);
             }
+
+            this.clearInputFields();
+
         } catch (error) {
             console.error('Error sending message:', error);
         }
     }
+}
+
+private async uploadSelectedFile(newMessage: Message): Promise<void> {
+  try {
+      const storage = getStorage();
+      const storageRef = ref(storage, `files/${this.selectedFile!.name}`);
+      const fileDataUrl = await this.readFileDataUrl(this.selectedFile!);
+
+      await uploadString(storageRef, fileDataUrl, 'data_url');
+
+      newMessage.messageImage = `files/${this.selectedFile?.name}`;
+
+      const messageId = await this.addMessageToFirestore(newMessage);
+      newMessage.messageId = messageId;
+
+  } catch (error) {
+      console.error('Error uploading file:', error);
+      throw error; // Re-throw the error to propagate it upwards
+  }
+}
+
+
+private async readFileDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+            resolve(fileReader.result as string);
+        };
+        fileReader.onerror = reject;
+        fileReader.readAsDataURL(file);
+    });
+}
+
+private async addMessageToFirestore(newMessage: Message): Promise<string> {
+    const messageRef = await addDoc(collection(this.firestore, 'messages'), newMessage.toJson());
+    return messageRef.id;
+}
+
+private clearInputFields(): void {
+    this.textArea = '';
+    this.selectedFile = undefined;
 }
 
 

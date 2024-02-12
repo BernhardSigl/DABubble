@@ -1,4 +1,12 @@
-import { Component, ElementRef, Input, ViewChild , OnInit} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  ViewChild,
+  OnInit,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
@@ -21,7 +29,12 @@ import {
 } from '@angular/fire/firestore';
 import { Message, Thread } from '../../../classes/message.class';
 import { UserListService } from '../../../firebase-services/user-list.service';
-import { getDownloadURL, getStorage, ref, uploadString } from 'firebase/storage';
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadString,
+} from 'firebase/storage';
 import { Observable } from 'rxjs';
 import { DrawerService } from '../../../firebase-services/drawer.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -35,12 +48,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     PickerModule,
     CommonModule,
     FormsModule,
-
   ],
   templateUrl: './message-box-thread.component.html',
   styleUrl: './message-box-thread.component.scss',
 })
-export class MessageBoxThreadComponent implements OnInit{
+export class MessageBoxThreadComponent implements OnInit {
   public textArea: string = '';
   public isEmojiPickerVisible: boolean = false;
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
@@ -48,12 +60,12 @@ export class MessageBoxThreadComponent implements OnInit{
   threads: Thread[] = [];
   selectedThreadId: string | undefined;
   messageId: string | undefined;
-
+  @Output() threadIdEmitter: EventEmitter<string> = new EventEmitter<string>();
   constructor(
     private elementRef: ElementRef,
     private firestore: Firestore,
     private userDataService: UserListService,
-    private threadService:DrawerService,
+    private threadService: DrawerService,
     private snackBar: MatSnackBar
   ) {
     this.getUserData();
@@ -67,17 +79,13 @@ export class MessageBoxThreadComponent implements OnInit{
   selectedThread: Thread | null = null;
   selectedMessage: Message | null = null;
   ngOnInit(): void {
-    console.log(this.userId)
-      this.threadService.selectedMessageChanged.subscribe(
-        (selectedMessage: Message | null) => {
-          if (selectedMessage) {
-            this.selectedMessage = selectedMessage;
-            console.log(selectedMessage)
-
-          }
+    this.threadService.selectedMessageChanged.subscribe(
+      (selectedMessage: Message | null) => {
+        if (selectedMessage) {
+          this.selectedMessage = selectedMessage;
         }
-      );
-
+      }
+    );
   }
 
   getUserData(): void {
@@ -108,9 +116,8 @@ export class MessageBoxThreadComponent implements OnInit{
       this.snackBar.open('Cannot send empty message', '', {
         duration: 3000,
         horizontalPosition: 'center',
-        verticalPosition: 'bottom'
-
-    });
+        verticalPosition: 'bottom',
+      });
     }
   }
 
@@ -138,9 +145,17 @@ export class MessageBoxThreadComponent implements OnInit{
       const downloadURL = await this.uploadFile(newThreadMessage);
       newThreadMessage.messageImage = downloadURL; // Set the download URL in the message
     }
-    await this.updateOrCreateThread(newThreadMessage, this.selectedMessage!.messageId);
-  }
+    await this.updateOrCreateThread(
+      newThreadMessage,
+      this.selectedMessage!.messageId
+    );
+    // Emit the threadId received from the child component
+    this.threadIdEmitter.emit(newThreadMessage.messageId);
+    console.log(newThreadMessage.messageId)
 
+    // Emit the threadId to the parent component
+    this.threadIdEmitter.emit(newThreadMessage.messageId);
+  }
 
   async uploadFile(newThreadMessage: Message): Promise<string> {
     const storage = getStorage();
@@ -152,12 +167,12 @@ export class MessageBoxThreadComponent implements OnInit{
     return downloadURL; // Return the download URL
   }
 
-
   readFile(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.onload = () => resolve(fileReader.result as string);
-      fileReader.onerror = () => reject(new Error('Error reading file data URL.'));
+      fileReader.onerror = () =>
+        reject(new Error('Error reading file data URL.'));
       fileReader.readAsDataURL(file);
     });
   }
@@ -167,12 +182,14 @@ export class MessageBoxThreadComponent implements OnInit{
     this.selectedFile = undefined;
   }
 
-
   generateUniquePartOfThreadId(): string {
     return `${this.userId}-${Date.now()}`;
   }
 
-  async updateOrCreateThread(newThreadMessage: Message, messageId: string): Promise<void> {
+  async updateOrCreateThread(
+    newThreadMessage: Message,
+    messageId: string
+  ): Promise<void> {
     const messageDocRef = doc(this.firestore, 'messages', messageId);
     const messageSnapshot = await getDoc(messageDocRef);
     if (!messageSnapshot.exists()) {
@@ -189,13 +206,11 @@ export class MessageBoxThreadComponent implements OnInit{
     await setDoc(threadDocRef, newThreadMessage.toJson());
   }
 
-
   generateThreadId(messageId: string): string {
     // Use messageId, userId, and the current timestamp to generate a unique thread ID
-    const userIdPart = `${this.userId}` ;
+    const userIdPart = `${this.userId}`;
     return `${messageId}${userIdPart}-${Date.now()}`;
   }
-
 
   // Helper function to read file as data URL
   readFileAsDataURL(file: File): Promise<string> {

@@ -5,7 +5,7 @@
 
 .selected-msg-container {
   display: flex;
-
+  flex-direction: row-reverse;
   .thread-profile-img {
     width: 70px;
     height: 70px;
@@ -15,6 +15,10 @@
       border-radius: 100%;
     }
   }
+}
+
+.other-user .selected-msg-container{
+  flex-direction:row ;
 }
 
 .thread-messages-list {
@@ -57,7 +61,7 @@
 .msg-content{
   display: flex;
     flex-direction: column;
-    align-items: end;
+
 }
 
 .message {
@@ -115,4 +119,65 @@
     background: #eceefe;
     transition: background 225ms ease-in-out;
   }
+}
+
+.emoji-reaction {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+emoji-mart{
+  position: absolute;
+  bottom:32px;
+  z-index: 9999;
+}
+.reactions-container{
+  display: flex;
+  gap: 10px;
+
+  .reactions{
+    border: 1px solid #8c91f7;
+    background-color: transparent;
+    border-radius: 10px;
+  }
+}
+
+.current-user .hover-options{
+  border: 1px solid #8c91f7;
+  border-radius: 30px 00px 30px 30px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  bottom: 75px;
+  right:240px;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  background-color: white;
+}
+
+.other-user  .hover-options{
+  border: 1px solid #8c91f7;
+  border-radius: 0px 30px 30px 30px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px;
+  bottom: 75px;
+  left:240px;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  background-color: white;
+}
+
+.thread-message:hover .hover-options {
+  display: flex;
+  opacity: 1;
 }
