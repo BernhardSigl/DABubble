@@ -26,7 +26,7 @@
                     <div class="horicontal">
                         <img [src]="user.profileImg" class="profile-img-small" alt="Profilbild">
                         <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
-                        <div class="deleteMember" (click)="removeUser(user)"></div>
+                        <div class="deleteMember" *ngIf="user.userId !== 'e7zSK07HmreqlBdt7cibNEcjAQW2' && user.userId !== firebase.loggedInUserId" (click)="removeUser(user)"></div>
                     </div>
                 </div>
             </div>

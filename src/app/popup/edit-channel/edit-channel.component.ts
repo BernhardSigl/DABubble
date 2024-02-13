@@ -52,8 +52,9 @@ async ngOnInit(): Promise<void>{
           channelNameEditText.innerHTML = "Bearbeiten";
           channelNameInputBox.style.display = "none";
           this.channelNameEditMode = false;
-          this.firebase.updatedChannelName(updatedChannelName);
-          this.firebase.activeChannelId(this.firebase.currentChannelId);
+          await this.firebase.updatedChannelName(updatedChannelName);
+          await this.firebase.activeChannelId(this.firebase.currentChannelId);
+          await this.firebase.ngOnInit();
         }
     }
 
