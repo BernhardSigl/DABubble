@@ -210,7 +210,7 @@ async updateReactionsInFirestore(message: Message) {
   saveEditedMessageThread(messageId: string, editedText: string): void {
     // Update the message in the Firebase Firestore
     // Assuming you have a way to identify the thread message document
-    const messageRef = doc(this.firestore, `messages/${this.messageId}/threads/${messageId}`);
+    const messageRef = doc(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${this.messageId}/Thread/${messageId}`);
     setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
       .then(() => {
         console.log('Message successfully updated.');
