@@ -353,7 +353,6 @@ export class LoginComponent implements OnInit {
         // Save the document ID to local storage
         localStorage.setItem('userId', docId);
         await this.firebase.online();
-        debugger;
         // Navigate to main page
         this.router.navigate(['/main'], { queryParams: { userId: this.userId } });
         this.snackBar.open('Successfully logged in', '', {

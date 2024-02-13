@@ -28,6 +28,7 @@ import { FormsModule } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { DrawerService } from '../../firebase-services/drawer.service';
 import { MessageBoxThreadComponent } from '../thread/message-box-thread/message-box-thread.component';
+import { GetIdService } from '../../firebase-services/get-id.service';
 
 @Component({
   selector: 'app-message-layout-thread',
@@ -49,7 +50,7 @@ export class MessageLayoutThreadComponent implements OnInit {
   constructor(
     private threadService: DrawerService,
     private firestore: Firestore,
-
+    private id:GetIdService
   ) {}
   selectedMessage: Message | null = null;
   threadMessages: Message[] = [];
@@ -65,6 +66,8 @@ export class MessageLayoutThreadComponent implements OnInit {
   >([]);
   messages$: Observable<Message[]> = this.messagesSubject.asObservable();
   @Input() threadId: string = '';
+  messageId: string = '';
+
 
   ngOnInit() {
     this.threadService.selectedMessageChanged.subscribe(
@@ -72,11 +75,10 @@ export class MessageLayoutThreadComponent implements OnInit {
         if (selectedMessage) {
           this.selectedMessage = selectedMessage;
           this.fetchThreadMessages(selectedMessage.messageId);
+          this.messageId = selectedMessage.messageId;
         }
       }
     );
-
-
   }
 
 
@@ -110,31 +112,61 @@ export class MessageLayoutThreadComponent implements OnInit {
         this.isEmojiPickerVisible[key] = false;
       });
     }
-    this.isEmojiPickerVisible[messageId] =
-      !this.isEmojiPickerVisible[messageId];
+    this.isEmojiPickerVisible[messageId] = !this.isEmojiPickerVisible[messageId];
   }
 
   onEmojiClick(event: any, message: Message) {
     this.addReactionThread(message, event.emoji.native);
   }
 
-  async addReactionThread(message: Message, emoji: string) {
-    if (!message || !emoji) {
-        console.error('Message or emoji is undefined');
-        return;
+  toggleReactionThread(message: Message, emoji: string) {
+    if (!this.userId) {
+      console.error('UserID is not defined.');
+      return;
     }
 
-    message.reactions = message.reactions || {}; // Ensure reactions object exists
+    const userId = this.userId;
 
-    message.reactions[emoji] = (message.reactions[emoji] || 0) + 1; // Increment reaction count
+    if (message.reactions && message.reactions[emoji]) {
+      if (message.senderId === userId && message.reactions[emoji] > 0) {
+        message.reactions[emoji]--; // Decrease count if same user reacts with the same emoji
+      } else {
+        message.reactions[emoji]++; // Increase count if different user reacts or same user reacts differently
+      }
 
-    await this.updateReactionsInFirestore(message);
+      if (message.reactions[emoji] === 0) {
+        delete message.reactions[emoji]; // Delete the reaction if count becomes 0
+      }
+    } else {
+      if (!message.reactions) {
+        message.reactions = {};
+      }
+      message.reactions[emoji] = 1; // Initialize count if emoji is reacted for the first time
+    }
+
+    this.updateReactionsInFirestore(message);
+  }
+
+
+
+async addReactionThread(message: Message, emoji: string) {
+  if (!message || !emoji) {
+    console.error('Message or emoji is undefined');
+    return;
+  }
+
+  message.reactions = message.reactions || {}; // Ensure reactions object exists
+
+  message.reactions[emoji] = (message.reactions[emoji] || 0) + 1; // Increment reaction count
+
+  await this.updateReactionsInFirestore(message);
+  this.closeEmojiPicker(message.messageId);
 }
 
 async updateReactionsInFirestore(message: Message) {
   console.log(message.messageId)
   try {
-      const threadDocRef = doc(this.firestore, `messages/${message.messageId}/threads/${message.threadId}`);
+      const threadDocRef = doc(this.firestore, `messages/${this.messageId}/threads/${message.messageId}`);
       await setDoc(threadDocRef, {
           reactions: message.reactions // Update only reactions field
       }, { merge: true });
@@ -149,15 +181,63 @@ async updateReactionsInFirestore(message: Message) {
   }
 
 
+  toggleEditMessageThread(messageId: string): void {
+    // Set editing enabled state to true for "Nachricht Bearbeiten"
+    this.isEditingEnabled[messageId] = true;
+
+    // Reset the edited message content when toggling edit mode
+    this.editedMessage[messageId] = '';
+  }
+
+  toggleToTextArea(messageId: string): void {
+    // Set edit enabled state to true
+    this.isEditEnabled[messageId] = true;
+    // Subscribe to the Observable returned by getMessageText
+    this.getMessageText(messageId).subscribe((messageText) => {
+      // Assign the message text to editedMessage[messageId]
+      this.editedMessage[messageId] = messageText;
+    });
+    this.isEditingEnabled[messageId] = false;
+
+  }
+
+  saveEditedMessageThread(messageId: string, editedText: string): void {
+    // Update the message in the Firebase Firestore
+    // Assuming you have a way to identify the thread message document
+    const messageRef = doc(this.firestore, `messages/${this.messageId}/threads/${messageId}`);
+    setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
+      .then(() => {
+        console.log('Message successfully updated.');
+        // Disable edit mode after saving
+        this.toggleEditMessageThread(messageId);
+        this.isEditEnabled[messageId] = false;
+        this.isEditingEnabled[messageId] = false;
+      })
+      .catch((error) => {
+        console.error('Error updating message:', error);
+      });
+
+  }
+
+
+  cancelEditThread(messageId: string): void {
+    // Disable edit mode and reset the edited message content
+    this.isEditEnabled[messageId] = false;
+    this.editedMessage[messageId] = '';
+    this.isEditingEnabled[messageId] = false;
+  }
 
 
 
   getMessageText(messageId: string): Observable<string> {
     return this.messages$.pipe(
       map((messages) => {
-        const message = messages.find((m) => m.messageId === messageId);
+        const message = this.threadMessages.find((m) => m.messageId === messageId);
         return message ? message.message.join('\n') : '';
       })
     );
   }
+
+
+
 }

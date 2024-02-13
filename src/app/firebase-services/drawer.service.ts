@@ -19,7 +19,7 @@ export class DrawerService {
   setSelectedMessage(message: Message): void {
     this.selectedMessage = message;
     this.selectedMessageChanged.emit(this.selectedMessage);
-    // this.loadThreadMessages(message);
+    this.loadThreadMessages(message);
   }
 
   private async loadThreadMessages(mainMessage: Message): Promise<void> {
