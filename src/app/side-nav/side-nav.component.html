@@ -21,8 +21,8 @@
 
                 <div class="channel-area" [ngStyle]="{'display': firebase.channelsArray.length === 0 ? 'none' : 'flex'}">
                     <div *ngFor="let channel of firebase.channelsArray" class="channel">
-                        <div class="hashtag-and-name horicontal" [ngClass]="{'channelIsActive': channel.channelName === firebase.currentChannelName}"
-                        (click)="firebase.activeChannelName(channel.channelName)">
+                        <div class="hashtag-and-name horicontal" [ngClass]="{'channelIsActive': channel.channelId === firebase.currentChannelId}"
+                        (click)="firebase.activeChannelId(channel.channelId)">
                             <div class="icon-size-24 hashtag"></div>
                             <span class="fs18 channel-name bold">{{ channel.channelName }}</span>
                         </div>

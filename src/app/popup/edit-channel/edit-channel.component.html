@@ -11,27 +11,40 @@
         </div>
     </div>
 
-    <div class="custom-frame">
+    <div class="custom-frame" id="edit-mode-channel-name">
         <div class="horicontal spaceBetween">
             <span class="fs18 bold">Channel-Name</span>
-            <span class="fs18 edit-text">Bearbeiten</span>
+            <span class="fs18 edit-text" (click)="channelNameEditMode ? saveChannelName(channelNameInput.value) : editChannelName()" id="channel-name-edit-text">Bearbeiten</span>
         </div>
 
-        <div class="channel-small">
+        <div class="channel-small" id="hide-channel-name">
             <div class="hashtag-and-name-small horicontal">
                 <div class="icon-size-24 hashtag-small"></div>
                 <span class="channel-name fs18">{{ firebase.currentChannelName }}</span>
             </div>
         </div>
+
+        <div class="input-box" id="channel-name-input-box">
+            <div class="input-border horicontal">
+                <img src="./../../../assets/img/hashtag-grey.png" class="icon-size-23">
+                <input #channelNameInput class="fs18" placeholder="{{ firebase.currentChannelName }}" required>
+            </div>
+        </div>
     </div>
 
-    <div class="custom-frame">
+    <div class="custom-frame" id="edit-mode-channel-description">
         <div class="horicontal spaceBetween">
             <span class="fs18 bold">Beschreibung</span>
-            <span class="fs18 edit-text">Bearbeiten</span>
+            <span class="fs18 edit-text"  (click)="channelDescriptionEditMode ? saveChannelDescription(channelDescriptionInput.value) : editChannelDescription()" id="channel-description-edit-text">Bearbeiten</span>
         </div>
 
-        <span class="fs18">{{ firebase.channelDescription }}</span>
+        <span class="fs18" id="hide-channel-description">{{ firebase.channelDescription }}</span>
+
+        <div class="input-box" id="channel-description-input-box">
+            <div class="input-border horicontal">
+                <input #channelDescriptionInput class="fs18" placeholder="Dein Text hier" required>
+            </div>
+        </div>
 
         <mat-divider></mat-divider>
 

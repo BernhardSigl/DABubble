@@ -13,7 +13,8 @@ import { MatDividerModule } from '@angular/material/divider';
   styleUrl: './edit-channel.component.scss'
 })
 export class EditChannelComponent {
-
+  channelNameEditMode: boolean = false;
+  channelDescriptionEditMode: boolean = false;
 
 constructor(
   public dialogRef: MatDialogRef<EditChannelComponent>,
@@ -24,6 +25,68 @@ constructor(
 async ngOnInit(): Promise<void>{
   await this.firebase.ngOnInit();
   }
+
+
+  editChannelName() {
+    const editModeChannelName = document.getElementById("edit-mode-channel-name");
+    const hideChannelName = document.getElementById("hide-channel-name");
+    const channelNameEditText = document.getElementById("channel-name-edit-text");
+    const channelNameInputBox = document.getElementById("channel-name-input-box");
+    if (editModeChannelName && hideChannelName && channelNameEditText && channelNameInputBox) {
+        editModeChannelName.classList.add("edit-mode");
+        hideChannelName.style.display = "none";
+        channelNameEditText.innerHTML = "Speichern";
+        channelNameInputBox.style.display = "flex";
+        this.channelNameEditMode = true;
+      }
+    }
+
+    async saveChannelName(updatedChannelName: string) {
+      const editModeChannelName = document.getElementById("edit-mode-channel-name");
+      const hideChannelName = document.getElementById("hide-channel-name");
+      const channelNameEditText = document.getElementById("channel-name-edit-text");
+      const channelNameInputBox = document.getElementById("channel-name-input-box");
+      if (editModeChannelName && hideChannelName && channelNameEditText && channelNameInputBox) {
+        editModeChannelName.classList.remove("edit-mode");
+        hideChannelName.style.display = "flex";
+          channelNameEditText.innerHTML = "Bearbeiten";
+          channelNameInputBox.style.display = "none";
+          this.channelNameEditMode = false;
+          this.firebase.updatedChannelName(updatedChannelName);
+          this.firebase.activeChannelId(this.firebase.currentChannelId)
+        }
+    }
+
+    editChannelDescription() {
+      const channelDescriptionEditText = document.getElementById("channel-description-edit-text");
+      const editModeChannelDescription = document.getElementById("edit-mode-channel-description");
+      const channelDescriptionInputBox = document.getElementById("channel-description-input-box");
+      const hideChannelDescription = document.getElementById("hide-channel-description");
+      if (channelDescriptionEditText && editModeChannelDescription && hideChannelDescription && channelDescriptionInputBox) {
+        hideChannelDescription.style.display = "none";
+        channelDescriptionInputBox.style.display = "flex";
+        editModeChannelDescription.classList.add("edit-mode");
+        channelDescriptionEditText.innerHTML = "Speichern";
+        this.channelDescriptionEditMode = true;
+      }
+    }
+
+    async saveChannelDescription(updatedChannelDescription: string) {
+      const channelDescriptionEditText = document.getElementById("channel-description-edit-text");
+      const editModeChannelDescription = document.getElementById("edit-mode-channel-description");
+      const channelDescriptionInputBox = document.getElementById("channel-description-input-box");
+      const hideChannelDescription = document.getElementById("hide-channel-description");
+      if (channelDescriptionEditText && editModeChannelDescription && hideChannelDescription && channelDescriptionInputBox) {
+        hideChannelDescription.style.display = "flex";
+        channelDescriptionInputBox.style.display = "none";
+        editModeChannelDescription.classList.remove("edit-mode");
+        channelDescriptionEditText.innerHTML = "Bearbeiten";
+        this.channelDescriptionEditMode = false;
+        this.firebase.updatedChannelDescription(updatedChannelDescription);
+        await this.ngOnInit();
+      }
+    }
+   
 }
 
 

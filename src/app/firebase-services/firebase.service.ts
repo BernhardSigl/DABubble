@@ -165,6 +165,14 @@ export class FirebaseService {
     await setDoc(this.currentOnClickedSingleChannelDocRef(), { members: updatedMembers }, { merge: true });
   }
 
+  async updatedChannelName(updatedChannelName: string) {
+    await setDoc(this.currentOnClickedSingleChannelDocRef(), { channelName: updatedChannelName }, { merge: true });
+  }
+
+  async updatedChannelDescription(updatedChannelDescription: string) {
+    await setDoc(this.currentOnClickedSingleChannelDocRef(), { description: updatedChannelDescription }, { merge: true });
+  }
+
   getChannelColRef() {
     return collection(this.firestore, "channels");
   }
@@ -191,20 +199,21 @@ export class FirebaseService {
     });
   }
 
-  async selectLastOpenedChannel() {
-    const currentChannelName = this.loggedInUserArray[0].activeChannelName;
-    if (currentChannelName) {
-      const channelToSelect = this.channelsArray.find(channel => channel.channelName === currentChannelName);
+  async selectLastOpenedChannel() {   
+    const currentChannelId = this.loggedInUserArray[0].activeChannelName;   
+    if (currentChannelId) {
+      const channelToSelect = this.channelsArray.find(channel => channel.channelId === currentChannelId);
       if (channelToSelect) {
-        await this.activeChannelName(channelToSelect.channelName);
+        await this.activeChannelId(channelToSelect.channelId);
       }
     }  
   }
 
-  async activeChannelName(activeChannelName: string): Promise<void> {
-    this.currentChannelName = activeChannelName;
-    await setDoc(this.getSingleUserDocRef(), { activeChannelName: activeChannelName }, { merge: true });
+  async activeChannelId(activeChannelId: string): Promise<void> {  
+    this.currentChannelId = activeChannelId;
+    await setDoc(this.getSingleUserDocRef(), { activeChannelName: this.currentChannelId }, { merge: true });
     await this.activeChannelData();
+    this.currentChannelName = this.currentChannelData[0].channelName,
     this.channelMembers = this.currentChannelData[0].members;
     this.channelCreatedBy = this.currentChannelData[0].createdBy;
     this.channelDescription = this.currentChannelData[0].description;
@@ -213,6 +222,6 @@ export class FirebaseService {
   }
 
   async activeChannelData(): Promise<void> {
-    this.currentChannelData = this.channelsArray.filter(channel => channel.channelName === this.currentChannelName);
+    this.currentChannelData = this.channelsArray.filter(channel => channel.channelId === this.currentChannelId); 
   }
 }
