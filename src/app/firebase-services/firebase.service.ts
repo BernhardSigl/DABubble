@@ -31,10 +31,15 @@ export class FirebaseService {
   channelMembers: any[] = [];
   channelMessages:  any[] = [];
   channelProfileImages:  any[] = [];
+
   currentChannelRights: any[] = [];
   currentUserWithRights: any[] = [];
   private selectedChannelIdSource = new BehaviorSubject<string | null>(null);
 selectedChannelId$ = this.selectedChannelIdSource.asObservable();
+
+  channelRightsIds: any[] = [];
+  channelsDataWithRights: any[] = [];
+
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
   constructor(
@@ -46,9 +51,9 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
     await this.loggedInUserData();
     await this.subAllMessages();
     await this.subAllChannels();
-    await this.selectLastOpenedChannel();
     await this.checkChannelRights();
     this.showOnlyChannelsWithRights();
+    await this.selectLastOpenedChannel();
   }
 
   async subAllMessages(): Promise<void> {
@@ -237,11 +242,11 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   }
 
   async checkChannelRights() {
-    this.currentChannelRights = [];
+    this.channelRightsIds = [];
     this.channelsArray.forEach(channel => {
       channel.members.forEach((member: any) => {
         if (member.userId.includes(this.loggedInUserId)) {
-          this.currentChannelRights.push(channel.channelId);
+          this.channelRightsIds.push(channel.channelId);
         }
       });
     });
@@ -249,17 +254,21 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   }
 
   async changeChannelRights(): Promise<void> {
-    await setDoc(this.getSingleUserDocRef(), { channelRights: this.currentChannelRights }, { merge: true });
+    await setDoc(this.getSingleUserDocRef(), { channelRights: this.channelRightsIds }, { merge: true });
   }
 
   showOnlyChannelsWithRights() {
       const filteredChannels = [];
       for (const channel of this.channelsArray) {
-    if (this.currentChannelRights.includes(channel.channelId)) {
+    if (this.channelRightsIds.includes(channel.channelId)) {
       filteredChannels.push(channel);
     }
   }
+
   this.currentUserWithRights = filteredChannels;
+
+  this.channelsDataWithRights = filteredChannels;
+
   }
 
 }

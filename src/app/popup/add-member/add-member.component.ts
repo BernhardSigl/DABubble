@@ -44,6 +44,22 @@ export class AddMemberComponent {
     this.memberService.selectedUserName = '';
   }
 
+  addYourself() {
+    const selectedUsers = this.firebase.usersArray.find(user => {
+      return user.userId === this.firebase.loggedInUserId;
+    });
+    this.memberService.selectedUsers.push(selectedUsers);
+  }
+
+  addGuest() {
+    if (this.firebase.loggedInUserId !== 'e7zSK07HmreqlBdt7cibNEcjAQW2') {
+          const selectedUsers = this.firebase.usersArray.find(user => {
+      return user.userId === 'e7zSK07HmreqlBdt7cibNEcjAQW2';
+    });
+    this.memberService.selectedUsers.push(selectedUsers);
+    }
+  }
+
   toggleCheckbox(selection: string) {
     if (selection === 'all') {
       this.checkboxAddAll = !this.checkboxAddAll;
@@ -51,13 +67,15 @@ export class AddMemberComponent {
     } else if (selection === 'specific') {
       this.checkboxAddSpecific = !this.checkboxAddSpecific;
       this.checkboxAddAll = false;
+      this.addYourself();
+      this.addGuest();
     }
   }
 
   async addNewChannel() {
-    localStorage.removeItem('channelName');
-    localStorage.setItem('channelName', this.data.channelName);
-
+    // localStorage.removeItem('channelName');
+    // localStorage.setItem('channelName', this.data.channelName);
+    this.addGuest();
     const newChannel = new Channel({
       channelName: this.data.channelName,
       channelDescription: this.data.channelDescription,
@@ -72,6 +90,7 @@ export class AddMemberComponent {
     await this.firebase.addChannel(newChannel);
     await this.firebase.checkChannelRights();
     this.firebase.showOnlyChannelsWithRights();
+    this.firebase.ngOnInit();
     this.dialogRef.close();
   }
 
