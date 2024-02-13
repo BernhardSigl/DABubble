@@ -9,7 +9,7 @@
     <div class="members-list-box">
         <div class="members-list-scroll-box scroll-bar">
             <div class="members-list horicontal"
-            *ngFor="let user of firebase.usersArray">
+            *ngFor="let user of firebase.currentChannelData[0].members">
     
                 <div class="profile-img-and-status">
                     <div [style.background-image]="'url(' + user.profileImg + ')'" class="profile-img"></div>

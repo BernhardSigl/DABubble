@@ -70,6 +70,8 @@ export class AddMemberComponent {
     this.pushMembersInChannel(newChannel);
 
     await this.firebase.addChannel(newChannel);
+    await this.firebase.checkChannelRights();
+    this.firebase.showOnlyChannelsWithRights();
     this.dialogRef.close();
   }
 

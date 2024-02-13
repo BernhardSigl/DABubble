@@ -24,8 +24,6 @@ constructor(
 
 async ngOnInit(): Promise<void> {
   await this.firebase.ngOnInit();
-  // this.addResizeListener();
-  // this.addBackgroundClickListener();
 }
 
 addMemberDropdown() {

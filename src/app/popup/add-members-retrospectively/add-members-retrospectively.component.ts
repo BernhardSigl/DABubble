@@ -43,9 +43,10 @@ updateChannelMembersAtStart() {
   this.memberService.selectedUsers = this.firebase.channelMembers;
 }
 
-updateChannelMembers() {
-  this.firebase.updateChannel(this.memberService.selectedUsers);
-  this.firebase.selectLastOpenedChannel();
+async updateChannelMembers() {
+  await this.firebase.updateChannel(this.memberService.selectedUsers);
+  await this.firebase.selectLastOpenedChannel();
+  await this.firebase.checkChannelRights();
   this.dialogRef.close();
 }
 

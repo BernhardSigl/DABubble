@@ -38,14 +38,25 @@ export class SideNavComponent implements OnInit {
   userId: string = '';
   userImage: string = '';
 
+  // channelWithRights: any[] = [];
+
   constructor(
     public dialog: MatDialog,
     public firebase: FirebaseService,
   ) { }
 
   async ngOnInit(): Promise<void> {
-    await this.firebase.ngOnInit(); 
-    await this.firebase.selectLastOpenedChannel();
+    await this.firebase.ngOnInit();
+    // console.log(this.firebase.channelsArray);
+    
+    // await this.firebase.selectLastOpenedChannel();
+    // const filteredChannels = [];
+    // for (const channel of this.firebase.channelsArray) {
+    //   if (this.firebase.currentChannelRights.includes(channel.channelId)) {
+    //     filteredChannels.push(channel);
+    //   }
+    // }
+    // this.channelWithRights = filteredChannels;
   }
 
   openAddChannels() {

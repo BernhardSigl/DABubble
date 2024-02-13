@@ -87,10 +87,12 @@ async ngOnInit(): Promise<void>{
       }
     }
 
-    leaveChannel() {
+    async leaveChannel() {
       const updatedMembers = this.firebase.channelMembers.filter(member => member.userId !== this.firebase.loggedInUserId);
-      this.firebase.updateChannel(updatedMembers);
-      this.firebase.selectLastOpenedChannel();
+      await this.firebase.updateChannel(updatedMembers);
+      await this.firebase.selectLastOpenedChannel();
+      await this.firebase.checkChannelRights();
+      this.firebase.showOnlyChannelsWithRights();
       this.dialogRef.close();
     }
    

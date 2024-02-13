@@ -30,7 +30,8 @@ export class FirebaseService {
   channelMembers: any[] = [];
   channelMessages:  any[] = [];
   channelProfileImages:  any[] = [];
-
+  currentChannelRights: any[] = [];
+  currentUserWithRights: any[] = [];
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
   constructor(
@@ -43,6 +44,8 @@ export class FirebaseService {
     await this.subAllMessages();
     await this.subAllChannels();
     await this.selectLastOpenedChannel();
+    await this.checkChannelRights();
+    this.showOnlyChannelsWithRights();
   }
 
   async subAllMessages(): Promise<void> {
@@ -224,4 +227,31 @@ export class FirebaseService {
   async activeChannelData(): Promise<void> {
     this.currentChannelData = this.channelsArray.filter(channel => channel.channelId === this.currentChannelId); 
   }
+  
+  async checkChannelRights() {
+    this.currentChannelRights = [];
+    this.channelsArray.forEach(channel => {
+      channel.members.forEach((member: any) => {
+        if (member.userId.includes(this.loggedInUserId)) {
+          this.currentChannelRights.push(channel.channelId);
+        }
+      });
+    });
+    this.changeChannelRights();
+  }
+
+  async changeChannelRights(): Promise<void> {
+    await setDoc(this.getSingleUserDocRef(), { channelRights: this.currentChannelRights }, { merge: true });
+  }
+
+  showOnlyChannelsWithRights() {
+      const filteredChannels = [];
+      for (const channel of this.channelsArray) {
+    if (this.currentChannelRights.includes(channel.channelId)) {
+      filteredChannels.push(channel);
+    }
+  }
+  this.currentUserWithRights = filteredChannels;  
+  }
+
 }
