@@ -46,10 +46,6 @@ export class SideNavComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit(); 
     await this.firebase.selectLastOpenedChannel();
-    console.log(this.firebase.currentChannelId);
-    console.log(this.firebase.channelsArray);
-    
-    
   }
 
   openAddChannels() {

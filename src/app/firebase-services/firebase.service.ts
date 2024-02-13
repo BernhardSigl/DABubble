@@ -200,7 +200,7 @@ export class FirebaseService {
   }
 
   async selectLastOpenedChannel() {   
-    const currentChannelId = this.loggedInUserArray[0].activeChannelName;   
+    const currentChannelId = this.loggedInUserArray[0].activeChannelId;   
     if (currentChannelId) {
       const channelToSelect = this.channelsArray.find(channel => channel.channelId === currentChannelId);
       if (channelToSelect) {
@@ -211,7 +211,7 @@ export class FirebaseService {
 
   async activeChannelId(activeChannelId: string): Promise<void> {  
     this.currentChannelId = activeChannelId;
-    await setDoc(this.getSingleUserDocRef(), { activeChannelName: this.currentChannelId }, { merge: true });
+    await setDoc(this.getSingleUserDocRef(), { activeChannelId: this.currentChannelId }, { merge: true });
     await this.activeChannelData();
     this.currentChannelName = this.currentChannelData[0].channelName,
     this.channelMembers = this.currentChannelData[0].members;

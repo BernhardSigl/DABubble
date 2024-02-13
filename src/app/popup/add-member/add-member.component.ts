@@ -45,7 +45,6 @@ export class AddMemberComponent {
   }
 
   toggleCheckbox(selection: string) {
-    
     if (selection === 'all') {
       this.checkboxAddAll = !this.checkboxAddAll;
       this.checkboxAddSpecific = false;

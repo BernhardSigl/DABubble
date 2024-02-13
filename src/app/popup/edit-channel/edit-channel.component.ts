@@ -46,14 +46,14 @@ async ngOnInit(): Promise<void>{
       const hideChannelName = document.getElementById("hide-channel-name");
       const channelNameEditText = document.getElementById("channel-name-edit-text");
       const channelNameInputBox = document.getElementById("channel-name-input-box");
-      if (editModeChannelName && hideChannelName && channelNameEditText && channelNameInputBox) {
+      if (updatedChannelName.trim() !== '' && editModeChannelName && hideChannelName && channelNameEditText && channelNameInputBox) {
         editModeChannelName.classList.remove("edit-mode");
         hideChannelName.style.display = "flex";
           channelNameEditText.innerHTML = "Bearbeiten";
           channelNameInputBox.style.display = "none";
           this.channelNameEditMode = false;
           this.firebase.updatedChannelName(updatedChannelName);
-          this.firebase.activeChannelId(this.firebase.currentChannelId)
+          this.firebase.activeChannelId(this.firebase.currentChannelId);
         }
     }
 
@@ -85,6 +85,13 @@ async ngOnInit(): Promise<void>{
         this.firebase.updatedChannelDescription(updatedChannelDescription);
         await this.ngOnInit();
       }
+    }
+
+    leaveChannel() {
+      const updatedMembers = this.firebase.channelMembers.filter(member => member.userId !== this.firebase.loggedInUserId);
+      this.firebase.updateChannel(updatedMembers);
+      this.firebase.selectLastOpenedChannel();
+      this.dialogRef.close();
     }
    
 }
