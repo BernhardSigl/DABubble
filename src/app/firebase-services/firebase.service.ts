@@ -4,6 +4,7 @@ import { Firestore, addDoc, collection, doc, getDocs, onSnapshot, query, setDoc,
 import { Router } from '@angular/router';
 import { Message } from '../classes/message.class';
 import { Channel } from '../classes/channel.class';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,8 @@ export class FirebaseService {
   channelProfileImages:  any[] = [];
   currentChannelRights: any[] = [];
   currentUserWithRights: any[] = [];
+  private selectedChannelIdSource = new BehaviorSubject<string | null>(null);
+selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
   constructor(
@@ -202,17 +205,22 @@ export class FirebaseService {
     });
   }
 
-  async selectLastOpenedChannel() {   
-    const currentChannelId = this.loggedInUserArray[0].activeChannelId;   
+  setSelectedChannelId(channelId: string) {
+    console.log('Setting selected channel ID:', channelId);
+    this.selectedChannelIdSource.next(channelId);
+  }
+
+  async selectLastOpenedChannel() {
+    const currentChannelId = this.loggedInUserArray[0].activeChannelId;
     if (currentChannelId) {
       const channelToSelect = this.channelsArray.find(channel => channel.channelId === currentChannelId);
       if (channelToSelect) {
         await this.activeChannelId(channelToSelect.channelId);
       }
-    }  
+    }
   }
 
-  async activeChannelId(activeChannelId: string): Promise<void> {  
+  async activeChannelId(activeChannelId: string): Promise<void> {
     this.currentChannelId = activeChannelId;
     await setDoc(this.getSingleUserDocRef(), { activeChannelId: this.currentChannelId }, { merge: true });
     await this.activeChannelData();
@@ -225,9 +233,9 @@ export class FirebaseService {
   }
 
   async activeChannelData(): Promise<void> {
-    this.currentChannelData = this.channelsArray.filter(channel => channel.channelId === this.currentChannelId); 
+    this.currentChannelData = this.channelsArray.filter(channel => channel.channelId === this.currentChannelId);
   }
-  
+
   async checkChannelRights() {
     this.currentChannelRights = [];
     this.channelsArray.forEach(channel => {
@@ -251,7 +259,7 @@ export class FirebaseService {
       filteredChannels.push(channel);
     }
   }
-  this.currentUserWithRights = filteredChannels;  
+  this.currentUserWithRights = filteredChannels;
   }
 
 }

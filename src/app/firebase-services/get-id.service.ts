@@ -6,17 +6,19 @@ import {
   getDocs,
   DocumentData,
 } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GetIdService {
   constructor(private firestore: Firestore) {}
+  private currentChannelIdSource = new BehaviorSubject<string | null>(null);
+  currentChannelId$ = this.currentChannelIdSource.asObservable();
 
-  getMessageIds(): Observable<string[]> {
-    const messageIdsCollection = collection(this.firestore, 'messages');
-    const messageIdsQuery = query(messageIdsCollection);
+  getMessageIds(channelId: string): Observable<string[]> {
+    const channelMessagesCollection = collection(this.firestore, 'channels', channelId, 'channelMessages');
+    const messageIdsQuery = query(channelMessagesCollection);
 
     return new Observable<string[]>((observer) => {
       getDocs(messageIdsQuery)
@@ -33,11 +35,9 @@ export class GetIdService {
     });
   }
 
-  getThreadIds(messageId: string): Observable<string[]> {
-    const threadsCollection = collection(
-      collection(this.firestore, 'messages', messageId),
-      'threads'
-    );
+
+  getThreadIds(channelId: string, messageId: string): Observable<string[]> {
+    const threadsCollection = collection(this.firestore, 'channels', channelId, 'channelMessages', messageId, 'threads');
     const threadsQuery = query(threadsCollection);
 
     return new Observable<string[]>((observer) => {
@@ -53,5 +53,27 @@ export class GetIdService {
           observer.error(error);
         });
     });
+  }
+  getChannelIds(): Observable<string[]> {
+    const channelsCollection = collection(this.firestore, 'channels');
+    const channelsQuery = query(channelsCollection);
+
+    return new Observable<string[]>((observer) => {
+      getDocs(channelsQuery)
+        .then((querySnapshot) => {
+          const channelIds: string[] = [];
+          querySnapshot.forEach((doc) => {
+            channelIds.push(doc.id);
+          });
+          observer.next(channelIds);
+        })
+        .catch((error) => {
+          observer.error(error);
+        });
+    });
+  }
+
+  setCurrentChannelId(channelId: string) {
+    this.currentChannelIdSource.next(channelId);
   }
 }

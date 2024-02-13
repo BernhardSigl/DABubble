@@ -29,6 +29,7 @@ import { map } from 'rxjs/operators';
 import { DrawerService } from '../../firebase-services/drawer.service';
 import { MessageBoxThreadComponent } from '../thread/message-box-thread/message-box-thread.component';
 import { GetIdService } from '../../firebase-services/get-id.service';
+import { FirebaseService } from '../../firebase-services/firebase.service';
 
 @Component({
   selector: 'app-message-layout-thread',
@@ -50,7 +51,8 @@ export class MessageLayoutThreadComponent implements OnInit {
   constructor(
     private threadService: DrawerService,
     private firestore: Firestore,
-    private id:GetIdService
+    private id:GetIdService,
+    private firebase:FirebaseService
   ) {}
   selectedMessage: Message | null = null;
   threadMessages: Message[] = [];
@@ -67,7 +69,7 @@ export class MessageLayoutThreadComponent implements OnInit {
   messages$: Observable<Message[]> = this.messagesSubject.asObservable();
   @Input() threadId: string = '';
   messageId: string = '';
-
+  selectedChannelId?: string;
 
   ngOnInit() {
     this.threadService.selectedMessageChanged.subscribe(
@@ -79,16 +81,23 @@ export class MessageLayoutThreadComponent implements OnInit {
         }
       }
     );
+    this.firebase.selectedChannelId$.subscribe(channelId => {
+
+      if (channelId !== null) {
+        this.selectedChannelId = channelId; // This will now only assign non-null values
+        console.log(channelId);
+      } else {
+        // Handle the null case explicitly, e.g., reset selectedChannelId or take other appropriate action
+        this.selectedChannelId = undefined; // or set to a default/fallback value if suitable
+      }
+    });
   }
 
 
 
 
   fetchThreadMessages(messageId: string): void {
-    const threadsRef = collection(
-      this.firestore,
-      `messages/${messageId}/threads`
-    );
+    const threadsRef = collection(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${messageId}/Thread`);
     const q = query(threadsRef, orderBy('time')); // Assuming you have a 'time' field for ordering
 
     onSnapshot(
@@ -164,15 +173,12 @@ async addReactionThread(message: Message, emoji: string) {
 }
 
 async updateReactionsInFirestore(message: Message) {
-  console.log(message.messageId)
   try {
-      const threadDocRef = doc(this.firestore, `messages/${this.messageId}/threads/${message.messageId}`);
-      await setDoc(threadDocRef, {
-          reactions: message.reactions // Update only reactions field
-      }, { merge: true });
-      console.log('Reactions updated successfully in Firestore');
+    const threadDocRef = doc(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${this.messageId}/Thread/${message.messageId}`);
+    await setDoc(threadDocRef, { reactions: message.reactions }, { merge: true });
+    console.log('Reactions updated successfully in Firestore');
   } catch (error) {
-      console.error('Error updating reactions in Firestore:', error);
+    console.error('Error updating reactions in Firestore:', error);
   }
 }
 

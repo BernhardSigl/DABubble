@@ -38,6 +38,7 @@ import {
 import { Observable } from 'rxjs';
 import { DrawerService } from '../../../firebase-services/drawer.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FirebaseService } from '../../../firebase-services/firebase.service';
 
 @Component({
   selector: 'app-message-box-thread',
@@ -60,13 +61,16 @@ export class MessageBoxThreadComponent implements OnInit {
   threads: Thread[] = [];
   selectedThreadId: string | undefined;
   messageId: string | undefined;
+  public selectedChannelId: string | undefined;
+
   @Output() threadIdEmitter: EventEmitter<string> = new EventEmitter<string>();
   constructor(
     private elementRef: ElementRef,
     private firestore: Firestore,
     private userDataService: UserListService,
     private threadService: DrawerService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private firebase:FirebaseService
   ) {
     this.getUserData();
   }
@@ -86,6 +90,15 @@ export class MessageBoxThreadComponent implements OnInit {
         }
       }
     );
+      // Subscribe to the selectedChannelId$
+  this.firebase.selectedChannelId$.subscribe(channelId => {
+    if (channelId !== null) {
+      this.selectedChannelId = channelId;
+      console.log(channelId);
+    } else {
+      this.selectedChannelId = undefined; // or set to a default/fallback value if suitable
+    }
+  });
   }
 
   getUserData(): void {
@@ -186,25 +199,25 @@ export class MessageBoxThreadComponent implements OnInit {
     return `${this.userId}-${Date.now()}`;
   }
 
-  async updateOrCreateThread(
-    newThreadMessage: Message,
-    messageId: string
-  ): Promise<void> {
-    const messageDocRef = doc(this.firestore, 'messages', messageId);
+  async updateOrCreateThread(newThreadMessage: Message, messageId: string): Promise<void> {
+    if (!this.selectedChannelId) {
+      throw new Error('Channel ID is not selected.');
+    }
+
+    const messageDocRef = doc(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${messageId}`);
     const messageSnapshot = await getDoc(messageDocRef);
     if (!messageSnapshot.exists()) {
       throw new Error('Message document not found.');
     }
 
-    // Generate the unique part of the thread ID
     const uniqueThreadIdPart = this.generateUniquePartOfThreadId();
-    newThreadMessage.messageId = `${uniqueThreadIdPart}`; // Set the full messageId for the new thread message
-    newThreadMessage.senderId = this.userId || ''; // Set the senderId for the new thread message
+    newThreadMessage.messageId = `${uniqueThreadIdPart}`;
+    newThreadMessage.senderId = this.userId || '';
 
-    // Use the unique part for the thread document ID within Firestore
-    const threadDocRef = doc(messageDocRef, 'threads', uniqueThreadIdPart);
+    const threadDocRef = doc(messageDocRef, 'Thread', uniqueThreadIdPart);
     await setDoc(threadDocRef, newThreadMessage.toJson());
   }
+
 
   generateThreadId(messageId: string): string {
     // Use messageId, userId, and the current timestamp to generate a unique thread ID

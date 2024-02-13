@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="channel-area" [ngStyle]="{'display': firebase.channelsArray.length === 0 ? 'none' : 'flex'}">
-                    <div *ngFor="let channel of firebase.currentUserWithRights" class="channel">
+                    <div *ngFor="let channel of firebase.currentUserWithRights" class="channel" (click)="selectChannel(channel.channelId)">
                         <div class="hashtag-and-name horicontal" [ngClass]="{'channelIsActive': channel.channelId === firebase.currentChannelId}"
                         (click)="firebase.activeChannelId(channel.channelId)">
                             <div class="icon-size-24 hashtag"></div>
@@ -55,7 +55,7 @@
                             <img src="./../../assets/img/profile-1.png">
                             <p>Test Tester</p>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>

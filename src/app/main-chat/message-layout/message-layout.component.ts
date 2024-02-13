@@ -18,9 +18,10 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { user } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
 import { map } from 'rxjs/operators';
-
+import { GetIdService } from '../../firebase-services/get-id.service';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DrawerService } from '../../firebase-services/drawer.service';
+import { FirebaseService } from '../../firebase-services/firebase.service';
 @Component({
   selector: 'app-message-layout',
   standalone: true,
@@ -49,16 +50,32 @@ export class MessageLayoutComponent implements OnInit {
   public isEditEnabled: { [key: string]: boolean } = {};
   public editedMessage: { [key: string]: string } = {};
   public selectedMessage: Message | null = null;
+  public channelDoc: any;
 
+  channelIds: string[] = [];
+  selectedChannelId?: string;
   private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
     Message[]
   >([]);
   messages$: Observable<Message[]> = this.messagesSubject.asObservable();
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
-  constructor(private firestore: Firestore, private drawerService:DrawerService) {}
+  constructor(private firestore: Firestore, private drawerService:DrawerService, private id: GetIdService,private firebase: FirebaseService) {}
 
-  ngOnInit(): void {
-    this.loadMessages();
+  ngOnInit() {
+
+    this.firebase.selectedChannelId$.subscribe(channelId => {
+
+      if (channelId !== null) {
+        this.selectedChannelId = channelId; // This will now only assign non-null values
+        console.log(channelId);
+        if (channelId) {
+          this.loadMessages(channelId);
+        }
+      } else {
+        // Handle the null case explicitly, e.g., reset selectedChannelId or take other appropriate action
+        this.selectedChannelId = undefined; // or set to a default/fallback value if suitable
+      }
+    });
   }
 
   openThread(message:Message): void {
@@ -68,27 +85,21 @@ export class MessageLayoutComponent implements OnInit {
   }
 
 
-
-
-
-  loadMessages(): void {
-    const messagesCollection = collection(this.firestore, 'messages');
+  loadMessages(channelId: string): void {
+    console.log(channelId)
+    const messagesCollection = collection(this.firestore, `channels/${channelId}/channelMessages`);
     const q = query(messagesCollection, orderBy('time', 'desc'));
+
     this.messages$ = new Observable<Message[]>((observer) => {
       onSnapshot(q, (querySnapshot) => {
         const messages: Message[] = [];
-        querySnapshot.forEach(async (doc) => {
-          const messageData = doc.data() as Message;
-          messageData.messageId = doc.id;
-          if (messageData.messageImage) {
-            const storage = getStorage();
-            const imageRef = ref(storage, messageData.messageImage as string);
-            messageData.messageImage = await getDownloadURL(imageRef);
-          }
-          messages.push(messageData);
+        querySnapshot.forEach((doc) => {
+          const message = doc.data() as Message;
+          message.messageId = doc.id;
+          messages.push(message);
         });
-        observer.next(messages);
-      });
+        observer.next(messages.reverse());
+      }, error => observer.error(error));
     });
   }
 
@@ -123,7 +134,8 @@ export class MessageLayoutComponent implements OnInit {
       message.reactions[emoji]++;
     }
 
-    this.updateMessageReactions(message);
+    this.updateMessageReactions(this.selectedChannelId!, message);
+
     this.closeEmojiPicker(message.messageId);
   }
 
@@ -152,16 +164,25 @@ export class MessageLayoutComponent implements OnInit {
       message.reactions[emoji] = 1; // Initialize count if emoji is reacted for the first time
     }
 
-    this.updateMessageReactions(message);
+    this.updateMessageReactions(this.selectedChannelId!, message);
+
 }
 
 
-  updateMessageReactions(message: Message) {
-    const messageRef = doc(this.firestore, 'messages', message.messageId);
-    const reactionsData = message.reactions || {};
+updateMessageReactions(channelId: string, message: Message) {
+  console.log(channelId)
+  // Construct the correct path using the provided channelId
+  const messageRef = doc(this.firestore, `channels/${channelId}/channelMessages`, message.messageId);
+  const reactionsData = message.reactions || {};
 
-    setDoc(messageRef, { reactions: reactionsData }, { merge: true });
-  }
+  setDoc(messageRef, { reactions: reactionsData }, { merge: true })
+    .then(() => {
+      console.log('Reactions successfully updated.');
+    })
+    .catch((error) => {
+      console.error('Error updating reactions:', error);
+    });
+}
 
   toggleHoverOptions(messageId: string, value: boolean): void {
     this.isHovered[messageId] = value;
@@ -190,11 +211,11 @@ export class MessageLayoutComponent implements OnInit {
     this.isEditingEnabled[messageId] = true;
   }
 
-  saveEditedMessage(message: Message, messageId: string): void {
+  saveEditedMessage(channelDoc: any, message: Message): void {
     const editedText = this.editedMessage[message.messageId];
 
     // Update the message in the Firebase Firestore
-    const messageRef = doc(this.firestore, 'messages', message.messageId);
+    const messageRef = doc(this.firestore, 'channels', channelDoc.id, 'messages', message.messageId);
     setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
       .then(() => {
         console.log('Message successfully updated.');
@@ -204,8 +225,8 @@ export class MessageLayoutComponent implements OnInit {
       .catch((error) => {
         console.error('Error updating message:', error);
       });
-    this.isEditEnabled[messageId] = false;
-    this.isEditingEnabled[messageId] = false;
+    this.isEditEnabled[message.messageId] = false;
+    this.isEditingEnabled[message.messageId] = false;
   }
 
   cancelEdit(messageId: string): void {

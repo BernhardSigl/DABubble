@@ -15,7 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
   imports: [
     CommonModule,
     MatSidenavModule,
-    MatDrawer, 
+    MatDrawer,
     CommonModule
   ],
   templateUrl: './side-nav.component.html',
@@ -48,7 +48,7 @@ export class SideNavComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
     // console.log(this.firebase.channelsArray);
-    
+
     // await this.firebase.selectLastOpenedChannel();
     // const filteredChannels = [];
     // for (const channel of this.firebase.channelsArray) {
@@ -102,4 +102,8 @@ export class SideNavComponent implements OnInit {
   openMessage() {
     // this.isMessageOpened = true;
   }
+  selectChannel(channelId: string) {
+    this.firebase.setSelectedChannelId(channelId);
+  }
+
 }

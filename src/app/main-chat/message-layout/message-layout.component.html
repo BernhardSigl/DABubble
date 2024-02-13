@@ -5,7 +5,6 @@
     'current-user': message.senderId === userId,
     'other-user': message.senderId !== userId
   }"
-
 >
   <div class="sent-date">
     <mat-divider class="one-divider"></mat-divider>
@@ -75,7 +74,7 @@
               (click)="toggleEmojiPicker(message.messageId)"
               alt=""
             />
-            <img src="../../../assets/img/thread.png" alt=""  (click)="openThread(message)" />
+            <img src="../../../assets/img/thread.png" alt="" (click)="openThread(message)" />
             <img
               *ngIf="message.senderId === userId"
               src="../../../assets/img/three-dots-vertical.png"
@@ -106,7 +105,7 @@
             Abbrechen
           </button>
           <button
-            (click)="saveEditedMessage(message, message.messageId)"
+            (click)="saveEditedMessage(message, channelDoc)"
             class="edit-save"
           >
             Speichern
@@ -117,6 +116,3 @@
     </div>
   </div>
 </div>
-
-<!--
-} -->
