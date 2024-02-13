@@ -198,7 +198,7 @@ export class MessageBoxThreadComponent implements OnInit {
 
     // Generate the unique part of the thread ID
     const uniqueThreadIdPart = this.generateUniquePartOfThreadId();
-    newThreadMessage.messageId = `${messageId}-${uniqueThreadIdPart}`; // Set the full messageId for the new thread message
+    newThreadMessage.messageId = `${uniqueThreadIdPart}`; // Set the full messageId for the new thread message
     newThreadMessage.senderId = this.userId || ''; // Set the senderId for the new thread message
 
     // Use the unique part for the thread document ID within Firestore
