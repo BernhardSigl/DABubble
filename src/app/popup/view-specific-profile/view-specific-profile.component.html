@@ -1,0 +1,37 @@
+<div class="popup">
+
+    <div class="horicontal spaceBetween">
+        <h4 class="bold">Profil</h4>
+        <div class="icon-size-24 cross-icon" (click)="this.dialogRef.close();">
+        </div>
+
+    </div>
+
+    <div class="profile-img-position">
+        <div [style.background-image]="'url(' + data.user.profileImg + ')'" class="profile-img"></div>
+    </div>
+
+    <div class="name-edit-status">
+        <div class="horicontal spaceBetween">
+            <h2 class="bold">{{ data.user.name }}</h2>
+        </div>
+
+        <div class="horicontal status">
+            <img [src]="data.user.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'">
+            <h5>{{ data.user.status ? 'Online' : 'Abwesend' }}</h5>
+        </div>
+    </div>
+
+    <div class="email-content" *ngIf="data.user.userId !== 'e7zSK07HmreqlBdt7cibNEcjAQW2'">
+        <div class="email-img-and-email-title horicontal">
+            <img src="./../../../assets/img/mail-black.png">
+            <h5 class="bold">E-Mail Adresse</h5>
+        </div>
+        <a href="mailto:{{ data.user.email }}" class="email fs18">{{ data.user.email }}</a>
+    </div>
+
+    <div class="vertical">
+      <button class="send-msg">Nachricht</button>  
+    </div>
+    
+</div>

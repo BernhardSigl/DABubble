@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { AddMembersRetrospectivelyComponent } from '../add-members-retrospectively/add-members-retrospectively.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ViewProfileComponent } from '../view-profile/view-profile.component';
+import { ViewSpecificProfileComponent } from '../view-specific-profile/view-specific-profile.component';
 
 @Component({
   selector: 'app-list-members',
@@ -31,6 +33,15 @@ addMemberDropdown() {
   this.dialog.open(AddMembersRetrospectivelyComponent, {
     position: { top: '210px', right: '550px' },
     panelClass: 'no-border-tr',
+  });
+}
+
+showProfile(user: any) {
+  this.dialog.open(ViewSpecificProfileComponent, {
+    data: {
+      user: user,
+    },
+    panelClass: 'border',
   });
 }
 

@@ -8,7 +8,7 @@
 
     <div class="members-list-box">
         <div class="members-list-scroll-box scroll-bar">
-            <div class="members-list horicontal"
+            <div class="members-list horicontal" (click)="showProfile(user)"
             *ngFor="let user of firebase.currentChannelData[0].members">
     
                 <div class="profile-img-and-status">
