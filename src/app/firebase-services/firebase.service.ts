@@ -220,7 +220,6 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   }
 
   setSelectedChannelId(channelId: string) {
-    console.log('Setting selected channel ID:', channelId);
     this.selectedChannelIdSource.next(channelId);
   }
 
@@ -299,6 +298,22 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
     await updateDoc(docRef, newPrivateMessagesArray.toJson());
   }
 
+  async getUsersInCurrentChannel(): Promise<any[]> {
+    try {
+        const currentChannelId = this.currentChannelId;
+        const channel = this.channelsArray.find(channel => channel.channelId === currentChannelId);
+        if (channel) {
+            const members = channel.members;
+            return members;
+        }
+        return [];
+    } catch (error) {
+        console.error('Error fetching users from current channel:', error);
+        return [];
+    }
+}
+
+
   // only for first creation
   getSinglePrivateMessageDocRef() {
     return doc(this.getPrivateMessagesColRef(), this.privateMessageId);
@@ -331,13 +346,13 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
             // log id
           this.currentPrivateMessageId = privateMessage.privateMessageId;
             // log onclicked private message array
-            const onClickedPrivateMessageArray = this.privateMessagesArray.filter(privateMessage => 
+            const onClickedPrivateMessageArray = this.privateMessagesArray.filter(privateMessage =>
               this.membersMatch(privateMessage.members, this.currentPrivateMessageMembers) &&
               privateMessage.privateMessageId === this.currentPrivateMessageId
           );
-          this.currentPrivateMessageArray = onClickedPrivateMessageArray[0]; 
+          this.currentPrivateMessageArray = onClickedPrivateMessageArray[0];
           this.privateMessageExists = true;
-          foundMatchingMessage = true;       
+          foundMatchingMessage = true;
             break;
         }
     }

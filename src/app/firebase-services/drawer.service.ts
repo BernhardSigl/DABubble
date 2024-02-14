@@ -6,7 +6,7 @@ import { Firestore, addDoc, collection, doc, getDocs, onSnapshot, query, setDoc 
   providedIn: 'root',
 })
 export class DrawerService {
-  private isOpenSubject = new BehaviorSubject<boolean>(true);
+  private isOpenSubject = new BehaviorSubject<boolean>(false);
   isOpen$ = this.isOpenSubject.asObservable();
   selectedMessageChanged: EventEmitter<Message | null> = new EventEmitter();
 

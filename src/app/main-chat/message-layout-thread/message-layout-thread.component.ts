@@ -85,7 +85,6 @@ export class MessageLayoutThreadComponent implements OnInit {
 
       if (channelId !== null) {
         this.selectedChannelId = channelId; // This will now only assign non-null values
-        console.log(channelId);
       } else {
         // Handle the null case explicitly, e.g., reset selectedChannelId or take other appropriate action
         this.selectedChannelId = undefined; // or set to a default/fallback value if suitable

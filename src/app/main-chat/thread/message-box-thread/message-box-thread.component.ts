@@ -94,9 +94,8 @@ export class MessageBoxThreadComponent implements OnInit {
   this.firebase.selectedChannelId$.subscribe(channelId => {
     if (channelId !== null) {
       this.selectedChannelId = channelId;
-      console.log(channelId);
     } else {
-      this.selectedChannelId = undefined; // or set to a default/fallback value if suitable
+      this.selectedChannelId = undefined;
     }
   });
   }

@@ -105,7 +105,8 @@
             Abbrechen
           </button>
           <button
-            (click)="saveEditedMessage(message, channelDoc)"
+          *ngIf="selectedChannelId"
+          (click)="saveEditedMessage(selectedChannelId, message)"
             class="edit-save"
           >
             Speichern

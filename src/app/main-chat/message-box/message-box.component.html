@@ -2,11 +2,16 @@
   <div class="selected-file" *ngIf="selectedFile">
     Selected file: {{ selectedFile.name }}
   </div>
-
+  <div *ngIf="mentionedUsers.length > 0" class="mentioned-users-container">
+    <div *ngFor="let user of mentionedUsers" (click)="selectMention(user)" class="mentioned-users">
+      {{ user }}
+    </div>
+  </div>
   <textarea
     class="textarea"
     placeholder="Nachricht an #Entwicklerteam"
     [(ngModel)]="textArea"
+    (input)="suggestUsers(); onTextAreaChange()"
   ></textarea>
 
   <div class="add-ons">
@@ -42,6 +47,7 @@
       alt=""
       class="mention"
     />
+
     <img
       matTooltip="Send"
       src="../../../assets/img/send-dark-blue.png"

@@ -47,7 +47,7 @@
                 </div>
                 <div *ngIf="!isOpenSecond" class="messages-users">
                     <!-- <div class="messages-user" (click)="openMessage()">
-                        
+
                         <div class="test">
                             <img src="./../../assets/img/profile-1.png">
                         <p>Daniel Schirmer (Du)</p>
@@ -61,19 +61,19 @@
 
                     </div> -->
                     <div class="members-list-box" *ngIf="!isOpenSecond">
-                
+
                         <div class="members-list-scroll-box scroll-bar">
                             <div class="members-list horicontal"
                             *ngFor="let user of firebase.usersArray" (click)="addNewPrivateMessage(user)">
-                    
+
                                 <div class="profile-img-and-status">
                                     <div [style.background-image]="'url(' + user.profileImg + ')'" class="profile-img"></div>
                                     <img [src]="user.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'"
                                         class="status">
                                 </div>
-                
+
                                 <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
-                    
+
                             </div>
                         </div>
                     </div>

@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { Firestore, addDoc, collection, getFirestore } from '@angular/fire/firestore';
 import { Message } from '../../classes/message.class';
 import { UserListService } from '../../firebase-services/user-list.service';
-import { getStorage, ref, uploadString } from 'firebase/storage';
+import { getDownloadURL, getStorage, ref, uploadString } from 'firebase/storage';
 import { Observable } from 'rxjs';
 import { GetIdService } from '../../firebase-services/get-id.service';
 import { FirebaseService } from '../../firebase-services/firebase.service';
@@ -34,8 +34,10 @@ export class MessageBoxComponent {
   ) {
     this.getUserData();
     this.subscribeToChannelChanges();
+
   }
 
+  mentionedUsers: string[] = [];
   userName: string = '';
   userImage: string = '';
   channelIds: string[] = [];
@@ -90,7 +92,7 @@ export class MessageBoxComponent {
         } else {
           await this.addMessageToFirestore(newMessage, this.currentChannelId);
         }
-
+        console.log('Sending message:', this.textArea, 'Mentioned users:', this.mentionedUsers);
         this.clearInputFields();
       } catch (error) {
         console.error('Error sending message:', error);
@@ -104,24 +106,27 @@ export class MessageBoxComponent {
 
 
 
-private async uploadSelectedFile(newMessage: Message, channelId: string): Promise<void> {
-  try {
-      const storage = getStorage();
-      const storageRef = ref(storage, `files/${this.selectedFile!.name}`);
-      const fileDataUrl = await this.readFileDataUrl(this.selectedFile!);
+  private async uploadSelectedFile(newMessage: Message, channelId: string): Promise<void> {
+    try {
+        const storage = getStorage();
+        const storageRef = ref(storage, `files/${this.selectedFile!.name}`);
+        const fileDataUrl = await this.readFileDataUrl(this.selectedFile!);
 
-      await uploadString(storageRef, fileDataUrl, 'data_url');
+        await uploadString(storageRef, fileDataUrl, 'data_url');
 
-      newMessage.messageImage = `files/${this.selectedFile?.name}`;
+        // Get the download URL for the uploaded file
+        const downloadURL = await getDownloadURL(storageRef);
 
-      const messageId = await this.addMessageToFirestore(newMessage, channelId);
-      newMessage.messageId = messageId;
+        newMessage.messageImage = downloadURL; // Set the download URL to the message
 
-  } catch (error) {
-      console.error('Error uploading file:', error);
-      throw error; // Re-throw the error to propagate it upwards
-  }
+        const messageId = await this.addMessageToFirestore(newMessage, channelId);
+        newMessage.messageId = messageId;
+    } catch (error) {
+        console.error('Error uploading file:', error);
+        throw error; // Re-throw the error to propagate it upwards
+    }
 }
+
 
 private async readFileDataUrl(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -148,5 +153,40 @@ private clearInputFields(): void {
 onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
 }
+
+// mention User
+
+onTextAreaChange() {
+  this.suggestUsers();
+}
+
+suggestUsers() {
+  if (this.textArea.includes('@')) {
+      // Filter users from the channel based on the input value
+      this.firebase.getUsersInCurrentChannel().then(users => {
+          this.mentionedUsers = users
+              .filter(user => user.name.toLowerCase().includes(this.textArea.toLowerCase().slice(this.textArea.lastIndexOf('@') + 1)))
+              .map(user => user.name);
+      }).catch(error => {
+          console.error('Error suggesting users:', error);
+      });
+  } else {
+      this.mentionedUsers = [];
+  }
+}
+
+
+
+selectMention(username: string) {
+  // Handle mention selection
+  // Insert the selected mention into the textarea
+  this.textArea = this.textArea.replace(`@${username}`, ''); // Remove mention from the textarea
+  this.textArea += `${username} `;
+  this.mentionedUsers = []; // Clear mentioned users after selection
+}
+
+
+
+
 
 }

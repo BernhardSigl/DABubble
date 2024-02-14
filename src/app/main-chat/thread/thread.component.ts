@@ -38,7 +38,7 @@ export class ThreadComponent implements OnInit {
   @Input() selectedMessage: Message | null = null;
   @ViewChild('drawer') drawer!: MatDrawer;
   threadMessages: string[] = [];
-  isOpen = true;
+  isOpen = false;
   threadId: string = '';
   constructor(private drawerService: DrawerService) {}
 

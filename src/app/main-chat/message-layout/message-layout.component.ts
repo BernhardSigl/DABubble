@@ -67,7 +67,7 @@ export class MessageLayoutComponent implements OnInit {
 
       if (channelId !== null) {
         this.selectedChannelId = channelId; // This will now only assign non-null values
-        console.log(channelId);
+
         if (channelId) {
           this.loadMessages(channelId);
         }
@@ -81,12 +81,12 @@ export class MessageLayoutComponent implements OnInit {
   openThread(message:Message): void {
     this.drawerService.openDrawer(message);
     this.drawerService.setSelectedMessage(message);
-    console.log(message)
+
   }
 
 
   loadMessages(channelId: string): void {
-    console.log(channelId)
+
     const messagesCollection = collection(this.firestore, `channels/${channelId}/channelMessages`);
     const q = query(messagesCollection, orderBy('time', 'desc'));
 
@@ -208,32 +208,34 @@ updateMessageReactions(channelId: string, message: Message) {
       // Assign the message text to editedMessage[messageId]
       this.editedMessage[messageId] = messageText;
     });
-    this.isEditingEnabled[messageId] = true;
+    this.isEditingEnabled[messageId] = false;
   }
 
-  saveEditedMessage(channelDoc: any, message: Message): void {
+  saveEditedMessage(channelId:string, message: Message): void {
+    console.log(message.messageId)
     const editedText = this.editedMessage[message.messageId];
 
     // Update the message in the Firebase Firestore
-    const messageRef = doc(this.firestore, 'channels', channelDoc.id, 'messages', message.messageId);
+    const messageRef = doc(this.firestore, `channels/${channelId}/channelMessages`, message.messageId);
     setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
       .then(() => {
         console.log('Message successfully updated.');
         // Disable edit mode after saving
         this.toggleEditMessage(message.messageId);
+        this.isEditingEnabled[message.messageId] = false;
       })
       .catch((error) => {
         console.error('Error updating message:', error);
       });
-    this.isEditEnabled[message.messageId] = false;
-    this.isEditingEnabled[message.messageId] = false;
+        this.isEditEnabled[message.messageId] = false;
+        this.isEditingEnabled[message.messageId] = false;
   }
 
   cancelEdit(messageId: string): void {
     this.isEditEnabled[messageId] = false;
 
     this.isHovered[messageId] = false;
-    this.isEditingEnabled[messageId] = true;
+    this.isEditingEnabled[messageId] = false;
   }
 
   getMessageText(messageId: string): Observable<string> {
