@@ -100,7 +100,7 @@ export class SideNavComponent implements OnInit {
     this.firebase.currentPrivateMessageId = '';
     this.firebase.currentPrivateMessageMembers = [];
     this.firebase.currentPrivateMessageMembers.push(user, this.firebase.loggedInUserArray[0]);
-    
+    await this.firebase.checkCurrentPrivateMessageId();
     
     if (!this.firebase.privateMessageExists) {
     const newPrivateMessage = new PrivateMessage({
@@ -110,9 +110,9 @@ export class SideNavComponent implements OnInit {
     });
     this.firebase.saveNewPrivateMessage(newPrivateMessage);
     await this.firebase.ngOnInit();
+    this.firebase.privateMessageExists = false;
   }
     
-    await this.firebase.checkCurrentPrivateMessageId();
     // console.log('currentPrivateMessageMembers :', this.firebase.currentPrivateMessageMembers);
     // console.log('currentPrivateMessageId :', this.firebase.currentPrivateMessageId);
     // console.log('currentPrivateMessageArray :', this.firebase.currentPrivateMessageArray);

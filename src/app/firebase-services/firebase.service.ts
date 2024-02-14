@@ -41,10 +41,10 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   channelRightsIds: any[] = [];
   channelsDataWithRights: any[] = [];
 
-  currentPrivateMessageMembers: any[] = []; // onclicked
   currentPrivateMessageId!: string; // onclicked
-  currentPrivateMessageArray: any[] = []; // onclicked
-  privateMessagesArray: any[] = []; // all
+  currentPrivateMessageArray: any[] = []; // only use id's
+  currentPrivateMessageMembers: any[] = []; // don't use this
+  privateMessagesArray: any[] = []; // don't use this
   privateMessageId!: string; // don't use this
   privateMessageExists: boolean = false; // don't use this
 
