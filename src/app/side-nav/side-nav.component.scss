@@ -258,3 +258,57 @@
 
 }
 
+.members-list-box {
+    margin-bottom: .9375rem; // 15px
+
+    .members-list-scroll-box {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        max-height: 12.5rem; // 200px
+        gap: .8125rem; // 13px
+    }
+
+    .members-list {
+        display: flex;
+        gap: .9375rem; // 15px
+        cursor: pointer;
+        padding: .25rem 1.25rem; // 4px 20px
+        border-radius: 1.875rem; // 30px
+        margin-right: .25rem; // 4px
+
+        &:not([style*="--primary"]) {
+            &:hover {
+                background-color: var(--background-color) !important;
+            }
+        }
+    }
+}
+
+.profile-img-and-status {
+    width: 3.125rem; // 50px
+    height: 3.125rem;
+    position: relative;
+
+    .profile-img {
+        height: 100%;
+        aspect-ratio: 1/1;
+        background-size: cover;
+        background-repeat: no-repeat;
+        border-radius: 50%;
+    }
+
+    .status {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        border: 2px solid var(--background-color);
+        border-radius: 100%;
+        width: .875rem; // 14px
+        height: .875rem; // 14px
+    }
+}
+
+.userName {
+    min-width: 150px;
+}

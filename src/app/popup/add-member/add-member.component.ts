@@ -73,8 +73,6 @@ export class AddMemberComponent {
   }
 
   async addNewChannel() {
-    // localStorage.removeItem('channelName');
-    // localStorage.setItem('channelName', this.data.channelName);
     this.addGuest();
     const newChannel = new Channel({
       channelName: this.data.channelName,

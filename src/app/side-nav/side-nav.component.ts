@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
+import { PrivateMessage } from '../classes/private-message.class';
 
 @Component({
   selector: 'app-side-nav',
@@ -38,8 +39,6 @@ export class SideNavComponent implements OnInit {
   userId: string = '';
   userImage: string = '';
 
-  // channelWithRights: any[] = [];
-
   constructor(
     public dialog: MatDialog,
     public firebase: FirebaseService,
@@ -47,16 +46,6 @@ export class SideNavComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
-    // console.log(this.firebase.channelsArray);
-
-    // await this.firebase.selectLastOpenedChannel();
-    // const filteredChannels = [];
-    // for (const channel of this.firebase.channelsArray) {
-    //   if (this.firebase.currentChannelRights.includes(channel.channelId)) {
-    //     filteredChannels.push(channel);
-    //   }
-    // }
-    // this.channelWithRights = filteredChannels;
   }
 
   openAddChannels() {
@@ -102,8 +91,32 @@ export class SideNavComponent implements OnInit {
   openMessage() {
     // this.isMessageOpened = true;
   }
+
   selectChannel(channelId: string) {
     this.firebase.setSelectedChannelId(channelId);
   }
+
+  async addNewPrivateMessage(user: any) {
+    this.firebase.currentPrivateMessageId = '';
+    this.firebase.currentPrivateMessageMembers = [];
+    this.firebase.currentPrivateMessageMembers.push(user, this.firebase.loggedInUserArray[0]);
+    
+    
+    if (!this.firebase.privateMessageExists) {
+    const newPrivateMessage = new PrivateMessage({
+      members: this.firebase.currentPrivateMessageMembers,
+      messages: [],
+      privateMessageId: '',
+    });
+    this.firebase.saveNewPrivateMessage(newPrivateMessage);
+    await this.firebase.ngOnInit();
+  }
+    
+    await this.firebase.checkCurrentPrivateMessageId();
+    // console.log('currentPrivateMessageMembers :', this.firebase.currentPrivateMessageMembers);
+    // console.log('currentPrivateMessageId :', this.firebase.currentPrivateMessageId);
+    // console.log('currentPrivateMessageArray :', this.firebase.currentPrivateMessageArray);
+  }
+
 
 }

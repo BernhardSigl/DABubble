@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Message } from '../classes/message.class';
 import { Channel } from '../classes/channel.class';
 import { BehaviorSubject } from 'rxjs';
+import { PrivateMessage } from '../classes/private-message.class';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,13 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   channelRightsIds: any[] = [];
   channelsDataWithRights: any[] = [];
 
+  currentPrivateMessageMembers: any[] = []; // onclicked
+  currentPrivateMessageId!: string; // onclicked
+  currentPrivateMessageArray: any[] = []; // onclicked
+  privateMessagesArray: any[] = []; // all
+  privateMessageId!: string; // don't use this
+  privateMessageExists: boolean = false; // don't use this
+
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
   constructor(
@@ -54,6 +62,7 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
     await this.checkChannelRights();
     this.showOnlyChannelsWithRights();
     await this.selectLastOpenedChannel();
+    await this.subAllPrivateMessages();
   }
 
   async subAllMessages(): Promise<void> {
@@ -270,5 +279,85 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   this.channelsDataWithRights = filteredChannels;
 
   }
+
+  // private messages:
+
+  async saveNewPrivateMessage(newPrivateMessagesArray: PrivateMessage) {
+    await addDoc(this.getPrivateMessagesColRef(), newPrivateMessagesArray.toJson()).then((result: any) => {
+      this.privateMessageId = result.id;
+      newPrivateMessagesArray.privateMessageId = this.privateMessageId;
+      this.savePrivateMessageId(newPrivateMessagesArray);
+    });
+  }
+
+  getPrivateMessagesColRef() {
+    return collection(this.firestore, "privateMessages");
+  }
+
+  async savePrivateMessageId(newPrivateMessagesArray: PrivateMessage) {
+    let docRef = this.getSinglePrivateMessageDocRef();
+    await updateDoc(docRef, newPrivateMessagesArray.toJson());
+  }
+
+  // only for first creation
+  getSinglePrivateMessageDocRef() {
+    return doc(this.getPrivateMessagesColRef(), this.privateMessageId);
+  }
+
+  // use for after the creation
+  getCurrentSinglePrivateMessageDocRef() {
+    return doc(this.getPrivateMessagesColRef(), this.currentPrivateMessageId);
+  }
+
+  async subAllPrivateMessages(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const q = query(this.getPrivateMessagesColRef());
+      onSnapshot(q, async (querySnapshot) => {
+        this.privateMessagesArray = [];
+        querySnapshot.forEach(async (doc) => {
+          const privateMessagesData = doc.data();
+          this.privateMessagesArray.push(privateMessagesData);
+        });
+        resolve();
+      });
+    });
+  }
+
+  async checkCurrentPrivateMessageId() {
+    let foundMatchingMessage = false;
+    for (const privateMessage of this.privateMessagesArray) {
+
+        if (this.membersMatch(privateMessage.members, this.currentPrivateMessageMembers)) {
+            // log id
+          this.currentPrivateMessageId = privateMessage.privateMessageId;
+            // log onclicked private message array
+            const onClickedPrivateMessageArray = this.privateMessagesArray.filter(privateMessage => 
+              this.membersMatch(privateMessage.members, this.currentPrivateMessageMembers) &&
+              privateMessage.privateMessageId === this.currentPrivateMessageId
+          );
+          this.currentPrivateMessageArray = onClickedPrivateMessageArray[0]; 
+          this.privateMessageExists = true;
+          foundMatchingMessage = true;       
+            break;
+        }
+    }
+    if (!foundMatchingMessage) {
+      this.privateMessageExists = false;
+  }
+}
+
+membersMatch(members1: any[], members2: any[]): boolean {
+    if (members1.length !== members2.length) {
+        return false;
+    }
+    const sortedMembers1 = members1.map(member => member.userId).sort();
+    const sortedMembers2 = members2.map(member => member.userId).sort();
+    for (let i = 0; i < sortedMembers1.length; i++) {
+        if (sortedMembers1[i] !== sortedMembers2[i]) {
+            return false;
+        }
+    }
+    return true;
+}
 
 }

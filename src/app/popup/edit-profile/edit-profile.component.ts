@@ -75,6 +75,7 @@ export class EditProfileComponent {
 
     if (this.inputName.trim() !== '' && (this.isEmailValid || this.inputEmail === '')) {
       this.firebase.changeName(this.inputName);
+      this.firebase.ngOnInit();
       this.dialogRef.close();
     }
 
@@ -82,6 +83,7 @@ export class EditProfileComponent {
       this.firebase.changeEmail(this.inputEmail);
       this.auth.changeEmailAuth(this.inputEmail);
       this.sentMailPopup();
+      this.firebase.ngOnInit();
       this.dialogRef.close();
     }
   }
