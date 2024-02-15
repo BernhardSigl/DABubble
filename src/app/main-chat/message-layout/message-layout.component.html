@@ -23,7 +23,7 @@
       <div class="card-content">
         <div class="time-name">
           <p>{{ message.time | date : "HH:mm" }}</p>
-          <h3>{{ message.name }}</h3>
+          <h3 (click)="showProfile(message.name)">{{ message.name }}</h3>
         </div>
         <img
           class="message-image"
