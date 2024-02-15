@@ -267,9 +267,20 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
     this.currentChannelId = activeChannelId;
     await setDoc(this.getSingleUserDocRef(), { activeChannelId: this.currentChannelId }, { merge: true });
     await this.activeChannelData();
+
+    const createdByUserId = this.currentChannelData[0].createdBy;
+    const creator = this.usersArray.find(user => user.userId === createdByUserId);
+    
     this.currentChannelName = this.currentChannelData[0].channelName,
     this.channelMembers = this.currentChannelData[0].members;
-    this.channelCreatedBy = this.currentChannelData[0].createdBy;
+    
+    // noch ändern !!!
+    if (creator) {
+      this.channelCreatedBy = creator.name;
+    } else { // delete
+      this.channelCreatedBy = this.currentChannelData[0].createdBy; // delete
+    }
+    
     this.channelDescription = this.currentChannelData[0].description;
     this.currentChannelId = this.currentChannelData[0].channelId;
     this.channelProfileImages = this.currentChannelData[0].members.map((member: any) => member.profileImg);

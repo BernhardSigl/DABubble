@@ -79,7 +79,7 @@ export class AddMemberComponent {
       channelDescription: this.data.channelDescription,
       members: [],
       messages: [],
-      createdBy: this.firebase.name,
+      createdBy: this.firebase.loggedInUserId,
       channelId: '',
     });
 
