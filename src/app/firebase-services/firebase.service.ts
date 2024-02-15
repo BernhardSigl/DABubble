@@ -229,6 +229,7 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
       const channelToSelect = this.channelsArray.find(channel => channel.channelId === currentChannelId);
       if (channelToSelect) {
         await this.activeChannelId(channelToSelect.channelId);
+        this.setSelectedChannelId(channelToSelect.channelId);
       }
     }
   }
