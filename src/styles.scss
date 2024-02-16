@@ -185,6 +185,12 @@ h5 {
 }
 
 /* scroll */
+.scroll-bar-transparent::-webkit-scrollbar-button:start:decrement,
+.scroll-bar-transparent::-webkit-scrollbar-button:end:increment {
+    background-size: 0 0 !important;
+    background-image: none !important;
+}
+
 .scroll-bar::-webkit-scrollbar-button:start:decrement {
     background-position: center;
     background-image: url('./assets/img/arrow-drop-up-grey.png');
@@ -203,13 +209,23 @@ h5 {
     background-repeat: no-repeat;
 }
 
+.scroll-bar-transparent::-webkit-scrollbar{
+    width: 0 !important;
+}
+
 .scroll-bar::-webkit-scrollbar {
     display: block;
     width: 8px;
 }
 
+.scroll-bar-transparent::-webkit-scrollbar-track,
 .scroll-bar::-webkit-scrollbar-track {
     background-color: transparent;
+}
+
+.scroll-bar-transparent::-webkit-scrollbar-thumb{
+    background-color: transparent !important;
+    border-radius: 0;
 }
 
 .scroll-bar::-webkit-scrollbar-thumb {

@@ -1,4 +1,10 @@
-<mat-drawer-container class="sidenav-wrapper"  [ngClass]="{'with-margin': sideNavBtnStatus, 'without-margin': !sideNavBtnStatus}">
+<mat-drawer-container
+  class="sidenav-wrapper"
+  [ngClass]="{
+    'with-margin': sideNavBtnStatus,
+    'without-margin': !sideNavBtnStatus
+  }"
+>
   <mat-drawer #drawer class="sidenav-container" mode="side">
     <div class="horicontal spaceBetween">
       <div class="channel-header-left horicontal">
@@ -29,7 +35,7 @@
       </div>
 
       <div *ngIf="!isOpen" class="add-channel">
-        <div class="custom-scroll-box scroll-bar">
+        <div class="custom-scroll-box scroll-bar-transparent">
           <div
             class="channel-area"
             [ngStyle]="{
@@ -66,10 +72,12 @@
     </div>
 
     <div class="column">
-      <div 
-      (mouseenter)="changeImageMessages(true)"
-      (mouseleave)="changeImageMessages(false)"
-      class="horicontal messages-header dropdown" (click)="toggleRotationMessage()">
+      <div
+        (mouseenter)="changeImageMessages(true)"
+        (mouseleave)="changeImageMessages(false)"
+        class="horicontal messages-header dropdown"
+        (click)="toggleRotationMessage()"
+      >
         <div class="horicontal">
           <img
             [@rotateAnimation]="isOpenSecond ? 'open' : 'closed'"
@@ -81,8 +89,8 @@
       </div>
 
       <div *ngIf="!isOpenSecond" class="messages-users">
-        <div class="members-list-box" *ngIf="!isOpenSecond">
-          <div class="custom-scroll-box scroll-bar">
+        <div class="custom-scroll-box scroll-bar-transparent">
+          <div class="members-list-box" *ngIf="!isOpenSecond">
             <div
               class="members-list horicontal"
               *ngFor="let user of firebase.usersArray"
