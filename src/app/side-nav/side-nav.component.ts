@@ -31,6 +31,7 @@ import { PrivateMessage } from '../classes/private-message.class';
   ]
 })
 export class SideNavComponent implements OnInit {
+  @ViewChild(MatDrawer) drawer!: MatDrawer;
 
   isOpen = false;
   isOpenSecond = false;
@@ -39,6 +40,8 @@ export class SideNavComponent implements OnInit {
   userId: string = '';
   userImage: string = '';
 
+  sideNavBtnStatus: boolean = false;
+
   constructor(
     public dialog: MatDialog,
     public firebase: FirebaseService,
@@ -46,6 +49,8 @@ export class SideNavComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
+    this.drawer.open();
+    this.checkSideNavBtnStatus();
   }
 
   openAddChannels() {
@@ -117,6 +122,15 @@ export class SideNavComponent implements OnInit {
     console.log('currentPrivateMessageMembers :', this.firebase.currentPrivateMessageMembers);
     console.log('currentPrivateMessageId :', this.firebase.currentPrivateMessageId);
     console.log('currentPrivateMessageArray :', this.firebase.currentPrivateMessageArray);
+  }
+  
+  checkSideNavBtnStatus() {
+    if (this.sideNavBtnStatus) {
+      this.sideNavBtnStatus = false;
+    } else if (!this.sideNavBtnStatus) {
+      this.sideNavBtnStatus = true;
+    }
+    console.log(this.sideNavBtnStatus);
   }
 
 

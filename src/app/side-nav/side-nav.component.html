@@ -1,94 +1,127 @@
-<mat-drawer-container class="sidenav-wrapper" autosize>
-    <mat-drawer #drawer class="sidenav-container" mode="side">
-        <div class="channel-header">
-            <img src="./../../assets/img/channel-logo.png">
-            <p>Code learning</p>
-            <img src="./../../assets/img/edit-channel.png" alt="">
+<mat-drawer-container class="sidenav-wrapper"  [ngClass]="{'with-margin': sideNavBtnStatus, 'without-margin': !sideNavBtnStatus}">
+  <mat-drawer #drawer class="sidenav-container" mode="side">
+    <div class="horicontal spaceBetween">
+      <div class="channel-header-left horicontal">
+        <img src="./../../assets/img/channel-logo.png" />
+        <h4 class="bold">Code learning</h4>
+      </div>
+      <div class="add-channel-img"></div>
+    </div>
+
+    <div class="channels-content column">
+      <div class="horicontal spaceBetween channel-dropdown">
+        <div
+          (click)="toggleRotationChannel()"
+          class="open-channel horicontal"
+          (mouseenter)="changeImagesChannel(true)"
+          (mouseleave)="changeImagesChannel(false)"
+        >
+          <img
+            [@rotateAnimation]="isOpen ? 'open' : 'closed'"
+            [src]="openMenuChannel"
+          />
+          <div class="channel-title horicontal">
+            <img [src]="workspaceChannel" class="icon-size-24" />
+            <h3 class="bold">Channels</h3>
+          </div>
         </div>
-        <div class="channels-content">
-            <div class="choose-channels">
-                <div class="choose-channel">
-                    <div class="open-channel"  (mouseenter)="changeImagesChannel(true)"
-                        (mouseleave)="changeImagesChannel(false)">
-                        <img (click)="toggleRotationChannel()"  [@rotateAnimation]="isOpen ? 'open' : 'closed'" [src]="openMenuChannel">
-                        <div class="channel-title">
-                            <img [src]="workspaceChannel">
-                            <p>Channels</p>
-                        </div>
-                    </div>
-                    <img class="plus-channel" src="./../../assets/img/plus-black.png" (click)="openAddChannels()">
-                </div>
+        <div class="add-channel-plus-img" (click)="openAddChannels()"></div>
+      </div>
 
-                <div class="channel-area" [ngStyle]="{'display': firebase.channelsArray.length === 0 ? 'none' : 'flex'}">
-
-                    <div *ngFor="let channel of firebase.currentUserWithRights" class="channel" (click)="selectChannel(channel.channelId)">
-
-                        <div class="hashtag-and-name horicontal" [ngClass]="{'channelIsActive': channel.channelId === firebase.currentChannelId}"
-                        (click)="firebase.activeChannelId(channel.channelId)">
-                            <div class="icon-size-24 hashtag"></div>
-                            <span class="fs18 channel-name bold">{{ channel.channelName }}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div *ngIf="!isOpen" class="add-channel" (mouseenter)="changeImagesChannel(true)"
-                    (mouseleave)="changeImagesChannel(false)" (click)="openAddChannels()">
-                    <img [src]="addChannelPlus">
-                    <p>Channel hinzufügen</p>
-                </div>
+      <div *ngIf="!isOpen" class="add-channel">
+        <div class="custom-scroll-box scroll-bar">
+          <div
+            class="channel-area"
+            [ngStyle]="{
+              display: firebase.channelsArray.length === 0 ? 'none' : 'flex'
+            }"
+          >
+            <div
+              *ngFor="let channel of firebase.currentUserWithRights"
+              class="channel"
+              (click)="selectChannel(channel.channelId)"
+            >
+              <div
+                class="hashtag-and-name horicontal"
+                [ngClass]="{
+                  channelIsActive:
+                    channel.channelId === firebase.currentChannelId
+                }"
+                (click)="firebase.activeChannelId(channel.channelId)"
+              >
+                <div class="icon-size-24 hashtag"></div>
+                <span class="fs18 channel-name bold">{{
+                  channel.channelName
+                }}</span>
+              </div>
             </div>
-
-            <div class="messages-container" (mouseenter)="changeImageMessages(true)"
-                (mouseleave)="changeImageMessages(false)">
-                <div class="messages-header">
-                    <img (click)="toggleRotationMessage()"  [@rotateAnimation]="isOpenSecond ? 'open' : 'closed'" [src]="openMenuMessage">
-                    <img [src]="directNewsImage">
-                    <p>Direktnachrichten</p>
-                </div>
-                <div *ngIf="!isOpenSecond" class="messages-users">
-                    <!-- <div class="messages-user" (click)="openMessage()">
-
-                        <div class="test">
-                            <img src="./../../assets/img/profile-1.png">
-                        <p>Daniel Schirmer (Du)</p>
-                        </div>
-                    </div>
-                    <div class="messages-user">
-                        <div class="test">
-                            <img src="./../../assets/img/profile-1.png">
-                            <p>Test Tester</p>
-                        </div>
-
-                    </div> -->
-                    <div class="members-list-box" *ngIf="!isOpenSecond">
-
-                        <div class="members-list-scroll-box scroll-bar">
-                            <div class="members-list horicontal"
-                            *ngFor="let user of firebase.usersArray" (click)="addNewPrivateMessage(user)">
-
-                                <div class="profile-img-and-status">
-                                    <div [style.background-image]="'url(' + user.profileImg + ')'" class="profile-img"></div>
-                                    <img [src]="user.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'"
-                                        class="status">
-                                </div>
-
-                                <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+          </div>
         </div>
 
-    </mat-drawer>
+        <div class="horicontal add-channel-text" (click)="openAddChannels()">
+          <div class="circle-add-channel-img"></div>
+          <span class="fs18">Channel hinzufügen</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <div 
+      (mouseenter)="changeImageMessages(true)"
+      (mouseleave)="changeImageMessages(false)"
+      class="horicontal messages-header dropdown" (click)="toggleRotationMessage()">
+        <div class="horicontal">
+          <img
+            [@rotateAnimation]="isOpenSecond ? 'open' : 'closed'"
+            [src]="openMenuMessage"
+          />
+          <img [src]="directNewsImage" class="messages-header-profile-img" />
+        </div>
+        <h3 class="bold">Direktnachrichten</h3>
+      </div>
+
+      <div *ngIf="!isOpenSecond" class="messages-users">
+        <div class="members-list-box" *ngIf="!isOpenSecond">
+          <div class="custom-scroll-box scroll-bar">
+            <div
+              class="members-list horicontal"
+              *ngFor="let user of firebase.usersArray"
+              (click)="addNewPrivateMessage(user)"
+            >
+              <div class="profile-img-and-status">
+                <div
+                  [style.background-image]="'url(' + user.profileImg + ')'"
+                  class="profile-img"
+                ></div>
+                <img
+                  [src]="
+                    user.status
+                      ? './../../../assets/img/online.png'
+                      : './../../../assets/img/offline.png'
+                  "
+                  class="status"
+                />
+              </div>
+
+              <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-drawer>
 </mat-drawer-container>
 
 <div class="sidenav-button">
-    <button type="button" mat-button (click)="drawer.toggle()" (mouseenter)="changeImagesButton(true)"
-        (mouseleave)="changeImagesButton(false)">
-        Workspace-Menü schließen
-        <img [src]="buttonImage">
-    </button>
+  <button
+    class="horicontal"
+    type="button"
+    mat-button
+    (click)="drawer.toggle(); checkSideNavBtnStatus()"
+    (mouseenter)="changeImagesButton(true)"
+    (mouseleave)="changeImagesButton(false)"
+  >
+    <h4 class="close-btn-text">Workspace-Menü schließen</h4>
+    <img [src]="buttonImage" />
+  </button>
 </div>
