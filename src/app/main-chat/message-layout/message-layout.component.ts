@@ -27,7 +27,6 @@ import { FirebaseService } from '../../firebase-services/firebase.service';
   standalone: true,
   imports: [
     MatDividerModule,
-    MainChatComponent,
     CommonModule,
     PickerModule,
     FormsModule,

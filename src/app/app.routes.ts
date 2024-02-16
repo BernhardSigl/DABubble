@@ -37,7 +37,7 @@ export const routes: Routes = [
     canActivate: [redirectLoggedIn],
   },
   {
-    path:'private-chat',//private-caht/:userId
+    path:'private-chat/:userId',//private-caht/:userId
     component:PrivateChatComponent
   },
   { path: '**', redirectTo: 'login' },

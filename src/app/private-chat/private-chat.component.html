@@ -1,1 +1,26 @@
-<p>private-chat works!</p>
+<app-header ></app-header>
+
+<div class="desktop-view">
+  <app-side-nav (selectedUser)="onUserSelected($event)"></app-side-nav>
+
+  <section class="private-chat-container">
+    <header class="header-chat">
+
+      <div class="left-side-header">
+        <div class="private-chat">
+          <div class="hashtag-and-name horicontal" >
+            <img class="icon-size-30 user-img" [src]="selectedUserImage">
+            <h4 class="channel-name bold">{{ selectedUserName }}</h4>
+            <div class="arrow-down-img"></div>
+        </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- message layout -->
+    <app-message-layout-pc class="scroll-bar"></app-message-layout-pc>
+
+<!-- message-box -->
+    <app-message-box-pc></app-message-box-pc>
+  </section>
+</div>

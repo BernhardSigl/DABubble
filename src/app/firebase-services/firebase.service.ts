@@ -1,6 +1,6 @@
 declare var google: any;
 import { Injectable, inject } from '@angular/core';
-import { Firestore, addDoc, collection, doc, getDocs, onSnapshot, query, setDoc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, doc, getDocs, onSnapshot, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Message } from '../classes/message.class';
 import { Channel } from '../classes/channel.class';
@@ -155,6 +155,7 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
     this.statusChangeable = loggedInUserInfo.statusChangeable;
     this.email = loggedInUserInfo.email;
     this.profileImg = loggedInUserInfo.profileImg;
+
   }
 
   async changeName(newName: string): Promise<void> {
@@ -281,13 +282,34 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
 
   // private messages:
 
-  async saveNewPrivateMessage(newPrivateMessagesArray: PrivateMessage) {
-    await addDoc(this.getPrivateMessagesColRef(), newPrivateMessagesArray.toJson()).then((result: any) => {
-      this.privateMessageId = result.id;
-      newPrivateMessagesArray.privateMessageId = this.privateMessageId;
-      this.savePrivateMessageId(newPrivateMessagesArray);
+async saveNewPrivateMessage(newPrivateMessage: PrivateMessage, uniqueChatId: string) {
+  const privateMessagesRef = this.getPrivateMessagesColRef();
+  const privateMessageDocRef = doc(privateMessagesRef, uniqueChatId);
+
+  const privateMessageData = newPrivateMessage.toJson();
+
+  await setDoc(privateMessageDocRef, privateMessageData);
+
+}
+
+// Inside FirebaseService class
+
+findPrivateMessageByMembers(members: any[]): PrivateMessage | null {
+  for (const privateMessage of this.currentPrivateMessageArray) {
+    const sortedMembers = privateMessage.members.sort((a: any, b: any) => a.id.localeCompare(b.id));
+    const sortedInputMembers = members.sort((a: any, b: any) => a.id.localeCompare(b.id));
+
+    const isSameMembers = sortedMembers.every((member: any, index: number) => {
+      return member.id === sortedInputMembers[index].id;
     });
+
+    if (isSameMembers) {
+      return privateMessage;
+    }
   }
+  return null;
+}
+
 
   getPrivateMessagesColRef() {
     return collection(this.firestore, "privateMessages");
@@ -297,6 +319,8 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
     let docRef = this.getSinglePrivateMessageDocRef();
     await updateDoc(docRef, newPrivateMessagesArray.toJson());
   }
+
+
 
   async getUsersInCurrentChannel(): Promise<any[]> {
     try {
@@ -312,6 +336,29 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
         return [];
     }
 }
+
+async findPrivateMessageByUniqueChatId(uniqueChatId: string): Promise<PrivateMessage | null> {
+  console.log("Suche nach: ", uniqueChatId);
+  const privateMessagesRef = this.getPrivateMessagesColRef();
+  const q = query(privateMessagesRef, where("privateMessageId", "==", uniqueChatId));
+  const querySnapshot = await getDocs(q);
+
+  console.log("Gefundene Dokumente: ", querySnapshot.size);
+  if (!querySnapshot.empty) {
+    const docData = querySnapshot.docs[0].data();
+    console.log("Gefundene Nachricht: ", docData);
+    return new PrivateMessage({
+      privateMessageId: docData['privateMessageId'],
+      members: docData['members'],
+      messages: docData['messages'],
+    });
+  } else {
+    console.log("Keine Nachricht gefunden");
+    return null;
+  }
+}
+
+
 
 
   // only for first creation
@@ -360,6 +407,12 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
       this.privateMessageExists = false;
   }
 }
+
+getPrivateMessageMembers(privateMessageId: string): any[] {
+  const privateMessage = this.privateMessagesArray.find(msg => msg.privateMessageId === privateMessageId);
+  return privateMessage ? privateMessage.members : [];
+}
+
 
 membersMatch(members1: any[], members2: any[]): boolean {
     if (members1.length !== members2.length) {

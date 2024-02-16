@@ -25,6 +25,7 @@
     "@ngneat/overview": "^6.0.0",
     "firebase": "^10.8.0",
     "inquirer": "^8.0.0",
+    "ngx-webstorage": "^13.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.6.2",
     "zone.js": "~0.14.2"

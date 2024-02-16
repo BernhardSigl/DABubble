@@ -1,0 +1,56 @@
+.message-box{
+  position: relative;
+  padding: 0 35px 10px 35px;
+  width: 100%;
+  textarea{
+    width:  calc(100% - 120px);;
+    border-radius: 20px;
+    border: 1px solid var(--ligth-purple-lines, #ADB0D9);
+    height: 100px;
+    font-size: 18px;
+    padding: 30px;
+    caret-color: auto;
+    outline: none;
+    position: relative;
+  }
+}
+
+
+.add-ons{
+  display: flex;
+  gap: 13px;
+  position: absolute;
+  bottom: 25px;
+  left: 50px;
+  width: 100%;
+  img{
+    cursor: pointer;
+  }
+}
+
+.vertical-divider {
+  width: 1px;
+  height: 22px;
+  margin: 0 5px;
+  background-color: #ADB0D9;
+}
+
+emoji-mart{
+  max-height: 30rem;
+  max-width: 25rem;
+    overflow: auto;
+    position: absolute;
+    bottom: 20px;
+}
+
+.send{
+  position: absolute;
+  right: 150px;
+  bottom: -5px;
+}
+
+.mentioned-users{
+  color: var(--primary);
+  font-weight: 800;
+  cursor: pointer;
+}

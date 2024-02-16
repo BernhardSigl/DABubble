@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, EventEmitter, Output } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDrawer } from '@angular/material/sidenav';
 
@@ -9,7 +9,8 @@ import { CommonModule } from '@angular/common';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { PrivateMessage } from '../classes/private-message.class';
-
+import { PrivateMessageService } from '../firebase-services/private-message.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-side-nav',
   standalone: true,
@@ -38,10 +39,12 @@ export class SideNavComponent implements OnInit {
   userEmail: string = '';
   userId: string = '';
   userImage: string = '';
-
+  @Output() selectedUser: EventEmitter<any> = new EventEmitter<any>();
   constructor(
     public dialog: MatDialog,
     public firebase: FirebaseService,
+    private privateMessageService: PrivateMessageService,
+    private router: Router
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -96,28 +99,36 @@ export class SideNavComponent implements OnInit {
     this.firebase.setSelectedChannelId(channelId);
   }
 
-  async addNewPrivateMessage(user: any) {
-    this.firebase.currentPrivateMessageId = '';
-    this.firebase.currentPrivateMessageMembers = [];
-    this.firebase.currentPrivateMessageMembers.push(user, this.firebase.loggedInUserArray[0]);
-    await this.firebase.checkCurrentPrivateMessageId();
+// In SideNavComponent
 
-    if (!this.firebase.privateMessageExists) {
+async addNewPrivateMessage(user: any) {
+  const currentUser = this.firebase.loggedInUserArray[0]; // Assuming this is the current logged-in user
+  const sortedIds = [user.userId, currentUser.userId].sort();
+  const uniqueChatId = sortedIds.join('_');
+
+  // Check if a conversation already exists
+  let existingPrivateMessage = await this.firebase.findPrivateMessageByUniqueChatId(uniqueChatId);
+
+  if (!existingPrivateMessage) {
+    // If no existing chat is found, create a new one
     const newPrivateMessage = new PrivateMessage({
-      members: this.firebase.currentPrivateMessageMembers,
+      members: [user, currentUser],
       messages: [],
-      privateMessageId: '',
+      privateMessageId: uniqueChatId // Use sorted and combined ID as the privateMessageId
     });
 
-    this.firebase.saveNewPrivateMessage(newPrivateMessage);
-    await this.firebase.ngOnInit();
-    this.firebase.privateMessageExists = false;
+    // Save the new private message with the uniqueChatId
+    await this.firebase.saveNewPrivateMessage(newPrivateMessage, uniqueChatId);
+    existingPrivateMessage = newPrivateMessage; // Set the new message as the existing one for selection
   }
 
-    console.log('currentPrivateMessageMembers :', this.firebase.currentPrivateMessageMembers);
-    console.log('currentPrivateMessageId :', this.firebase.currentPrivateMessageId);
-    console.log('currentPrivateMessageArray :', this.firebase.currentPrivateMessageArray);
-  }
+  // Update the selected private message state
+  this.privateMessageService.setSelectedPrivateMessage(existingPrivateMessage);
+  this.selectedUser.emit(user);
+  this.router.navigate(['/private-chat', user.userId]);
+}
+
+
 
 
 }
