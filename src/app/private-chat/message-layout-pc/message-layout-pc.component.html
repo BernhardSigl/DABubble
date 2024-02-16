@@ -9,7 +9,7 @@
   <div class="sent-date">
     <mat-divider class="one-divider"></mat-divider>
     <div class="btn-date">
-      <button>{{ message.time | date : "M/d/yy" }}</button>
+      <button>{{ message.time | date : "mediumDate" }}</button>
     </div>
     <mat-divider class="two-divider"></mat-divider>
   </div>
@@ -22,7 +22,7 @@
     >
       <div class="card-content">
         <div class="time-name">
-          <p>{{ message.time | date : "HH:mm" }}</p>
+          <p>{{ message.time | date : "shortTime" }}</p>
           <h3>{{ message.name }}</h3>
         </div>
         <img
@@ -67,14 +67,11 @@
           ></emoji-mart>
           <!--   -->
           <div class="hover-options" *ngIf="isHovered[message.messageId]">
-            <img src="../../../assets/img/check-mark.png" alt="" />
-            <img src="../../../assets/img/hands-up.png" alt="" />
             <img
               src="../../../assets/img/add-reaction.png"
               (click)="toggleEmojiPicker(message.messageId)"
               alt=""
             />
-            <img src="../../../assets/img/thread.png" alt="" (click)="openThread(message)" />
             <img
               *ngIf="message.senderId === userId"
               src="../../../assets/img/three-dots-vertical.png"
@@ -105,12 +102,14 @@
             Abbrechen
           </button>
           <button
-          *ngIf="selectedChannelId"
-          (click)="saveEditedMessage(selectedChannelId, message)"
+
+
             class="edit-save"
           >
             Speichern
           </button>
+
+          <!--           (click)="saveEditedMessage(message)" -->
         </div>
       </div>
       <img class="card-profile-img" [src]="message.image" alt="User Image" />

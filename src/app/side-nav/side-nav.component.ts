@@ -134,7 +134,12 @@ async addNewPrivateMessage(user: any) {
 
   // Update the selected private message state
   this.privateMessageService.setSelectedPrivateMessage(existingPrivateMessage);
+  this.privateMessageService.userSelected.emit({
+    user,
+    privateMessageId: existingPrivateMessage.privateMessageId,
+  });
   this.selectedUser.emit(user);
+  console.log(existingPrivateMessage.privateMessageId )
   this.router.navigate(['/private-chat', user.userId]);
 }
 

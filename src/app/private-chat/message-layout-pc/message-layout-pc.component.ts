@@ -8,6 +8,9 @@ import {
   onSnapshot,
   doc,
   setDoc,
+  getDocs,
+  where,
+  limit,
 } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '../../classes/message.class';
@@ -21,21 +24,26 @@ import { GetIdService } from '../../firebase-services/get-id.service';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DrawerService } from '../../firebase-services/drawer.service';
 import { FirebaseService } from '../../firebase-services/firebase.service';
+import { LocalStorage } from 'ngx-webstorage';
+import { PrivateMessageService } from '../../firebase-services/private-message.service';
 @Component({
   selector: 'app-message-layout-pc',
   standalone: true,
-  imports: [    MatDividerModule,
+  imports: [
+    MatDividerModule,
     CommonModule,
     PickerModule,
     FormsModule,
-    MatDrawer,],
+    MatDrawer,
+  ],
   templateUrl: './message-layout-pc.component.html',
-  styleUrl: './message-layout-pc.component.scss'
+  styleUrl: './message-layout-pc.component.scss',
 })
 export class MessageLayoutPcComponent {
-  @Input() userId?: string;
+  @Input() userId: string | null = null;
   @Input() userName!: string;
   @Input() userImage!: string;
+  @Input() privateMessageId!: string;
   @ViewChild('drawer') drawer!: MatDrawer;
 
   isHovered: { [key: string]: boolean } = {};
@@ -47,54 +55,47 @@ export class MessageLayoutPcComponent {
   public selectedMessage: Message | null = null;
   public channelDoc: any;
 
-  channelIds: string[] = [];
-  selectedChannelId?: string;
   private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
     Message[]
   >([]);
   messages$: Observable<Message[]> = this.messagesSubject.asObservable();
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
-  constructor(private firestore: Firestore, private drawerService:DrawerService, private id: GetIdService,private firebase: FirebaseService) {}
+  constructor(
+    private firestore: Firestore,
+    private firebase: FirebaseService,
+    private privateMessage:PrivateMessageService
+  ) {}
 
   ngOnInit() {
+    this.privateMessage.userSelected.subscribe(({ user, privateMessageId }) => {
+      console.log('Received user and message ID:', user, privateMessageId);
+      this.privateMessageId = privateMessageId;
 
-    this.firebase.selectedChannelId$.subscribe(channelId => {
-
-      if (channelId !== null) {
-        this.selectedChannelId = channelId; // This will now only assign non-null values
-
-        if (channelId) {
-          this.loadMessages(channelId);
-        }
-      } else {
-        // Handle the null case explicitly, e.g., reset selectedChannelId or take other appropriate action
-        this.selectedChannelId = undefined; // or set to a default/fallback value if suitable
-      }
+      this.loadMessages();
     });
-  }
-
-  openThread(message:Message): void {
-    this.drawerService.openDrawer(message);
-    this.drawerService.setSelectedMessage(message);
+    this.userId = localStorage.getItem('userId');
 
   }
 
+  loadMessages(): void {
+    if (!this.userId || !this.privateMessageId) {
+      console.error('User ID or Private Message ID is missing.');
+      return;
+    }
 
-  loadMessages(channelId: string): void {
+    const messagesCollectionPath = `privateMessages/${this.privateMessageId}/messages`;
 
-    const messagesCollection = collection(this.firestore, `channels/${channelId}/channelMessages`);
-    const q = query(messagesCollection, orderBy('time', 'desc'));
+    const q = query(
+      collection(this.firestore, messagesCollectionPath),
+      orderBy('time', 'asc') // Order messages by time
+    );
 
-    this.messages$ = new Observable<Message[]>((observer) => {
-      onSnapshot(q, (querySnapshot) => {
-        const messages: Message[] = [];
-        querySnapshot.forEach((doc) => {
-          const message = doc.data() as Message;
-          message.messageId = doc.id;
-          messages.push(message);
-        });
-        observer.next(messages.reverse());
-      }, error => observer.error(error));
+    onSnapshot(q, (snapshot) => {
+      const messages: Message[] = [];
+      snapshot.forEach((doc) => {
+        messages.push(doc.data() as Message);
+      });
+      this.messagesSubject.next(messages);
     });
   }
 
@@ -129,7 +130,7 @@ export class MessageLayoutPcComponent {
       message.reactions[emoji]++;
     }
 
-    this.updateMessageReactions(this.selectedChannelId!, message);
+    // this.updateMessageReactions(this.selectedChannelId!, message);
 
     this.closeEmojiPicker(message.messageId);
   }
@@ -159,25 +160,27 @@ export class MessageLayoutPcComponent {
       message.reactions[emoji] = 1; // Initialize count if emoji is reacted for the first time
     }
 
-    this.updateMessageReactions(this.selectedChannelId!, message);
+    // this.updateMessageReactions(this.selectedChannelId!, message);
+  }
 
-}
+  updateMessageReactions(channelId: string, message: Message) {
+    console.log(channelId);
+    // Construct the correct path using the provided channelId
+    const messageRef = doc(
+      this.firestore,
+      `channels/${channelId}/channelMessages`,
+      message.messageId
+    );
+    const reactionsData = message.reactions || {};
 
-
-updateMessageReactions(channelId: string, message: Message) {
-  console.log(channelId)
-  // Construct the correct path using the provided channelId
-  const messageRef = doc(this.firestore, `channels/${channelId}/channelMessages`, message.messageId);
-  const reactionsData = message.reactions || {};
-
-  setDoc(messageRef, { reactions: reactionsData }, { merge: true })
-    .then(() => {
-      console.log('Reactions successfully updated.');
-    })
-    .catch((error) => {
-      console.error('Error updating reactions:', error);
-    });
-}
+    setDoc(messageRef, { reactions: reactionsData }, { merge: true })
+      .then(() => {
+        console.log('Reactions successfully updated.');
+      })
+      .catch((error) => {
+        console.error('Error updating reactions:', error);
+      });
+  }
 
   toggleHoverOptions(messageId: string, value: boolean): void {
     this.isHovered[messageId] = value;
@@ -206,25 +209,25 @@ updateMessageReactions(channelId: string, message: Message) {
     this.isEditingEnabled[messageId] = false;
   }
 
-  saveEditedMessage(channelId:string, message: Message): void {
-    console.log(message.messageId)
-    const editedText = this.editedMessage[message.messageId];
+  // saveEditedMessage( message: Message): void {
+  //   console.log(message.messageId)
+  //   const editedText = this.editedMessage[message.messageId];
 
-    // Update the message in the Firebase Firestore
-    const messageRef = doc(this.firestore, `channels/${channelId}/channelMessages`, message.messageId);
-    setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
-      .then(() => {
-        console.log('Message successfully updated.');
-        // Disable edit mode after saving
-        this.toggleEditMessage(message.messageId);
-        this.isEditingEnabled[message.messageId] = false;
-      })
-      .catch((error) => {
-        console.error('Error updating message:', error);
-      });
-        this.isEditEnabled[message.messageId] = false;
-        this.isEditingEnabled[message.messageId] = false;
-  }
+  //   // Update the message in the Firebase Firestore
+  //   // const messageRef = doc(this.firestore, `channels/${channelId}/channelMessages`, message.messageId);
+  //   // setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
+  //     .then(() => {
+  //       console.log('Message successfully updated.');
+  //       // Disable edit mode after saving
+  //       this.toggleEditMessage(message.messageId);
+  //       this.isEditingEnabled[message.messageId] = false;
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error updating message:', error);
+  //     });
+  //       this.isEditEnabled[message.messageId] = false;
+  //       this.isEditingEnabled[message.messageId] = false;
+  // }
 
   cancelEdit(messageId: string): void {
     this.isEditEnabled[messageId] = false;

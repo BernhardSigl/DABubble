@@ -65,8 +65,8 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
     await this.checkChannelRights();
     this.showOnlyChannelsWithRights();
     await this.selectLastOpenedChannel();
-    await this.subAllPrivateMessages();   
-    this.scheduleAutomaticUpdate(); 
+    await this.subAllPrivateMessages();
+    this.scheduleAutomaticUpdate();
   }
 
   scheduleAutomaticUpdate(): void {
@@ -221,7 +221,7 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
 
   async updateChannel(updatedMembers: any) {
     console.log(updatedMembers);
-    
+
     await setDoc(this.currentOnClickedSingleChannelDocRef(), { members: updatedMembers }, { merge: true });
   }
 
@@ -252,8 +252,8 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
         this.channelsArray = [];
         const updatePromises: Promise<void>[] = [];
         querySnapshot.forEach(async (doc) => {
-          const channelsData = doc.data();    
-          await this.updateChannelMembers(channelsData);        
+          const channelsData = doc.data();
+          await this.updateChannelMembers(channelsData);
           updatePromises.push(this.updateChannelInFirebase(channelsData['channelId'], channelsData['members']));
           this.channelsArray.push(channelsData);
         });
@@ -280,7 +280,7 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
       if (updatedMember) {
         member.name = updatedMember.name;
         member.email = updatedMember.email;
-      }     
+      }
       updatedMembers.push(member);
     }
     channelsData.members = updatedMembers;
@@ -308,17 +308,17 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
 
     const createdByUserId = this.currentChannelData[0].createdBy;
     const creator = this.usersArray.find(user => user.userId === createdByUserId);
-    
+
     this.currentChannelName = this.currentChannelData[0].channelName,
     this.channelMembers = this.currentChannelData[0].members;
-    
+
     // noch ändern !!!
     if (creator) {
       this.channelCreatedBy = creator.name;
     } else { // delete
       this.channelCreatedBy = this.currentChannelData[0].createdBy; // delete
     }
-    
+
     this.channelDescription = this.currentChannelData[0].description;
     this.currentChannelId = this.currentChannelData[0].channelId;
     this.channelProfileImages = this.currentChannelData[0].members.map((member: any) => member.profileImg);

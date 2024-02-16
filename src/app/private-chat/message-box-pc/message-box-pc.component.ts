@@ -8,6 +8,8 @@ import {
   Firestore,
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
   getFirestore,
   onSnapshot,
@@ -67,10 +69,32 @@ export class MessageBoxPcComponent {
   private privateMessagesArray: PrivateMessage[] = [];
   loggedInUserId: string | undefined;
 
-  ngOnInit() {
+  async ngOnInit() {
     this.userId = localStorage.getItem('userId');
+    console.log(this.userId)
+    if (this.userId) {
+      await this.fetchUserDetails(this.userId);
+    }
     this.subscribeToSelectedPrivateMessage();
   }
+
+  private async fetchUserDetails(userId: string): Promise<void> {
+    console.log(userId)
+    const userDocRef = doc(this.firestore, `users/${userId}`);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+      console.log(userData)
+      this.userName = userData['name'];
+      this.userImage = userData['profileImg'];
+    } else {
+      console.log("No such document!");
+    }
+
+    console.log(this.userImage,this.userName)
+  }
+
 
   private subscribeToSelectedPrivateMessage(): void {
     this.privateMessageService.selectedPrivateMessage$.subscribe(
@@ -104,7 +128,11 @@ export class MessageBoxPcComponent {
         newMessage.senderId = this.userId;
         newMessage.message = [messageContent];
         newMessage.time = Date.now();
-        newMessage.messageId = this.currentPrivateMessageId
+        newMessage.messageId = this.currentPrivateMessageId;
+        newMessage.name = this.userName;
+        newMessage.image = this.userImage;
+
+        console.log(newMessage)
 
         const messagesCollectionPath = `privateMessages/${this.currentPrivateMessageId}/messages`;
 
