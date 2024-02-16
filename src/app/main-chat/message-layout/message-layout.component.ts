@@ -22,6 +22,8 @@ import { GetIdService } from '../../firebase-services/get-id.service';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DrawerService } from '../../firebase-services/drawer.service';
 import { FirebaseService } from '../../firebase-services/firebase.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/view-specific-profile.component';
 @Component({
   selector: 'app-message-layout',
   standalone: true,
@@ -58,7 +60,13 @@ export class MessageLayoutComponent implements OnInit {
   >([]);
   messages$: Observable<Message[]> = this.messagesSubject.asObservable();
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
-  constructor(private firestore: Firestore, private drawerService:DrawerService, private id: GetIdService,private firebase: FirebaseService) {}
+  constructor(
+    private firestore: Firestore,
+    private drawerService:DrawerService,
+    private id: GetIdService,
+    private firebase: FirebaseService,
+    public dialog: MatDialog,
+    ) {}
 
   ngOnInit() {
 
@@ -245,4 +253,16 @@ updateMessageReactions(channelId: string, message: Message) {
       })
     );
   }
+
+  showProfile(name: string) {
+    const filteredUsers = this.firebase.usersArray.filter(user => user.name === name);
+  
+    this.dialog.open(ViewSpecificProfileComponent, {
+      data: {
+        user: filteredUsers[0],
+      },
+        panelClass: 'border',
+      });
+
+    }
 }

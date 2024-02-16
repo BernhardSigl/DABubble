@@ -62,7 +62,7 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
     await this.checkChannelRights();
     this.showOnlyChannelsWithRights();
     await this.selectLastOpenedChannel();
-    await this.subAllPrivateMessages();
+    await this.subAllPrivateMessages();    
   }
 
   async subAllMessages(): Promise<void> {
@@ -183,6 +183,8 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   }
 
   async updateChannel(updatedMembers: any) {
+    console.log(updatedMembers);
+    
     await setDoc(this.currentOnClickedSingleChannelDocRef(), { members: updatedMembers }, { merge: true });
   }
 
@@ -211,13 +213,40 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
       const q = query(this.getChannelColRef());
       onSnapshot(q, async (querySnapshot) => {
         this.channelsArray = [];
+        const updatePromises: Promise<void>[] = [];
         querySnapshot.forEach(async (doc) => {
-          const channelsData = doc.data();
+          const channelsData = doc.data();    
+          await this.updateChannelMembers(channelsData);        
+          updatePromises.push(this.updateChannelInFirebase(channelsData['channelId'], channelsData['members']));
           this.channelsArray.push(channelsData);
         });
+        await Promise.all(updatePromises);
         resolve();
       });
     });
+  }
+
+  async updateChannelInFirebase(channelId: string, updatedMembers: any[]): Promise<void> {
+    const channelDocRef = doc(this.getChannelColRef(), channelId);
+    try {
+      await updateDoc(channelDocRef, { members: updatedMembers });
+      // console.log("Channel updated successfully in Firebase");
+    } catch (error) {
+      // console.error("Error updating channel in Firebase: ", error);
+    }
+  }
+
+  async updateChannelMembers(channelsData: any): Promise<void> {
+    const updatedMembers = [];
+    for (let member of channelsData.members) {
+      const updatedMember = this.usersArray.find(user => user.userId === member.userId);
+      if (updatedMember) {
+        member.name = updatedMember.name;
+        member.email = updatedMember.email;
+      }     
+      updatedMembers.push(member);
+    }
+    channelsData.members = updatedMembers;
   }
 
   setSelectedChannelId(channelId: string) {
@@ -230,6 +259,7 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
       const channelToSelect = this.channelsArray.find(channel => channel.channelId === currentChannelId);
       if (channelToSelect) {
         await this.activeChannelId(channelToSelect.channelId);
+        this.setSelectedChannelId(channelToSelect.channelId);
       }
     }
   }
@@ -238,9 +268,20 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
     this.currentChannelId = activeChannelId;
     await setDoc(this.getSingleUserDocRef(), { activeChannelId: this.currentChannelId }, { merge: true });
     await this.activeChannelData();
+
+    const createdByUserId = this.currentChannelData[0].createdBy;
+    const creator = this.usersArray.find(user => user.userId === createdByUserId);
+    
     this.currentChannelName = this.currentChannelData[0].channelName,
     this.channelMembers = this.currentChannelData[0].members;
-    this.channelCreatedBy = this.currentChannelData[0].createdBy;
+    
+    // noch ändern !!!
+    if (creator) {
+      this.channelCreatedBy = creator.name;
+    } else { // delete
+      this.channelCreatedBy = this.currentChannelData[0].createdBy; // delete
+    }
+    
     this.channelDescription = this.currentChannelData[0].description;
     this.currentChannelId = this.currentChannelData[0].channelId;
     this.channelProfileImages = this.currentChannelData[0].members.map((member: any) => member.profileImg);

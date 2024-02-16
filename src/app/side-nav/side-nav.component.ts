@@ -32,6 +32,7 @@ import { Router } from '@angular/router';
   ]
 })
 export class SideNavComponent implements OnInit {
+  @ViewChild(MatDrawer) drawer!: MatDrawer;
 
   isOpen = false;
   isOpenSecond = false;
@@ -39,7 +40,13 @@ export class SideNavComponent implements OnInit {
   userEmail: string = '';
   userId: string = '';
   userImage: string = '';
+
   @Output() selectedUser: EventEmitter<any> = new EventEmitter<any>();
+
+
+  sideNavBtnStatus: boolean = false;
+
+
   constructor(
     public dialog: MatDialog,
     public firebase: FirebaseService,
@@ -49,6 +56,8 @@ export class SideNavComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
+    this.drawer.open();
+    this.checkSideNavBtnStatus();
   }
 
   openAddChannels() {
@@ -102,7 +111,7 @@ export class SideNavComponent implements OnInit {
 // In SideNavComponent
 
 async addNewPrivateMessage(user: any) {
-  const currentUser = this.firebase.loggedInUserArray[0]; // Assuming this is the current logged-in user
+  const currentUser = this.firebase.loggedInUserArray[0];
   const sortedIds = [user.userId, currentUser.userId].sort();
   const uniqueChatId = sortedIds.join('_');
 
@@ -122,12 +131,16 @@ async addNewPrivateMessage(user: any) {
     existingPrivateMessage = newPrivateMessage; // Set the new message as the existing one for selection
   }
 
-  // Update the selected private message state
-  this.privateMessageService.setSelectedPrivateMessage(existingPrivateMessage);
-  this.selectedUser.emit(user);
-  this.router.navigate(['/private-chat', user.userId]);
 }
 
+  checkSideNavBtnStatus() {
+    if (this.sideNavBtnStatus) {
+      this.sideNavBtnStatus = false;
+    } else if (!this.sideNavBtnStatus) {
+      this.sideNavBtnStatus = true;
+    }
+    console.log(this.sideNavBtnStatus);
+  }
 
 
 

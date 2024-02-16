@@ -1,0 +1,28 @@
+@mixin hoverSymbol($path, $hPath, $size, $bColor) {
+    background-image: url($path);
+    background-size: $size;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-radius: 100%;
+    width: calc(1% + $size);
+    aspect-ratio: 1/1;
+    cursor: pointer;
+  
+    &:hover {
+      background-color: $bColor;
+      background-image: url($hPath);
+    }
+  }
+
+  @mixin onlyHoverSymbol($hPath, $size, $bColor) {
+    background-image: url($hPath);
+    background-color: $bColor;
+    background-size: $size;
+    background-repeat: no-repeat;
+    background-position: center center;
+    border-radius: 100%;
+    width: calc(1% + $size);
+    aspect-ratio: 1/1;
+    cursor: pointer;
+  }
+  
