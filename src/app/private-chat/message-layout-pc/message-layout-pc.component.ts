@@ -54,7 +54,7 @@ export class MessageLayoutPcComponent {
   public editedMessage: { [key: string]: string } = {};
   public selectedMessage: Message | null = null;
   public channelDoc: any;
-
+  public messageId:string='';
   private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
     Message[]
   >([]);
@@ -93,6 +93,9 @@ export class MessageLayoutPcComponent {
     onSnapshot(q, (snapshot) => {
       const messages: Message[] = [];
       snapshot.forEach((doc) => {
+        const message = { ...doc.data(), messageId: doc.id } as Message;
+        this.messageId = message.messageId
+;
         messages.push(doc.data() as Message);
       });
       this.messagesSubject.next(messages);
@@ -130,7 +133,7 @@ export class MessageLayoutPcComponent {
       message.reactions[emoji]++;
     }
 
-    // this.updateMessageReactions(this.selectedChannelId!, message);
+    this.updateMessageReactions( message);
 
     this.closeEmojiPicker(message.messageId);
   }
@@ -163,14 +166,18 @@ export class MessageLayoutPcComponent {
     // this.updateMessageReactions(this.selectedChannelId!, message);
   }
 
-  updateMessageReactions(channelId: string, message: Message) {
-    console.log(channelId);
-    // Construct the correct path using the provided channelId
+  updateMessageReactions(message: Message) {
+    if (!this.privateMessageId || !message.messageId) {
+      console.error('Missing PrivateMessageId or MessageId.');
+      return;
+    }
+
+    // Construct the correct path using the privateMessageId and messageId
     const messageRef = doc(
       this.firestore,
-      `channels/${channelId}/channelMessages`,
-      message.messageId
+      `privateMessages/${this.privateMessageId}/messages/${this.messageId}`
     );
+
     const reactionsData = message.reactions || {};
 
     setDoc(messageRef, { reactions: reactionsData }, { merge: true })
@@ -181,6 +188,7 @@ export class MessageLayoutPcComponent {
         console.error('Error updating reactions:', error);
       });
   }
+
 
   toggleHoverOptions(messageId: string, value: boolean): void {
     this.isHovered[messageId] = value;
@@ -208,26 +216,30 @@ export class MessageLayoutPcComponent {
     });
     this.isEditingEnabled[messageId] = false;
   }
+  saveEditedMessage(messageId: string): void {
+    const editedText = this.editedMessage[messageId];
+    if (!this.privateMessageId || !messageId) {
+      console.error('Missing required IDs for updating message.');
+      return;
+    }
 
-  // saveEditedMessage( message: Message): void {
-  //   console.log(message.messageId)
-  //   const editedText = this.editedMessage[message.messageId];
+    const messageRef = doc(this.firestore, `privateMessages/${this.privateMessageId}/messages`, messageId);
 
-  //   // Update the message in the Firebase Firestore
-  //   // const messageRef = doc(this.firestore, `channels/${channelId}/channelMessages`, message.messageId);
-  //   // setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
-  //     .then(() => {
-  //       console.log('Message successfully updated.');
-  //       // Disable edit mode after saving
-  //       this.toggleEditMessage(message.messageId);
-  //       this.isEditingEnabled[message.messageId] = false;
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error updating message:', error);
-  //     });
-  //       this.isEditEnabled[message.messageId] = false;
-  //       this.isEditingEnabled[message.messageId] = false;
-  // }
+    // Assuming your message structure allows a 'message' field to be an array or a string.
+    // Adjust as necessary based on your actual data model.
+    setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
+      .then(() => {
+        console.log('Message successfully updated.');
+        this.isEditEnabled[messageId] = false;
+        this.isEditingEnabled[messageId] = false;
+        // Reset or clear editedMessage for messageId to avoid residual data
+        this.editedMessage[messageId] = '';
+      })
+      .catch((error) => {
+        console.error('Error updating message:', error);
+      });
+  }
+
 
   cancelEdit(messageId: string): void {
     this.isEditEnabled[messageId] = false;
