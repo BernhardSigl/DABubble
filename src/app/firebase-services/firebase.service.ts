@@ -7,6 +7,9 @@ import { Channel } from '../classes/channel.class';
 import { BehaviorSubject } from 'rxjs';
 import { PrivateMessage } from '../classes/private-message.class';
 
+import { interval } from 'rxjs';
+import { startWith, switchMap } from 'rxjs/operators';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -62,7 +65,41 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
     await this.checkChannelRights();
     this.showOnlyChannelsWithRights();
     await this.selectLastOpenedChannel();
-    await this.subAllPrivateMessages();    
+    await this.subAllPrivateMessages();   
+    this.scheduleAutomaticUpdate(); 
+  }
+
+  scheduleAutomaticUpdate(): void {
+    interval(24 * 60 * 60 * 1000)
+      .pipe(
+        startWith(0),
+        switchMap(() => this.updateUsersStatus())
+      )
+      .subscribe(() => {
+        console.log('Automatische Aktualisierung abgeschlossen');
+      });
+  }
+
+  async updateUsersStatus(): Promise<void> {
+    const now = new Date();
+    const targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 3, 0);
+    let delay = targetTime.getTime() - now.getTime();
+    if (delay < 0) {
+      delay += 24 * 60 * 60 * 1000;
+    }
+    await new Promise(resolve => setTimeout(resolve, delay));
+
+    const usersSnapshot = await getDocs(collection(this.firestore, 'users'));
+    const updatePromises: Promise<void>[] = [];
+    usersSnapshot.forEach((userDoc) => {
+      const userRef = doc(this.firestore, 'users', userDoc.id);
+      const updatePromise = setDoc(userRef, {
+        statusChangeable: true,
+        status: false
+      }, { merge: true });
+      updatePromises.push(updatePromise);
+    });
+    await Promise.all(updatePromises);
   }
 
   async subAllMessages(): Promise<void> {
