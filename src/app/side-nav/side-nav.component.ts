@@ -111,7 +111,7 @@ export class SideNavComponent implements OnInit {
 // In SideNavComponent
 
 async addNewPrivateMessage(user: any) {
-  const currentUser = this.firebase.loggedInUserArray[0];
+  const currentUser = this.firebase.loggedInUserArray[0]; // Assuming this is the current logged-in user
   const sortedIds = [user.userId, currentUser.userId].sort();
   const uniqueChatId = sortedIds.join('_');
 
@@ -131,7 +131,14 @@ async addNewPrivateMessage(user: any) {
     existingPrivateMessage = newPrivateMessage; // Set the new message as the existing one for selection
   }
 
+
+  // Update the selected private message state
+  this.privateMessageService.setSelectedPrivateMessage(existingPrivateMessage);
+  this.selectedUser.emit(user);
+  this.router.navigate(['/private-chat', user.userId]);
 }
+
+
 
   checkSideNavBtnStatus() {
     if (this.sideNavBtnStatus) {
