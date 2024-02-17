@@ -14,6 +14,7 @@ import {
   getFirestore,
   onSnapshot,
   query,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { Message } from '../../classes/message.class';
 import { UserListService } from '../../firebase-services/user-list.service';
@@ -54,10 +55,8 @@ export class MessageBoxPcComponent {
     private userDataService: UserListService,
     private id: GetIdService,
     private privateMessageService: PrivateMessageService,
-    private firebase: FirebaseService,
-
-  ) {
-  }
+    private firebase: FirebaseService
+  ) {}
   userId: string | null = null;
   userName: string = '';
   userImage: string = '';
@@ -71,7 +70,7 @@ export class MessageBoxPcComponent {
 
   async ngOnInit() {
     this.userId = localStorage.getItem('userId');
-    console.log(this.userId)
+
     if (this.userId) {
       await this.fetchUserDetails(this.userId);
     }
@@ -79,22 +78,17 @@ export class MessageBoxPcComponent {
   }
 
   private async fetchUserDetails(userId: string): Promise<void> {
-    console.log(userId)
     const userDocRef = doc(this.firestore, `users/${userId}`);
     const userDocSnap = await getDoc(userDocRef);
 
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
-      console.log(userData)
       this.userName = userData['name'];
       this.userImage = userData['profileImg'];
     } else {
-      console.log("No such document!");
+      console.log('No such document!');
     }
-
-    console.log(this.userImage,this.userName)
   }
-
 
   private subscribeToSelectedPrivateMessage(): void {
     this.privateMessageService.selectedPrivateMessage$.subscribe(
@@ -117,33 +111,42 @@ export class MessageBoxPcComponent {
 
   async sendMessage(): Promise<void> {
     if (!this.currentPrivateMessageId || !this.userId) {
-      console.error('No private message selected or user ID not found.');
-      return;
+        console.error('No private message selected or user ID not found.');
+        return;
     }
 
     try {
-      const messageContent = this.textArea.trim();
-      if (messageContent) {
-        const newMessage = new Message();
-        newMessage.senderId = this.userId;
-        newMessage.message = [messageContent];
-        newMessage.time = Date.now();
-        newMessage.messageId = this.currentPrivateMessageId;
-        newMessage.name = this.userName;
-        newMessage.image = this.userImage;
+        const messageContent = this.textArea.trim();
+        if (messageContent) {
+            const newMessage = new Message();
+            newMessage.senderId = this.userId;
+            newMessage.message = [messageContent];
+            newMessage.time = Date.now();
+            newMessage.name = this.userName;
+            newMessage.image = this.userImage;
 
-        console.log(newMessage)
+            const messagesCollectionPath = `privateMessages/${this.currentPrivateMessageId}/messages`;
 
-        const messagesCollectionPath = `privateMessages/${this.currentPrivateMessageId}/messages`;
+            const docRef = await addDoc(
+                collection(this.firestore, messagesCollectionPath),
+                newMessage.toJson()
+            );
 
-        await addDoc(collection(this.firestore, messagesCollectionPath), newMessage.toJson());
+            // Retrieve the ID of the newly created document
+            const newMessageId = docRef.id;
+            newMessage.messageId = newMessageId;
 
-        this.clearInputFields();
-      }
+            // Update the message with the actual ID
+            await updateDoc(doc(this.firestore, `${messagesCollectionPath}/${newMessageId}`), {
+                messageId: newMessageId
+            });
+
+            this.clearInputFields();
+        }
     } catch (error) {
-      console.error('Error sending message:', error);
+        console.error('Error sending message:', error);
     }
-  }
+}
 
 
   private clearInputFields(): void {

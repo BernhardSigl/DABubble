@@ -106,6 +106,7 @@ export class SideNavComponent implements OnInit {
 
   selectChannel(channelId: string) {
     this.firebase.setSelectedChannelId(channelId);
+    this.router.navigate(['/main',channelId]);
   }
 
 // In SideNavComponent
@@ -139,7 +140,6 @@ async addNewPrivateMessage(user: any) {
     privateMessageId: existingPrivateMessage.privateMessageId,
   });
   this.selectedUser.emit(user);
-  console.log(existingPrivateMessage.privateMessageId )
   this.router.navigate(['/private-chat', user.userId]);
 }
 

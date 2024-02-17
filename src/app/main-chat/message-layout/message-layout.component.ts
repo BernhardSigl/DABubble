@@ -33,7 +33,6 @@ import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/
     PickerModule,
     FormsModule,
     MatDrawer,
-
   ],
   templateUrl: './message-layout.component.html',
   styleUrls: ['./message-layout.component.scss'],
@@ -62,16 +61,14 @@ export class MessageLayoutComponent implements OnInit {
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
   constructor(
     private firestore: Firestore,
-    private drawerService:DrawerService,
+    private drawerService: DrawerService,
     private id: GetIdService,
     private firebase: FirebaseService,
-    public dialog: MatDialog,
-    ) {}
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit() {
-
-    this.firebase.selectedChannelId$.subscribe(channelId => {
-
+    this.firebase.selectedChannelId$.subscribe((channelId) => {
       if (channelId !== null) {
         this.selectedChannelId = channelId; // This will now only assign non-null values
 
@@ -85,28 +82,32 @@ export class MessageLayoutComponent implements OnInit {
     });
   }
 
-  openThread(message:Message): void {
+  openThread(message: Message): void {
     this.drawerService.openDrawer(message);
     this.drawerService.setSelectedMessage(message);
-
   }
 
-
   loadMessages(channelId: string): void {
-
-    const messagesCollection = collection(this.firestore, `channels/${channelId}/channelMessages`);
+    const messagesCollection = collection(
+      this.firestore,
+      `channels/${channelId}/channelMessages`
+    );
     const q = query(messagesCollection, orderBy('time', 'desc'));
 
     this.messages$ = new Observable<Message[]>((observer) => {
-      onSnapshot(q, (querySnapshot) => {
-        const messages: Message[] = [];
-        querySnapshot.forEach((doc) => {
-          const message = doc.data() as Message;
-          message.messageId = doc.id;
-          messages.push(message);
-        });
-        observer.next(messages.reverse());
-      }, error => observer.error(error));
+      onSnapshot(
+        q,
+        (querySnapshot) => {
+          const messages: Message[] = [];
+          querySnapshot.forEach((doc) => {
+            const message = doc.data() as Message;
+            message.messageId = doc.id;
+            messages.push(message);
+          });
+          observer.next(messages.reverse());
+        },
+        (error) => observer.error(error)
+      );
     });
   }
 
@@ -172,24 +173,26 @@ export class MessageLayoutComponent implements OnInit {
     }
 
     this.updateMessageReactions(this.selectedChannelId!, message);
+  }
 
-}
+  updateMessageReactions(channelId: string, message: Message) {
+    console.log(channelId);
+    // Construct the correct path using the provided channelId
+    const messageRef = doc(
+      this.firestore,
+      `channels/${channelId}/channelMessages`,
+      message.messageId
+    );
+    const reactionsData = message.reactions || {};
 
-
-updateMessageReactions(channelId: string, message: Message) {
-  console.log(channelId)
-  // Construct the correct path using the provided channelId
-  const messageRef = doc(this.firestore, `channels/${channelId}/channelMessages`, message.messageId);
-  const reactionsData = message.reactions || {};
-
-  setDoc(messageRef, { reactions: reactionsData }, { merge: true })
-    .then(() => {
-      console.log('Reactions successfully updated.');
-    })
-    .catch((error) => {
-      console.error('Error updating reactions:', error);
-    });
-}
+    setDoc(messageRef, { reactions: reactionsData }, { merge: true })
+      .then(() => {
+        console.log('Reactions successfully updated.');
+      })
+      .catch((error) => {
+        console.error('Error updating reactions:', error);
+      });
+  }
 
   toggleHoverOptions(messageId: string, value: boolean): void {
     this.isHovered[messageId] = value;
@@ -218,12 +221,16 @@ updateMessageReactions(channelId: string, message: Message) {
     this.isEditingEnabled[messageId] = false;
   }
 
-  saveEditedMessage(channelId:string, message: Message): void {
-    console.log(message.messageId)
+  saveEditedMessage(channelId: string, message: Message): void {
+    console.log(message.messageId);
     const editedText = this.editedMessage[message.messageId];
 
     // Update the message in the Firebase Firestore
-    const messageRef = doc(this.firestore, `channels/${channelId}/channelMessages`, message.messageId);
+    const messageRef = doc(
+      this.firestore,
+      `channels/${channelId}/channelMessages`,
+      message.messageId
+    );
     setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
       .then(() => {
         console.log('Message successfully updated.');
@@ -234,8 +241,8 @@ updateMessageReactions(channelId: string, message: Message) {
       .catch((error) => {
         console.error('Error updating message:', error);
       });
-        this.isEditEnabled[message.messageId] = false;
-        this.isEditingEnabled[message.messageId] = false;
+    this.isEditEnabled[message.messageId] = false;
+    this.isEditingEnabled[message.messageId] = false;
   }
 
   cancelEdit(messageId: string): void {
@@ -255,14 +262,15 @@ updateMessageReactions(channelId: string, message: Message) {
   }
 
   showProfile(name: string) {
-    const filteredUsers = this.firebase.usersArray.filter(user => user.name === name);
-  
+    const filteredUsers = this.firebase.usersArray.filter(
+      (user) => user.name === name
+    );
+
     this.dialog.open(ViewSpecificProfileComponent, {
       data: {
         user: filteredUsers[0],
       },
-        panelClass: 'border',
-      });
-
-    }
+      panelClass: 'border',
+    });
+  }
 }

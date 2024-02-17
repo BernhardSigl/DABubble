@@ -54,7 +54,7 @@ export class MessageLayoutPcComponent {
   public editedMessage: { [key: string]: string } = {};
   public selectedMessage: Message | null = null;
   public channelDoc: any;
-  public messageId:string='';
+  public messageId: string = '';
   private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
     Message[]
   >([]);
@@ -63,18 +63,16 @@ export class MessageLayoutPcComponent {
   constructor(
     private firestore: Firestore,
     private firebase: FirebaseService,
-    private privateMessage:PrivateMessageService
+    private privateMessage: PrivateMessageService
   ) {}
 
   ngOnInit() {
     this.privateMessage.userSelected.subscribe(({ user, privateMessageId }) => {
-      console.log('Received user and message ID:', user, privateMessageId);
       this.privateMessageId = privateMessageId;
 
       this.loadMessages();
     });
     this.userId = localStorage.getItem('userId');
-
   }
 
   loadMessages(): void {
@@ -94,8 +92,7 @@ export class MessageLayoutPcComponent {
       const messages: Message[] = [];
       snapshot.forEach((doc) => {
         const message = { ...doc.data(), messageId: doc.id } as Message;
-        this.messageId = message.messageId
-;
+        this.messageId = message.messageId;
         messages.push(doc.data() as Message);
       });
       this.messagesSubject.next(messages);
@@ -133,7 +130,7 @@ export class MessageLayoutPcComponent {
       message.reactions[emoji]++;
     }
 
-    this.updateMessageReactions( message);
+    this.updateMessageReactions(message);
 
     this.closeEmojiPicker(message.messageId);
   }
@@ -163,7 +160,7 @@ export class MessageLayoutPcComponent {
       message.reactions[emoji] = 1; // Initialize count if emoji is reacted for the first time
     }
 
-    // this.updateMessageReactions(this.selectedChannelId!, message);
+    this.updateMessageReactions(message);
   }
 
   updateMessageReactions(message: Message) {
@@ -188,7 +185,6 @@ export class MessageLayoutPcComponent {
         console.error('Error updating reactions:', error);
       });
   }
-
 
   toggleHoverOptions(messageId: string, value: boolean): void {
     this.isHovered[messageId] = value;
@@ -223,23 +219,22 @@ export class MessageLayoutPcComponent {
       return;
     }
 
-    const messageRef = doc(this.firestore, `privateMessages/${this.privateMessageId}/messages`, messageId);
+    const messageRef = doc(
+      this.firestore,
+      `privateMessages/${this.privateMessageId}/messages/${this.messageId}`
+    );
 
-    // Assuming your message structure allows a 'message' field to be an array or a string.
-    // Adjust as necessary based on your actual data model.
     setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
       .then(() => {
         console.log('Message successfully updated.');
         this.isEditEnabled[messageId] = false;
         this.isEditingEnabled[messageId] = false;
-        // Reset or clear editedMessage for messageId to avoid residual data
         this.editedMessage[messageId] = '';
       })
       .catch((error) => {
         console.error('Error updating message:', error);
       });
   }
-
 
   cancelEdit(messageId: string): void {
     this.isEditEnabled[messageId] = false;

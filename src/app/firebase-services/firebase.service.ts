@@ -416,15 +416,12 @@ findPrivateMessageByMembers(members: any[]): PrivateMessage | null {
 }
 
 async findPrivateMessageByUniqueChatId(uniqueChatId: string): Promise<PrivateMessage | null> {
-  console.log("Suche nach: ", uniqueChatId);
   const privateMessagesRef = this.getPrivateMessagesColRef();
   const q = query(privateMessagesRef, where("privateMessageId", "==", uniqueChatId));
   const querySnapshot = await getDocs(q);
 
-  console.log("Gefundene Dokumente: ", querySnapshot.size);
   if (!querySnapshot.empty) {
     const docData = querySnapshot.docs[0].data();
-    console.log("Gefundene Nachricht: ", docData);
     return new PrivateMessage({
       privateMessageId: docData['privateMessageId'],
       members: docData['members'],

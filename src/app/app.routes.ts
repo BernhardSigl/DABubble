@@ -32,6 +32,11 @@ export const routes: Routes = [
     component: MainChatComponent,
     canActivate: [redirectLoggedIn],
   },
+  {
+    path: 'main/:channelId',
+    component: MainChatComponent,
+    canActivate: [redirectLoggedIn],
+  },
   { path: 'chooseAvatar',
     component: ChooseAvaterComponent,
     canActivate: [redirectLoggedIn],
