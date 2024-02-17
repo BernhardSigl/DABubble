@@ -219,9 +219,11 @@ export class MessageLayoutPcComponent {
       return;
     }
 
+    console.log(this.messageId)
+
     const messageRef = doc(
       this.firestore,
-      `privateMessages/${this.privateMessageId}/messages/${this.messageId}`
+      `privateMessages/${this.privateMessageId}/messages/${messageId}`
     );
 
     setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
