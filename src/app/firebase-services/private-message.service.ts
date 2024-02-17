@@ -6,14 +6,12 @@ import { PrivateMessage } from '../classes/private-message.class';
   providedIn: 'root',
 })
 export class PrivateMessageService {
-  private selectedPrivateMessageSubject =
-    new BehaviorSubject<PrivateMessage | null>(null);
-
+  private selectedPrivateMessageSubject = new BehaviorSubject<PrivateMessage | null>(null);
   selectedPrivateMessage$ = this.selectedPrivateMessageSubject.asObservable();
-  public userSelected: EventEmitter<{ user: any; privateMessageId: string }> =
-    new EventEmitter();
+  public userSelected: EventEmitter<{ user: any; privateMessageId: string }> = new EventEmitter();
+
   constructor() {}
-  private messages: PrivateMessage[] = [];
+
   setSelectedPrivateMessage(privateMessage: PrivateMessage): void {
     this.selectedPrivateMessageSubject.next(privateMessage);
   }
