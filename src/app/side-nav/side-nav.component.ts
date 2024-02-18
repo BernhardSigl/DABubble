@@ -149,6 +149,7 @@ export class SideNavComponent implements OnInit {
         existingPrivateMessage = newPrivateMessage;
       }
 
+      console.log('User data for private message:', user.name, user.profileImg); // Log user data
       this.privateMessageService.setSelectedPrivateMessage(existingPrivateMessage);
       this.privateMessageService.userSelected.emit({
         user,
@@ -160,6 +161,7 @@ export class SideNavComponent implements OnInit {
       console.error('Error adding new private message:', error);
     }
   }
+
 
 
   checkSideNavBtnStatus() {

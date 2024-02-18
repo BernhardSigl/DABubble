@@ -4,6 +4,7 @@ import { SideNavComponent } from '../side-nav/side-nav.component';
 import { MessageBoxPcComponent } from './message-box-pc/message-box-pc.component';
 import { MessageLayoutPcComponent } from './message-layout-pc/message-layout-pc.component';
 import { PrivateMessageService } from '../firebase-services/private-message.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-private-chat',
@@ -20,11 +21,14 @@ import { PrivateMessageService } from '../firebase-services/private-message.serv
 export class PrivateChatComponent implements OnInit {
   selectedUserName: string = '';
   selectedUserImage: string = '';
-  constructor(private privateMessageService: PrivateMessageService) {}
+  userId:string='';
+  constructor(private privateMessageService: PrivateMessageService,    private route: ActivatedRoute,) {}
 
   ngOnInit(): void {
+    this.route.params.subscribe(params => {
+      this.userId = params['userId'];
+    });
     this.privateMessageService.userSelected.subscribe(({ user }) => {
-      console.log(user)
       this.selectedUserName = user.name;
       this.selectedUserImage = user.profileImg;
     });

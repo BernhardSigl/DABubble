@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
@@ -10,11 +10,6 @@ import {
   collection,
   doc,
   getDoc,
-  getDocs,
-  getFirestore,
-  onSnapshot,
-  query,
-  updateDoc,
 } from '@angular/fire/firestore';
 import { Message } from '../../classes/message.class';
 import { UserListService } from '../../firebase-services/user-list.service';
@@ -25,11 +20,8 @@ import {
   uploadString,
 } from 'firebase/storage';
 import { Observable } from 'rxjs';
-import { GetIdService } from '../../firebase-services/get-id.service';
-import { FirebaseService } from '../../firebase-services/firebase.service';
 import { PrivateMessage } from '../../classes/private-message.class';
 import { PrivateMessageService } from '../../firebase-services/private-message.service';
-import { LocalStorage } from 'ngx-webstorage';
 
 @Component({
   selector: 'app-message-box-pc',
@@ -42,7 +34,7 @@ import { LocalStorage } from 'ngx-webstorage';
     FormsModule,
   ],
   templateUrl: './message-box-pc.component.html',
-  styleUrl: './message-box-pc.component.scss',
+  styleUrls: ['./message-box-pc.component.scss'],
 })
 export class MessageBoxPcComponent {
   public textArea: string = '';
@@ -53,20 +45,15 @@ export class MessageBoxPcComponent {
     private elementRef: ElementRef,
     private firestore: Firestore,
     private userDataService: UserListService,
-    private id: GetIdService,
-    private privateMessageService: PrivateMessageService,
-    private firebase: FirebaseService
+    private privateMessageService: PrivateMessageService
   ) {}
+
   userId: string | null = null;
   userName: string = '';
   userImage: string = '';
   selectedFile?: File;
-  sendButtonDisabled: boolean = true;
   messages$!: Observable<Message[]>;
-  private currentChannelId: string | null = null;
   private currentPrivateMessageId: string | null = null;
-  private privateMessagesArray: PrivateMessage[] = [];
-  loggedInUserId: string | undefined;
 
   async ngOnInit() {
     this.userId = localStorage.getItem('userId');
@@ -111,43 +98,70 @@ export class MessageBoxPcComponent {
 
   async sendMessage(): Promise<void> {
     if (!this.currentPrivateMessageId || !this.userId) {
-        console.error('No private message selected or user ID not found.');
-        return;
+      console.error('No private message selected or user ID not found.');
+      return;
     }
 
     try {
-        const messageContent = this.textArea.trim();
-        if (messageContent) {
-            const newMessage = new Message();
-            newMessage.senderId = this.userId;
-            newMessage.message = [messageContent];
-            newMessage.time = Date.now();
-            newMessage.name = this.userName;
-            newMessage.image = this.userImage;
+      if (this.textArea.trim() || this.selectedFile) {
+        const newMessage = new Message();
+        newMessage.senderId = this.userId;
+        newMessage.message = [this.textArea.trim()];
+        newMessage.time = Date.now();
+        newMessage.name = this.userName;
+        newMessage.image = this.userImage;
 
-            const messagesCollectionPath = `privateMessages/${this.currentPrivateMessageId}/messages`;
+        const messagesCollectionPath = `privateMessages/${this.currentPrivateMessageId}/messages`;
 
-            const docRef = await addDoc(
-                collection(this.firestore, messagesCollectionPath),
-                newMessage.toJson()
-            );
-
-            // Retrieve the ID of the newly created document
-            const newMessageId = docRef.id;
-            newMessage.messageId = newMessageId;
-
-            // Update the message with the actual ID
-            await updateDoc(doc(this.firestore, `${messagesCollectionPath}/${newMessageId}`), {
-                messageId: newMessageId
-            });
-
-            this.clearInputFields();
+        if (this.selectedFile) {
+          await this.uploadSelectedFile(newMessage, messagesCollectionPath);
+        } else {
+          await addDoc(
+            collection(this.firestore, messagesCollectionPath),
+            newMessage.toJson()
+          );
         }
-    } catch (error) {
-        console.error('Error sending message:', error);
-    }
-}
 
+        this.clearInputFields();
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  }
+
+  private async uploadSelectedFile(
+    newMessage: Message,
+    messagesCollectionPath: string
+  ): Promise<void> {
+    try {
+      const storage = getStorage();
+      const storageRef = ref(storage, `files/${this.selectedFile!.name}`);
+      const fileDataUrl = await this.readFileDataUrl(this.selectedFile!);
+
+      await uploadString(storageRef, fileDataUrl, 'data_url');
+
+      // Get the download URL for the uploaded file
+      const downloadURL = await getDownloadURL(storageRef);
+
+      newMessage.messageImage = downloadURL; // Set the download URL to the message
+
+      await addDoc(collection(this.firestore, messagesCollectionPath), newMessage.toJson());
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      throw error; // Re-throw the error to propagate it upwards
+    }
+  }
+
+  private async readFileDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        resolve(fileReader.result as string);
+      };
+      fileReader.onerror = reject;
+      fileReader.readAsDataURL(file);
+    });
+  }
 
   private clearInputFields(): void {
     this.textArea = '';
