@@ -54,6 +54,8 @@ export class SideNavComponent implements OnInit {
   sideNavBtnStatus: boolean = false;
   temporaryDisabled: boolean = true;
 
+  privateChatIsActive: boolean = false;
+
   constructor(
     public dialog: MatDialog,
     public firebase: FirebaseService,
@@ -64,6 +66,12 @@ export class SideNavComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.checkSideNavBtnStatus();
     await this.firebase.ngOnInit();
+    if (
+      this.firebase.lastOpenedPrivateMessageArray &&
+      this.firebase.loggedInUserArray[0].lastOpened === 'privateChat'
+    ) {
+      this.addNewPrivateMessage(this.firebase.lastOpenedPrivateMessageArray);
+    }
   }
 
   openAddChannels() {
@@ -119,17 +127,32 @@ export class SideNavComponent implements OnInit {
     // this.isMessageOpened = true;
   }
 
-  async selectChannel(channelOrPrivateChat: string, channelOrPrivateChatId: any) {
+  async selectChannel(
+    channelOrPrivateChat: string,
+    channelOrPrivateChatId: any
+  ) {
     if (channelOrPrivateChat === 'channel') {
-          this.firebase.setSelectedChannelId(channelOrPrivateChatId);
-          this.firebase.activeChannelId(channelOrPrivateChat, channelOrPrivateChatId);
-          this.router.navigate(['/main', channelOrPrivateChatId]);
+      this.firebase.setSelectedChannelId(channelOrPrivateChatId);
+      await this.firebase.activeChannelId(
+        channelOrPrivateChat,
+        channelOrPrivateChatId
+      );
+      await this.firebase.channelOrPrivateChat('channel');
+      this.router.navigate(['/main', channelOrPrivateChatId]);
     } else if (channelOrPrivateChat === 'privateChat') {
       this.firebase.setSelectedChannelId(channelOrPrivateChatId['userId']);
-      this.firebase.activeChannelId(channelOrPrivateChat, channelOrPrivateChatId['userId'])
+      await this.firebase.activeChannelId(
+        channelOrPrivateChat,
+        `${channelOrPrivateChatId['userId']}_${this.firebase.loggedInUserId}`
+      );
+      await this.firebase.channelOrPrivateChat('privateChat');
       await this.addNewPrivateMessage(channelOrPrivateChatId);
-      console.log(channelOrPrivateChatId['userId'], this.firebase.currentChannelId);
     }
+  }
+
+  comparePrivateChatId(userId: string): boolean {
+    const updadetUserId = userId + '_' + this.firebase.loggedInUserId;
+    return updadetUserId === this.firebase.currentChannelId;
   }
 
   // In SideNavComponent
@@ -144,7 +167,8 @@ export class SideNavComponent implements OnInit {
       const sortedIds = [user.userId, currentUser.userId].sort();
       const uniqueChatId = sortedIds.join('_');
 
-      let existingPrivateMessage = await this.firebase.findPrivateMessageByUniqueChatId(uniqueChatId);
+      let existingPrivateMessage =
+        await this.firebase.findPrivateMessageByUniqueChatId(uniqueChatId);
 
       if (!existingPrivateMessage) {
         const newPrivateMessage = new PrivateMessage({
@@ -153,19 +177,25 @@ export class SideNavComponent implements OnInit {
           privateMessageId: uniqueChatId,
         });
 
-        await this.firebase.saveNewPrivateMessage(newPrivateMessage, uniqueChatId);
+        await this.firebase.saveNewPrivateMessage(
+          newPrivateMessage,
+          uniqueChatId
+        );
         existingPrivateMessage = newPrivateMessage;
       }
 
-      // console.log('User data for private message:', user.name, user.profileImg); // Log user data
-      this.privateMessageService.setSelectedPrivateMessage(existingPrivateMessage);
-      this.privateMessageService.setSelectedUser(user, existingPrivateMessage.privateMessageId);
+      this.privateMessageService.setSelectedPrivateMessage(
+        existingPrivateMessage
+      );
+      this.privateMessageService.setSelectedUser(
+        user,
+        existingPrivateMessage.privateMessageId
+      );
       this.router.navigate(['/private-chat', user.userId]);
     } catch (error) {
       console.error('Error adding new private message:', error);
     }
   }
-
 
   checkSideNavBtnStatus() {
     if (this.sideNavBtnStatus) {
@@ -174,5 +204,4 @@ export class SideNavComponent implements OnInit {
       this.sideNavBtnStatus = true;
     }
   }
-
 }

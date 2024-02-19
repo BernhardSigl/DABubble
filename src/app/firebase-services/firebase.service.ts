@@ -58,9 +58,11 @@ export class FirebaseService {
   currentPrivateMessageId!: string; // onclicked
   currentPrivateMessageArray: any[] = []; // only use id's
   currentPrivateMessageMembers: any[] = []; // don't use this
+  lastOpenedPrivateMessageArray!: [];
   privateMessagesArray: any[] = []; // don't use this
   privateMessageId!: string; // don't use this
   privateMessageExists: boolean = false; // don't use this
+  lastOpenedElementSideNav!: string;
 
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
@@ -267,8 +269,6 @@ export class FirebaseService {
   }
 
   async updateChannel(updatedMembers: any) {
-    console.log(updatedMembers);
-
     await setDoc(
       this.currentOnClickedSingleChannelDocRef(),
       { members: updatedMembers },
@@ -360,18 +360,35 @@ export class FirebaseService {
   }
 
   async selectLastOpenedChannel() {
-    console.log(this.currentPrivateMessageArray);
-    
     const currentChannelId = this.loggedInUserArray[0].activeChannelId;
+    const lastOpenedOnSideNav = this.loggedInUserArray[0].lastOpened;
+ 
     if (currentChannelId) {
-      const channelToSelect = this.channelsArray.find(
+      if(lastOpenedOnSideNav === 'channel') {
+              const channelToSelect = this.channelsArray.find(
         (channel) => channel.channelId === currentChannelId
       );
-      if (channelToSelect) {
-        await this.activeChannelId('channel', channelToSelect.channelId);
-        this.setSelectedChannelId(channelToSelect.channelId);
+      await this.activeChannelId('channel', channelToSelect.channelId);
+      
+      
+      this.setSelectedChannelId(channelToSelect.channelId);
+      } else if (lastOpenedOnSideNav === 'privateChat') {
+        const privateMessageToSelect = this.privateMessagesArray.find(
+          (privateMessages) => privateMessages.privateMessageId === currentChannelId
+        );
+        await this.activeChannelId('privateChat', privateMessageToSelect.privateMessageId);
+        this.setSelectedChannelId(privateMessageToSelect.privateMessageId);
+        this.lastOpenedPrivateMessageArray = privateMessageToSelect['members'][0];
       }
     }
+  }
+
+  async channelOrPrivateChat(channelOrPrivateChat: string): Promise<void> {
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { lastOpened: channelOrPrivateChat },
+      { merge: true }
+    );
   }
 
   async activeChannelId(
@@ -384,9 +401,9 @@ export class FirebaseService {
       { activeChannelId: this.currentChannelId },
       { merge: true }
     );
-    await this.activeChannelData();
-
+    
     if (channelOrPrivateChat === 'channel') {
+      await this.activeChannelData();
       const createdByUserId = this.currentChannelData[0].createdBy;
       const creator = this.usersArray.find(
         (user) => user.userId === createdByUserId

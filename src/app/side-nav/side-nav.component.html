@@ -97,10 +97,7 @@
               class="members-list horicontal"
               *ngFor="let user of firebase.usersArray"
               (click)="selectChannel('privateChat', user)"
-              [ngClass]="{
-                privateChatIsActive:
-                user.userId === firebase.currentChannelId
-              }"
+              [ngClass]="{ privateChatIsActive: comparePrivateChatId(user.userId) }"
             >
               <div class="profile-img-and-status">
                 <div
