@@ -151,16 +151,13 @@ export class SideNavComponent implements OnInit {
 
       console.log('User data for private message:', user.name, user.profileImg); // Log user data
       this.privateMessageService.setSelectedPrivateMessage(existingPrivateMessage);
-      this.privateMessageService.userSelected.emit({
-        user,
-        privateMessageId: existingPrivateMessage.privateMessageId,
-      });
-      this.selectedUser.emit(user);
+      this.privateMessageService.setSelectedUser(user, existingPrivateMessage.privateMessageId);
       this.router.navigate(['/private-chat', user.userId]);
     } catch (error) {
       console.error('Error adding new private message:', error);
     }
   }
+
 
   checkSideNavBtnStatus() {
     if (this.sideNavBtnStatus) {

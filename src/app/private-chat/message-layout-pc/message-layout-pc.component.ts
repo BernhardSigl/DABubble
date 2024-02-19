@@ -67,12 +67,18 @@ export class MessageLayoutPcComponent {
   ) {}
 
   ngOnInit() {
-    this.privateMessage.userSelected.subscribe(({ user, privateMessageId }) => {
-      this.privateMessageId = privateMessageId;
-
-      this.loadMessages();
+    this.privateMessage.selectedUser$.subscribe(data => {
+      if (data) {
+        this.userId = localStorage.getItem('userId');
+        this.privateMessageId = data.privateMessageId;
+        this.userName = data.user.name;
+        this.userImage = data.user.profileImg;
+        if ( this.privateMessageId) {
+          this.loadMessages();
+        }
+      }
     });
-    this.userId = localStorage.getItem('userId');
+
   }
 
   loadMessages(): void {

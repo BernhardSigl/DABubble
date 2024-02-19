@@ -25,12 +25,16 @@ export class PrivateChatComponent implements OnInit {
   constructor(private privateMessageService: PrivateMessageService,    private route: ActivatedRoute,) {}
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.userId = params['userId'];
-    });
-    this.privateMessageService.userSelected.subscribe(({ user }) => {
-      this.selectedUserName = user.name;
-      this.selectedUserImage = user.profileImg;
+    this.subscribeToSelectedUser();
+  }
+  subscribeToSelectedUser() {
+    this.privateMessageService.selectedUser$.subscribe(data => {
+      if (data) {
+        this.selectedUserName = data.user.name;
+        this.selectedUserImage = data.user.profileImg;
+      }
     });
   }
+
+
 }

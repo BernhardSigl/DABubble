@@ -8,12 +8,18 @@ import { PrivateMessage } from '../classes/private-message.class';
 export class PrivateMessageService {
   private selectedPrivateMessageSubject = new BehaviorSubject<PrivateMessage | null>(null);
   selectedPrivateMessage$ = this.selectedPrivateMessageSubject.asObservable();
-  public userSelected: EventEmitter<{ user: any; privateMessageId: string }> = new EventEmitter();
+
+  private selectedUserSubject = new BehaviorSubject<{ user: any; privateMessageId: string } | null>(null);
+  selectedUser$ = this.selectedUserSubject.asObservable();
 
   constructor() {}
 
   setSelectedPrivateMessage(privateMessage: PrivateMessage): void {
     this.selectedPrivateMessageSubject.next(privateMessage);
+  }
+
+  setSelectedUser(user: any, privateMessageId: string): void {
+    this.selectedUserSubject.next({ user, privateMessageId });
   }
 
   getSelectedPrivateMessage(): PrivateMessage | null {
