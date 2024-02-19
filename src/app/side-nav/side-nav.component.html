@@ -48,7 +48,7 @@
             <div
               *ngFor="let channel of firebase.currentUserWithRights"
               class="channel"
-              (click)="selectChannel(channel.channelId)"
+              (click)="selectChannel('channel', channel.channelId)"
             >
               <div
                 class="hashtag-and-name horicontal"
@@ -56,10 +56,9 @@
                   channelIsActive:
                     channel.channelId === firebase.currentChannelId
                 }"
-                (click)="firebase.activeChannelId(channel.channelId)"
               >
                 <div class="icon-size-24 hashtag"></div>
-                <span class="fs18 channel-name bold">{{
+                <span class="fs18 channel-name">{{
                   channel.channelName
                 }}</span>
               </div>
@@ -97,7 +96,11 @@
             <div
               class="members-list horicontal"
               *ngFor="let user of firebase.usersArray"
-              (click)="addNewPrivateMessage(user)"
+              (click)="selectChannel('privateChat', user)"
+              [ngClass]="{
+                privateChatIsActive:
+                user.userId === firebase.currentChannelId
+              }"
             >
               <div class="profile-img-and-status">
                 <div

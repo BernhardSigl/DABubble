@@ -1,6 +1,17 @@
 declare var google: any;
 import { Injectable, inject } from '@angular/core';
-import { Firestore, addDoc, collection, doc, getDocs, onSnapshot, query, setDoc, updateDoc, where } from '@angular/fire/firestore';
+import {
+  Firestore,
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { Message } from '../classes/message.class';
 import { Channel } from '../classes/channel.class';
@@ -11,7 +22,7 @@ import { interval } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FirebaseService {
   name!: string;
@@ -33,13 +44,13 @@ export class FirebaseService {
   channelCreatedBy!: string;
   channelDescription!: string;
   channelMembers: any[] = [];
-  channelMessages:  any[] = [];
-  channelProfileImages:  any[] = [];
+  channelMessages: any[] = [];
+  channelProfileImages: any[] = [];
 
   currentChannelRights: any[] = [];
   currentUserWithRights: any[] = [];
   private selectedChannelIdSource = new BehaviorSubject<string | null>(null);
-selectedChannelId$ = this.selectedChannelIdSource.asObservable();
+  selectedChannelId$ = this.selectedChannelIdSource.asObservable();
 
   channelRightsIds: any[] = [];
   channelsDataWithRights: any[] = [];
@@ -53,8 +64,7 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
 
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
-  constructor(
-  ) { }
+  constructor() {}
 
   async ngOnInit(): Promise<void> {
     await this.pullLoggedInUserId();
@@ -64,8 +74,8 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
     await this.subAllChannels();
     await this.checkChannelRights();
     this.showOnlyChannelsWithRights();
-    await this.selectLastOpenedChannel();
     await this.subAllPrivateMessages();
+    await this.selectLastOpenedChannel();
     this.scheduleAutomaticUpdate();
   }
 
@@ -82,21 +92,31 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
 
   async updateUsersStatus(): Promise<void> {
     const now = new Date();
-    const targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 3, 0);
+    const targetTime = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      3,
+      0
+    );
     let delay = targetTime.getTime() - now.getTime();
     if (delay < 0) {
       delay += 24 * 60 * 60 * 1000;
     }
-    await new Promise(resolve => setTimeout(resolve, delay));
+    await new Promise((resolve) => setTimeout(resolve, delay));
 
     const usersSnapshot = await getDocs(collection(this.firestore, 'users'));
     const updatePromises: Promise<void>[] = [];
     usersSnapshot.forEach((userDoc) => {
       const userRef = doc(this.firestore, 'users', userDoc.id);
-      const updatePromise = setDoc(userRef, {
-        statusChangeable: true,
-        status: false
-      }, { merge: true });
+      const updatePromise = setDoc(
+        userRef,
+        {
+          statusChangeable: true,
+          status: false,
+        },
+        { merge: true }
+      );
       updatePromises.push(updatePromise);
     });
     await Promise.all(updatePromises);
@@ -113,7 +133,7 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   }
 
   getMessagesColRef() {
-    return collection(this.firestore, "messages");
+    return collection(this.firestore, 'messages');
   }
 
   async sendMessage(message: Message): Promise<void> {
@@ -145,7 +165,7 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   }
 
   getUsersColRef() {
-    return collection(this.firestore, "users");
+    return collection(this.firestore, 'users');
   }
 
   getSingleUserDocRef() {
@@ -153,11 +173,15 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   }
 
   async pullLoggedInUserId(): Promise<void> {
-    this.loggedInUserId = await Promise.resolve(localStorage.getItem('userId') || '');
+    this.loggedInUserId = await Promise.resolve(
+      localStorage.getItem('userId') || ''
+    );
   }
 
   async loggedInUserData(): Promise<void> {
-    this.loggedInUserArray = this.usersArray.filter(user => user.userId === this.loggedInUserId);
+    this.loggedInUserArray = this.usersArray.filter(
+      (user) => user.userId === this.loggedInUserId
+    );
   }
 
   async setOnlineStatus(): Promise<void> {
@@ -165,17 +189,29 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   }
 
   async setOfflineStatus(): Promise<void> {
-    await setDoc(this.getSingleUserDocRef(), { status: false }, { merge: true });
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { status: false },
+      { merge: true }
+    );
   }
 
   async online() {
     await this.pullLoggedInUserId();
-    await setDoc(this.getSingleUserDocRef(), { statusChangeable: false }, { merge: true });
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { statusChangeable: false },
+      { merge: true }
+    );
     await this.ngOnInit();
   }
 
   async offline() {
-    await setDoc(this.getSingleUserDocRef(), { statusChangeable: true }, { merge: true });
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { statusChangeable: true },
+      { merge: true }
+    );
     await this.ngOnInit();
     await new Promise<void>((resolve) => {
       resolve();
@@ -185,33 +221,44 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   }
 
   async getLoggedInUserInfos(): Promise<void> {
-    const loggedInUserInfo = this.usersArray.find(user => user.userId === this.loggedInUserId);
+    const loggedInUserInfo = this.usersArray.find(
+      (user) => user.userId === this.loggedInUserId
+    );
 
     this.name = loggedInUserInfo.name;
     this.status = loggedInUserInfo.status;
     this.statusChangeable = loggedInUserInfo.statusChangeable;
     this.email = loggedInUserInfo.email;
     this.profileImg = loggedInUserInfo.profileImg;
-
   }
 
   async changeName(newName: string): Promise<void> {
-    await setDoc(this.getSingleUserDocRef(), { name: newName }, { merge: true });
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { name: newName },
+      { merge: true }
+    );
   }
 
   async changeEmail(newEmail: string): Promise<void> {
-    await setDoc(this.getSingleUserDocRef(), { email: newEmail }, { merge: true });
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { email: newEmail },
+      { merge: true }
+    );
   }
 
   // Email Change:
 
   // Channels:
   async addChannel(newChannel: Channel) {
-    await addDoc(this.getChannelColRef(), newChannel.toJson()).then((result: any) => {
-      this.channelId = result.id;
-      newChannel.channelId = this.channelId;
-      this.saveChannelId(newChannel);
-    });
+    await addDoc(this.getChannelColRef(), newChannel.toJson()).then(
+      (result: any) => {
+        this.channelId = result.id;
+        newChannel.channelId = this.channelId;
+        this.saveChannelId(newChannel);
+      }
+    );
   }
 
   async saveChannelId(newChannel: Channel) {
@@ -222,19 +269,31 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   async updateChannel(updatedMembers: any) {
     console.log(updatedMembers);
 
-    await setDoc(this.currentOnClickedSingleChannelDocRef(), { members: updatedMembers }, { merge: true });
+    await setDoc(
+      this.currentOnClickedSingleChannelDocRef(),
+      { members: updatedMembers },
+      { merge: true }
+    );
   }
 
   async updatedChannelName(updatedChannelName: string) {
-    await setDoc(this.currentOnClickedSingleChannelDocRef(), { channelName: updatedChannelName }, { merge: true });
+    await setDoc(
+      this.currentOnClickedSingleChannelDocRef(),
+      { channelName: updatedChannelName },
+      { merge: true }
+    );
   }
 
   async updatedChannelDescription(updatedChannelDescription: string) {
-    await setDoc(this.currentOnClickedSingleChannelDocRef(), { description: updatedChannelDescription }, { merge: true });
+    await setDoc(
+      this.currentOnClickedSingleChannelDocRef(),
+      { description: updatedChannelDescription },
+      { merge: true }
+    );
   }
 
   getChannelColRef() {
-    return collection(this.firestore, "channels");
+    return collection(this.firestore, 'channels');
   }
 
   getSingleChannelDocRef() {
@@ -254,7 +313,12 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
         querySnapshot.forEach(async (doc) => {
           const channelsData = doc.data();
           await this.updateChannelMembers(channelsData);
-          updatePromises.push(this.updateChannelInFirebase(channelsData['channelId'], channelsData['members']));
+          updatePromises.push(
+            this.updateChannelInFirebase(
+              channelsData['channelId'],
+              channelsData['members']
+            )
+          );
           this.channelsArray.push(channelsData);
         });
         await Promise.all(updatePromises);
@@ -263,7 +327,10 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
     });
   }
 
-  async updateChannelInFirebase(channelId: string, updatedMembers: any[]): Promise<void> {
+  async updateChannelInFirebase(
+    channelId: string,
+    updatedMembers: any[]
+  ): Promise<void> {
     const channelDocRef = doc(this.getChannelColRef(), channelId);
     try {
       await updateDoc(channelDocRef, { members: updatedMembers });
@@ -276,7 +343,9 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   async updateChannelMembers(channelsData: any): Promise<void> {
     const updatedMembers = [];
     for (let member of channelsData.members) {
-      const updatedMember = this.usersArray.find(user => user.userId === member.userId);
+      const updatedMember = this.usersArray.find(
+        (user) => user.userId === member.userId
+      );
       if (updatedMember) {
         member.name = updatedMember.name;
         member.email = updatedMember.email;
@@ -291,46 +360,66 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   }
 
   async selectLastOpenedChannel() {
+    console.log(this.currentPrivateMessageArray);
+    
     const currentChannelId = this.loggedInUserArray[0].activeChannelId;
     if (currentChannelId) {
-      const channelToSelect = this.channelsArray.find(channel => channel.channelId === currentChannelId);
+      const channelToSelect = this.channelsArray.find(
+        (channel) => channel.channelId === currentChannelId
+      );
       if (channelToSelect) {
-        await this.activeChannelId(channelToSelect.channelId);
+        await this.activeChannelId('channel', channelToSelect.channelId);
         this.setSelectedChannelId(channelToSelect.channelId);
       }
     }
   }
 
-  async activeChannelId(activeChannelId: string): Promise<void> {
+  async activeChannelId(
+    channelOrPrivateChat: string,
+    activeChannelId: string
+  ): Promise<void> {
     this.currentChannelId = activeChannelId;
-    await setDoc(this.getSingleUserDocRef(), { activeChannelId: this.currentChannelId }, { merge: true });
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { activeChannelId: this.currentChannelId },
+      { merge: true }
+    );
     await this.activeChannelData();
 
-    const createdByUserId = this.currentChannelData[0].createdBy;
-    const creator = this.usersArray.find(user => user.userId === createdByUserId);
+    if (channelOrPrivateChat === 'channel') {
+      const createdByUserId = this.currentChannelData[0].createdBy;
+      const creator = this.usersArray.find(
+        (user) => user.userId === createdByUserId
+      );
 
-    this.currentChannelName = this.currentChannelData[0].channelName,
-    this.channelMembers = this.currentChannelData[0].members;
+      (this.currentChannelName = this.currentChannelData[0].channelName),
+        (this.channelMembers = this.currentChannelData[0].members);
 
-    // noch ändern !!!
-    if (creator) {
-      this.channelCreatedBy = creator.name;
-    } else { // delete
-      this.channelCreatedBy = this.currentChannelData[0].createdBy; // delete
+      // noch ändern !!!
+      if (creator) {
+        this.channelCreatedBy = creator.name;
+      } else {
+        // delete
+        this.channelCreatedBy = this.currentChannelData[0].createdBy; // delete
+      }
+
+      this.channelDescription = this.currentChannelData[0].description;
+      this.currentChannelId = this.currentChannelData[0].channelId;
+      this.channelProfileImages = this.currentChannelData[0].members.map(
+        (member: any) => member.profileImg
+      );
     }
-
-    this.channelDescription = this.currentChannelData[0].description;
-    this.currentChannelId = this.currentChannelData[0].channelId;
-    this.channelProfileImages = this.currentChannelData[0].members.map((member: any) => member.profileImg);
   }
 
   async activeChannelData(): Promise<void> {
-    this.currentChannelData = this.channelsArray.filter(channel => channel.channelId === this.currentChannelId);
+    this.currentChannelData = this.channelsArray.filter(
+      (channel) => channel.channelId === this.currentChannelId
+    );
   }
 
   async checkChannelRights() {
     this.channelRightsIds = [];
-    this.channelsArray.forEach(channel => {
+    this.channelsArray.forEach((channel) => {
       channel.members.forEach((member: any) => {
         if (member.userId.includes(this.loggedInUserId)) {
           this.channelRightsIds.push(channel.channelId);
@@ -341,56 +430,66 @@ selectedChannelId$ = this.selectedChannelIdSource.asObservable();
   }
 
   async changeChannelRights(): Promise<void> {
-    await setDoc(this.getSingleUserDocRef(), { channelRights: this.channelRightsIds }, { merge: true });
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { channelRights: this.channelRightsIds },
+      { merge: true }
+    );
   }
 
   showOnlyChannelsWithRights() {
-      const filteredChannels = [];
-      for (const channel of this.channelsArray) {
-    if (this.channelRightsIds.includes(channel.channelId)) {
-      filteredChannels.push(channel);
+    const filteredChannels = [];
+    for (const channel of this.channelsArray) {
+      if (this.channelRightsIds.includes(channel.channelId)) {
+        filteredChannels.push(channel);
+      }
     }
-  }
 
-  this.currentUserWithRights = filteredChannels;
+    this.currentUserWithRights = filteredChannels;
 
-  this.channelsDataWithRights = filteredChannels;
-
+    this.channelsDataWithRights = filteredChannels;
   }
 
   // private messages:
 
-async saveNewPrivateMessage(newPrivateMessage: PrivateMessage, uniqueChatId: string) {
-  const privateMessagesRef = this.getPrivateMessagesColRef();
-  const privateMessageDocRef = doc(privateMessagesRef, uniqueChatId);
+  async saveNewPrivateMessage(
+    newPrivateMessage: PrivateMessage,
+    uniqueChatId: string
+  ) {
+    const privateMessagesRef = this.getPrivateMessagesColRef();
+    const privateMessageDocRef = doc(privateMessagesRef, uniqueChatId);
 
-  const privateMessageData = newPrivateMessage.toJson();
+    const privateMessageData = newPrivateMessage.toJson();
 
-  await setDoc(privateMessageDocRef, privateMessageData);
-
-}
-
-// Inside FirebaseService class
-
-findPrivateMessageByMembers(members: any[]): PrivateMessage | null {
-  for (const privateMessage of this.currentPrivateMessageArray) {
-    const sortedMembers = privateMessage.members.sort((a: any, b: any) => a.id.localeCompare(b.id));
-    const sortedInputMembers = members.sort((a: any, b: any) => a.id.localeCompare(b.id));
-
-    const isSameMembers = sortedMembers.every((member: any, index: number) => {
-      return member.id === sortedInputMembers[index].id;
-    });
-
-    if (isSameMembers) {
-      return privateMessage;
-    }
+    await setDoc(privateMessageDocRef, privateMessageData);
   }
-  return null;
-}
 
+  // Inside FirebaseService class
+
+  findPrivateMessageByMembers(members: any[]): PrivateMessage | null {
+    for (const privateMessage of this.currentPrivateMessageArray) {
+      const sortedMembers = privateMessage.members.sort((a: any, b: any) =>
+        a.id.localeCompare(b.id)
+      );
+      const sortedInputMembers = members.sort((a: any, b: any) =>
+        a.id.localeCompare(b.id)
+      );
+
+      const isSameMembers = sortedMembers.every(
+        (member: any, index: number) => {
+          return member.id === sortedInputMembers[index].id;
+        }
+      );
+
+      if (isSameMembers) {
+        return privateMessage;
+      }
+    }
+    return null;
+  }
 
   getPrivateMessagesColRef() {
-    return collection(this.firestore, "privateMessages");
+    return collection(this.firestore, 'privateMessages');
   }
 
   async savePrivateMessageId(newPrivateMessagesArray: PrivateMessage) {
@@ -398,43 +497,45 @@ findPrivateMessageByMembers(members: any[]): PrivateMessage | null {
     await updateDoc(docRef, newPrivateMessagesArray.toJson());
   }
 
-
-
   async getUsersInCurrentChannel(): Promise<any[]> {
     try {
-        const currentChannelId = this.currentChannelId;
-        const channel = this.channelsArray.find(channel => channel.channelId === currentChannelId);
-        if (channel) {
-            const members = channel.members;
-            return members;
-        }
-        return [];
+      const currentChannelId = this.currentChannelId;
+      const channel = this.channelsArray.find(
+        (channel) => channel.channelId === currentChannelId
+      );
+      if (channel) {
+        const members = channel.members;
+        return members;
+      }
+      return [];
     } catch (error) {
-        console.error('Error fetching users from current channel:', error);
-        return [];
+      console.error('Error fetching users from current channel:', error);
+      return [];
     }
-}
-
-async findPrivateMessageByUniqueChatId(uniqueChatId: string): Promise<PrivateMessage | null> {
-  const privateMessagesRef = this.getPrivateMessagesColRef();
-  const q = query(privateMessagesRef, where("privateMessageId", "==", uniqueChatId));
-  const querySnapshot = await getDocs(q);
-
-  if (!querySnapshot.empty) {
-    const docData = querySnapshot.docs[0].data();
-    return new PrivateMessage({
-      privateMessageId: docData['privateMessageId'],
-      members: docData['members'],
-      messages: docData['messages'],
-    });
-  } else {
-    console.log("Keine Nachricht gefunden");
-    return null;
   }
-}
 
+  async findPrivateMessageByUniqueChatId(
+    uniqueChatId: string
+  ): Promise<PrivateMessage | null> {
+    const privateMessagesRef = this.getPrivateMessagesColRef();
+    const q = query(
+      privateMessagesRef,
+      where('privateMessageId', '==', uniqueChatId)
+    );
+    const querySnapshot = await getDocs(q);
 
-
+    if (!querySnapshot.empty) {
+      const docData = querySnapshot.docs[0].data();
+      return new PrivateMessage({
+        privateMessageId: docData['privateMessageId'],
+        members: docData['members'],
+        messages: docData['messages'],
+      });
+    } else {
+      console.log('Keine Nachricht gefunden');
+      return null;
+    }
+  }
 
   // only for first creation
   getSinglePrivateMessageDocRef() {
@@ -463,44 +564,52 @@ async findPrivateMessageByUniqueChatId(uniqueChatId: string): Promise<PrivateMes
   async checkCurrentPrivateMessageId() {
     let foundMatchingMessage = false;
     for (const privateMessage of this.privateMessagesArray) {
-
-        if (this.membersMatch(privateMessage.members, this.currentPrivateMessageMembers)) {
-            // log id
-          this.currentPrivateMessageId = privateMessage.privateMessageId;
-            // log onclicked private message array
-            const onClickedPrivateMessageArray = this.privateMessagesArray.filter(privateMessage =>
-              this.membersMatch(privateMessage.members, this.currentPrivateMessageMembers) &&
-              privateMessage.privateMessageId === this.currentPrivateMessageId
-          );
-          this.currentPrivateMessageArray = onClickedPrivateMessageArray[0];
-          this.privateMessageExists = true;
-          foundMatchingMessage = true;
-            break;
-        }
+      if (
+        this.membersMatch(
+          privateMessage.members,
+          this.currentPrivateMessageMembers
+        )
+      ) {
+        // log id
+        this.currentPrivateMessageId = privateMessage.privateMessageId;
+        // log onclicked private message array
+        const onClickedPrivateMessageArray = this.privateMessagesArray.filter(
+          (privateMessage) =>
+            this.membersMatch(
+              privateMessage.members,
+              this.currentPrivateMessageMembers
+            ) &&
+            privateMessage.privateMessageId === this.currentPrivateMessageId
+        );
+        this.currentPrivateMessageArray = onClickedPrivateMessageArray[0];
+        this.privateMessageExists = true;
+        foundMatchingMessage = true;
+        break;
+      }
     }
     if (!foundMatchingMessage) {
       this.privateMessageExists = false;
-  }
-}
-
-getPrivateMessageMembers(privateMessageId: string): any[] {
-  const privateMessage = this.privateMessagesArray.find(msg => msg.privateMessageId === privateMessageId);
-  return privateMessage ? privateMessage.members : [];
-}
-
-
-membersMatch(members1: any[], members2: any[]): boolean {
-    if (members1.length !== members2.length) {
-        return false;
     }
-    const sortedMembers1 = members1.map(member => member.userId).sort();
-    const sortedMembers2 = members2.map(member => member.userId).sort();
+  }
+
+  getPrivateMessageMembers(privateMessageId: string): any[] {
+    const privateMessage = this.privateMessagesArray.find(
+      (msg) => msg.privateMessageId === privateMessageId
+    );
+    return privateMessage ? privateMessage.members : [];
+  }
+
+  membersMatch(members1: any[], members2: any[]): boolean {
+    if (members1.length !== members2.length) {
+      return false;
+    }
+    const sortedMembers1 = members1.map((member) => member.userId).sort();
+    const sortedMembers2 = members2.map((member) => member.userId).sort();
     for (let i = 0; i < sortedMembers1.length; i++) {
-        if (sortedMembers1[i] !== sortedMembers2[i]) {
-            return false;
-        }
+      if (sortedMembers1[i] !== sortedMembers2[i]) {
+        return false;
+      }
     }
     return true;
-}
-
+  }
 }

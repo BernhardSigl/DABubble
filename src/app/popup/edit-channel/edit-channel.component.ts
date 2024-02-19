@@ -53,7 +53,7 @@ async ngOnInit(): Promise<void>{
           channelNameInputBox.style.display = "none";
           this.channelNameEditMode = false;
           await this.firebase.updatedChannelName(updatedChannelName);
-          await this.firebase.activeChannelId(this.firebase.currentChannelId);
+          await this.firebase.activeChannelId('channel', this.firebase.currentChannelId);
           await this.firebase.ngOnInit();
         }
     }

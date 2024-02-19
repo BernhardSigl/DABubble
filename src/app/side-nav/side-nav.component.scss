@@ -202,10 +202,17 @@
   .channelIsActive {
     background-color: var(--background-color);
     color: var(--purple);
+    font-weight: 700;
     .hashtag {
       background-image: url("./../../assets/img/hashtag-blue.png") !important;
     }
   }
+}
+
+.privateChatIsActive {
+  background-color: var(--background-color);
+  color: var(--purple);
+  font-weight: 700;
 }
 
 .members-list-box {

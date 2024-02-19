@@ -119,9 +119,17 @@ export class SideNavComponent implements OnInit {
     // this.isMessageOpened = true;
   }
 
-  selectChannel(channelId: string) {
-    this.firebase.setSelectedChannelId(channelId);
-    this.router.navigate(['/main', channelId]);
+  async selectChannel(channelOrPrivateChat: string, channelOrPrivateChatId: any) {
+    if (channelOrPrivateChat === 'channel') {
+          this.firebase.setSelectedChannelId(channelOrPrivateChatId);
+          this.firebase.activeChannelId(channelOrPrivateChat, channelOrPrivateChatId);
+          this.router.navigate(['/main', channelOrPrivateChatId]);
+    } else if (channelOrPrivateChat === 'privateChat') {
+      this.firebase.setSelectedChannelId(channelOrPrivateChatId['userId']);
+      this.firebase.activeChannelId(channelOrPrivateChat, channelOrPrivateChatId['userId'])
+      await this.addNewPrivateMessage(channelOrPrivateChatId);
+      console.log(channelOrPrivateChatId['userId'], this.firebase.currentChannelId);
+    }
   }
 
   // In SideNavComponent
@@ -149,7 +157,7 @@ export class SideNavComponent implements OnInit {
         existingPrivateMessage = newPrivateMessage;
       }
 
-      console.log('User data for private message:', user.name, user.profileImg); // Log user data
+      // console.log('User data for private message:', user.name, user.profileImg); // Log user data
       this.privateMessageService.setSelectedPrivateMessage(existingPrivateMessage);
       this.privateMessageService.setSelectedUser(user, existingPrivateMessage.privateMessageId);
       this.router.navigate(['/private-chat', user.userId]);
