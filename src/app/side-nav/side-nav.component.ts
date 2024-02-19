@@ -52,6 +52,7 @@ export class SideNavComponent implements OnInit {
   @Output() selectedUser: EventEmitter<any> = new EventEmitter<any>();
 
   sideNavBtnStatus: boolean = false;
+  temporaryDisabled: boolean = true;
 
   constructor(
     public dialog: MatDialog,
@@ -61,9 +62,8 @@ export class SideNavComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    await this.firebase.ngOnInit();
-    this.drawer.open();
     this.checkSideNavBtnStatus();
+    await this.firebase.ngOnInit();
   }
 
   openAddChannels() {
@@ -162,14 +162,12 @@ export class SideNavComponent implements OnInit {
     }
   }
 
-
-
   checkSideNavBtnStatus() {
     if (this.sideNavBtnStatus) {
       this.sideNavBtnStatus = false;
     } else if (!this.sideNavBtnStatus) {
       this.sideNavBtnStatus = true;
     }
-    console.log(this.sideNavBtnStatus);
   }
+
 }

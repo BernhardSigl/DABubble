@@ -4,8 +4,11 @@
     'with-margin': sideNavBtnStatus,
     'without-margin': !sideNavBtnStatus
   }"
+  autosize
+  opened disableClose="true"
 >
-  <mat-drawer #drawer class="sidenav-container" mode="side">
+  <mat-drawer #drawer class="sidenav-container" mode="side" opened="true">
+
     <div class="horicontal spaceBetween">
       <div class="channel-header-left horicontal">
         <img src="./../../assets/img/channel-logo.png" />
@@ -117,7 +120,9 @@
         </div>
       </div>
     </div>
+
   </mat-drawer>
+
 </mat-drawer-container>
 
 <div class="sidenav-button">
