@@ -20,6 +20,16 @@
     <!-- message layout -->
     <app-message-layout-pc class="scroll-bar"></app-message-layout-pc>
 
+    <div class="empty-pc-content"  *ngIf="(messages$ | async) as messages">
+      <ng-container *ngIf="messages.length === 0">
+        <div class="name-pimg">
+          <img class="user-pimg" [src]="selectedUserImage">
+          <p>{{ selectedUserName }}</p>
+        </div>
+        <span>Diese Unterhaltung findet nur zwischen {{selectedUserName}} und dir statt </span>
+      </ng-container>
+    </div>
+
 <!-- message-box -->
     <app-message-box-pc></app-message-box-pc>
   </section>
