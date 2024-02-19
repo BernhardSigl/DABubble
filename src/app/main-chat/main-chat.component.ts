@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { SideNavComponent } from '../side-nav/side-nav.component';
 import { MessageBoxComponent } from './message-box/message-box.component';
@@ -17,6 +17,7 @@ import { AddMembersRetrospectivelyComponent } from '../popup/add-members-retrosp
 import { MatDialog } from '@angular/material/dialog';
 import { ListMembersComponent } from '../popup/list-members/list-members.component';
 import { EditChannelComponent } from '../popup/edit-channel/edit-channel.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-main-chat',
@@ -45,6 +46,9 @@ export class MainChatComponent implements OnInit {
   userImage: string = '';
   userId: string = '';
   selectedMessage: Message | null = null;
+  @ViewChild(MessageLayoutComponent)
+  messageLayout!: MessageLayoutComponent;
+  messages$: Observable<Message[]> | undefined;
 
   constructor(
     private userDataService: UserListService,
@@ -66,6 +70,9 @@ export class MainChatComponent implements OnInit {
     const emailForSignIn = window.localStorage.getItem('emailForSignIn');
     if (emailForSignIn) {
       this.auth.completeEmailChange();
+    }
+    if (this.messageLayout) {
+      this.messages$ = this.messageLayout.messages$;
     }
   }
 
