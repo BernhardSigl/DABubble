@@ -54,7 +54,9 @@ async ngOnInit(): Promise<void>{
           this.channelNameEditMode = false;
           await this.firebase.updatedChannelName(updatedChannelName);
           await this.firebase.activeChannelId('channel', this.firebase.currentChannelId);
-          await this.firebase.ngOnInit();
+          await this.firebase.subAllChannels();
+          this.firebase.showOnlyChannelsWithRights();
+          await this.firebase.selectLastOpenedChannel();
         }
     }
 
@@ -84,7 +86,7 @@ async ngOnInit(): Promise<void>{
         channelDescriptionEditText.innerHTML = "Bearbeiten";
         this.channelDescriptionEditMode = false;
         this.firebase.updatedChannelDescription(updatedChannelDescription);
-        await this.ngOnInit();
+        await this.firebase.selectLastOpenedChannel();
       }
     }
 
