@@ -69,7 +69,7 @@ export class MainChatComponent implements OnInit {
     // important for email change
     const emailForSignIn = window.localStorage.getItem('emailForSignIn');
     if (emailForSignIn) {
-      this.auth.completeEmailChange();
+      await this.auth.completeEmailChange();
     }
     if (this.messageLayout) {
       this.messages$ = this.messageLayout.messages$;
