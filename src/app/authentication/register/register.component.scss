@@ -248,3 +248,25 @@ mat-error {
     bottom: -20px;
     font-size: 0.7rem
 }
+
+@media (max-width: 701px) {
+    .header {
+        justify-content: center;
+
+        img {
+            margin-top: 3rem;
+        }
+    }
+
+    .imprint-wrapper {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .header{
+        img{
+            height: 3.5rem;
+        }
+    }
+}
