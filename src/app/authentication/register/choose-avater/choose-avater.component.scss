@@ -251,3 +251,50 @@
         }
     }
 }
+
+@media (max-width: 701px) {
+    .header {
+        justify-content: center;
+
+        img {
+            margin-top: 3rem;
+        }
+    }
+}
+
+@media (max-width: 600px) {
+   .imprint-wrapper {
+        display: none;
+    }
+
+    .choose-avatar-wrapper {
+        height: 65%;
+
+        h1{
+            font-size: 2rem;
+        }
+        .arrow-left{
+            top: 1rem !important;
+        }
+    }
+
+    .choose-avatar-container {
+        width: 24.875rem;
+        padding: 1rem 1.3rem 1rem 1.3rem !important;
+    }
+
+    .choose-avatar-content {
+               .avatars {
+            gap: 0.325rem !important;
+            img{
+                width: 3.5rem;
+                height: 3.5rem;
+                
+            }
+        }
+
+        .upload-img {
+            gap: 1.25rem;
+        }
+    }
+}
