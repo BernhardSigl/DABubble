@@ -18,12 +18,21 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthyService } from '../../firebase-services/authy.service';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
-import { Firestore, addDoc, collection, doc, getDoc, getDocs, query, updateDoc, where } from '@angular/fire/firestore';
-import { User } from '../../classes/user.class'
+import {
+  Firestore,
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from '@angular/fire/firestore';
+import { User } from '../../classes/user.class';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { DocumentReference } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
 
 @Component({
   selector: 'app-login',
@@ -35,7 +44,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     ReactiveFormsModule,
     RouterModule,
     AngularFirestoreModule,
-
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -80,7 +88,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     ]),
   ],
 })
-
 export class LoginComponent implements OnInit {
   textState: string = 'hidden';
   svgTransform: string = 'middle';
@@ -92,7 +99,7 @@ export class LoginComponent implements OnInit {
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
-  })
+  });
 
   // google
   user!: User;
@@ -106,23 +113,23 @@ export class LoginComponent implements OnInit {
     private ngZone: NgZone, // google
     public firebase: FirebaseService, // push userId in firebase service
     private snackBar: MatSnackBar
-  ) { }
+  ) {}
   isGuest: boolean | undefined;
 
   ngOnInit(): void {
-        if (!this.animationPlayed) {
+    if (!this.animationPlayed) {
       this.playAnimation();
     }
 
     //google
     this.loadGoogleApi(() => {
       google.accounts.id.initialize({
-        client_id: '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
-        callback: (resp: any) => this.handleLogin(resp)
+        client_id:
+          '440475341248-7cnocq0n3c2vcmmfukg58lq3jeasfeua.apps.googleusercontent.com',
+        callback: (resp: any) => this.handleLogin(resp),
       });
     });
   }
-
 
   // google login window
   ngAfterViewInit(): void {
@@ -176,7 +183,9 @@ export class LoginComponent implements OnInit {
       const profileImg = payLoad.picture; // find this in session storage
       const querySnapshot = await this.getUsersDocRef();
 
-      const existingUser = querySnapshot.docs.find(doc => doc.data()['email'] === email); // email already exists?
+      const existingUser = querySnapshot.docs.find(
+        (doc) => doc.data()['email'] === email
+      ); // email already exists?
 
       if (existingUser) {
         this.redirect(existingUser.id);
@@ -208,7 +217,7 @@ export class LoginComponent implements OnInit {
       email: email,
       profileImg: profileImg,
       status: false,
-      statusChangeable: false
+      statusChangeable: false,
     });
     await this.addUser().then((result: any) => {
       this.userId = result.id;
@@ -237,7 +246,7 @@ export class LoginComponent implements OnInit {
    * Google: Get firebase users collection
    */
   getUsersColRef() {
-    return collection(this.firestore, "users");
+    return collection(this.firestore, 'users');
   }
 
   /**
@@ -273,47 +282,54 @@ export class LoginComponent implements OnInit {
     const guestPassword = '123456';
 
     try {
-      // Authenticate as guest
-      await this.authyService.loginWithEmailAndPassword(guestEmail, guestPassword);
-      this.clearStorage();
-      // Provide the guest user ID
-      const userId = 'e7zSK07HmreqlBdt7cibNEcjAQW2';
-
-      // Save the guest user ID to local storage
-      localStorage.setItem('userId', userId);
-      await this.firebase.online();
-      // Navigate to the main page with the guest user ID as a query parameter
-      this.router.navigate(['/main'], { queryParams: { userId: userId } });
-            // Display toast notification
-      this.snackBar.open('Successfully logged in', 'Close', {
-        duration: 3000, // Duration the toast is shown (in milliseconds)
-        horizontalPosition: 'center', // Position of the toast
-        verticalPosition: 'bottom'
-
-    });
-
-      console.log('logged in as guest with ID: ', userId);
-    } catch (err: any) {
-      // Handle authentication errors
-      if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-
-        this.snackBar.open('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.', 'Close', {
-          duration: 5000, // Duration the toast is shown (in milliseconds)
-          horizontalPosition: 'center', // Position of the toast
-          verticalPosition: 'top'}
-        );
-      } else {
-
-        this.snackBar.open('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.', 'Close', {
-          duration: 5000, // Duration the toast is shown (in milliseconds)
-          horizontalPosition: 'center', // Position of the toast
-          verticalPosition: 'bottom'
-      });
-      }
+        await this.authenticateGuest(guestEmail, guestPassword);
+        const userId = 'e7zSK07HmreqlBdt7cibNEcjAQW2';
+        this.clearStorage();
+        this.saveUserIdToLocalStorage(userId);
+        await this.firebase.online();
+        this.navigateToMainPageWithUserId(userId);
+        this.showSuccessToastGuest('Successfully logged in as guest with ID: ' + userId);
+    } catch (error: any) {
+        this.handleLoginErrorGuest(error);
     }
-  }
+}
 
+private async authenticateGuest(email: string, password: string): Promise<void> {
+    await this.authyService.loginWithEmailAndPassword(email, password);
+}
 
+private saveUserIdToLocalStorage(userId: string): void {
+    localStorage.setItem('userId', userId);
+}
+
+private navigateToMainPageWithUserId(userId: string): void {
+    this.router.navigate(['/main'], { queryParams: { userId: userId } });
+}
+
+private handleLoginErrorGuest(error: any): void {
+    let errorMessage = 'Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.';
+    if (
+        error.code === 'auth/invalid-email' ||
+        error.code === 'auth/user-not-found' ||
+        error.code === 'auth/wrong-password'
+    ) {
+        errorMessage = 'Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.';
+    }
+
+    this.snackBar.open(errorMessage, 'Close', {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: error.code === 'auth/invalid-email' ? 'top' : 'bottom',
+    });
+}
+
+private showSuccessToastGuest(message: string): void {
+    this.snackBar.open(message, 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+    });
+}
 
 
   async submit() {
@@ -321,8 +337,11 @@ export class LoginComponent implements OnInit {
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
 
-
-    if (this.loginForm.valid && typeof email === 'string' && typeof password === 'string') {
+    if (
+      this.loginForm.valid &&
+      typeof email === 'string' &&
+      typeof password === 'string'
+    ) {
       this.loginForm.disable();
       try {
         await this.login(email, password);
@@ -333,61 +352,73 @@ export class LoginComponent implements OnInit {
     }
   }
 
-
-
   async login(email: string, password: string) {
     try {
-      // Authenticate user
-      const userCredential = await this.authyService.loginWithEmailAndPassword(email, password);
-      this.userId = userCredential.user?.uid;
+        const userCredential = await this.authyService.loginWithEmailAndPassword(email, password);
+        this.userId = userCredential.user?.uid;
 
-      // Query Firestore to find the document with matching userId
-      const querySnapshot = await getDocs(query(collection(this.firestore, "users"), where("userId", "==", this.userId)));
+        const userDocId = await this.findUserDocumentId(this.userId);
 
-      if (!querySnapshot.empty) {
-        const userDocSnapshot = querySnapshot.docs[0];
-
-        // Now you have the document snapshot, you can retrieve the document ID
-        const docId = userDocSnapshot.id;
-        this.clearStorage();
-        // Save the document ID to local storage
-        localStorage.setItem('userId', docId);
-        await this.firebase.online();
-        // Navigate to main page
-        this.router.navigate(['/main'], { queryParams: { userId: this.userId } });
-        this.snackBar.open('Successfully logged in', '', {
-          duration: 3000, // Duration the toast is shown (in milliseconds)
-          horizontalPosition: 'center', // Position of the toast
-          verticalPosition: 'bottom',
-
-        });
-        console.log('logged in');
-      } else {
-        console.log('User document does not exist.');
-      }
-    } catch (err: any) {
-      // Handle authentication errors
-      if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
-        this.snackBar.open('Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.', 'Close', {
-          duration: 5000, // Duration the toast is shown (in milliseconds)
-          horizontalPosition: 'center', // Position of the toast
-          verticalPosition: 'top'}
-        );
-      } else {
-        this.snackBar.open('Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.', 'Close', {
-          duration: 5000, // Duration the toast is shown (in milliseconds)
-          horizontalPosition: 'center', // Position of the toast
-          verticalPosition: 'bottom'
-      });
-      }
+        if (userDocId) {
+            this.clearStorage();
+            localStorage.setItem('userId', userDocId);
+            await this.firebase.online();
+            this.navigateToMainPage();
+            this.showSuccessToast('Successfully logged in');
+            console.log('logged in');
+        } else {
+            console.log('User document does not exist.');
+        }
+    } catch (error: any) {
+        this.handleLoginError(error);
     }
-  }
+}
+
+private async findUserDocumentId(userId: string): Promise<string | null> {
+    const querySnapshot = await getDocs(
+        query(
+            collection(this.firestore, 'users'),
+            where('userId', '==', userId)
+        )
+    );
+
+    return querySnapshot.empty ? null : querySnapshot.docs[0].id;
+}
+
+private handleLoginError(error: any): void {
+    let errorMessage = 'Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.';
+    if (
+        error.code === 'auth/invalid-email' ||
+        error.code === 'auth/user-not-found' ||
+        error.code === 'auth/wrong-password'
+    ) {
+        errorMessage = 'Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.';
+    }
+
+    this.snackBar.open(errorMessage, 'Close', {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: error.code === 'auth/invalid-email' ? 'top' : 'bottom',
+    });
+}
+
+private navigateToMainPage(): void {
+    this.router.navigate(['/main'], { queryParams: { userId: this.userId } });
+}
+
+private showSuccessToast(message: string): void {
+    this.snackBar.open(message, '', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom',
+    });
+}
+
 
   clearStorage() {
     sessionStorage.clear();
     localStorage.clear();
   }
-
 
   playAnimation() {
     this.textState = 'hidden';

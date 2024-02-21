@@ -15,7 +15,7 @@
   max-width: 1440px;
 }
 
-simple-snack-bar{
+simple-snack-bar {
   background-color: var(--primary);
 }
 
@@ -73,7 +73,7 @@ simple-snack-bar{
   display: flex;
   flex-direction: column;
   align-items: end;
-  gap: .625rem;
+  gap: 0.625rem;
   font-size: 1.125rem;
 
   a {
@@ -81,8 +81,8 @@ simple-snack-bar{
     color: var(--secondary);
     cursor: pointer;
     box-sizing: border-box;
-    padding: .625rem .9375rem;
-    border: .0625rem solid transparent;
+    padding: 0.625rem 0.9375rem;
+    border: 0.0625rem solid transparent;
     margin-right: -0.9375rem;
 
     &:hover {
@@ -138,14 +138,14 @@ simple-snack-bar{
         font-family: var(--main-font);
         text-indent: 3.375rem;
         width: 100%;
-        border: .0625rem solid transparent;
+        border: 0.0625rem solid transparent;
 
         &:hover {
-          border: .0625rem solid #686868;
+          border: 0.0625rem solid #686868;
         }
 
         &:focus {
-          border: .0625rem solid #535AF1;
+          border: 0.0625rem solid #535af1;
         }
       }
 
@@ -176,7 +176,7 @@ simple-snack-bar{
         margin-bottom: 2rem;
         text-decoration: none;
 
-        padding: .3125rem .9375rem;
+        padding: 0.3125rem 0.9375rem;
         width: 200px;
 
         color: var(--secondary);
@@ -233,10 +233,8 @@ simple-snack-bar{
         &:hover {
           border: 1px solid var(--primary);
 
-
           font-weight: 700;
           color: var(--primary);
-
         }
       }
 
@@ -261,7 +259,7 @@ simple-snack-bar{
           background-color: var(--primary);
 
           &:hover {
-            background-color: #797EF3;
+            background-color: #797ef3;
           }
         }
 
@@ -281,19 +279,18 @@ simple-snack-bar{
 }
 
 .imprint-wrapper {
-  margin-top: 4rem;
   display: flex;
   gap: 1rem;
   color: var(--secondary);
   font-size: 1.125rem;
-
+  margin-top: 4rem;
   a {
     text-decoration: none;
     color: var(--secondary);
     cursor: pointer;
     box-sizing: border-box;
-    padding: .625rem .9375rem;
-    border: .0625rem solid transparent;
+    padding: 0.625rem 0.9375rem;
+    border: 0.0625rem solid transparent;
 
     &:hover {
       border: 1px solid #686868;
@@ -308,4 +305,179 @@ mat-error {
   position: absolute;
   bottom: -20px;
   font-size: 0.7rem;
+}
+
+.register-container-mobile {
+  flex-direction: column;
+  gap: 0.625rem;
+  font-size: 1.125rem;
+  margin-top: 2rem;
+  display: none;
+  a {
+    text-decoration: none;
+    color: var(--secondary);
+    cursor: pointer;
+    box-sizing: border-box;
+    padding: 0.625rem 0.9375rem;
+    border: 0.0625rem solid transparent;
+    margin-right: -0.9375rem;
+
+    &:hover {
+      border: 1px solid #686868;
+      color: var(--primary);
+      border-radius: 1.875rem;
+    }
+  }
+}
+
+@media (max-width: 701px) {
+  .container {
+    gap: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .register-container-mobile {
+    display: flex;
+    margin-top: 3rem;
+    align-items: baseline;
+    a {
+      border: 1px solid var(--primary);
+      border-radius: 30px;
+      text-align: center;
+    }
+  }
+  .imprint-wrapper {
+    display: none;
+  }
+  .register-container {
+    display: none;
+  }
+  .header {
+    justify-content: center;
+  }
+  .password-field {
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    padding: 1rem 1.3rem 1rem 1.3rem !important;
+    margin-top: 1rem;
+  }
+
+  .header {
+    margin-top: 4rem;
+    img {
+      height: 56px;
+    }
+  }
+
+  form {
+    margin-top: 1rem;
+  }
+
+  .login-wrapper {
+    height: 80vh;
+  }
+
+  .login-header {
+    h1 {
+      margin-bottom: 1rem !important;
+      font-size: 1.875rem !important;
+    }
+
+    span {
+      font-size: 1rem !important;
+    }
+  }
+
+  mat-divider {
+    min-width: 140px !important;
+  }
+
+  .register-container-mobile {
+    margin-top: 2rem;
+  }
+
+  .forgot-password {
+    a {
+      margin-top: 1rem !important;
+      margin-bottom: 1rem !important;
+    }
+  }
+  .login-methods {
+    margin-top: 1rem !important;
+  }
+  .login-btns-div {
+    margin-top: 1rem !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .login-container {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+  }
+
+  mat-divider {
+    min-width: 120px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  .header {
+    margin-top: 1rem !important;
+  }
+
+  .container {
+    gap: 1rem !important;
+  }
+
+  mat-divider {
+    min-width: 90px !important;
+  }
+
+  .login-header {
+    h1 {
+      margin-bottom: 0 !important;
+    }
+    span {
+      font-size: 0.85rem !important;
+    }
+  }
+
+  .login-container {
+    width: 80% !important;
+    margin-top: 2rem !important;
+  }
+
+  .forgot-password {
+    a {
+      margin-top: 0.6rem !important;
+      margin-bottom: 0.6rem !important;
+    }
+  }
+  .email-field {
+    margin-bottom: 1rem !important;
+  }
+
+  form {
+    margin-top: 0.6rem !important;
+  }
+
+  .register-container-mobile{
+    margin-top: 1rem;
+    a{
+      padding: 0.3rem 1rem;
+    }
+  }
+.login-btn{
+  padding:0.45rem 1rem !important;
+}
+
 }

@@ -9,7 +9,7 @@ export class Message {
   public senderId: string = '';
   public reactions: { [key: string]: any } = {};
   public users: { [key: string]: number } = {};
-  public reactionsByUser?: { [userId: string]: string };
+  reactionsByUser?: ReactionsByUser;
   public threadId: string = '';
 
   public toJson() {
@@ -37,7 +37,13 @@ export class Message {
   }
 }
 
+interface ReactionByUser {
+  [emoji: string]: boolean;
+}
 
+interface ReactionsByUser {
+  [userId: string]: ReactionByUser;
+}
 export class Thread {
   public threadId: string = '';
   public name: string = '';

@@ -51,13 +51,14 @@
           />
           <div class="reactions-container">
             <button
-              *ngFor="let reaction of message.reactions | keyvalue"
-              class="reactions"
-              (click)="toggleReaction(message, reaction.key)"
+                *ngFor="let reaction of message.reactions | keyvalue"
+                class="reactions"
+                (click)="toggleReaction(message, reaction.key, userId!)"
             >
-              {{ reaction.key }} {{ reaction.value }}
+                {{ reaction.key }} {{ reaction.value }}
             </button>
-          </div>
+        </div>
+
 
           <emoji-mart
             class="emoji-mart"

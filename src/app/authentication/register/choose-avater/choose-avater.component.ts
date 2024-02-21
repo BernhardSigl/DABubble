@@ -58,45 +58,54 @@ export class ChooseAvaterComponent implements OnInit {
   async handleFileSelect(event: any): Promise<void> {
     const file = event.target.files[0];
 
-    if (file) {
-      try {
-        const reader = new FileReader();
-
-        reader.onload = async (e) => {
-          const dataURL = e.target?.result as string;
-
-          // Upload the image to Firebase Storage
-          const storageRef = ref(
-            this.storage,
-            `profilePicture/${this.userName}_${file.name}`
-          );
-          await uploadString(storageRef, dataURL, 'data_url');
-
-          // Get the download URL of the uploaded image
-          const downloadURL = await getDownloadURL(storageRef);
-          this.profileImageSrc = downloadURL;
-
-          // Update user data in Firestore with the uploaded image URL
-          const user = new User({
-            name: this.userName,
-            email: this.email,
-            userId: '',
-            profileImg: downloadURL, // Use the uploaded image URL
-            password: '',
-          });
-
-          // Update user data in Firestore
-          await this.authyService.updateUserData(user);
-        };
-
-        reader.readAsDataURL(file);
-      } catch (error) {
-        console.error('Error uploading avatar:', error);
-      }
-    } else {
-      alert('Please select a file.');
+    if (!file) {
+        alert('Please select a file.');
+        return;
     }
-  }
+
+    try {
+        const dataURL = await this.readFileAsDataURL(file);
+
+        const downloadURL = await this.uploadImageToFirebaseStorage(file, dataURL);
+
+        this.profileImageSrc = downloadURL;
+
+        await this.updateUserDataWithImageURL(downloadURL);
+    } catch (error) {
+        console.error('Error uploading avatar:', error);
+    }
+}
+
+private readFileAsDataURL(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            resolve(event.target?.result as string);
+        };
+        reader.onerror = (error) => {
+            reject(error);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+private async uploadImageToFirebaseStorage(file: File, dataURL: string): Promise<string> {
+    const storageRef = ref(this.storage, `profilePicture/${this.userName}_${file.name}`);
+    await uploadString(storageRef, dataURL, 'data_url');
+    return getDownloadURL(storageRef);
+}
+
+private async updateUserDataWithImageURL(downloadURL: string): Promise<void> {
+    const user = new User({
+        name: this.userName,
+        email: this.email,
+        userId: '',
+        profileImg: downloadURL,
+        password: '',
+    });
+    await this.authyService.updateUserData(user);
+}
+
 
   // Function to trigger file input click when "Datei hochladen" link is clicked
   triggerFileInput(): void {

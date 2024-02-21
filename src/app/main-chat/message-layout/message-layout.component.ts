@@ -38,7 +38,7 @@ import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/
   styleUrls: ['./message-layout.component.scss'],
 })
 export class MessageLayoutComponent implements OnInit {
-  @Input() userId?: string;
+  @Input() userId?: string = '';
   @Input() userName!: string;
   @Input() userImage!: string;
   @ViewChild('drawer') drawer!: MatDrawer;
@@ -123,57 +123,68 @@ export class MessageLayoutComponent implements OnInit {
 
   onEmojiClick(event: any, message: Message) {
     console.log('Selected emoji:', event.emoji.native);
-    this.addReaction(message, event.emoji.native);
-  }
-
-  addReaction(message: Message, emoji: string) {
-    if (!message.reactions) {
-      message.reactions = {};
+    if (this.userId) {
+        this.addReaction(message, event.emoji.native, this.userId);
+    } else {
+        console.error('UserID is not defined.');
     }
+}
 
-    if (!emoji) {
-      console.error('Selected emoji is undefined');
-      return;
+
+  addReaction(message: Message, emoji: string, userId: string) {
+    if (!message.reactions) {
+        message.reactions = {};
     }
 
     if (!message.reactions[emoji]) {
-      message.reactions[emoji] = 1;
+        message.reactions[emoji] = 1;
     } else {
-      message.reactions[emoji]++;
+        message.reactions[emoji]++;
+    }
+
+    // Update the user ID in the users object
+    if (!message.users[userId]) {
+        message.users[userId] = 1;
+    } else {
+        message.users[userId]++;
     }
 
     this.updateMessageReactions(this.selectedChannelId!, message);
 
     this.closeEmojiPicker(message.messageId);
-  }
+}
+
 
   closeEmojiPicker(messageId: string) {
     this.isEmojiPickerVisible[messageId] = false;
   }
 
-  toggleReaction(message: Message, emoji: string) {
-    if (!this.userId) {
-      console.error('UserID is not defined.');
-      return;
-    }
-
-    const userId = this.userId;
-
-    if (message.reactions && message.reactions[emoji]) {
-      if (message.senderId === userId && message.reactions[emoji] > 0) {
-        message.reactions[emoji]--; // Decrease count if same user reacts with the same emoji
-      } else {
-        message.reactions[emoji]++; // Increase count if different user reacts or same user reacts differently
-      }
-    } else {
-      if (!message.reactions) {
-        message.reactions = {};
-      }
-      message.reactions[emoji] = 1; // Initialize count if emoji is reacted for the first time
-    }
-
-    this.updateMessageReactions(this.selectedChannelId!, message);
+toggleReaction(message: Message, emoji: string, userId: string) {
+  // Initialize reactionsByUser if it doesn't exist
+  if (!message.reactionsByUser) {
+    message.reactionsByUser = {};
   }
+
+  // Initialize this user's reactions if they don't exist
+  if (!message.reactionsByUser[userId]) {
+    message.reactionsByUser[userId] = {};
+  }
+
+  const hasReactedWithEmoji = message.reactionsByUser[userId][emoji];
+
+  // If user has already reacted with this emoji, decrease the count and remove the reaction for the user
+  if (hasReactedWithEmoji) {
+    message.reactions[emoji] = Math.max(0, (message.reactions[emoji] || 1) - 1);
+    delete message.reactionsByUser[userId][emoji];
+  } else {
+    // If user hasn't reacted with this emoji, increase the count and add the reaction for the user
+    message.reactions[emoji] = (message.reactions[emoji] || 0) + 1;
+    message.reactionsByUser[userId][emoji] = true;
+  }
+  this.updateMessageReactions(this.selectedChannelId!, message);
+}
+
+
 
   updateMessageReactions(channelId: string, message: Message) {
     console.log(channelId);
