@@ -263,10 +263,76 @@ mat-error {
     }
 }
 
+@media (max-width: 650px) {
+
+    .arrow-left{
+        top: 2.2rem !important;
+    }
+    .login-header{
+       
+        h1{
+            font-size: 2.1rem;
+            margin-bottom: 0.5rem !important;
+        }
+    }
+}
+
 @media (max-width: 600px) {
     .header{
+        margin-top: 0;
         img{
             height: 3.5rem;
         }
+    }
+
+    .login-wrapper{
+        min-width: 26.875rem;
+    }
+
+    .arrow-left{
+        top: 1.2rem !important;
+    }
+
+    .login-container{
+        padding: 1rem 1.3rem 1rem 1.3rem !important;
+    }
+    .form-login {
+        .name-field, .email-field, .password-field{
+          margin-bottom: 1rem !important;  
+
+          input{
+            padding: 0.6rem 0.6rem !important;
+          }
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    .login-wrapper {
+        height: 75vh;
+        min-width: 24rem;
+        
+    }
+}
+@media (max-width: 400px) {
+    .login-wrapper {
+        min-width: 21rem;
+    }
+
+    .arrow-left{
+        left: 1.2rem !important;
+    }
+
+    .login-container{
+        h1{
+            font-size: 2rem !important;
+        }
+        span{
+            font-size: 1.0625rem !important;
+        }
+    }
+
+    .login-btn{
+        padding: 0.5rem 1rem !important;
     }
 }
