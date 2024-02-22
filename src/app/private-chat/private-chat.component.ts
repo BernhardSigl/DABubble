@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild ,ChangeDetectorRef } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { SideNavComponent } from '../side-nav/side-nav.component';
 import { MessageBoxPcComponent } from './message-box-pc/message-box-pc.component';
@@ -8,6 +14,9 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Message } from '../classes/message.class';
+import { FirebaseService } from '../firebase-services/firebase.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ViewSpecificProfileComponent } from '../popup/view-specific-profile/view-specific-profile.component';
 
 @Component({
   selector: 'app-private-chat',
@@ -17,16 +26,23 @@ import { Message } from '../classes/message.class';
     SideNavComponent,
     MessageBoxPcComponent,
     MessageLayoutPcComponent,
-    CommonModule
+    CommonModule,
   ],
   templateUrl: './private-chat.component.html',
   styleUrl: './private-chat.component.scss',
 })
-export class PrivateChatComponent implements OnInit , AfterViewInit {
+export class PrivateChatComponent implements OnInit, AfterViewInit {
   selectedUserName: string = '';
   selectedUserImage: string = '';
-  userId:string='';
-  constructor(private privateMessageService: PrivateMessageService,     private cdr: ChangeDetectorRef,private route: ActivatedRoute,) {}
+
+  userId: string = '';
+  constructor(
+    private privateMessageService: PrivateMessageService,
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private firebase: FirebaseService,
+    public dialog: MatDialog
+  ) {}
   @ViewChild(MessageLayoutPcComponent)
   messageLayoutPC!: MessageLayoutPcComponent;
   messages$: Observable<Message[]> | undefined;
@@ -42,7 +58,7 @@ export class PrivateChatComponent implements OnInit , AfterViewInit {
   }
 
   subscribeToSelectedUser() {
-    this.privateMessageService.selectedUser$.subscribe(data => {
+    this.privateMessageService.selectedUser$.subscribe((data) => {
       if (data) {
         this.selectedUserName = data.user.name;
         this.selectedUserImage = data.user.profileImg;
@@ -50,5 +66,16 @@ export class PrivateChatComponent implements OnInit , AfterViewInit {
     });
   }
 
+  showProfile(name: string) {
+    const filteredUsers = this.firebase.usersArray.filter(
+      (user) => user.name === name
+    );
 
+    this.dialog.open(ViewSpecificProfileComponent, {
+      data: {
+        user: filteredUsers[0],
+      },
+      panelClass: 'border',
+    });
+  }
 }

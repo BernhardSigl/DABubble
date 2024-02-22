@@ -23,8 +23,8 @@
     <div class="empty-pc-content"  *ngIf="(messages$ | async) as messages">
       <ng-container *ngIf="messages.length === 0">
         <div class="name-pimg">
-          <img class="user-pimg" [src]="selectedUserImage">
-          <p>{{ selectedUserName }}</p>
+          <img class="user-pimg" [src]="selectedUserImage" (click)="showProfile(selectedUserName)">
+          <h4 class="bold" (click)="showProfile(selectedUserName)">{{ selectedUserName }}</h4>
         </div>
         <span>Diese Unterhaltung findet nur zwischen {{selectedUserName}} und dir statt </span>
       </ng-container>

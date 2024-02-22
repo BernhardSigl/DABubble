@@ -112,7 +112,7 @@
           </button>
         </div>
       </div>
-      <img class="card-profile-img" [src]="message.image" alt="User Image" />
+      <img class="card-profile-img" [src]="message.image" alt="User Image"  (click)="showProfile(message.name)"/>
     </div>
   </div>
 </div>

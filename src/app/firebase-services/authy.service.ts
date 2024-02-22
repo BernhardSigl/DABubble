@@ -11,26 +11,21 @@ import {
   sendSignInLinkToEmail,
   isSignInWithEmailLink,
   signInWithEmailLink,
-  updateEmail
+  updateEmail,
+  sendEmailVerification,
 } from '@angular/fire/auth';
 import { AppUser } from '../classes/user.class';
 import { FirebaseService } from './firebase.service';
-
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthyService {
-  constructor(
-    private auth: Auth,
-    private firebase: FirebaseService,
-  ) {
-
+  constructor(private auth: Auth, private firebase: FirebaseService) {
     this.auth = getAuth();
   }
 
   async registerWithEmailAndPassword(user: AppUser) {
-
     try {
       const userCredential = await createUserWithEmailAndPassword(
         this.auth,
@@ -82,7 +77,7 @@ export class AuthyService {
       if (currentUser) {
         await updateProfile(currentUser, {
           displayName: user.name,
-          photoURL: user.profileImg
+          photoURL: user.profileImg,
         });
       } else {
         console.error('Current user is null. Unable to update user data.');
@@ -94,37 +89,54 @@ export class AuthyService {
   }
 
   async changeEmailAuth(newEmail: string): Promise<void> {
-    this.firebase.pullLoggedInUserId();
+    const actionCodeSettings = {
+            url: `http://localhost:4200/main?userId=${this.firebase.loggedInUserId}`,
+            handleCodeInApp: true,
+          };
+    const currentUser = this.auth.currentUser;
+    if (currentUser) {
+      sendEmailVerification(currentUser, actionCodeSettings)
+      
+        .then(() => {
+          updateEmail(currentUser, newEmail)
+          console.log('klappt', newEmail);
+        })
 
-    try {
-      const currentUser = this.auth.currentUser;
-
-      if (currentUser && currentUser.email) {
-
-        const actionCodeSettings = {
-          url: `http://localhost:4200/main?userId=${this.firebase.loggedInUserId}`,
-          handleCodeInApp: true,
-        };
-
-        await sendSignInLinkToEmail(this.auth, newEmail, actionCodeSettings);
-
-        window.localStorage.setItem('emailForSignIn', newEmail);
-      } else {
-        throw new Error('User not authenticated or missing email.');
-      }
-    } catch (error) {
-      console.error('Error sending authentication link:', error);
-      throw error;
+        .catch((error) => {
+          console.log('klappt ned: ', error);
+        });
     }
+    // this.firebase.pullLoggedInUserId();
+
+    // try {
+    //   const currentUser = this.auth.currentUser;
+
+    //   if (currentUser && currentUser.email) {
+
+    //     const actionCodeSettings = {
+    //       url: `http://localhost:4200/main?userId=${this.firebase.loggedInUserId}`,
+    //       handleCodeInApp: true,
+    //     };
+
+    //     await sendSignInLinkToEmail(this.auth, newEmail, actionCodeSettings);
+
+    //     window.localStorage.setItem('emailForSignIn', newEmail);
+    //   } else {
+    //     throw new Error('User not authenticated or missing email.');
+    //   }
+    // } catch (error) {
+    //   console.error('Error sending authentication link:', error);
+    //   throw error;
+    // }
   }
 
   async completeEmailChange(): Promise<void> {
     try {
       const email = window.localStorage.getItem('emailForSignIn');
-  
+
       // Warten auf den aktuellen Benutzer
       await new Promise<void>((resolve, reject) => {
-        const unsubscribe = this.auth.onAuthStateChanged(user => {
+        const unsubscribe = this.auth.onAuthStateChanged((user) => {
           if (user) {
             resolve();
           } else {
@@ -133,20 +145,24 @@ export class AuthyService {
           unsubscribe();
         });
       });
-  
+
       // Aktualisiere die E-Mail-Adresse, wenn ein Benutzer gefunden wurde
       const user = this.auth.currentUser;
-      if (user && email && isSignInWithEmailLink(this.auth, window.location.href)) {
+      if (
+        user &&
+        email &&
+        isSignInWithEmailLink(this.auth, window.location.href)
+      ) {
         await updateEmail(user, email); // Hier wird die E-Mail-Adresse aktualisiert
         window.localStorage.removeItem('emailForSignIn');
       } else {
-        console.error('Error: Unable to update email. User not authenticated or missing email.');
+        console.error(
+          'Error: Unable to update email. User not authenticated or missing email.'
+        );
       }
     } catch (error) {
       console.error('Error completing email change:', error);
       throw error;
     }
   }
-
-
 }
