@@ -73,7 +73,6 @@ export class AddMemberComponent {
   }
 
   async addNewChannel() {
-    this.addGuest();
     const newChannel = new Channel({
       channelName: this.data.channelName,
       channelDescription: this.data.channelDescription,
