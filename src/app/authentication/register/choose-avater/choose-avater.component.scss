@@ -263,17 +263,18 @@
 }
 
 @media (max-width: 600px) {
-   .imprint-wrapper {
+    .imprint-wrapper {
         display: none;
     }
 
     .choose-avatar-wrapper {
         height: 65%;
 
-        h1{
+        h1 {
             font-size: 2rem;
         }
-        .arrow-left{
+
+        .arrow-left {
             top: 1rem !important;
         }
     }
@@ -284,17 +285,53 @@
     }
 
     .choose-avatar-content {
-               .avatars {
+        .avatars {
             gap: 0.325rem !important;
-            img{
+
+            img {
                 width: 3.5rem;
                 height: 3.5rem;
-                
+
             }
         }
 
         .upload-img {
             gap: 1.25rem;
+        }
+    }
+}
+
+@media (max-width: 500px) {
+    .choose-avatar-container {
+        width: 21.875rem;
+
+    }
+
+    .avatars {
+        overflow-x: scroll;
+        width: -webkit-fill-available;
+        justify-content: start !important;
+        gap: 0.425rem;
+    }
+
+    .upload-img {
+        gap: 0.75rem !important;
+
+        span {
+            font-size: 1rem;
+        }
+    }
+}
+
+@media (max-width: 400px) {
+.choose-avatar-container {
+    width: 17.875rem;
+}
+
+    .profile-img {
+        img {
+            width: 7.5rem !important;
+            height: 7.5rem !important;
         }
     }
 }
