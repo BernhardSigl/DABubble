@@ -324,9 +324,27 @@
 }
 
 @media (max-width: 400px) {
-.choose-avatar-container {
-    width: 17.875rem;
-}
+    .container {
+        overflow-y: scroll;
+        overflow-x: hidden;
+        padding-bottom: 2rem !important;
+    }
+
+    .header {
+        margin-top: 1rem !important;
+
+        img {
+            width: 80% !important;
+        }
+    }
+
+    .choose-avatar-wrapper {
+        height: 100%;
+    }
+
+    .choose-avatar-container {
+        width: 17.875rem;
+    }
 
     .profile-img {
         img {
