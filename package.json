@@ -23,6 +23,7 @@
     "@angular/router": "^17.0.0",
     "@ctrl/ngx-emoji-mart": "^9.2.0",
     "@ngneat/overview": "^6.0.0",
+    "@types/firebase": "^3.2.1",
     "firebase": "^10.8.0",
     "inquirer": "^8.0.0",
     "ngx-webstorage": "^13.0.1",

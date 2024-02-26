@@ -13,6 +13,7 @@ import {
   signInWithEmailLink,
   updateEmail,
   sendEmailVerification,
+  verifyBeforeUpdateEmail
 } from '@angular/fire/auth';
 import { AppUser } from '../classes/user.class';
 import { FirebaseService } from './firebase.service';
@@ -89,44 +90,33 @@ export class AuthyService {
   }
 
   async changeEmailAuth(newEmail: string): Promise<void> {
-    const actionCodeSettings = {
-            url: `http://localhost:4200/main?userId=${this.firebase.loggedInUserId}`,
-            handleCodeInApp: true,
-          };
     const currentUser = this.auth.currentUser;
+    const actionCodeSettings = {
+      url: `http://localhost:4200/main?userId=${this.firebase.loggedInUserId}_email`,
+    };
     if (currentUser) {
-      sendEmailVerification(currentUser, actionCodeSettings)
-      
-        .then(() => {
-          updateEmail(currentUser, newEmail)
-          console.log('klappt', newEmail);
-        })
-
-        .catch((error) => {
-          console.log('klappt ned: ', error);
-        });
+      verifyBeforeUpdateEmail(
+      currentUser, newEmail, actionCodeSettings)
+      .then(function() {
+        console.log('Verification email sent');
+      })
+      .catch(function(error) {
+       console.log('Fehler: ', error);
+      });
     }
-    // this.firebase.pullLoggedInUserId();
+  }
 
-    // try {
-    //   const currentUser = this.auth.currentUser;
-
-    //   if (currentUser && currentUser.email) {
-
-    //     const actionCodeSettings = {
-    //       url: `http://localhost:4200/main?userId=${this.firebase.loggedInUserId}`,
-    //       handleCodeInApp: true,
-    //     };
-
-    //     await sendSignInLinkToEmail(this.auth, newEmail, actionCodeSettings);
-
-    //     window.localStorage.setItem('emailForSignIn', newEmail);
-    //   } else {
-    //     throw new Error('User not authenticated or missing email.');
+  async acceptEmailChange() {
+    // const currentUser = this.auth.currentUser;
+    // const email = window.localStorage.getItem('emailForSignIn');
+    // if (currentUser && email) {
+    //   try {
+    //     await updateEmail(currentUser, email);
+    //     window.localStorage.removeItem('emailForSignIn');
+    //     console.log('klappt', email);
+    //   } catch (error) {
+    //     console.log('Fehler beim Aktualisieren der E-Mail:', error);
     //   }
-    // } catch (error) {
-    //   console.error('Error sending authentication link:', error);
-    //   throw error;
     // }
   }
 
