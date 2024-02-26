@@ -6,6 +6,7 @@ import { AbstractControl, FormsModule, NgForm, ValidatorFn } from '@angular/form
 import { AuthyService } from '../../firebase-services/authy.service';
 import { EmailSentComponent } from '../email-sent/email-sent.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { VerifyComponent } from '../verify/verify.component';
 
 @Component({
   selector: 'app-edit-profile',
@@ -81,18 +82,27 @@ export class EditProfileComponent {
 
     if (this.inputEmail.trim() !== '' && this.isEmailValid) {
       // this.firebase.changeEmail(this.inputEmail);
-      this.auth.changeEmailAuth(this.inputEmail);
-      this.sentMailPopup();
-      this.firebase.ngOnInit();
+      // this.auth.changeEmailAuth(this.inputEmail);
+      // this.sentMailPopup();
       this.dialogRef.close();
+      this.verify(this.inputEmail);
     }
   }
 
-  sentMailPopup() {
-    this.dialog.open(EmailSentComponent, {
-      panelClass: 'border'
+  verify(inputEmail: string) {
+    this.dialog.open(VerifyComponent, {
+      panelClass: 'border',
+      data: {
+        oldEmail: inputEmail,
+      },
     });
   }
+
+  // sentMailPopup() {
+  //   this.dialog.open(EmailSentComponent, {
+  //     panelClass: 'border'
+  //   });
+  // }
 
   validateEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
