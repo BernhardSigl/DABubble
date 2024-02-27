@@ -7,12 +7,19 @@
     <header class="header-chat">
 
       <div class="left-side-header">
-        <div class="private-chat">
-          <div class="hashtag-and-name horicontal" >
-            <img class="icon-size-30 user-img" [src]="selectedUserImage">
+          <div class="hashtag-and-name horicontal" (click)="showProfile(selectedUserName)">
+            <div class="profile-img-and-status">
+              <img class="icon-size-50 user-img" [src]="selectedUserImage">
+              <img
+                [src]="
+                  selectedUserStatus
+                    ? './../../../assets/img/online.png'
+                    : './../../../assets/img/offline.png'
+                "
+                class="status"
+              />
+            </div>
             <h4 class="channel-name bold">{{ selectedUserName }}</h4>
-            <div class="arrow-down-img"></div>
-        </div>
         </div>
       </div>
     </header>

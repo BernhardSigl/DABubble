@@ -23,126 +23,80 @@
       box-shadow: 0px 10px 10px -10px rgba(0, 0, 0, 0.08);
 
       .left-side-header {
-        display:flex;
-        flex-direction: column;
-        gap: .8125rem; // 13px
-
-       .private-chat {
-        padding: 0 .9375rem; // 15px
-        gap: .625rem; // 10px
-
-        .hashtag-and-name{
-            gap: .625rem; // 10px
-            padding: .25rem 1.25rem; // 4px 20px
-            cursor: pointer;
-
-            .hashtag {
-                background-image: url('./../../assets/img/hashtag-black.png');
-                background-position: center;
-                background-repeat: no-repeat;
-            }
-
-            .arrow-down-img {
-              width: 1.875rem;
-              height: 1.875rem;
-              background-image: url('./../../assets/img/keyboard-arrow-down-black.png');
-              background-position: center;
-              background-repeat: no-repeat;
-            }
-
-            border-radius: 1.25rem; // 20px
-
-            &:hover {
-                color: var(--purple);
-                background-color: var(--background-color);
-                .hashtag {
-                    background-image: url('./../../assets/img/hashtag-blue.png');
-                }
-                .arrow-down-img {
-                  background-image: url('./../../assets/img/keyboard-arrow-down-blue.png');
-                }
-            }
-        }
-    }
-  }
-
-      .right-side-header {
         display: flex;
-        align-items: center;
-        gap: .625rem; // 10px
+        flex-direction: column;
+        gap: 0.8125rem; // 13px
 
-        .profile-images {
-          gap: .625rem; // 10px
-          padding: .1875rem .625rem .1875rem calc(.625rem + 1.25rem); // 3px 10px 3px calc(10px + 20px from minus margin)
+        .hashtag-and-name {
+          gap: 0.9375rem; // 15px
+          padding: 0.5rem 0.25rem; // 8px 4px
           cursor: pointer;
           border-radius: 1.875rem; // 30px
 
-          .profile-counts {
-              font-weight: 600;
-          }
-
-          img {
-            border-radius: 30px;
-            border: 2px solid var(--White, #fff);
-            margin-left: -1.25rem; // -20px
-            width: 2.5rem; // 40px
-            background-color: white;
-          }
-
           &:hover {
-            background-color: var(--background-color);
             color: var(--purple);
-          }
-        }
-
-        .add-member {
-          background-image: url('../../assets/img/add-person.png');
-          width: 2.5rem; // 40px;
-          height: 2.5rem;
-          background-position: center;
-          background-repeat: no-repeat;
-          background-color: var(--background-color);
-          border-radius: 100%;
-          cursor: pointer;
-          &:hover {
-            background-image: url('../../assets/img/add-person-hover.png');
+            background-color: var(--background-color);
+            .hashtag {
+              background-image: url("./../../assets/img/hashtag-blue.png");
+            }
+            .arrow-down-img {
+              background-image: url("./../../assets/img/keyboard-arrow-down-blue.png");
+            }
           }
         }
       }
-    }}}
-
-    app-message-layout-pc {
-      position: relative;
-      margin-top: auto;
-      display: flex;
-      gap: 30px;
-      flex-direction: column;
-      align-items: flex-end;
-      overflow-y: scroll;
-      max-height: 60vh;
-      margin-bottom: 38px;
     }
-
-.user-img{
-  border-radius: 100%;
+  }
 }
 
-.empty-pc-content{
+.profile-img-and-status {
+  width: 3.125rem; // 50px
+  height: 3.125rem;
+  position: relative;
+
+  .status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    box-shadow: inset 0 0 0 2px var(--background-color), 0 0 0 2px var(--background-color);
+    border-radius: 100%;
+    width: 0.875rem; // 14px
+    height: 0.875rem; // 14px
+  }
+}
+
+app-message-layout-pc {
+  position: relative;
+  margin-top: auto;
+  display: flex;
+  gap: 30px;
+  flex-direction: column;
+  align-items: flex-end;
+  overflow-y: scroll;
+  max-height: 60vh;
+  margin-bottom: 38px;
+}
+
+.user-img {
+  border-radius: 100% !important; // 30px
+}
+
+.empty-pc-content {
   margin-bottom: 25px;
   margin-left: 45px;
 }
 
-.name-pimg{
+.name-pimg {
   display: flex;
   align-items: end;
   margin-bottom: 10px;
   gap: 21px;
-.user-pimg{
-  border-radius: 100%;
-  width: 100px;
-  height: 100px;
-}
-  p{
+  .user-pimg {
+    border-radius: 100%;
+    width: 100px;
+    height: 100px;
+  }
+  p {
     font-size: 21px;
     font-size: 800;
   }

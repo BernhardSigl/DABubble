@@ -71,9 +71,9 @@ export class SideNavComponent implements OnInit {
       this.firebase.lastOpenedPrivateMessageArray &&
       this.firebase.loggedInUserArray[0].lastOpened === 'privateChat'
     ) {
-      this.addNewPrivateMessage(this.firebase.lastOpenedPrivateMessageArray);
+      this.firebase.addNewPrivateMessage(this.firebase.lastOpenedPrivateMessageArray);
     }
-    // this.filteredUsers = this.firebase.usersArray.filter(user => user.userId !== this.firebase.loggedInUserId);
+    this.filteredUsers = this.firebase.usersArray.filter(user => user.userId !== this.firebase.loggedInUserId);
   }
 
   openAddChannels() {
@@ -143,55 +143,13 @@ export class SideNavComponent implements OnInit {
         `${channelOrPrivateChatId['userId']}_${this.firebase.loggedInUserId}`
       );
       await this.firebase.channelOrPrivateChat('privateChat');
-      await this.addNewPrivateMessage(channelOrPrivateChatId);
+      await this.firebase.addNewPrivateMessage(channelOrPrivateChatId);
     }
   }
 
   comparePrivateChatId(userId: string): boolean {
     const updadetUserId = userId + '_' + this.firebase.loggedInUserId;
     return updadetUserId === this.firebase.currentChannelId;
-  }
-
-  // In SideNavComponent
-  async addNewPrivateMessage(user: any) {
-    try {
-      const currentUser = this.firebase.loggedInUserArray[0];
-      if (!currentUser) {
-        console.error('Current user not found.');
-        return;
-      }
-
-      const sortedIds = [user.userId, currentUser.userId].sort();
-      const uniqueChatId = sortedIds.join('_');
-
-      let existingPrivateMessage =
-        await this.firebase.findPrivateMessageByUniqueChatId(uniqueChatId);
-
-      if (!existingPrivateMessage) {
-        const newPrivateMessage = new PrivateMessage({
-          members: [user, currentUser],
-          messages: [],
-          privateMessageId: uniqueChatId,
-        });
-
-        await this.firebase.saveNewPrivateMessage(
-          newPrivateMessage,
-          uniqueChatId
-        );
-        existingPrivateMessage = newPrivateMessage;
-      }
-
-      this.privateMessageService.setSelectedPrivateMessage(
-        existingPrivateMessage
-      );
-      this.privateMessageService.setSelectedUser(
-        user,
-        existingPrivateMessage.privateMessageId
-      );
-      this.router.navigate(['/private-chat', user.userId]);
-    } catch (error) {
-      console.error('Error adding new private message:', error);
-    }
   }
 
   checkSideNavBtnStatus() {

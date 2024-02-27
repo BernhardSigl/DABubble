@@ -20,6 +20,7 @@ import { PrivateMessage } from '../classes/private-message.class';
 
 import { interval } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
+import { PrivateMessageService } from './private-message.service';
 
 @Injectable({
   providedIn: 'root',
@@ -66,7 +67,7 @@ export class FirebaseService {
 
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
-  constructor() {}
+  constructor(private privateMessageService: PrivateMessageService,) {}
 
   async ngOnInit(): Promise<void> {
     await this.pullLoggedInUserId();
@@ -364,6 +365,7 @@ export class FirebaseService {
     const lastOpenedOnSideNav = this.loggedInUserArray[0].lastOpened;
     const correctedPrivateMessageId = this.correctedPrivateMessageId(currentChannelId);
     const reversePrivateMessageId = this.reversePrivateMessageId(currentChannelId);
+    const chatPartner = this.usersArray.find((chatPartners) => (chatPartners.userId === this.getFirstId(currentChannelId)));
  
     if (currentChannelId) {
       if (lastOpenedOnSideNav === 'channel') {
@@ -377,9 +379,60 @@ export class FirebaseService {
         const privateMessageToSelect = this.privateMessagesArray.find(
           (privateMessages) => (privateMessages.privateMessageId === currentChannelId || privateMessages.privateMessageId === reversePrivateMessageId)
         );
+        this.addNewPrivateMessage(chatPartner);
         await this.activeChannelId('privateChat', correctedPrivateMessageId);
-        this.lastOpenedPrivateMessageArray = privateMessageToSelect['members'][0];
+        // this.lastOpenedPrivateMessageArray = privateMessageToSelect['members'][0];
       }
+    }
+  }
+
+  async addNewPrivateMessage(user: any) {
+    try {
+      const currentUser = this.loggedInUserArray[0];
+      if (!currentUser) {
+        console.error('Current user not found.');
+        return;
+      }
+
+      const sortedIds = [user.userId, currentUser.userId].sort();
+      const uniqueChatId = sortedIds.join('_');
+
+      let existingPrivateMessage =
+        await this.findPrivateMessageByUniqueChatId(uniqueChatId);
+
+      if (!existingPrivateMessage) {
+        const newPrivateMessage = new PrivateMessage({
+          members: [user, currentUser],
+          messages: [],
+          privateMessageId: uniqueChatId,
+        });
+
+        await this.saveNewPrivateMessage(
+          newPrivateMessage,
+          uniqueChatId
+        );
+        existingPrivateMessage = newPrivateMessage;
+      }
+
+      this.privateMessageService.setSelectedPrivateMessage(
+        existingPrivateMessage
+      );
+      this.privateMessageService.setSelectedUser(
+        user,
+        existingPrivateMessage.privateMessageId
+      );
+      this.router.navigate(['/private-chat', user.userId]);
+    } catch (error) {
+      console.error('Error adding new private message:', error);
+    }
+  }
+
+  getFirstId(id: string): string {
+    const parts = id.split('_');
+    if (parts.length === 2) {
+      return parts[0]; // Gibt die ID vor dem Unterstrich zurück
+    } else {
+      return ""; // Wenn kein Unterstrich vorhanden ist, geben Sie einen leeren String zurück oder behandeln Sie es entsprechend
     }
   }
   

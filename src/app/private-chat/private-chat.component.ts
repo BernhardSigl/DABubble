@@ -34,10 +34,11 @@ import { ViewSpecificProfileComponent } from '../popup/view-specific-profile/vie
 export class PrivateChatComponent implements OnInit, AfterViewInit {
   selectedUserName: string = '';
   selectedUserImage: string = '';
-
+  selectedUserStatus!: boolean;
   userId: string = '';
+
   constructor(
-    private privateMessageService: PrivateMessageService,
+    public privateMessageService: PrivateMessageService,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private firebase: FirebaseService,
@@ -50,6 +51,7 @@ export class PrivateChatComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.subscribeToSelectedUser();
   }
+
   ngAfterViewInit(): void {
     if (this.messageLayoutPC) {
       this.messages$ = this.messageLayoutPC.messages$;
@@ -62,6 +64,7 @@ export class PrivateChatComponent implements OnInit, AfterViewInit {
       if (data) {
         this.selectedUserName = data.user.name;
         this.selectedUserImage = data.user.profileImg;
+        this.selectedUserStatus = data.user.status;
       }
     });
   }
