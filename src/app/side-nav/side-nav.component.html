@@ -114,7 +114,7 @@
                 />
               </div>
 
-              <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
+              <span class="fs18 userName maxNameLenth">{{ user.name }}<span class="fs18 userName" *ngIf="user.userId === firebase.loggedInUserId"> (Du)</span></span>
             </div>
           </div>
         </div>

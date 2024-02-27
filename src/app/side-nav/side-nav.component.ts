@@ -67,6 +67,7 @@ export class SideNavComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.checkSideNavBtnStatus();
     await this.firebase.ngOnInit();
+    // this.sortUsersList(); // hat zulange ladezeiten
     if (
       this.firebase.lastOpenedPrivateMessageArray &&
       this.firebase.loggedInUserArray[0].lastOpened === 'privateChat'
@@ -158,5 +159,17 @@ export class SideNavComponent implements OnInit {
     } else if (!this.sideNavBtnStatus) {
       this.sideNavBtnStatus = true;
     }
+  }
+
+  sortUsersList() {
+    this.firebase.usersArray.sort((a, b) => {
+      if (a.userId === this.firebase.loggedInUserId) {
+        return -1;
+      } else if (b.userId === this.firebase.loggedInUserId) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
   }
 }
