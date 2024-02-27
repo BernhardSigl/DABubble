@@ -1,4 +1,29 @@
 .popup {
     padding: 24px;
     background-color: white;
+    color: var(--primary);
+    font-size: 24px;
+
+    input{
+        border-radius: 30px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        outline: none;
+        padding: 15px;
+        border: none;
+    }
+
+    button{
+        border-radius: 30px;
+        background-color: var(--primary);
+        border:none;
+        padding: 10px;
+        color: white;
+        cursor: pointer;
+        &:hover{
+            font-weight: 800;
+            background-color: var(--light-purple);
+            transition: background-color 225ms ease-in-out;
+        }
+    }
 }
