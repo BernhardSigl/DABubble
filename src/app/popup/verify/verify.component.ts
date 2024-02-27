@@ -18,6 +18,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class VerifyComponent {
   oldEmail!: string;
+  newMail!: string;
   userId!: string;
   password!: string;
   constructor(
@@ -30,8 +31,10 @@ export class VerifyComponent {
   ) {
     this.userId = this.firebase.loggedInUserId;
     this.oldEmail = this.firebase.email;
-
+    this.newMail = this.data.oldEmail;
     console.log(this.userId, this.oldEmail);
+    console.log('new mail: ', this.newMail);
+    
   }
 
   async verifyNewEmail() {
@@ -39,6 +42,7 @@ export class VerifyComponent {
       // Authenticate user with email and password
       await this.login(this.oldEmail, this.password);
       // If authentication is successful, proceed with email verification
+      this.auth.changeEmailAuth(this.newMail);
       this.dialogRef.close();
       this.sentMailPopup(); // note popup -> checkout spam folder
     } catch (error: any) {
