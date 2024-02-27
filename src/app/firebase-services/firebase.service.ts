@@ -362,24 +362,45 @@ export class FirebaseService {
   async selectLastOpenedChannel() {
     const currentChannelId = this.loggedInUserArray[0].activeChannelId;
     const lastOpenedOnSideNav = this.loggedInUserArray[0].lastOpened;
+    const correctedPrivateMessageId = this.correctedPrivateMessageId(currentChannelId);
+    const reversePrivateMessageId = this.reversePrivateMessageId(currentChannelId);
  
     if (currentChannelId) {
-      if(lastOpenedOnSideNav === 'channel') {
+      if (lastOpenedOnSideNav === 'channel') {
               const channelToSelect = this.channelsArray.find(
         (channel) => channel.channelId === currentChannelId
       );
       await this.activeChannelId('channel', channelToSelect.channelId);
-      
-      
       this.setSelectedChannelId(channelToSelect.channelId);
+
       } else if (lastOpenedOnSideNav === 'privateChat') {
         const privateMessageToSelect = this.privateMessagesArray.find(
-          (privateMessages) => privateMessages.privateMessageId === currentChannelId
+          (privateMessages) => (privateMessages.privateMessageId === currentChannelId || privateMessages.privateMessageId === reversePrivateMessageId)
         );
-        await this.activeChannelId('privateChat', privateMessageToSelect.privateMessageId);
-        this.setSelectedChannelId(privateMessageToSelect.privateMessageId);
+        await this.activeChannelId('privateChat', correctedPrivateMessageId);
         this.lastOpenedPrivateMessageArray = privateMessageToSelect['members'][0];
       }
+    }
+  }
+  
+  correctedPrivateMessageId(str: string): string {
+    const parts = str.split('_');
+    if (parts.length === 2) {
+      if (parts[1] === this.loggedInUserId) {
+        return str;
+      } else if (parts[0] === this.loggedInUserId) {
+        return parts[1] + '_' + parts[0];
+      }
+    }
+    return str;
+  }
+
+  reversePrivateMessageId(str: string): string {
+    const parts = str.split('_');
+    if (parts.length === 2) {
+      return parts[1] + '_' + parts[0];
+    } else {
+      return str;
     }
   }
 

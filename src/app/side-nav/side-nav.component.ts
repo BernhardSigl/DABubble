@@ -48,6 +48,7 @@ export class SideNavComponent implements OnInit {
   userEmail: string = '';
   userId: string = '';
   userImage: string = '';
+  filteredUsers!: any[];
 
   @Output() selectedUser: EventEmitter<any> = new EventEmitter<any>();
 
@@ -72,6 +73,7 @@ export class SideNavComponent implements OnInit {
     ) {
       this.addNewPrivateMessage(this.firebase.lastOpenedPrivateMessageArray);
     }
+    // this.filteredUsers = this.firebase.usersArray.filter(user => user.userId !== this.firebase.loggedInUserId);
   }
 
   openAddChannels() {
@@ -102,7 +104,6 @@ export class SideNavComponent implements OnInit {
     this.workspaceChannel = isHovered
       ? './../../assets/img/workspaces-blue.png'
       : './../../assets/img/workspaces-black.png';
-    // this.plusChannel = isHovered ? './../../assets/img/plus-blue.png' : './../../assets/img/plus-black.png';
     this.addChannelPlus = isHovered
       ? './../../assets/img/plus-circle-blue.png'
       : './../../assets/img/plus-circle-black.png';
@@ -121,10 +122,6 @@ export class SideNavComponent implements OnInit {
     this.buttonImage = isHovered
       ? './../../assets/img/hide-nav-blue.png'
       : './../../assets/img/hide-nav-black.png';
-  }
-
-  openMessage() {
-    // this.isMessageOpened = true;
   }
 
   async selectChannel(
