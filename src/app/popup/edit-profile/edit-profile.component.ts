@@ -67,7 +67,7 @@ export class EditProfileComponent {
     }
   }
 
-  save() {
+   save() {
     this.isEmailValid = this.validateEmail(this.inputEmail);
 
     if (this.inputName.trim() === '' && this.inputEmail.trim() === '') {
@@ -89,13 +89,16 @@ export class EditProfileComponent {
     }
   }
 
-  verify(inputEmail: string) {
-    this.dialog.open(VerifyComponent, {
+
+
+  async verify(inputEmail: string) {
+    const dialogRef=this.dialog.open(VerifyComponent, {
       panelClass: 'border',
       data: {
         oldEmail: inputEmail,
       },
     });
+    await dialogRef.afterClosed().toPromise(); 
   }
 
   // sentMailPopup() {
