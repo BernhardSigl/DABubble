@@ -1,102 +1,145 @@
 .header-wrapper {
-    display: flex;
-    margin: 1.5625rem 2.125rem 0 2.8125rem; // 25px 0 34px 45px
+  display: flex;
+  margin: 1.5625rem 2.125rem 0 2.8125rem; // 25px 0 34px 45px
 }
 
 .header-logo {
-    width: 15.1319rem; // 242.11px
-    height: 4.375rem; // 70px
+  width: 15.1319rem; // 242.11px
+  height: 4.375rem; // 70px
 }
 
 .header-input {
-    display: flex;
-    width: 61.8125rem; // 989px
-    box-sizing: border-box;
-    padding: 1.1563rem 2.8125rem; // 18.5px 45px
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 2.625rem;
-    background: var(--White, #FFF);
+  display: flex;
+  // width: 61.8125rem; // 989px
+  box-sizing: border-box;
+  padding: 1.1563rem 2.8125rem; // 18.5px 45px
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 2.625rem;
+  background: var(--White, #fff);
 
-    input {
-        color: black;
-        font-size: 24px;
-        border: none;
-        outline: none;
-        width: 100%;
-        padding: 0;
+  input {
+    color: black;
+    font-size: 18px;
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 0;
 
-        input::placeholder {
-            color: var(--Text-gray, #686868);
-        }
-    }
-}
-
-
-.header-profile {
-    gap: 1.25rem; // 20px
-    cursor: pointer;
-
-    .name {
-        width: calc(29.4375rem - 8.75rem); // 471px - 140px
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1;
-        max-height: 4.375rem; // 70px
-        text-align: end;
-        margin: 0 0 0 1.25rem; // 20px;
-    }
-
-    .profile-img-and-status {
-        width: 4.375rem; // 70px
-        height: 4.375rem; // 70px
-        position: relative;
-
-        .profile-img {
-            height: 100%;
-            aspect-ratio: 1/1;
-            background-size: cover;
-            background-repeat: no-repeat;
-            border-radius: 50%;
-        }
-
-        .status {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            border: 2px solid var(--background-color);
-            border-radius: 100%;
-        }
+    input::placeholder {
+      color: var(--Text-gray, #686868);
     }
   }
+}
+
+.header-profile {
+  gap: 1.25rem; // 20px
+  cursor: pointer;
+
+  .name {
+    width: calc(29.4375rem - 8.75rem); // 471px - 140px
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1;
+    max-height: 4.375rem; // 70px
+    text-align: end;
+    margin: 0 0 0 1.25rem; // 20px;
+  }
+
+  .profile-img-and-status {
+    width: 4.375rem; // 70px
+    height: 4.375rem; // 70px
+    position: relative;
+
+    .profile-img {
+      height: 100%;
+      aspect-ratio: 1/1;
+      background-size: cover;
+      background-repeat: no-repeat;
+      border-radius: 50%;
+    }
+
+    .status {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      border: 2px solid var(--background-color);
+      border-radius: 100%;
+    }
+  }
+}
 
 .header-profil {
-    display: flex;
-    width: auto ;
-    align-items: center;
-    gap: 1.25rem;
+  display: flex;
+  width: auto;
+  align-items: center;
+  gap: 1.25rem;
+  cursor: pointer;
+
+  p {
+    color: var(--Black, #000);
+    font-family: Nunito;
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  .profil-img {
+    width: 4.375rem;
+    height: 4.375rem;
+    flex-shrink: 0;
+    border-radius: 100%;
+  }
+
+  .logout-img {
+    width: 1.875rem;
+    height: 1.875rem;
+    flex-shrink: 0;
+  }
+}
+
+.search {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown {
+  background-color: white;
+  padding: 10px;
+  border-radius: 0 0 30px 30px;
+  max-height: 10vh;
+  overflow: auto;
+  z-index: 100;
+  position: absolute;
+  top: 100px;
+  p {
+    color: #686868;
+    font-size: 13px;
+    padding: 10px;
+  }
+}
+
+.search-channel,
+.search-user {
+  h3 {
+    padding-left: 10px;
+  }
+}
+
+.searched-user-result {
+  display: flex;
+  img {
+    width: 30px;
+    border-radius: 100%;
+    height: 30px;
+  }
+}
+
+.searched-channel-result,.searched-user-result {
+
+  &:hover{
+    background-color: #c4c2c2;
     cursor: pointer;
-
-    p {
-        color: var(--Black, #000);
-        font-family: Nunito;
-        font-size: 2rem;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal;
-    }
-
-    .profil-img {
-        width: 4.375rem;
-        height: 4.375rem;
-        flex-shrink: 0;
-        border-radius: 100%;
-    }
-
-    .logout-img {
-        width: 1.875rem;
-        height: 1.875rem;
-        flex-shrink: 0;
-    }
-
+  }
 }
