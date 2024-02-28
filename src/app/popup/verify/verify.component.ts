@@ -32,9 +32,6 @@ export class VerifyComponent {
     this.userId = this.firebase.loggedInUserId;
     this.oldEmail = this.firebase.email;
     this.newMail = this.data.oldEmail;
-    console.log(this.userId, this.oldEmail);
-    console.log('new mail: ', this.newMail);
-    
   }
 
   async verifyNewEmail() {

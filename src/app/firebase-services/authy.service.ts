@@ -26,6 +26,13 @@ export class AuthyService {
     this.auth = getAuth();
   }
 
+  // checkEmailChange() {
+  //   // const currentUser = this.auth.currentUser;
+  //   // if (currentUser) {
+  //   // console.log(currentUser);
+  //   // }
+  // }
+
   async registerWithEmailAndPassword(user: AppUser) {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -104,20 +111,6 @@ export class AuthyService {
        console.log('Fehler: ', error);
       });
     }
-  }
-
-  async acceptEmailChange() {
-    // const currentUser = this.auth.currentUser;
-    // const email = window.localStorage.getItem('emailForSignIn');
-    // if (currentUser && email) {
-    //   try {
-    //     await updateEmail(currentUser, email);
-    //     window.localStorage.removeItem('emailForSignIn');
-    //     console.log('klappt', email);
-    //   } catch (error) {
-    //     console.log('Fehler beim Aktualisieren der E-Mail:', error);
-    //   }
-    // }
   }
 
   async completeEmailChange(): Promise<void> {

@@ -65,16 +65,10 @@ export class MainChatComponent implements OnInit {
     await this.firebase.ngOnInit();
     this.userId = this.firebase.loggedInUserId;
     this.getUserData(this.userId);
-
-    // important for email change
-    // const emailForSignIn = window.localStorage.getItem('emailForSignIn');
-    // if (emailForSignIn) {
-    //   await this.auth.completeEmailChange();
-    // }
-    await this.auth.acceptEmailChange();
     if (this.messageLayout) {
       this.messages$ = this.messageLayout.messages$;
     }
+    // this.auth.checkEmailChange();
   }
 
   async getUserData(userId: string): Promise<void> {

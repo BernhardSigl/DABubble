@@ -80,10 +80,24 @@ export class HeaderComponent implements OnInit {
     });
   }
   
-  navigateToChannel(channelId: string) {
-    this.router.navigate(['/main', channelId]); 
+  async navigateToChannel(channelId: string) {
+    this.firebase.setSelectedChannelId(channelId);
+      await this.firebase.activeChannelId(
+        'channel',
+        channelId
+      );
+      await this.firebase.channelOrPrivateChat('channel');
+      this.router.navigate(['/main', channelId]);
   }
-  navigateToUser(userId: string) {
-    this.router.navigate(['/private-chat', userId]); 
+
+  async navigateToUser(userId: string) {
+    const user = this.firebase.usersArray.find(user => user.userId === userId);
+    this.firebase.setSelectedChannelId(userId);
+    await this.firebase.activeChannelId(
+      'privateChat',
+      `${userId}_${this.firebase.loggedInUserId}`
+    );
+    await this.firebase.channelOrPrivateChat('privateChat');
+    await this.firebase.addNewPrivateMessage(user);
   }
 }
