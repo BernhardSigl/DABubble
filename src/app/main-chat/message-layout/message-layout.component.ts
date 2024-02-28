@@ -42,7 +42,6 @@ export class MessageLayoutComponent implements OnInit {
   @Input() userName!: string;
   @Input() userImage!: string;
   @ViewChild('drawer') drawer!: MatDrawer;
-
   isHovered: { [key: string]: boolean } = {};
   public textArea: string = '';
   public isEmojiPickerVisible: { [key: string]: boolean } = {};
@@ -124,67 +123,63 @@ export class MessageLayoutComponent implements OnInit {
   onEmojiClick(event: any, message: Message) {
     console.log('Selected emoji:', event.emoji.native);
     if (this.userId) {
-        this.addReaction(message, event.emoji.native, this.userId);
+      this.addReaction(message, event.emoji.native, this.userId);
     } else {
-        console.error('UserID is not defined.');
+      console.error('UserID is not defined.');
     }
-}
-
+  }
 
   addReaction(message: Message, emoji: string, userId: string) {
-    if (!message.reactions) {
-        message.reactions = {};
-    }
-
+    // Initialize the reaction object for the emoji if it does not exist
     if (!message.reactions[emoji]) {
-        message.reactions[emoji] = 1;
-    } else {
-        message.reactions[emoji]++;
+      message.reactions[emoji] = { count: 0, users: {} };
     }
-
-    // Update the user ID in the users object
-    if (!message.users[userId]) {
-        message.users[userId] = 1;
-    } else {
-        message.users[userId]++;
-    }
-
+  
+    let emojiReaction = message.reactions[emoji];
+  
+    // If the user has not already reacted with this emoji, add their reaction
+    if (!emojiReaction.users[userId]) {
+      emojiReaction.count += 1;
+      emojiReaction.users[userId] = true; // Mark this user as having reacted with this emoji
+    } 
+  
+    // Update the message reactions in Firebase
     this.updateMessageReactions(this.selectedChannelId!, message);
-
+  
+    // Close the emoji picker UI
     this.closeEmojiPicker(message.messageId);
-}
-
+  }
+  
 
   closeEmojiPicker(messageId: string) {
     this.isEmojiPickerVisible[messageId] = false;
   }
 
-toggleReaction(message: Message, emoji: string, userId: string) {
-  // Initialize reactionsByUser if it doesn't exist
-  if (!message.reactionsByUser) {
-    message.reactionsByUser = {};
+  toggleReaction(message: Message, emoji: string, userId: string) {
+    if (!message.reactions[emoji]) {
+      message.reactions[emoji] = { count: 0, users: {} };
+    }
+
+    let emojiReaction = message.reactions[emoji];
+
+    if (emojiReaction.users[userId]) {
+      // If the user has already reacted with this emoji, remove their reaction
+      emojiReaction.count = Math.max(0, emojiReaction.count - 1);
+      delete emojiReaction.users[userId];
+    } else {
+      // If the user hasn't reacted with this emoji, add their reaction
+      emojiReaction.count += 1;
+      emojiReaction.users[userId] = true;
+    }
+
+    // If no one has reacted with this emoji after toggling, remove the emoji from reactions
+    if (emojiReaction.count === 0) {
+      delete message.reactions[emoji];
+    }
+
+    // Proceed to update the message reactions in Firebase
+    this.updateMessageReactions(this.selectedChannelId!, message);
   }
-
-  // Initialize this user's reactions if they don't exist
-  if (!message.reactionsByUser[userId]) {
-    message.reactionsByUser[userId] = {};
-  }
-
-  const hasReactedWithEmoji = message.reactionsByUser[userId][emoji];
-
-  // If user has already reacted with this emoji, decrease the count and remove the reaction for the user
-  if (hasReactedWithEmoji) {
-    message.reactions[emoji] = Math.max(0, (message.reactions[emoji] || 1) - 1);
-    delete message.reactionsByUser[userId][emoji];
-  } else {
-    // If user hasn't reacted with this emoji, increase the count and add the reaction for the user
-    message.reactions[emoji] = (message.reactions[emoji] || 0) + 1;
-    message.reactionsByUser[userId][emoji] = true;
-  }
-  this.updateMessageReactions(this.selectedChannelId!, message);
-}
-
-
 
   updateMessageReactions(channelId: string, message: Message) {
     console.log(channelId);
@@ -196,13 +191,9 @@ toggleReaction(message: Message, emoji: string, userId: string) {
     );
     const reactionsData = message.reactions || {};
 
-    setDoc(messageRef, { reactions: reactionsData }, { merge: true })
-      .then(() => {
-        console.log('Reactions successfully updated.');
-      })
-      .catch((error) => {
-        console.error('Error updating reactions:', error);
-      });
+    setDoc(messageRef, { reactions: message.reactions }, { merge: true })
+      .then(() => console.log('Reactions successfully updated.'))
+      .catch((error) => console.error('Error updating reactions:', error));
   }
 
   toggleHoverOptions(messageId: string, value: boolean): void {

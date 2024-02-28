@@ -127,60 +127,71 @@ export class MessageLayoutThreadComponent implements OnInit {
     this.addReactionThread(message, event.emoji.native);
   }
 
-  toggleReactionThread(message: Message, emoji: string) {
+  async toggleReactionThread(message: Message, emoji: string) {
     if (!this.userId) {
       console.error('UserID is not defined.');
       return;
     }
-
-    const userId = this.userId;
-
-    if (message.reactions && message.reactions[emoji]) {
-      if (message.senderId === userId && message.reactions[emoji] > 0) {
-        message.reactions[emoji]--; // Decrease count if same user reacts with the same emoji
-      } else {
-        message.reactions[emoji]++; // Increase count if different user reacts or same user reacts differently
-      }
-
-      if (message.reactions[emoji] === 0) {
-        delete message.reactions[emoji]; // Delete the reaction if count becomes 0
-      }
-    } else {
-      if (!message.reactions) {
-        message.reactions = {};
-      }
-      message.reactions[emoji] = 1; // Initialize count if emoji is reacted for the first time
+  
+    if (!message.reactions[emoji]) {
+      message.reactions[emoji] = { count: 0, users: {} };
     }
-
-    this.updateReactionsInFirestore(message);
+  
+    if (message.reactions[emoji].users[this.userId]) {
+      // If the user has reacted with this emoji, remove their reaction
+      message.reactions[emoji].count = Math.max(0, message.reactions[emoji].count - 1);
+      delete message.reactions[emoji].users[this.userId];
+    } else {
+      // If the user hasn't reacted with this emoji, add their reaction
+      message.reactions[emoji].count++;
+      message.reactions[emoji].users[this.userId] = true;
+    }
+  
+    // If no one has reacted with this emoji after toggling, consider removing the emoji from reactions
+    if (message.reactions[emoji].count === 0) {
+      delete message.reactions[emoji];
+    }
+  
+    await this.updateReactionsInFirestore(message);
   }
+  
 
 
 
-async addReactionThread(message: Message, emoji: string) {
-  if (!message || !emoji) {
-    console.error('Message or emoji is undefined');
-    return;
+  async addReactionThread(message: Message, emoji: string) {
+    if (!this.userId) {
+      console.error('UserID is not defined.');
+      return;
+    }
+  
+    if (!message.reactions[emoji]) {
+      message.reactions[emoji] = { count: 1, users: { [this.userId]: true } };
+    } else {
+      if (!message.reactions[emoji].users[this.userId]) {
+        message.reactions[emoji].count++;
+        message.reactions[emoji].users[this.userId] = true;
+      } else {
+        // If the user has already reacted with this emoji, consider if you want to toggle the reaction off instead
+        console.warn('User has already reacted with this emoji.');
+        return;
+      }
+    }
+  
+    await this.updateReactionsInFirestore(message);
+    this.closeEmojiPicker(message.messageId);
   }
+  
 
-  message.reactions = message.reactions || {}; // Ensure reactions object exists
-
-  message.reactions[emoji] = (message.reactions[emoji] || 0) + 1; // Increment reaction count
-
-  await this.updateReactionsInFirestore(message);
-  this.closeEmojiPicker(message.messageId);
-}
-
-async updateReactionsInFirestore(message: Message) {
-  try {
-    const threadDocRef = doc(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${this.messageId}/Thread/${message.messageId}`);
-    await setDoc(threadDocRef, { reactions: message.reactions }, { merge: true });
-    console.log('Reactions updated successfully in Firestore');
-  } catch (error) {
-    console.error('Error updating reactions in Firestore:', error);
+  async updateReactionsInFirestore(message: Message) {
+    try {
+      const threadDocRef = doc(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${this.messageId}/Thread/${message.messageId}`);
+      await setDoc(threadDocRef, { reactions: message.reactions }, { merge: true });
+      console.log('Reactions updated successfully in Firestore');
+    } catch (error) {
+      console.error('Error updating reactions in Firestore:', error);
+    }
   }
-}
-
+  
   closeEmojiPicker(messageId: string) {
     this.isEmojiPickerVisible[messageId] = false;
   }

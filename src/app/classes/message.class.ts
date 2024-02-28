@@ -7,7 +7,12 @@ export class Message {
   public image: string = '';
   public messageImage: string | undefined = '';
   public senderId: string = '';
-  public reactions: { [key: string]: any } = {};
+  public reactions: {
+    [key: string]: {
+      count: number;
+      users: { [userId: string]: boolean };
+    };
+  } = {};
   public users: { [key: string]: number } = {};
   reactionsByUser?: ReactionsByUser;
   public threadId: string = '';

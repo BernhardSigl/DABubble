@@ -124,25 +124,23 @@ export class MessageLayoutPcComponent {
   }
 
   addReaction(message: Message, emoji: string) {
-    if (!message.reactions) {
-      message.reactions = {};
-    }
-
-    if (!emoji) {
-      console.error('Selected emoji is undefined');
+    if (!this.userId) {
+      console.error('UserID is not defined.');
       return;
     }
-
+  
     if (!message.reactions[emoji]) {
-      message.reactions[emoji] = 1;
+      message.reactions[emoji] = { count: 1, users: { [this.userId]: true } };
     } else {
-      message.reactions[emoji]++;
+      message.reactions[emoji].count++;
+      message.reactions[emoji].users[this.userId] = true;
     }
-
+  
     this.updateMessageReactions(message);
-
+  
     this.closeEmojiPicker(message.messageId);
   }
+  
 
   closeEmojiPicker(messageId: string) {
     this.isEmojiPickerVisible[messageId] = false;
@@ -153,47 +151,46 @@ export class MessageLayoutPcComponent {
       console.error('UserID is not defined.');
       return;
     }
-
-    const userId = this.userId;
-
-    if (message.reactions && message.reactions[emoji]) {
-      if (message.senderId === userId && message.reactions[emoji] > 0) {
-        message.reactions[emoji]--; // Decrease count if same user reacts with the same emoji
-      } else {
-        message.reactions[emoji]++; // Increase count if different user reacts or same user reacts differently
-      }
-    } else {
-      if (!message.reactions) {
-        message.reactions = {};
-      }
-      message.reactions[emoji] = 1; // Initialize count if emoji is reacted for the first time
+  
+    // Ensure the reactions object and the specific emoji reaction are initialized
+    if (!message.reactions[emoji]) {
+      message.reactions[emoji] = { count: 0, users: {} };
     }
-
+  
+    const hasReacted = message.reactions[emoji].users[this.userId];
+  
+    if (hasReacted) {
+      // If the user has reacted with this emoji, remove their reaction
+      message.reactions[emoji].count = Math.max(0, message.reactions[emoji].count - 1);
+      delete message.reactions[emoji].users[this.userId];
+    } else {
+      // If the user hasn't reacted with this emoji, add their reaction
+      message.reactions[emoji].count++;
+      message.reactions[emoji].users[this.userId] = true;
+    }
+  
+    // If no one has reacted with this emoji after toggling, consider removing the emoji from reactions
+    if (message.reactions[emoji].count === 0) {
+      delete message.reactions[emoji];
+    }
+  
     this.updateMessageReactions(message);
   }
-
+  
   updateMessageReactions(message: Message) {
     if (!this.privateMessageId || !message.messageId) {
       console.error('Missing PrivateMessageId or MessageId.');
       return;
     }
-
-    // Construct the correct path using the privateMessageId and messageId
-    const messageRef = doc(
-      this.firestore,
-      `privateMessages/${this.privateMessageId}/messages/${this.messageId}`
-    );
-
-    const reactionsData = message.reactions || {};
-
-    setDoc(messageRef, { reactions: reactionsData }, { merge: true })
-      .then(() => {
-        console.log('Reactions successfully updated.');
-      })
-      .catch((error) => {
-        console.error('Error updating reactions:', error);
-      });
+  
+    const messageRef = doc(this.firestore, `privateMessages/${this.privateMessageId}/messages/${message.messageId}`);
+  
+    // Ensure we only update the reactions field to minimize overwriting other data
+    setDoc(messageRef, { reactions: message.reactions }, { merge: true })
+      .then(() => console.log('Reactions successfully updated.'))
+      .catch((error) => console.error('Error updating reactions:', error));
   }
+  
 
   toggleHoverOptions(messageId: string, value: boolean): void {
     this.isHovered[messageId] = value;
