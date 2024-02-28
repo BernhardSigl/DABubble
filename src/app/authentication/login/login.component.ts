@@ -33,6 +33,7 @@ import { User } from '../../classes/user.class';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { DocumentReference } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-login',
@@ -44,6 +45,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     ReactiveFormsModule,
     RouterModule,
     AngularFirestoreModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -100,7 +102,7 @@ export class LoginComponent implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),
   });
-
+  isLoading: boolean = false;
   // google
   user!: User;
   userId!: string;
@@ -282,6 +284,7 @@ export class LoginComponent implements OnInit {
     const guestPassword = '123456';
 
     try {
+      this.isLoading = true;
         await this.authenticateGuest(guestEmail, guestPassword);
         const userId = 'e7zSK07HmreqlBdt7cibNEcjAQW2';
         this.clearStorage();
@@ -292,6 +295,7 @@ export class LoginComponent implements OnInit {
     } catch (error: any) {
         this.handleLoginErrorGuest(error);
     }
+    this.isLoading = false;
 }
 
 private async authenticateGuest(email: string, password: string): Promise<void> {
@@ -343,12 +347,15 @@ private showSuccessToastGuest(message: string): void {
       typeof password === 'string'
     ) {
       this.loginForm.disable();
+      this.isLoading = true;
+      console.log(this.isLoading)
       try {
         await this.login(email, password);
       } catch (err) {
         console.error(err);
       }
       this.loginForm.enable();
+      this.isLoading = false;
     }
   }
 

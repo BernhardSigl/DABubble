@@ -44,6 +44,11 @@ simple-snack-bar {
   font-weight: 700;
 }
 
+.spinner{
+  position: absolute;
+  top: 50%;
+}
+
 .content {
   display: flex;
   align-items: center;
