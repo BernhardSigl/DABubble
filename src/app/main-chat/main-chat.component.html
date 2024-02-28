@@ -38,13 +38,11 @@
 
     <!-- If there are no text messages in the Channel -->
 
-    <div class="empty-channel-content" *ngIf="(messages$ | async) as messages">
-      <ng-container *ngIf="messages.length === 0">
-        <h2>#   {{ firebase.currentChannelName }}</h2>
-        <p>{{firebase.channelCreatedBy}} hat diesen Channel erstellt. Das ist der Anfang des Channel <span>#{{firebase.currentChannelName}}</span></p>
-      </ng-container>
+    <div class="empty-channel-content" *ngIf="(messages$ | async)?.length === 0">
+      <h2>#   {{ firebase.currentChannelName }}</h2>
+      <p>{{firebase.channelCreatedBy}} hat diesen Channel erstellt. Das ist der Anfang des Channel <span>#{{firebase.currentChannelName}}</span></p>
     </div>
-
+    
 
     <!-- Message box -->
     <app-message-box [userId]="userId"></app-message-box>
