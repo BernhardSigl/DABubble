@@ -25,7 +25,7 @@ constructor(
 ){}
 
 async ngOnInit(): Promise<void> {
-  await this.firebase.ngOnInit();
+  // await this.firebase.ngOnInit(); // performance: alt
 }
 
 addMemberDropdown() {

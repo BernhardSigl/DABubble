@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit {
   showDropdown: boolean = false;
   searchQuery: string = '';
   channelId: string = '';
+
   constructor(
     public firebase: FirebaseService,
     public dialog: MatDialog,
@@ -44,12 +45,23 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    await this.firebase.ngOnInit();
+    this.loadFirebaseContent();
     this.channelArr = this.firebase.channelsArray;
     this.channelId = this.firebase.channelId;
     this.userArr = this.firebase.usersArray;
     this.filteredChannels = [...this.channelArr];
     this.filteredUsers = [...this.userArr];
+  }
+
+  async loadFirebaseContent() {
+    // await this.firebase.ngOnInit(); // performance: alt
+    await this.firebase.pullLoggedInUserId(); // performance: neu
+    await this.firebase.subAllUsers(); // performance: neu
+    await this.firebase.loggedInUserData(); // performance: neu
+    await this.firebase.subAllChannels(); // performance: neu
+    await this.firebase.checkChannelRights(); // performance: neu
+    this.firebase.showOnlyChannelsWithRights(); // performance: neu
+    await this.firebase.selectLastOpenedChannel(); // performance: neu
   }
 
   headerDropdownMenu() {

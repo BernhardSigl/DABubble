@@ -66,15 +66,19 @@ export class SideNavComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.checkSideNavBtnStatus();
-    await this.firebase.ngOnInit();
+    // await this.firebase.ngOnInit(); // performance test: alt
+    this.lastOpenedPrivateChatAtStartup();
     // this.sortUsersList(); // hat zulange ladezeiten
+    // this.filteredUsers = this.firebase.usersArray.filter(user => user.userId !== this.firebase.loggedInUserId);
+  }
+
+  lastOpenedPrivateChatAtStartup() {
     if (
       this.firebase.lastOpenedPrivateMessageArray &&
       this.firebase.loggedInUserArray[0].lastOpened === 'privateChat'
     ) {
       this.firebase.addNewPrivateMessage(this.firebase.lastOpenedPrivateMessageArray);
     }
-    this.filteredUsers = this.firebase.usersArray.filter(user => user.userId !== this.firebase.loggedInUserId);
   }
 
   openAddChannels() {

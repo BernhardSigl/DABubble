@@ -62,7 +62,9 @@ export class MainChatComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void>{
-    await this.firebase.ngOnInit();
+    // await this.firebase.ngOnInit(); // performance test: alt
+    await this.firebase.pullLoggedInUserId();  // performance test: neu
+
     this.userId = this.firebase.loggedInUserId;
     this.getUserData(this.userId);
     if (this.messageLayout) {

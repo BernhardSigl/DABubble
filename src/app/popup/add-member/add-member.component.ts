@@ -1,5 +1,9 @@
 import { Component, ElementRef, HostListener, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { Channel } from '../../classes/channel.class';
 import { CommonModule } from '@angular/common';
@@ -10,12 +14,9 @@ import { MemberServiceService } from '../member-service/member-service.service';
 @Component({
   selector: 'app-add-member',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule 
-  ],
+  imports: [CommonModule, FormsModule],
   templateUrl: './add-member.component.html',
-  styleUrl: './add-member.component.scss'
+  styleUrl: './add-member.component.scss',
 })
 export class AddMemberComponent {
   channel!: Channel;
@@ -25,6 +26,8 @@ export class AddMemberComponent {
   selectMemberDialogOpen: boolean = false;
   membersField: HTMLElement | null = null;
   inputValue: string = '';
+  addYourselfToInput = false;
+  addGuestToInput = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddMemberComponent>,
@@ -32,12 +35,12 @@ export class AddMemberComponent {
     public firebase: FirebaseService,
     public memberService: MemberServiceService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private elementRef: ElementRef, // for background click
-  ) {
-  }
+    private elementRef: ElementRef // for background click
+  ) {}
 
   async ngOnInit(): Promise<void> {
-    await this.firebase.ngOnInit();
+    // await this.firebase.ngOnInit(); // performance: alt
+
     this.addResizeListener();
     this.addBackgroundClickListener();
     this.memberService.selectedUsers = [];
@@ -45,19 +48,25 @@ export class AddMemberComponent {
   }
 
   addYourself() {
-    const selectedUsers = this.firebase.usersArray.find(user => {
-      return user.userId === this.firebase.loggedInUserId;
-    });
-    this.memberService.selectedUsers.push(selectedUsers);
+    if (!this.addYourselfToInput) {
+      const selectedUsers = this.firebase.usersArray.find((user) => {
+        return user.userId === this.firebase.loggedInUserId;
+      });
+      this.memberService.selectedUsers.push(selectedUsers);
+    }
+    this.addYourselfToInput = true;
   }
 
   addGuest() {
-    if (this.firebase.loggedInUserId !== 'e7zSK07HmreqlBdt7cibNEcjAQW2') {
-          const selectedUsers = this.firebase.usersArray.find(user => {
-      return user.userId === 'e7zSK07HmreqlBdt7cibNEcjAQW2';
-    });
-    this.memberService.selectedUsers.push(selectedUsers);
+    if (!this.addGuestToInput) {
+      if (this.firebase.loggedInUserId !== 'e7zSK07HmreqlBdt7cibNEcjAQW2') {
+        const selectedUsers = this.firebase.usersArray.find((user) => {
+          return user.userId === 'e7zSK07HmreqlBdt7cibNEcjAQW2';
+        });
+        this.memberService.selectedUsers.push(selectedUsers);
+      }
     }
+    this.addGuestToInput = true;
   }
 
   toggleCheckbox(selection: string) {
@@ -91,12 +100,12 @@ export class AddMemberComponent {
     this.dialogRef.close();
   }
 
-  pushMembersInChannel(newChannel: any) {   
+  pushMembersInChannel(newChannel: any) {
     if (this.checkboxAddAll) {
       for (const userAll of this.firebase.usersArray) {
         newChannel.members.push(userAll);
       }
-    } else if (this.checkboxAddSpecific){
+    } else if (this.checkboxAddSpecific) {
       for (const userSpecific of this.memberService.selectedUsers) {
         newChannel.members.push(userSpecific);
       }
@@ -116,7 +125,9 @@ export class AddMemberComponent {
   }
 
   selectMember() {
-    const inputField = document.getElementById('inputField') as HTMLInputElement;
+    const inputField = document.getElementById(
+      'inputField'
+    ) as HTMLInputElement;
     if (inputField) {
       const rect = inputField.getBoundingClientRect();
       this.selectMemberDialogRef = this.dialog.open(SelectMemberComponent, {
@@ -131,8 +142,8 @@ export class AddMemberComponent {
         backdropClass: 'transparent-backdrop',
         position: {
           top: `${rect.bottom}px`,
-          left: `${rect.left}px`
-        }
+          left: `${rect.left}px`,
+        },
       });
     }
   }
@@ -140,18 +151,18 @@ export class AddMemberComponent {
   updateDialogPosition() {
     const inputField = document.getElementById('inputField');
     if (inputField && this.selectMemberDialogRef) {
-        const rect = inputField.getBoundingClientRect();
-        this.selectMemberDialogRef.updatePosition({
-            top: `${rect.bottom}px`,
-            left: `${rect.left}px`
-        });
+      const rect = inputField.getBoundingClientRect();
+      this.selectMemberDialogRef.updatePosition({
+        top: `${rect.bottom}px`,
+        left: `${rect.left}px`,
+      });
     }
-}
+  }
 
-  closeSelectMemberDialog(){  
+  closeSelectMemberDialog() {
     if (this.selectMemberDialogOpen) {
-          this.selectMemberDialogRef.close();
-          this.selectMemberDialogOpen = false;
+      this.selectMemberDialogRef.close();
+      this.selectMemberDialogOpen = false;
     }
   }
 

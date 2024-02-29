@@ -38,7 +38,8 @@ export class EditProfileComponent {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    await this.firebase.ngOnInit();
+    // await this.firebase.ngOnInit(); // performance: alt
+    await this.firebase.selectLastOpenedChannel(); // performance: neu
     this.editProfileForm.form.setValidators(this.atLeastOneFieldRequired());
   }
 

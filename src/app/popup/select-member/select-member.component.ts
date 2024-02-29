@@ -26,7 +26,7 @@ export class SelectMemberComponent {
   }
 
   async ngOnInit(): Promise<void> {
-    await this.firebase.ngOnInit();
+    // await this.firebase.ngOnInit(); // performance: alt
     if (this.memberService.selectedUsers.length > 0) {
       this.checkboxAddSpecific = true;
       for (const selectedUser of this.memberService.selectedUsers) {
