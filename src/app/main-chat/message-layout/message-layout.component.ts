@@ -121,7 +121,6 @@ export class MessageLayoutComponent implements OnInit {
   }
 
   onEmojiClick(event: any, message: Message) {
-    console.log('Selected emoji:', event.emoji.native);
     if (this.userId) {
       this.addReaction(message, event.emoji.native, this.userId);
     } else {
@@ -182,7 +181,7 @@ export class MessageLayoutComponent implements OnInit {
   }
 
   updateMessageReactions(channelId: string, message: Message) {
-    console.log(channelId);
+
     // Construct the correct path using the provided channelId
     const messageRef = doc(
       this.firestore,
@@ -224,7 +223,6 @@ export class MessageLayoutComponent implements OnInit {
   }
 
   saveEditedMessage(channelId: string, message: Message): void {
-    console.log(message.messageId);
     const editedText = this.editedMessage[message.messageId];
 
     // Update the message in the Firebase Firestore
@@ -235,7 +233,6 @@ export class MessageLayoutComponent implements OnInit {
     );
     setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
       .then(() => {
-        console.log('Message successfully updated.');
         // Disable edit mode after saving
         this.toggleEditMessage(message.messageId);
         this.isEditingEnabled[message.messageId] = false;

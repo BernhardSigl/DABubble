@@ -41,6 +41,9 @@ export const routes: Routes = [
     component: ChooseAvaterComponent,
     canActivate: [redirectLoggedIn],
   },
+  { path: 'forgot',
+  component: ForgetPasswordComponent,
+},
   {
     path:'private-chat/:userId',
     component:PrivateChatComponent

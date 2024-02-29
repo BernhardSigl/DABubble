@@ -291,7 +291,7 @@ export class LoginComponent implements OnInit {
         this.saveUserIdToLocalStorage(userId);
         await this.firebase.online();
         this.navigateToMainPageWithUserId(userId);
-        this.showSuccessToastGuest('Successfully logged in as guest with ID: ' + userId);
+        this.showSuccessToastGuest('Successfully logged in as guest' );
     } catch (error: any) {
         this.handleLoginErrorGuest(error);
     }
@@ -337,7 +337,6 @@ private showSuccessToastGuest(message: string): void {
 
 
   async submit() {
-    console.log('CLICKED');
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
 
@@ -356,6 +355,10 @@ private showSuccessToastGuest(message: string): void {
       }
       this.loginForm.enable();
       this.isLoading = false;
+    }else{
+      console.log('Fill in the form')
+      this.email?.markAsTouched();
+      this.password?.markAsTouched();
     }
   }
 

@@ -158,7 +158,6 @@ private async updateUserDataWithImageURL(downloadURL: string): Promise<void> {
           horizontalPosition: 'center', // Position of the toast
           verticalPosition: 'bottom',
         });
-        console.log('User added to collection:', result);
       });
     } catch (error) {
       this.snackBar.open('Registration failed. Please try again.', 'Close', {
@@ -178,7 +177,7 @@ private async updateUserDataWithImageURL(downloadURL: string): Promise<void> {
           `users/${this.user.userId}`
         );
         await setDoc(userRef, this.user.toJson());
-        console.log('User added to collection:', this.user);
+      
         return userRef;
       } catch (error) {
         console.error('Error adding user to collection:', error);

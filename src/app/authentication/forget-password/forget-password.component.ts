@@ -15,7 +15,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-
     MatInputModule,
   ],
   templateUrl: './forget-password.component.html',
@@ -28,7 +27,8 @@ export class ForgetPasswordComponent implements OnInit {
 
   constructor(
     private authService: AuthyService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router:Router
   ) {}
 
   ngOnInit(): void {}
@@ -71,5 +71,6 @@ export class ForgetPasswordComponent implements OnInit {
         );
       }
     }
+    this.router.navigate(['/login'])
   }
 }
