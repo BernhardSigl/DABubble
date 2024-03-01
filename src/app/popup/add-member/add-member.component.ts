@@ -40,7 +40,6 @@ export class AddMemberComponent {
 
   async ngOnInit(): Promise<void> {
     // await this.firebase.ngOnInit(); // performance: alt
-
     this.addResizeListener();
     this.addBackgroundClickListener();
     this.memberService.selectedUsers = [];
@@ -88,9 +87,8 @@ export class AddMemberComponent {
       members: [],
       messages: [],
       createdBy: this.firebase.loggedInUserId,
-      channelId: '',
+      channelId: 'empty',
     });
-
     this.pushMembersInChannel(newChannel);
 
     await this.firebase.addChannel(newChannel);

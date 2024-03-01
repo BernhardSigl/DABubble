@@ -255,13 +255,14 @@ export class FirebaseService {
 
   // Channels:
   async addChannel(newChannel: Channel) {
-    await addDoc(this.getChannelColRef(), newChannel.toJson()).then(
-      (result: any) => {
-        this.channelId = result.id;
-        newChannel.channelId = this.channelId;
-        this.saveChannelId(newChannel);
-      }
-    );
+    try {
+      const result = await addDoc(this.getChannelColRef(), newChannel.toJson());
+      this.channelId = result.id;
+      newChannel.channelId = this.channelId;
+      await this.saveChannelId(newChannel);
+    } catch (error) {
+      console.error("Error adding channel:", error);
+    }
   }
 
   async saveChannelId(newChannel: Channel) {
