@@ -97,22 +97,22 @@ export class HeaderComponent implements OnInit {
   }
 
   filterChannelsWithRights(channels: any[], propertyName: string, searchTerm: string, userId: string): any[] {
-    console.log('Filtering channels for user:', userId);
+
     userId = this.firebase.loggedInUserId
     const user = this.userArr.find((u: { userId: string; }) => u.userId === userId);
-    console.log('User found:', user);
+   
     if (!user || !user.channelRights) {
-      console.log('No user or channel rights found');
+
       return []; // Return empty if no user or user has no channel rights
     }
   
-    console.log('User channel rights:', user.channelRights);
+
     const filteredChannels = channels.filter(channel => {
       const hasRight = user.channelRights.includes(channel.channelId);
       const nameMatches = channel && channel[propertyName] && channel[propertyName].toLowerCase().includes(searchTerm);
       return hasRight && nameMatches;
     });
-    console.log('Filtered channels:', filteredChannels);
+
     return filteredChannels;
   }
   
@@ -132,6 +132,8 @@ export class HeaderComponent implements OnInit {
     await this.firebase.activeChannelId('channel', channelId);
     await this.firebase.channelOrPrivateChat('channel');
     this.router.navigate(['/main', channelId]);
+    this.showDropdown = false;
+    this.searchQuery='';
   }
 
   async navigateToUser(userId: string) {
@@ -145,5 +147,7 @@ export class HeaderComponent implements OnInit {
     );
     await this.firebase.channelOrPrivateChat('privateChat');
     await this.firebase.addNewPrivateMessage(user);
+    this.showDropdown=false;
+    this.searchQuery='';
   }
 }

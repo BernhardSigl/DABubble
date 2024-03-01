@@ -3,10 +3,18 @@
     Selected file: {{ selectedFile.name }}
   </div>
   <div *ngIf="mentionedUsers.length > 0" class="mentioned-users-container">
-    <div *ngFor="let user of mentionedUsers" (click)="selectMention(user)" class="mentioned-users">
-      {{ user }}
+    <div
+      *ngFor="let user of mentionedUsers; let i = index"
+      (click)="selectMention(i)"
+      class="mentioned-users"
+    >
+      <img [src]="user.profilePicture" class="suggest-profile-picture" />
+      <!-- Display profile picture -->
+      <span>{{ user.name }}</span>
+      <!-- Display name -->
     </div>
   </div>
+
   <textarea
     class="textarea"
     placeholder="Nachricht an #Entwicklerteam"
@@ -46,6 +54,7 @@
       src="../../../assets/img/at-grey.png"
       alt=""
       class="mention"
+      (click)="addMention()"
     />
 
     <img
