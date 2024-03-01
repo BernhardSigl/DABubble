@@ -25,6 +25,7 @@ export class MessageBoxComponent {
   public isEmojiPickerVisible: boolean = false;
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
   @Input() userId: string | undefined;
+  clickedUserIndex: number | null = null;
   constructor(
     private elementRef: ElementRef,
     private firestore: Firestore,
@@ -37,7 +38,7 @@ export class MessageBoxComponent {
 
   }
 
-  mentionedUsers: string[] = [];
+  mentionedUsers: { name: string, profilePicture: string }[] = [];
   userName: string = '';
   userImage: string = '';
   channelIds: string[] = [];
@@ -92,7 +93,6 @@ export class MessageBoxComponent {
         } else {
           await this.addMessageToFirestore(newMessage, this.currentChannelId);
         }
-        console.log('Sending message:', this.textArea, 'Mentioned users:', this.mentionedUsers);
         this.clearInputFields();
       } catch (error) {
         console.error('Error sending message:', error);
@@ -166,7 +166,7 @@ suggestUsers() {
       this.firebase.getUsersInCurrentChannel().then(users => {
           this.mentionedUsers = users
               .filter(user => user.name.toLowerCase().includes(this.textArea.toLowerCase().slice(this.textArea.lastIndexOf('@') + 1)))
-              .map(user => user.name);
+              .map(user => ({ name: user.name, profilePicture: user.profileImg }));
       }).catch(error => {
           console.error('Error suggesting users:', error);
       });
@@ -176,17 +176,19 @@ suggestUsers() {
 }
 
 
-
-selectMention(username: string) {
+selectMention(index: number) {
   // Handle mention selection
   // Insert the selected mention into the textarea
-  this.textArea = this.textArea.replace(`@${username}`, ''); // Remove mention from the textarea
-  this.textArea += `${username} `;
+  const mentionedUser = this.mentionedUsers[index];
+  this.textArea = this.textArea.replace(`@${mentionedUser.name}`, ''); // Remove mention from the textarea
+  this.textArea += `${mentionedUser.name} `;
   this.mentionedUsers = []; // Clear mentioned users after selection
 }
 
-
-
-
-
+addMention() {
+  // Add '@' to the text area
+  this.textArea += '@';
+  this.suggestUsers();
+  this.onTextAreaChange();
+}
 }
