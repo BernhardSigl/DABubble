@@ -56,6 +56,9 @@ export class SideNavComponent implements OnInit {
   temporaryDisabled: boolean = true;
 
   privateChatIsActive: boolean = false;
+  loggedInUserName!: string;
+  loggedInUserProfileImg!: string;
+  loggedInUserStatus!: boolean;
 
   constructor(
     public dialog: MatDialog,
@@ -68,8 +71,6 @@ export class SideNavComponent implements OnInit {
     this.checkSideNavBtnStatus();
     // await this.firebase.ngOnInit(); // performance test: alt
     this.lastOpenedPrivateChatAtStartup();
-    // this.sortUsersList(); // hat zulange ladezeiten
-    // this.filteredUsers = this.firebase.usersArray.filter(user => user.userId !== this.firebase.loggedInUserId);
   }
 
   lastOpenedPrivateChatAtStartup() {

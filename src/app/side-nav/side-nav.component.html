@@ -5,10 +5,10 @@
     'without-margin': !sideNavBtnStatus
   }"
   autosize
-  opened disableClose="true"
+  opened
+  disableClose="true"
 >
   <mat-drawer #drawer class="sidenav-container" mode="side" opened="true">
-
     <div class="horicontal spaceBetween">
       <div class="channel-header-left horicontal">
         <img src="./../../assets/img/channel-logo.png" />
@@ -58,9 +58,7 @@
                 }"
               >
                 <div class="icon-size-24 hashtag"></div>
-                <span class="fs18 channel-name">{{
-                  channel.channelName
-                }}</span>
+                <span class="fs18 channel-name">{{ channel.channelName }}</span>
               </div>
             </div>
           </div>
@@ -95,18 +93,22 @@
           <div class="members-list-box" *ngIf="!isOpenSecond">
             <div
               class="members-list horicontal"
-              *ngFor="let user of firebase.usersArray"
-              (click)="selectChannel('privateChat', user)"
-              [ngClass]="{ privateChatIsActive: comparePrivateChatId(user.userId) }"
+              *ngFor="let loggedInUser of firebase.loggedInUserArray"
+              (click)="selectChannel('privateChat', loggedInUser)"
+              [ngClass]="{
+                privateChatIsActive: comparePrivateChatId(loggedInUser.userId)
+              }"
             >
               <div class="profile-img-and-status">
                 <div
-                  [style.background-image]="'url(' + user.profileImg + ')'"
+                  [style.background-image]="
+                    'url(' + loggedInUser.profileImg + ')'
+                  "
                   class="profile-img"
                 ></div>
                 <img
                   [src]="
-                    user.status
+                    loggedInUser.status
                       ? './../../../assets/img/online.png'
                       : './../../../assets/img/offline.png'
                   "
@@ -114,15 +116,43 @@
                 />
               </div>
 
-              <span class="fs18 userName maxNameLenth">{{ user.name }}<span class="fs18 userName" *ngIf="user.userId === firebase.loggedInUserId"> (Du)</span></span>
+              <span class="fs18 userName maxNameLenth"
+                >{{ loggedInUser.name }} (Du)</span
+              >
             </div>
+
+            <ng-container *ngFor="let user of firebase.usersArray">
+              <div
+                class="members-list horicontal"
+                *ngIf="user.userId !== firebase.loggedInUserId"
+                (click)="selectChannel('privateChat', user)"
+                [ngClass]="{
+                  privateChatIsActive: comparePrivateChatId(user.userId)
+                }"
+              >
+                <div class="profile-img-and-status">
+                  <div
+                    [style.background-image]="'url(' + user.profileImg + ')'"
+                    class="profile-img"
+                  ></div>
+                  <img
+                    [src]="
+                      user.status
+                        ? './../../../assets/img/online.png'
+                        : './../../../assets/img/offline.png'
+                    "
+                    class="status"
+                  />
+                </div>
+
+                <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
+              </div>
+            </ng-container>
           </div>
         </div>
       </div>
     </div>
-
   </mat-drawer>
-
 </mat-drawer-container>
 
 <div class="sidenav-button">

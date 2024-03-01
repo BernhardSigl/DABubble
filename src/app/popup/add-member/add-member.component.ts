@@ -94,7 +94,7 @@ export class AddMemberComponent {
     await this.firebase.addChannel(newChannel);
     await this.firebase.checkChannelRights();
     this.firebase.showOnlyChannelsWithRights();
-    this.firebase.ngOnInit();
+    // this.firebase.ngOnInit(); // performance: alt
     this.dialogRef.close();
   }
 
