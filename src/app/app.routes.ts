@@ -7,6 +7,8 @@ import { ForgetPasswordComponent } from './authentication/forget-password/forget
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
 import { canActivate, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
 import { PrivateChatComponent } from './private-chat/private-chat.component';
+import { ImprintComponent } from './authentication/imprint/imprint.component';
+import { PrivacyPolicyComponent } from './authentication/privacy-policy/privacy-policy.component';
 
 const redirectLoggedIn = () => redirectUnauthorizedTo(['login']);
 const redirectToMain = () => redirectLoggedInTo(['main']);
@@ -26,6 +28,14 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+  },
+  {
+    path: 'imprint',
+    component: ImprintComponent,
+  },
+  {
+    path: 'policy',
+    component: PrivacyPolicyComponent,
   },
   {
     path: 'main',

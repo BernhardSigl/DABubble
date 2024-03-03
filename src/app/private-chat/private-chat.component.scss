@@ -105,6 +105,7 @@ app-message-layout-pc {
 .chat-partner{
   color: var(--purple);
   cursor: pointer;
+  text-align: center;
   &:hover{
     font-weight: 700;
   }
