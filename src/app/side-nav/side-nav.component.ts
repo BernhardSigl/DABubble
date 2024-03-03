@@ -165,16 +165,4 @@ export class SideNavComponent implements OnInit {
       this.sideNavBtnStatus = true;
     }
   }
-
-  sortUsersList() {
-    this.firebase.usersArray.sort((a, b) => {
-      if (a.userId === this.firebase.loggedInUserId) {
-        return -1;
-      } else if (b.userId === this.firebase.loggedInUserId) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
-  }
 }

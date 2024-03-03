@@ -33,7 +33,7 @@
           <img class="user-pimg" [src]="selectedUserImage" (click)="showProfile(selectedUserName)">
           <h4 class="bold" (click)="showProfile(selectedUserName)">{{ selectedUserName }}</h4>
         </div>
-        <span>Diese Unterhaltung findet nur zwischen {{selectedUserName}} und dir statt </span>
+        <h3  class="horicontal">Diese Unterhaltung findet nur zwischen<h3 (click)="showProfile(selectedUserName)" class="chat-partner">&nbsp;&commat;{{ selectedUserName }}&nbsp;</h3>und dir statt.</h3>
       </ng-container>
     </div>
 

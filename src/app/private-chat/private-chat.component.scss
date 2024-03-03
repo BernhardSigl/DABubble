@@ -101,3 +101,11 @@ app-message-layout-pc {
     font-size: 800;
   }
 }
+
+.chat-partner{
+  color: var(--purple);
+  cursor: pointer;
+  &:hover{
+    font-weight: 700;
+  }
+}
