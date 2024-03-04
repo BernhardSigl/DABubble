@@ -18,6 +18,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ListMembersComponent } from '../popup/list-members/list-members.component';
 import { EditChannelComponent } from '../popup/edit-channel/edit-channel.component';
 import { Observable } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-chat',
@@ -54,7 +55,9 @@ export class MainChatComponent implements OnInit {
     private userDataService: UserListService,
     private auth: AuthyService,
     public firebase: FirebaseService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private route: ActivatedRoute,
+    private router: Router
     ) { }
 
   onMessageSelected(message: Message): void {
@@ -62,7 +65,8 @@ export class MainChatComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void>{
-    // await this.firebase.ngOnInit(); // performance test: alt
+    // performance test: alt
+    
     await this.firebase.pullLoggedInUserId();  // performance test: neu
 
     this.userId = this.firebase.loggedInUserId;
@@ -70,7 +74,7 @@ export class MainChatComponent implements OnInit {
     if (this.messageLayout) {
       this.messages$ = this.messageLayout.messages$;
     }
-    // this.auth.checkEmailChange();
+    this.checkEmailChange();
   }
 
   async getUserData(userId: string): Promise<void> {
@@ -103,4 +107,22 @@ export class MainChatComponent implements OnInit {
       panelClass: 'no-border-tl',
     });
   }
+
+  async checkEmailChange() {
+    this.route.queryParams.subscribe(async params => {
+      const userIdParam = params['userId'];
+      if (userIdParam && userIdParam.endsWith('_email')) {
+        await this.firebase.ngOnInit();
+        const inputEmail = localStorage.getItem('inputEmail');
+        if (inputEmail) {
+          await this.firebase.changeEmail(inputEmail);
+          localStorage.removeItem('inputEmail');
+          this.router.navigateByUrl(`/main?userId=${this.userId}`, { skipLocationChange: true }).then(() => {
+            this.router.navigate([this.router.url]);
+          });
+        }
+      }
+    });
+  }  
+
 }

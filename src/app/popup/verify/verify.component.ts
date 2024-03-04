@@ -59,7 +59,7 @@ export class VerifyComponent {
       const userDocId = this.userId;
 
       if (userDocId) {
-        this.clearStorage();
+        localStorage.removeItem('userId');
         localStorage.setItem('userId', userDocId);
         await this.firebase.online();
       } else {
@@ -70,6 +70,7 @@ export class VerifyComponent {
       throw error; // Re-throw the error to propagate it to the calling function
     }
   }
+
   private handleLoginError(error: any): void {
     let errorMessage =
       'Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.';
