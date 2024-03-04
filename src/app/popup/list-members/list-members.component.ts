@@ -25,7 +25,17 @@ constructor(
 ){}
 
 async ngOnInit(): Promise<void> {
-  // await this.firebase.ngOnInit(); // performance: alt
+   await this.updateOnlineStatus();
+}
+
+async updateOnlineStatus(): Promise <void> {
+  for (let member of this.firebase.currentChannelData[0].members) {   
+    const user = this.firebase.usersArray.find(u => u.userId === member.userId);
+    if (user) {
+      member.statusChangeable = user.statusChangeable;
+      member.status = user.status;
+    }
+  }
 }
 
 addMemberDropdown() {
