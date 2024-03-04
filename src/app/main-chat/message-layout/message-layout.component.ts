@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnInit,
+  ViewChild,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MainChatComponent } from '../main-chat.component';
 import {
@@ -61,9 +68,9 @@ export class MessageLayoutComponent implements OnInit {
   constructor(
     private firestore: Firestore,
     private drawerService: DrawerService,
-    private id: GetIdService,
     private firebase: FirebaseService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -92,24 +99,39 @@ export class MessageLayoutComponent implements OnInit {
       `channels/${channelId}/channelMessages`
     );
     const q = query(messagesCollection, orderBy('time', 'desc'));
-
-    this.messages$ = new Observable<Message[]>((observer) => {
-      onSnapshot(
-        q,
-        (querySnapshot) => {
-          const messages: Message[] = [];
-          querySnapshot.forEach((doc) => {
-            const message = doc.data() as Message;
-            message.messageId = doc.id;
-            messages.push(message);
-          });
-          observer.next(messages.reverse());
-        },
-        (error) => observer.error(error)
-      );
-    });
+  
+    onSnapshot(
+      q,
+      (querySnapshot) => {
+        const messages: Message[] = [];
+        querySnapshot.forEach((doc) => {
+          const message = doc.data() as Message;
+          message.messageId = doc.id;
+          if (message.senderId === this.userId) {
+            // Check if the user has updated their name
+            if (this.firebase.updatedName) {
+              message.name = this.firebase.updatedName;
+            } else {
+              // Use the default user name
+              message.name = this.userName;
+            }
+          } else {
+            // For messages from other users, use their default name
+            // Assuming there's a property like senderName in the message
+            message.name = message.name;
+          }
+          messages.push(message);
+        });
+        this.messagesSubject.next(messages.reverse()); // Update the messages
+      },
+      (error) => console.error('Error fetching messages:', error)
+    );
   }
+  
 
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
+  }
   toggleEmojiPicker(messageId: string) {
     if (!this.isEmojiPickerVisible[messageId]) {
       Object.keys(this.isEmojiPickerVisible).forEach((key) => {
@@ -133,22 +155,21 @@ export class MessageLayoutComponent implements OnInit {
     if (!message.reactions[emoji]) {
       message.reactions[emoji] = { count: 0, users: {} };
     }
-  
+
     let emojiReaction = message.reactions[emoji];
-  
+
     // If the user has not already reacted with this emoji, add their reaction
     if (!emojiReaction.users[userId]) {
       emojiReaction.count += 1;
       emojiReaction.users[userId] = true; // Mark this user as having reacted with this emoji
-    } 
-  
+    }
+
     // Update the message reactions in Firebase
     this.updateMessageReactions(this.selectedChannelId!, message);
-  
+
     // Close the emoji picker UI
     this.closeEmojiPicker(message.messageId);
   }
-  
 
   closeEmojiPicker(messageId: string) {
     this.isEmojiPickerVisible[messageId] = false;
@@ -181,7 +202,6 @@ export class MessageLayoutComponent implements OnInit {
   }
 
   updateMessageReactions(channelId: string, message: Message) {
-
     // Construct the correct path using the provided channelId
     const messageRef = doc(
       this.firestore,

@@ -4,6 +4,7 @@ import {
   OnInit,
   EventEmitter,
   Output,
+  ChangeDetectorRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -64,7 +65,8 @@ export class SideNavComponent implements OnInit {
     public dialog: MatDialog,
     public firebase: FirebaseService,
     private privateMessageService: PrivateMessageService,
-    private router: Router
+    private router: Router,
+    private changeDetector: ChangeDetectorRef,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -164,5 +166,9 @@ export class SideNavComponent implements OnInit {
     } else if (!this.sideNavBtnStatus) {
       this.sideNavBtnStatus = true;
     }
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetector.detectChanges();
   }
 }

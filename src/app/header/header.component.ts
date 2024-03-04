@@ -78,23 +78,31 @@ export class HeaderComponent implements OnInit {
     this.searchQuery = query;
 
     if (query.startsWith('@')) {
-      this.filteredUsers = this.filterArray(this.userArr, 'name', searchTerm);
-      this.filteredChannels = []; // Reset channels
-      this.showDropdown = true;
+        this.filteredUsers = this.filterArray(this.userArr, 'name', searchTerm);
+        this.filteredChannels = []; // Reset channels
+        this.showDropdown = true;
     } else if (query.startsWith('#')) {
-      // Use a new method for filtering channels that considers channel rights
-      this.filteredChannels = this.filterChannelsWithRights(
-        this.channelArr,
-        'channelName',
-        searchTerm,
-        this.userId
-      );
-      this.filteredUsers = []; // Reset users
-      this.showDropdown = true;
+        this.filteredChannels = this.filterChannelsWithRights(
+            this.channelArr,
+            'channelName',
+            searchTerm,
+            this.userId
+        );
+        this.filteredUsers = []; // Reset users
+        this.showDropdown = true;
     } else {
-      this.showDropdown = false; // Hide dropdown if neither @ nor # is entered
+        // Show both channels and users if no specific symbol is entered
+        this.filteredChannels = this.filterChannelsWithRights(
+            this.channelArr,
+            'channelName',
+            searchTerm,
+            this.userId
+        );
+        this.filteredUsers = this.filterArray(this.userArr, 'name', searchTerm);
+        this.showDropdown = true;
     }
-  }
+}
+
 
   filterChannelsWithRights(channels: any[], propertyName: string, searchTerm: string, userId: string): any[] {
 

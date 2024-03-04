@@ -4,47 +4,72 @@
 
   <div class="header-profil" (click)="headerDropdownMenu()">
       <! <p>{{ firebase.name }}</p> -->
-      <!-- <img class="profil-img" src="./../../assets/img/profile-1.png">
+<!-- <img class="profil-img" src="./../../assets/img/profile-1.png">
       <img class="logout-img" src="./../../assets/img/keyboard-arrow-down-black.png"> -->
 
 <div class="header-wrapper spaceBetween horicontal">
-
-  <img src="./../../assets/img/text-logo.png" class="header-logo">
+  <img src="./../../assets/img/text-logo.png" class="header-logo" />
 
   <div class="horicontal">
     <div class="search">
       <div class="header-input">
-          <input type="text" placeholder="@ für users # für channels" (input)="search($event)">
-          <img src="./../../assets/img/search.png"  class="icon-size-35">
+        <input
+          type="text"
+          placeholder="@ für users # für channels"
+          (click)="showDropdown = true"
+          (input)="search($event)"
+        />
+        <img src="./../../assets/img/search.png" class="icon-size-35" />
       </div>
-      <div *ngIf="showDropdown" class="dropdown scroll-bar" >
+      <div *ngIf="showDropdown" class="dropdown scroll-bar">
         <p>Suche mit &commat; nach User and # nach Channels</p>
 
         <div class="search-channel">
-            <h3>Channel:</h3>
-            <p *ngIf="filteredChannels.length === 0">Keine Einträge gefunden</p>
-            <p class="searched-channel-result" (click)="navigateToChannel(channel.channelId)" *ngFor="let channel of filteredChannels">#{{channel.channelName}}</p>
+          <h3>Channel:</h3>
+          <p *ngIf="filteredChannels.length === 0">Keine Einträge gefunden</p>
+          <p
+            class="searched-channel-result"
+            (click)="navigateToChannel(channel.channelId)"
+            *ngFor="let channel of filteredChannels"
+          >
+            #{{ channel.channelName }}
+          </p>
         </div>
         <div class="search-user">
-            <h3>Users:</h3>
-            <p *ngIf="filteredUsers.length === 0">Keine Einträge gefunden</p>
-            <div *ngFor="let user of filteredUsers" (click)="navigateToUser(user.userId)" class="searched-user-result">
-                <img [src]="user.profileImg" alt="">
-                <p class="user-name">{{user.name}}</p>
-            </div>
+          <h3>Users:</h3>
+          <p *ngIf="filteredUsers.length === 0">Keine Einträge gefunden</p>
+          <div
+            *ngFor="let user of filteredUsers"
+            (click)="navigateToUser(user.userId)"
+            class="searched-user-result"
+          >
+            <img [src]="user.profileImg" alt="" />
+            <p class="user-name">{{ user.name }}</p>
+          </div>
         </div>
       </div>
     </div>
-      <div class="header-profile horicontal" (click)="headerDropdownMenu()">
-          <h2 class="bold name">{{ firebase.name }}</h2>
-          <div class="profile-img-and-status">
-              <div [style.background-image]="'url(' + firebase.profileImg + ')'" class="profile-img"></div>
-              <img [src]="firebase.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'"
-                  class="status">
-          </div>
-
-          <img class="icon-size-30" src="./../../assets/img/keyboard-arrow-down-black.png">
+    <div class="header-profile horicontal" (click)="headerDropdownMenu()">
+      <h2 class="bold name">{{ firebase.name }}</h2>
+      <div class="profile-img-and-status">
+        <div
+          [style.background-image]="'url(' + firebase.profileImg + ')'"
+          class="profile-img"
+        ></div>
+        <img
+          [src]="
+            firebase.status
+              ? './../../../assets/img/online.png'
+              : './../../../assets/img/offline.png'
+          "
+          class="status"
+        />
       </div>
 
+      <img
+        class="icon-size-30"
+        src="./../../assets/img/keyboard-arrow-down-black.png"
+      />
+    </div>
   </div>
 </div>

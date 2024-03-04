@@ -1,7 +1,9 @@
 declare var google: any;
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject  } from '@angular/core';
 import {
+  DocumentData,
   Firestore,
+  QueryDocumentSnapshot,
   addDoc,
   collection,
   doc,
@@ -17,7 +19,7 @@ import { Message } from '../classes/message.class';
 import { Channel } from '../classes/channel.class';
 import { BehaviorSubject } from 'rxjs';
 import { PrivateMessage } from '../classes/private-message.class';
-
+import { ChangeDetectorRef } from '@angular/core';
 import { interval } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
 import { PrivateMessageService } from './private-message.service';
@@ -31,7 +33,7 @@ export class FirebaseService {
   statusChangeable!: boolean;
   email!: string;
   profileImg!: string;
-
+  updatedName!:string;
   usersArray: any[] = [];
   loggedInUserId!: string;
   loggedInUserArray: any[] = [];
@@ -64,7 +66,6 @@ export class FirebaseService {
   privateMessageId!: string; // don't use this
   privateMessageExists: boolean = false; // don't use this
   lastOpenedElementSideNav!: string;
-
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
   constructor(private privateMessageService: PrivateMessageService,) {}
@@ -241,6 +242,8 @@ export class FirebaseService {
       { name: newName },
       { merge: true }
     );
+      this.updateUserNameInMessages(this.loggedInUserId, newName, this.currentChannelId)
+    this.updatedName = newName;
   }
 
   async changeEmail(newEmail: string): Promise<void> {
@@ -704,4 +707,41 @@ export class FirebaseService {
     }
     return true;
   }
+  
+
+  async updateUserNameInMessages(userId: string, newName: string, currentChannelId: string): Promise<void> {
+    try {
+        console.log(currentChannelId);
+        const q = query(collection(this.firestore, `channels/${currentChannelId}/channelMessages`));
+        const querySnapshot = await getDocs(q);
+        
+        console.log(`Found ${querySnapshot.size} messages for user ID ${userId} in channel ${currentChannelId}`);
+        for (const doc of querySnapshot.docs) {
+            try {
+                const messageData = doc.data(); // Retrieve the document data
+                if (messageData['senderId'] === userId) {
+                    const messageId = doc.id; // Retrieve the document ID
+                    const messageRef = doc.ref; // Access the document reference
+    
+                    console.log(`Updating message with ID ${messageId}`);
+            
+                    // Update the user name in the message data
+                    const updatedData = { ...messageData, name: newName };
+                  this.updatedName = newName
+                    // Set the updated data back to the document
+                    await setDoc(messageRef, updatedData);
+                }
+            } catch (updateError) {
+                console.error(`Error updating message: ${updateError}`);
+            }
+        }
+        console.log('User name updated in channelMessages collection.');
+    } catch (error) {
+        console.error('Error updating user name in channelMessages:', error);
+    }
+}
+
+  
+  
+  
 }

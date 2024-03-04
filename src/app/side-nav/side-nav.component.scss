@@ -271,4 +271,5 @@
   overflow-y: auto;
   max-height: calc(100vh - 942px); // -900px
   gap: 0.8125rem; // 13px
+  min-height: calc(100vh - 830px);
 }

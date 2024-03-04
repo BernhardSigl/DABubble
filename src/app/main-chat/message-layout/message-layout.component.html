@@ -1,6 +1,6 @@
 <div
-  class="message-card "
-  *ngFor="let message of messages$ | async"
+  class="message-card"
+  *ngFor="let message of messages$ | async;"
   [ngClass]="{
     'current-user': message.senderId === userId,
     'other-user': message.senderId !== userId
@@ -9,7 +9,7 @@
   <div class="sent-date">
     <mat-divider class="one-divider"></mat-divider>
     <div class="btn-date">
-      <button>{{ message.time | date : "M/d/yy" }}</button>
+      <button>{{ message.time | date : "d/M/yy" }}</button>
     </div>
     <mat-divider class="two-divider"></mat-divider>
   </div>
@@ -31,7 +31,6 @@
           alt="Message Image"
           *ngIf="message.messageImage"
         />
-
         <div
           class="message"
           *ngIf="
@@ -51,14 +50,13 @@
           />
           <div class="reactions-container">
             <button
-                *ngFor="let reaction of message.reactions | keyvalue"
-                class="reactions"
-                (click)="toggleReaction(message, reaction.key, userId!)"
+              *ngFor="let reaction of message.reactions | keyvalue"
+              class="reactions"
+              (click)="toggleReaction(message, reaction.key, userId!)"
             >
-                {{ reaction.key }} {{ reaction.value.count }}
+              {{ reaction.key }} {{ reaction.value.count }}
             </button>
-        </div>
-
+          </div>
 
           <emoji-mart
             class="emoji-mart"
@@ -73,7 +71,11 @@
               (click)="toggleEmojiPicker(message.messageId)"
               alt=""
             />
-            <img src="../../../assets/img/thread.png" alt="" (click)="openThread(message)" />
+            <img
+              src="../../../assets/img/thread.png"
+              alt=""
+              (click)="openThread(message)"
+            />
             <img
               *ngIf="message.senderId === userId"
               src="../../../assets/img/three-dots-vertical.png"
@@ -104,15 +106,20 @@
             Abbrechen
           </button>
           <button
-          *ngIf="selectedChannelId"
-          (click)="saveEditedMessage(selectedChannelId, message)"
+            *ngIf="selectedChannelId"
+            (click)="saveEditedMessage(selectedChannelId, message)"
             class="edit-save"
           >
             Speichern
           </button>
         </div>
       </div>
-      <img class="card-profile-img" [src]="message.image" alt="User Image"  (click)="showProfile(message.name)"/>
+      <img
+        class="card-profile-img"
+        [src]="message.image"
+        alt="User Image"
+        (click)="showProfile(message.name)"
+      />
     </div>
   </div>
 </div>
