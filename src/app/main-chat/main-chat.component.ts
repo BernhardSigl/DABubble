@@ -86,6 +86,7 @@ export class MainChatComponent implements OnInit {
       this.messages$ = this.messageLayout.messages$;
     }
     this.checkEmailChange();
+    this.firebase.scheduleAutomaticUpdate();
   }
 
   async getUserData(userId: string): Promise<void> {

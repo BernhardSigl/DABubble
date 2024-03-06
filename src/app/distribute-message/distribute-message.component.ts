@@ -73,17 +73,46 @@ export class DistributeMessageComponent implements OnInit {
   messages$!: Observable<Message[]>;
   private currentChannelId: string | null = null;
   selectedChannelIds: string[] = [];
-
   selectedPrivateChatId:string[]=[];
 
+  usersToDisplay: any[]=[];
+  channelsToDisplay: any[]=[];
 
   constructor(
     private firebase: FirebaseService,
     private router: Router,
     private firestore: Firestore
   ) {}
+  
   async ngOnInit() {
     await this.firebase.ngOnInit();
+  }
+
+  convertUserId() {
+    this.usersToDisplay = [];
+    const privateChatIds = this.selectedPrivateChatId.map(id => id.split('_')[0]);
+    const matchedUsers = this.firebase.usersArray.filter(user => privateChatIds.includes(user.userId));
+    this.usersToDisplay.push(...matchedUsers);
+  }
+
+  convertChannelId() {
+    this.channelsToDisplay = [];
+    const matchedChannels = this.firebase.channelsArray.filter(channel => this.selectedChannelIds.includes(channel.channelId));
+    this.channelsToDisplay.push(...matchedChannels)
+  }
+
+  removeUser(userToRemove: any) {
+    const index = this.usersToDisplay.indexOf(userToRemove);
+    if (index !== -1) {
+      this.usersToDisplay.splice(index, 1);
+    }
+  }
+
+  removeChannel(channelToRemove: any) {
+    const index = this.channelsToDisplay.indexOf(channelToRemove);
+    if (index !== -1) {
+      this.channelsToDisplay.splice(index, 1);
+    }
   }
 
   search(event: Event) {
@@ -169,41 +198,46 @@ export class DistributeMessageComponent implements OnInit {
     if (channel) {
       this.selectedChannelIds.push(channel.channelId); // Push channelId into the array
       this.updateInputValue(channel.channelName);
+      this.convertChannelId();
     }
-
   }
   
-
   async navigateToUser(userId: string) {
     const user = this.filteredUsers.find((u) => u.userId === userId);
     this.selectedPrivateChatId.push(user.userId+'_'+  this.firebase.loggedInUserId)  ;
     console.log(this.selectedPrivateChatId)
     if (user) {
       this.updateInputValue(user.name);
+      this.convertUserId();
     }
     // Additional logic if needed
   }
 
   private updateInputValue(value: string) {
-    const inputElement = document.querySelector(
-      '.distributor-input'
-    ) as HTMLInputElement;
+    const inputElement = document.querySelector('.distributor-input') as HTMLInputElement;
     if (inputElement) {
-      const currentValue = inputElement.value;
-      if (currentValue) {
-        // Check if the current value starts with '#' or '@'
-        if (currentValue.startsWith('#') || currentValue.startsWith('@')) {
-          // If yes, replace the current value with the new value
-          inputElement.value = value + ', ';
-        } else {
-          // If not, append the new value to the current value with a comma
-          inputElement.value = currentValue + ', ' + value;
-        }
-      } else {
-        inputElement.value = value + ', ';
-        this.showDropdown = false;
-      }
+      inputElement.value = '';
     }
+
+    // const inputElement = document.querySelector(
+    //   '.distributor-input'
+    // ) as HTMLInputElement;
+    // if (inputElement) {
+    //   const currentValue = inputElement.value;
+    //   if (currentValue) {
+    //     // Check if the current value starts with '#' or '@'
+    //     if (currentValue.startsWith('#') || currentValue.startsWith('@')) {
+    //       // If yes, replace the current value with the new value
+    //       inputElement.value = value + ', ';
+    //     } else {
+    //       // If not, append the new value to the current value with a comma
+    //       inputElement.value = currentValue + ', ' + value;
+    //     }
+    //   } else {
+    //     inputElement.value = value + ', ';
+    //     this.showDropdown = false;
+    //   }
+    // }
   }
 
   async sendMessage(): Promise<void> {

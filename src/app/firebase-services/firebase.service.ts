@@ -105,7 +105,7 @@ export class FirebaseService {
       now.getFullYear(),
       now.getMonth(),
       now.getDate(),
-      3,
+      21,
       0
     );
     let delay = targetTime.getTime() - now.getTime();
@@ -118,6 +118,7 @@ export class FirebaseService {
     const updatePromises: Promise<void>[] = [];
     usersSnapshot.forEach((userDoc) => {
       const userRef = doc(this.firestore, 'users', userDoc.id);
+      console.log('test');
       const updatePromise = setDoc(
         userRef,
         {
