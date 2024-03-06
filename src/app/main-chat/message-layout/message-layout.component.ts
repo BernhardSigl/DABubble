@@ -5,6 +5,8 @@ import {
   OnInit,
   ViewChild,
   ChangeDetectorRef,
+  AfterViewChecked,
+  AfterViewInit,
 } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MainChatComponent } from '../main-chat.component';
@@ -49,6 +51,7 @@ export class MessageLayoutComponent implements OnInit {
   @Input() userName!: string;
   @Input() userImage!: string;
   @ViewChild('drawer') drawer!: MatDrawer;
+  @ViewChild('scrollContainer') private scrollContainer: ElementRef | undefined;
   isHovered: { [key: string]: boolean } = {};
   public textArea: string = '';
   public isEmojiPickerVisible: { [key: string]: boolean } = {};
@@ -57,7 +60,6 @@ export class MessageLayoutComponent implements OnInit {
   public editedMessage: { [key: string]: string } = {};
   public selectedMessage: Message | null = null;
   public channelDoc: any;
-
   channelIds: string[] = [];
   selectedChannelId?: string;
   private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
@@ -73,6 +75,20 @@ export class MessageLayoutComponent implements OnInit {
     private changeDetector: ChangeDetectorRef
   ) {}
 
+
+  // ngAfterViewChecked() {
+  //   this.scrollToBottom();
+  // }
+
+  // scrollToBottom(): void {
+  //   console.log(this.scrollContainer)
+  //   if (this.scrollContainer) {
+  //     console.log('ji')
+  //     try {
+  //       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+  //     } catch(err) { }
+  //   }
+  // }
   ngOnInit() {
     this.firebase.selectedChannelId$.subscribe((channelId) => {
       if (channelId !== null) {
@@ -87,6 +103,8 @@ export class MessageLayoutComponent implements OnInit {
       }
     });
   }
+
+
 
   openThread(message: Message): void {
     this.drawerService.openDrawer(message);
@@ -123,6 +141,7 @@ export class MessageLayoutComponent implements OnInit {
           messages.push(message);
         });
         this.messagesSubject.next(messages.reverse()); // Update the messages
+
       },
       (error) => console.error('Error fetching messages:', error)
     );

@@ -1,5 +1,5 @@
 declare var google: any;
-import { Injectable, inject  } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   DocumentData,
   Firestore,
@@ -23,6 +23,7 @@ import { ChangeDetectorRef } from '@angular/core';
 import { interval } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
 import { PrivateMessageService } from './private-message.service';
+import { DrawerService } from './drawer.service';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +34,7 @@ export class FirebaseService {
   statusChangeable!: boolean;
   email!: string;
   profileImg!: string;
-  updatedName!:string;
+  updatedName!: string;
   usersArray: any[] = [];
   loggedInUserId!: string;
   loggedInUserArray: any[] = [];
@@ -49,6 +50,7 @@ export class FirebaseService {
   channelMembers: any[] = [];
   channelMessages: any[] = [];
   channelProfileImages: any[] = [];
+  channelMessagesId!: string;
 
   currentChannelRights: any[] = [];
   currentUserWithRights: any[] = [];
@@ -68,7 +70,10 @@ export class FirebaseService {
   lastOpenedElementSideNav!: string;
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
-  constructor(private privateMessageService: PrivateMessageService,) {}
+  constructor(
+    private privateMessageService: PrivateMessageService,
+    private threadService: DrawerService
+  ) {}
 
   async ngOnInit(): Promise<void> {
     await this.pullLoggedInUserId();
@@ -242,7 +247,12 @@ export class FirebaseService {
       { name: newName },
       { merge: true }
     );
-      this.updateUserNameInMessages(this.loggedInUserId, newName, this.currentChannelId)
+    this.updateUserNameInMessages(
+      this.loggedInUserId,
+      newName,
+      this.currentChannelId
+    );
+    // this.updateUserNameInThreads(this.loggedInUserId, newName, this.currentChannelId)
     this.updatedName = newName;
   }
 
@@ -264,7 +274,7 @@ export class FirebaseService {
       newChannel.channelId = this.channelId;
       await this.saveChannelId(newChannel);
     } catch (error) {
-      console.error("Error adding channel:", error);
+      console.error('Error adding channel:', error);
     }
   }
 
@@ -367,21 +377,27 @@ export class FirebaseService {
   async selectLastOpenedChannel() {
     const currentChannelId = this.loggedInUserArray[0].activeChannelId;
     const lastOpenedOnSideNav = this.loggedInUserArray[0].lastOpened;
-    const correctedPrivateMessageId = this.correctedPrivateMessageId(currentChannelId);
-    const reversePrivateMessageId = this.reversePrivateMessageId(currentChannelId);
-    const chatPartner = this.usersArray.find((chatPartners) => (chatPartners.userId === this.getFirstId(currentChannelId)));
- 
+    const correctedPrivateMessageId =
+      this.correctedPrivateMessageId(currentChannelId);
+    const reversePrivateMessageId =
+      this.reversePrivateMessageId(currentChannelId);
+    const chatPartner = this.usersArray.find(
+      (chatPartners) =>
+        chatPartners.userId === this.getFirstId(currentChannelId)
+    );
+
     if (currentChannelId) {
       if (lastOpenedOnSideNav === 'channel') {
-              const channelToSelect = this.channelsArray.find(
-        (channel) => channel.channelId === currentChannelId
-      );
-      await this.activeChannelId('channel', channelToSelect.channelId);
-      this.setSelectedChannelId(channelToSelect.channelId);
-
+        const channelToSelect = this.channelsArray.find(
+          (channel) => channel.channelId === currentChannelId
+        );
+        await this.activeChannelId('channel', channelToSelect.channelId);
+        this.setSelectedChannelId(channelToSelect.channelId);
       } else if (lastOpenedOnSideNav === 'privateChat') {
         const privateMessageToSelect = this.privateMessagesArray.find(
-          (privateMessages) => (privateMessages.privateMessageId === currentChannelId || privateMessages.privateMessageId === reversePrivateMessageId)
+          (privateMessages) =>
+            privateMessages.privateMessageId === currentChannelId ||
+            privateMessages.privateMessageId === reversePrivateMessageId
         );
         this.addNewPrivateMessage(chatPartner);
         await this.activeChannelId('privateChat', correctedPrivateMessageId);
@@ -401,8 +417,9 @@ export class FirebaseService {
       const sortedIds = [user.userId, currentUser.userId].sort();
       const uniqueChatId = sortedIds.join('_');
 
-      let existingPrivateMessage =
-        await this.findPrivateMessageByUniqueChatId(uniqueChatId);
+      let existingPrivateMessage = await this.findPrivateMessageByUniqueChatId(
+        uniqueChatId
+      );
 
       if (!existingPrivateMessage) {
         const newPrivateMessage = new PrivateMessage({
@@ -411,10 +428,7 @@ export class FirebaseService {
           privateMessageId: uniqueChatId,
         });
 
-        await this.saveNewPrivateMessage(
-          newPrivateMessage,
-          uniqueChatId
-        );
+        await this.saveNewPrivateMessage(newPrivateMessage, uniqueChatId);
         existingPrivateMessage = newPrivateMessage;
       }
 
@@ -436,10 +450,10 @@ export class FirebaseService {
     if (parts.length === 2) {
       return parts[0]; // Gibt die ID vor dem Unterstrich zurück
     } else {
-      return ""; // Wenn kein Unterstrich vorhanden ist, geben Sie einen leeren String zurück oder behandeln Sie es entsprechend
+      return ''; // Wenn kein Unterstrich vorhanden ist, geben Sie einen leeren String zurück oder behandeln Sie es entsprechend
     }
   }
-  
+
   correctedPrivateMessageId(str: string): string {
     const parts = str.split('_');
     if (parts.length === 2) {
@@ -479,7 +493,7 @@ export class FirebaseService {
       { activeChannelId: this.currentChannelId },
       { merge: true }
     );
-    
+
     if (channelOrPrivateChat === 'channel') {
       await this.activeChannelData();
       const createdByUserId = this.currentChannelData[0].createdBy;
@@ -707,41 +721,39 @@ export class FirebaseService {
     }
     return true;
   }
-  
 
-  async updateUserNameInMessages(userId: string, newName: string, currentChannelId: string): Promise<void> {
+  async updateUserNameInMessages(
+    userId: string,
+    newName: string,
+    currentChannelId: string
+  ): Promise<void> {
     try {
-        console.log(currentChannelId);
-        const q = query(collection(this.firestore, `channels/${currentChannelId}/channelMessages`));
-        const querySnapshot = await getDocs(q);
-        
-        console.log(`Found ${querySnapshot.size} messages for user ID ${userId} in channel ${currentChannelId}`);
-        for (const doc of querySnapshot.docs) {
-            try {
-                const messageData = doc.data(); // Retrieve the document data
-                if (messageData['senderId'] === userId) {
-                    const messageId = doc.id; // Retrieve the document ID
-                    const messageRef = doc.ref; // Access the document reference
-    
-                    console.log(`Updating message with ID ${messageId}`);
-            
-                    // Update the user name in the message data
-                    const updatedData = { ...messageData, name: newName };
-                  this.updatedName = newName
-                    // Set the updated data back to the document
-                    await setDoc(messageRef, updatedData);
-                }
-            } catch (updateError) {
-                console.error(`Error updating message: ${updateError}`);
-            }
+      const q = query(
+        collection(
+          this.firestore,
+          `channels/${currentChannelId}/channelMessages`
+        )
+      );
+      const querySnapshot = await getDocs(q);
+      for (const doc of querySnapshot.docs) {
+        try {
+          const messageData = doc.data(); // Retrieve the document data
+          const channelMessagesId = doc.id;
+          this.channelMessagesId = channelMessagesId;
+          if (messageData['senderId'] === userId) {
+            const messageRef = doc.ref; // Access the document reference
+            // Update the user name in the message data
+            const updatedData = { ...messageData, name: newName };
+            this.updatedName = newName;
+            // Set the updated data back to the document
+            await setDoc(messageRef, updatedData);
+          }
+        } catch (updateError) {
+          console.error(`Error updating message: ${updateError}`);
         }
-        console.log('User name updated in channelMessages collection.');
+      }
     } catch (error) {
-        console.error('Error updating user name in channelMessages:', error);
+      console.error('Error updating user name in channelMessages:', error);
     }
-}
-
-  
-  
-  
+  }
 }

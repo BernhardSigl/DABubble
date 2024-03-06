@@ -44,6 +44,11 @@ simple-snack-bar {
   font-weight: 700;
 }
 
+.low-opacity-background {
+ opacity: 0.6;
+ transition: opacity 225ms ease-in-out;
+}
+
 .spinner{
   position: absolute;
   top: 50%;
@@ -302,6 +307,21 @@ simple-snack-bar {
       color: var(--primary);
       border-radius: 1.875rem;
     }
+  }
+}
+
+.pop-successful-login{
+  position: absolute;
+  background-color: var(--primary);
+  color: white;
+  min-width: 10rem;
+  padding: 10px;
+  border-radius: 20px 0 20px 20px;
+  bottom: 5rem;
+  right: 5rem;
+  h1{
+  font-size: 1rem;
+
   }
 }
 

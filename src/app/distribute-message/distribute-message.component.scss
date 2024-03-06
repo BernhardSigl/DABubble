@@ -1,0 +1,168 @@
+.desktop-view {
+    display: flex;
+    // gap: 20px;
+    margin-bottom: 25px;
+  
+    .main-chat {
+      flex-grow: 1;
+      margin-top: 20px;
+      margin: 20px 20px 0 20px;
+      height: 80vh;
+      background: var(--white);
+      border-radius: 30px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .header-chat {
+        display: flex;
+        flex-direction: column;
+
+        font-size: 24px;
+        padding: 25px 45px;
+        box-sizing: border-box;
+        box-shadow: 0px 10px 10px -10px rgba(0, 0, 0, 0.08);
+  
+        h2{
+            font-size: 24px;
+            font-weight: bold;
+        }
+        input{
+            border-radius: 30px;
+            padding: 13px;
+            margin-top: 10px;
+            border: 1px solid var(--light-purple);
+            outline: none;
+        }
+
+      }}
+      
+}
+  
+
+.dropdown {
+  background-color: white;
+  padding: 10px;
+  border-radius: 0 0 30px 30px;
+  max-height: 10vh;
+  overflow: auto;
+  z-index: 100;
+  position: absolute;
+  top: 230px;
+  p {
+    color: #686868;
+    font-size: 13px;
+    padding: 10px;
+  }
+}
+
+.search-channel,
+.search-user {
+  h3 {
+    padding-left: 10px;
+  }
+}
+
+.searched-user-result {
+  display: flex;
+  img {
+    width: 30px;
+    border-radius: 100%;
+    height: 30px;
+  }
+}
+
+.searched-channel-result,.searched-user-result {
+
+  &:hover{
+    background-color: #c4c2c2;
+    cursor: pointer;
+  }
+}
+
+  
+      app-message-layout {
+        position: relative;
+        margin-top: auto;
+        display: flex;
+        gap: 30px;
+        flex-direction: column;
+        align-items: flex-end;
+        overflow-y: scroll;
+        max-height: 60vh;
+        margin-bottom: 38px;
+      }
+  
+      .message-box{
+        position: relative;
+        padding: 0 35px 10px 35px;
+        width: 100%;
+        textarea{
+          width:  calc(100% - 120px);;
+          border-radius: 20px;
+          border: 1px solid var(--ligth-purple-lines, #ADB0D9);
+          height: 100px;
+          font-size: 18px;
+          padding: 30px;
+          caret-color: auto;
+          outline: none;
+          position: relative;
+        }
+      }
+      
+      .suggest-profile-picture{
+        width: 30px;
+        height:30px;
+        border-radius: 100%;
+      }
+      
+      
+      .add-ons{
+        display: flex;
+        gap: 13px;
+        position: absolute;
+        bottom: 25px;
+        left: 50px;
+        width: 100%;
+        img{
+          cursor: pointer;
+        }
+      }
+      
+      .vertical-divider {
+        width: 1px;
+        height: 22px;
+        margin: 0 5px;
+        background-color: #ADB0D9;
+      }
+      
+      emoji-mart{
+        max-height: 30rem;
+        max-width: 25rem;
+          overflow: auto;
+          position: absolute;
+          bottom: 20px;
+      }
+      
+      .send{
+        position: absolute;
+        right: 150px;
+        bottom: -5px;
+      }
+      
+      .mentioned-users{
+        color: var(--primary);
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        gap: 10px;
+      }
+      
+      .mentioned-users-container {
+        height: 13vh;
+        overflow: auto;
+      }
+      
+      

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { SideNavComponent } from '../side-nav/side-nav.component';
 import { MessageBoxComponent } from './message-box/message-box.component';
@@ -42,7 +42,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './main-chat.component.scss',
 })
 export class MainChatComponent implements OnInit {
-
+  @ViewChild('messageContainer') messageContainer!: ElementRef;
   userName: string = '';
   userImage: string = '';
   userId: string = '';
@@ -50,7 +50,7 @@ export class MainChatComponent implements OnInit {
   @ViewChild(MessageLayoutComponent)
   messageLayout!: MessageLayoutComponent;
   messages$: Observable<Message[]> | undefined;
-
+  @ViewChild('scrollContainer') private scrollContainer: ElementRef | undefined;
   constructor(
     private userDataService: UserListService,
     private auth: AuthyService,
@@ -63,7 +63,18 @@ export class MainChatComponent implements OnInit {
   onMessageSelected(message: Message): void {
     this.selectedMessage = message;
   }
+  // ngAfterViewChecked() {
+  //   this.scrollToBottom();
+  // }
 
+  // scrollToBottom(): void {
+  //   console.log(this.scrollContainer)
+  //   if (this.scrollContainer) {
+  //     try {
+  //       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
+  //     } catch(err) { }
+  //   }
+  // }
   async ngOnInit(): Promise<void>{
     // performance test: alt
     

@@ -9,6 +9,7 @@ import { canActivate, redirectUnauthorizedTo, redirectLoggedInTo } from '@angula
 import { PrivateChatComponent } from './private-chat/private-chat.component';
 import { ImprintComponent } from './authentication/imprint/imprint.component';
 import { PrivacyPolicyComponent } from './authentication/privacy-policy/privacy-policy.component';
+import { DistributeMessageComponent } from './distribute-message/distribute-message.component';
 
 const redirectLoggedIn = () => redirectUnauthorizedTo(['login']);
 const redirectToMain = () => redirectLoggedInTo(['main']);
@@ -53,6 +54,9 @@ export const routes: Routes = [
   },
   { path: 'forgot',
   component: ForgetPasswordComponent,
+},
+{ path: 'distributor',
+component: DistributeMessageComponent,
 },
   {
     path:'private-chat/:userId',

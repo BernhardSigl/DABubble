@@ -5,48 +5,64 @@
   <!-- Chat Header -->
   <section class="main-chat">
     <header class="header-chat">
-
       <div class="left-side-header">
-          <div class="channel">
-              <div class="hashtag-and-name horicontal" (click)="showChannelInfo()">
-                  <div class="icon-size-24 hashtag"></div>
-                  <h4 class="channel-name bold">{{ firebase.currentChannelName }}</h4>
-                  <div class="arrow-down-img"></div>
-              </div>
+        <div class="channel">
+          <div class="hashtag-and-name horicontal" (click)="showChannelInfo()">
+            <div class="icon-size-24 hashtag"></div>
+            <h4 class="channel-name bold">{{ firebase.currentChannelName }}</h4>
+            <div class="arrow-down-img"></div>
           </div>
-
+        </div>
       </div>
 
       <div class="right-side-header">
         <div class="profile-images horicontal" (click)="listMembers()">
-
-          <ng-container *ngFor="let image of firebase.channelProfileImages; let i=index">
+          <ng-container
+            *ngFor="let image of firebase.channelProfileImages; let i = index"
+          >
             <img *ngIf="i < 3" [src]="image" alt="Profile Image" />
           </ng-container>
           <ng-container *ngIf="firebase.channelProfileImages.length > 3">
-            <h3 class="profile-counts">+{{ firebase.channelProfileImages.length - 3 }}</h3>
+            <h3 class="profile-counts">
+              +{{ firebase.channelProfileImages.length - 3 }}
+            </h3>
           </ng-container>
-
         </div>
         <div class="add-member" (click)="addMemberDropdown()"></div>
-
       </div>
     </header>
 
     <!--  Messages -->
-    <app-message-layout class="scroll-bar" [userId]="userId" [userName]="userName" [userImage]="userImage" #messageLayout></app-message-layout>
+
+    <app-message-layout
+
+      class="scroll-bar"
+      [userId]="userId"
+      [userName]="userName"
+      [userImage]="userImage"
+      #messageLayout
+    ></app-message-layout>
 
     <!-- If there are no text messages in the Channel -->
 
-    <div class="empty-channel-content" *ngIf="(messageLayout.messages$ | async)?.length === 0">
+    <div
+      class="empty-channel-content"
+      *ngIf="(messageLayout.messages$ | async)?.length === 0"
+    >
       <h2>#{{ firebase.currentChannelName }}</h2>
-      <p>{{ firebase.channelCreatedBy }} hat diesen Channel erstellt. Das ist der Anfang des Channels <span>#{{ firebase.currentChannelName }}</span></p>
+      <p>
+        {{ firebase.channelCreatedBy }} hat diesen Channel erstellt. Das ist der
+        Anfang des Channels <span>#{{ firebase.currentChannelName }}</span>
+      </p>
     </div>
 
     <!-- Message box -->
     <app-message-box [userId]="userId"></app-message-box>
   </section>
-  <div >
-    <app-thread  [selectedMessage]="selectedMessage" [userId]="userId" ></app-thread>
+  <div>
+    <app-thread
+      [selectedMessage]="selectedMessage"
+      [userId]="userId"
+    ></app-thread>
   </div>
 </div>

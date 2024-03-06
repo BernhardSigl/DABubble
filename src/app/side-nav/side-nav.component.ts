@@ -171,4 +171,8 @@ export class SideNavComponent implements OnInit {
   ngAfterContentChecked(): void {
     this.changeDetector.detectChanges();
   }
+
+  routeToDistribute(){
+    this.router.navigate(['/distributor'])
+  }
 }

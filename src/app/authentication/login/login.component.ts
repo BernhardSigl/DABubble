@@ -89,6 +89,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
       transition('middle => top-left', animate('0.6s ease-out')),
     ]),
   ],
+  
 })
 export class LoginComponent implements OnInit {
   textState: string = 'hidden';
@@ -97,7 +98,6 @@ export class LoginComponent implements OnInit {
   setNone: boolean = false;
   moveState: string = 'middle';
   animationPlayed: boolean = false;
-
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', Validators.required),

@@ -1,0 +1,112 @@
+<app-header></app-header>
+
+<div class="desktop-view">
+  <app-side-nav></app-side-nav>
+  <!-- Chat Header -->
+  <section class="main-chat">
+    <header class="header-chat">    
+        <h2>Neue Nachricht</h2>
+        <input class="distributor-input" type="text" placeholder="An: #channel, oder @jemand oder E-Mail Adresse" (input)="search($event)">
+        <div *ngIf="showDropdown" class="dropdown scroll-bar">
+          <p>Suche mit &commat; nach User and # nach Channels</p>
+  
+          <div class="search-channel">
+            <h3>Channel:</h3>
+            <p *ngIf="filteredChannels.length === 0">Keine Einträge gefunden</p>
+            <p
+              class="searched-channel-result" (click)="navigateToChannel(channel.channelId)"
+              *ngFor="let channel of filteredChannels"
+            >
+              #{{ channel.channelName }}
+            </p>
+          </div>
+          <div class="search-user">
+            <h3>Users:</h3>
+            <div
+              *ngFor="let user of filteredUsers"
+              class="searched-user-result" (click)="navigateToUser(user.userId)"
+            >
+              <img [src]="user.profileImg" alt="" />
+              <p class="user-name">{{ user.name }}</p>
+            </div>
+          </div>
+        </div>
+      </header>
+
+
+
+      
+  <div class="message-box">
+    <div class="selected-file" *ngIf="selectedFile">
+      Selected file: {{ selectedFile.name }}
+    </div>
+    <div *ngIf="mentionedUsers.length > 0" class="mentioned-users-container">
+      <div
+        *ngFor="let user of mentionedUsers; let i = index"
+        (click)="selectMention(i)"
+        class="mentioned-users"
+      >
+        <img [src]="user.profilePicture" class="suggest-profile-picture" />
+        <!-- Display profile picture -->
+        <span>{{ user.name }}</span>
+        <!-- Display name -->
+      </div>
+    </div>
+  
+    <textarea
+      class="textarea"
+      placeholder="Nachricht an #Entwicklerteam"
+      [(ngModel)]="textArea"
+      (input)="suggestUsers(); onTextAreaChange()"
+    ></textarea>
+  
+    <div class="add-ons">
+      <input
+        type="file"
+        accept="image/*"
+        (change)="onFileSelected($event)"
+        #fileInput
+        style="display: none"
+      />
+      <img
+        matTooltip="Add Image"
+        src="../../../assets/img/add.png"
+        class="add"
+        (click)="fileInput.click()"
+      />
+      <mat-divider class="vertical-divider"></mat-divider>
+      <img
+        matTooltip="Open the emoji"
+        class="emoji"
+        src="../../../assets/img/emoji.png"
+        (click)="toggleEmojiPicker()"
+      />
+      <emoji-mart
+        class="emoji-mart"
+        *ngIf="isEmojiPickerVisible"
+        (emojiSelect)="addEmoji($event)"
+        title="Choose your emoji"
+      ></emoji-mart>
+      <img
+        matTooltip="mention someone"
+        src="../../../assets/img/at-grey.png"
+        alt=""
+        class="mention"
+        (click)="addMention()"
+      />
+  
+      <img
+        matTooltip="Send"
+        src="../../../assets/img/send-dark-blue.png"
+        alt=""
+        class="send"
+        (click)="sendMessage()"
+      />
+    </div>
+  </div>
+  </section>
+
+
+  
+<!--         (click)="sendMessage()" -->
+</div>
