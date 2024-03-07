@@ -253,7 +253,6 @@ export class FirebaseService {
       newName,
       this.currentChannelId
     );
-    // this.updateUserNameInThreads(this.loggedInUserId, newName, this.currentChannelId)
     this.updatedName = newName;
   }
 
@@ -741,6 +740,7 @@ export class FirebaseService {
           const messageData = doc.data(); // Retrieve the document data
           const channelMessagesId = doc.id;
           this.channelMessagesId = channelMessagesId;
+          console.log(this.channelMessagesId)
           if (messageData['senderId'] === userId) {
             const messageRef = doc.ref; // Access the document reference
             // Update the user name in the message data
@@ -757,4 +757,5 @@ export class FirebaseService {
       console.error('Error updating user name in channelMessages:', error);
     }
   }
+
 }

@@ -71,7 +71,7 @@ export class MessageLayoutThreadComponent implements OnInit {
   messageId: string = '';
   selectedChannelId?: string;
 
-  ngOnInit() {
+ async ngOnInit() {
     this.threadService.selectedMessageChanged.subscribe(
       (selectedMessage: Message | null) => {
         if (selectedMessage) {
@@ -90,6 +90,8 @@ export class MessageLayoutThreadComponent implements OnInit {
         this.selectedChannelId = undefined; // or set to a default/fallback value if suitable
       }
     });
+    await this.firebase.ngOnInit();
+
   }
 
 
@@ -105,6 +107,12 @@ export class MessageLayoutThreadComponent implements OnInit {
         this.threadMessages = [];
         querySnapshot.forEach((doc) => {
           const message = { messageId: doc.id, ...doc.data() } as Message; // Add the doc.id as messageId if needed
+
+          if(this.firebase.updatedName){
+            message.name = this.firebase.updatedName;
+          }else{
+            message.name = message.name
+          }
           this.threadMessages.push(message);
         });
       },

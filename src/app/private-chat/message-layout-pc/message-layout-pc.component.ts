@@ -11,6 +11,7 @@ import {
   getDocs,
   where,
   limit,
+  QuerySnapshot,
 } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '../../classes/message.class';
@@ -97,13 +98,19 @@ export class MessageLayoutPcComponent {
       orderBy('time', 'asc') // Order messages by time
     );
 
-    onSnapshot(q, (snapshot) => {
+    onSnapshot(q, (querySnapshot) => {
       const messages: Message[] = [];
-      snapshot.forEach((doc) => {
-        const message = { ...doc.data(), messageId: doc.id } as Message;
-        this.messageId = message.messageId;
-        messages.push(doc.data() as Message);
-      });
+      querySnapshot.forEach((doc)=>{
+        const message = doc.data() as Message;
+        message.messageId = doc.id;
+        if(this.firebase.updatedName){
+          message.name = this.firebase.updatedName;
+        }else{
+          message.name = message.name
+        }
+
+        messages.push(message)
+      })
       this.messagesSubject.next(messages);
     });
   }

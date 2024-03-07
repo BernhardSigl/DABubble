@@ -135,7 +135,6 @@ export class MessageLayoutComponent implements OnInit {
             }
           } else {
             // For messages from other users, use their default name
-            // Assuming there's a property like senderName in the message
             message.name = message.name;
           }
           messages.push(message);

@@ -282,7 +282,7 @@ export class LoginComponent implements OnInit {
   async loginAsGuest() {
     const guestEmail = 'guest@guest.de';
     const guestPassword = '123456';
-
+    // debugger;
     try {
       this.isLoading = true;
         await this.authenticateGuest(guestEmail, guestPassword);

@@ -128,8 +128,6 @@ export class DistributeMessageComponent implements OnInit {
       );
       this.showDropdown = true;
       this.filteredChannels = []; // Reset channels
-
-      console.log(this.filteredUsers);
     } else if (query.startsWith('#')) {
       this.filteredChannels = this.filterChannelsWithRights(
         this.firebase.channelsArray,
@@ -139,8 +137,6 @@ export class DistributeMessageComponent implements OnInit {
       );
       this.showDropdown = true;
       this.filteredUsers = []; // Reset users
-
-      console.log(this.filteredChannels);
     } else {
       // Show both channels and users if no specific symbol is entered
       this.filteredChannels = this.filterChannelsWithRights(
@@ -205,7 +201,7 @@ export class DistributeMessageComponent implements OnInit {
   async navigateToUser(userId: string) {
     const user = this.filteredUsers.find((u) => u.userId === userId);
     this.selectedPrivateChatId.push(user.userId+'_'+  this.firebase.loggedInUserId)  ;
-    console.log(this.selectedPrivateChatId)
+
     if (user) {
       this.updateInputValue(user.name);
       this.convertUserId();
@@ -254,16 +250,9 @@ export class DistributeMessageComponent implements OnInit {
         if (this.selectedChannelIds.length > 0) {
           // Iterate over each selected channel ID and send the message
           for (const channelId of this.selectedChannelIds) {
-            console.log(this.selectedChannelIds)
             await this.sendMessageToChannel(newMessage, channelId);
           }
         }
-  
-        // if (this.selectedPrivateChatId) {
-        //   // Send message to the selected private chat
-        //   await this.sendMessageToPrivateChat(newMessage);
-        // }
-
         if(this.selectedPrivateChatId.length>0){
           for(const pcId of this.selectedPrivateChatId){
             await this.sendMessageToPrivateChat(newMessage,pcId)
