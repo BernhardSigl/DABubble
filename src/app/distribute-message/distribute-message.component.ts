@@ -31,7 +31,12 @@ import {
   ref,
   uploadString,
 } from 'firebase/storage';
-import { Firestore, addDoc, collection, getFirestore } from '@angular/fire/firestore';
+import {
+  Firestore,
+  addDoc,
+  collection,
+  getFirestore,
+} from '@angular/fire/firestore';
 @Component({
   selector: 'app-distribute-message',
   standalone: true,
@@ -73,38 +78,62 @@ export class DistributeMessageComponent implements OnInit {
   messages$!: Observable<Message[]>;
   private currentChannelId: string | null = null;
   selectedChannelIds: string[] = [];
-  selectedPrivateChatId:string[]=[];
+  selectedPrivateChatId: string[] = [];
 
-  usersToDisplay: any[]=[];
-  channelsToDisplay: any[]=[];
+  usersToDisplay: any[] = [];
+  channelsToDisplay: any[] = [];
 
   constructor(
     private firebase: FirebaseService,
     private router: Router,
     private firestore: Firestore
   ) {}
-  
+
   async ngOnInit() {
     await this.firebase.ngOnInit();
+    setInterval(() => {
+      // console.log('selectedPrivateChatId: ', this.selectedPrivateChatId);
+      // // console.log('filteredUsers: ', this.filteredUsers);
+    }, 2000);
+    console.log(this.firebase.channelsArray);
   }
 
   convertUserId() {
     this.usersToDisplay = [];
-    const privateChatIds = this.selectedPrivateChatId.map(id => id.split('_')[0]);
-    const matchedUsers = this.firebase.usersArray.filter(user => privateChatIds.includes(user.userId));
+    const privateChatIds = this.selectedPrivateChatId.map(
+      (id) => id.split('_')[0]
+    );
+
+    const matchedUsers = this.firebase.usersArray.filter((user) =>
+      privateChatIds.includes(user.userId)
+    );
     this.usersToDisplay.push(...matchedUsers);
+    this.onclickedUser();
   }
 
   convertChannelId() {
     this.channelsToDisplay = [];
-    const matchedChannels = this.firebase.channelsArray.filter(channel => this.selectedChannelIds.includes(channel.channelId));
-    this.channelsToDisplay.push(...matchedChannels)
+    const matchedChannels = this.firebase.channelsArray.filter((channel) =>
+      this.selectedChannelIds.includes(channel.channelId)
+    );
+    this.channelsToDisplay.push(...matchedChannels);
+    this.onclickedChannel();
   }
 
   removeUser(userToRemove: any) {
     const index = this.usersToDisplay.indexOf(userToRemove);
     if (index !== -1) {
       this.usersToDisplay.splice(index, 1);
+      const privateChatIndex = this.selectedPrivateChatId.findIndex(
+        (chatId) => {
+          const [userId] = chatId.split('_');
+          return userId === userToRemove.userId;
+        }
+      );
+      if (privateChatIndex !== -1) {
+        this.selectedPrivateChatId.splice(privateChatIndex, 1);
+      }
+      this.onclickedUser();
     }
   }
 
@@ -112,46 +141,90 @@ export class DistributeMessageComponent implements OnInit {
     const index = this.channelsToDisplay.indexOf(channelToRemove);
     if (index !== -1) {
       this.channelsToDisplay.splice(index, 1);
+      const selectedChannelIdsIndex = this.selectedChannelIds.indexOf(
+        channelToRemove.channelId
+      );
+      if (selectedChannelIdsIndex !== -1) {
+        this.selectedChannelIds.splice(selectedChannelIdsIndex, 1);
+      }
+      this.onclickedChannel();
     }
   }
 
-  search(event: Event) {
-    const query = (event.target as HTMLInputElement).value.trim();
-    const searchTerm = query.substring(1).toLowerCase();
-    this.searchQuery = query;
+  onclickedUser() {
+    this.usersToDisplay.forEach((user) => {
+      user.selected = true;
+    });
+    this.firebase.usersArray.forEach((user) => {
+      if (!this.usersToDisplay.find((u) => u.userId === user.userId)) {
+        user.selected = false;
+      }
+    });
+  }
 
-    if (query.startsWith('@')) {
-      this.filteredUsers = this.filterArray(
-        this.firebase.usersArray,
-        'name',
-        searchTerm
-      );
-      this.showDropdown = true;
-      this.filteredChannels = []; // Reset channels
-    } else if (query.startsWith('#')) {
-      this.filteredChannels = this.filterChannelsWithRights(
-        this.firebase.channelsArray,
-        'channelName',
-        searchTerm,
-        this.firebase.loggedInUserId
-      );
-      this.showDropdown = true;
-      this.filteredUsers = []; // Reset users
-    } else {
-      // Show both channels and users if no specific symbol is entered
-      this.filteredChannels = this.filterChannelsWithRights(
-        this.firebase.channelsArray,
-        'channelName',
-        searchTerm,
-        this.firebase.loggedInUserId
-      );
-      this.filteredUsers = this.filterArray(
-        this.firebase.usersArray,
-        'name',
-        searchTerm
-      );
-      this.showDropdown = true;
+  onclickedChannel() {
+    this.channelsToDisplay.forEach((channel) => {
+      channel.selected = true;
+    });
+    this.firebase.channelsArray.forEach((channel) => {
+      if (
+        !this.channelsToDisplay.find((c) => c.channelId === channel.channelId)
+      ) {
+        channel.selected = false;
+      }
+    });
+  }
+
+  search(event: Event) {
+    if (this.showDropdown === true) {
+      const query = (event.target as HTMLInputElement).value.trim();
+      const searchTerm = query.substring(1).toLowerCase();
+      this.searchQuery = query;
+
+      if (query.startsWith('@')) {
+        this.filteredUsers = this.filterArray(
+          this.firebase.usersArray,
+          'name',
+          searchTerm
+        );
+        this.showDropdown = true;
+        this.filteredChannels = []; // Reset channels
+      } else if (query.startsWith('#')) {
+        this.filteredChannels = this.filterChannelsWithRights(
+          this.firebase.channelsArray,
+          'channelName',
+          searchTerm,
+          this.firebase.loggedInUserId
+        );
+        this.showDropdown = true;
+        this.filteredUsers = []; // Reset users
+      } else {
+        // Show both channels and users if no specific symbol is entered
+        this.filteredChannels = this.filterChannelsWithRights(
+          this.firebase.channelsArray,
+          'channelName',
+          searchTerm,
+          this.firebase.loggedInUserId
+        );
+        this.filteredUsers = this.filterArray(
+          this.firebase.usersArray,
+          'name',
+          searchTerm
+        );
+        this.showDropdown = true;
+      }
     }
+  }
+
+  hideDropdown() {
+    if (this.showDropdown) {
+      this.showDropdown = false;
+    }
+  }
+
+  searchInput() {
+    const inputEvent = new Event('input', { bubbles: true });
+    this.search(inputEvent);
   }
 
   filterChannelsWithRights(
@@ -187,30 +260,56 @@ export class DistributeMessageComponent implements OnInit {
     });
   }
 
+  handleChannelClick(channel: any) {
+    if (channel.selected) {
+      this.removeChannel(channel);
+    } else {
+      this.navigateToChannel(channel.channelId);
+    }
+  }
+
   async navigateToChannel(channelId: string) {
     const channel = this.filteredChannels.find(
       (c) => c.channelId === channelId
     );
+    const chatId = channel.channelId;
+
+    if (!this.selectedChannelIds.includes(chatId)) {
+      this.selectedChannelIds.push(chatId);
+    }
+
     if (channel) {
-      this.selectedChannelIds.push(channel.channelId); // Push channelId into the array
       this.updateInputValue(channel.channelName);
       this.convertChannelId();
     }
   }
-  
+
+  handleUserClick(user: any) {
+    if (user.selected) {
+      this.removeUser(user);
+    } else {
+      this.navigateToUser(user.userId);
+    }
+  }
+
   async navigateToUser(userId: string) {
     const user = this.filteredUsers.find((u) => u.userId === userId);
-    this.selectedPrivateChatId.push(user.userId+'_'+  this.firebase.loggedInUserId)  ;
+    const chatId = user.userId + '_' + this.firebase.loggedInUserId;
+
+    if (!this.selectedPrivateChatId.includes(chatId)) {
+      this.selectedPrivateChatId.push(chatId);
+    }
 
     if (user) {
       this.updateInputValue(user.name);
       this.convertUserId();
     }
-    // Additional logic if needed
   }
 
   private updateInputValue(value: string) {
-    const inputElement = document.querySelector('.distributor-input') as HTMLInputElement;
+    const inputElement = document.querySelector(
+      '.distributor-input'
+    ) as HTMLInputElement;
     if (inputElement) {
       inputElement.value = '';
     }
@@ -245,7 +344,7 @@ export class DistributeMessageComponent implements OnInit {
         newMessage.time = Date.now();
         newMessage.name = this.firebase.loggedInUserArray[0].name;
         newMessage.image = this.firebase.loggedInUserArray[0].profileImg;
-  
+
         // Check if any channel is selected
         if (this.selectedChannelIds.length > 0) {
           // Iterate over each selected channel ID and send the message
@@ -253,28 +352,32 @@ export class DistributeMessageComponent implements OnInit {
             await this.sendMessageToChannel(newMessage, channelId);
           }
         }
-        if(this.selectedPrivateChatId.length>0){
-          for(const pcId of this.selectedPrivateChatId){
-            await this.sendMessageToPrivateChat(newMessage,pcId)
+        if (this.selectedPrivateChatId.length > 0) {
+          for (const pcId of this.selectedPrivateChatId) {
+            await this.sendMessageToPrivateChat(newMessage, pcId);
           }
         }
-  
+
         this.clearInputFields();
       }
     } catch (error) {
       console.error('Error sending message:', error);
     }
   }
-  
-  
-  
-  async sendMessageToChannel(newMessage: Message, channelId: string): Promise<void> {
+
+  async sendMessageToChannel(
+    newMessage: Message,
+    channelId: string
+  ): Promise<void> {
     try {
       if (channelId) {
         const channelMessagesCollectionPath = `channels/${channelId}/channelMessages`;
-  
+
         if (this.selectedFile) {
-          await this.uploadSelectedFile(newMessage, channelMessagesCollectionPath);
+          await this.uploadSelectedFile(
+            newMessage,
+            channelMessagesCollectionPath
+          );
         } else {
           await addDoc(
             collection(this.firestore, channelMessagesCollectionPath),
@@ -288,13 +391,15 @@ export class DistributeMessageComponent implements OnInit {
       console.error('Error sending message to channel:', error);
     }
   }
-  
-  
-  async sendMessageToPrivateChat(newMessage: Message,pcId:string): Promise<void> {
+
+  async sendMessageToPrivateChat(
+    newMessage: Message,
+    pcId: string
+  ): Promise<void> {
     try {
       if (pcId) {
         const messagesCollectionPath = `privateMessages/${pcId}/messages`;
-  
+
         if (this.selectedFile) {
           await this.uploadSelectedFile(newMessage, messagesCollectionPath);
         } else {
@@ -310,7 +415,6 @@ export class DistributeMessageComponent implements OnInit {
       console.error('Error sending message to private chat:', error);
     }
   }
-  
 
   private subscribeToChannelChanges(): void {
     // This subscription will update the local variable whenever the selected channel changes.

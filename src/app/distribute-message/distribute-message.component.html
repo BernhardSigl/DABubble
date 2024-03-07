@@ -4,131 +4,207 @@
   <app-side-nav></app-side-nav>
   <!-- Chat Header -->
   <section class="main-chat">
-    <header class="header-chat column">    
-        <h4 class="bold title">Neue Nachricht</h4>
+    <header class="header-chat column">
+      <h4 class="bold title">Neue Nachricht</h4>
 
-        <div #membersField class="members-field" [style.padding-bottom.rem]="usersToDisplay.length === 0 ? 0 : 1.25">
-          <div class="dFlex member-scroll-box scroll-bar">
-              <div *ngFor="let user of usersToDisplay" class="addedMembers input-slide-down">
-                      <img [src]="user.profileImg" class="profile-img-small" alt="Profilbild">
-                      <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
-                      <div class="deleteMember" (click)="removeUser(user)"></div>
-                  </div>
-              </div>
-          </div>
-
-          
-        <div #channelsField class="members-field" [style.padding-bottom.rem]="channelsToDisplay.length === 0 ? 0 : 1.25">
-          <div class="dFlex member-scroll-box scroll-bar">
-              <div *ngFor="let channel of channelsToDisplay" class="addedMembers input-slide-down">
-                      <span class="fs18 userName maxNameLenth">{{ channel.channelName }}</span>
-                      <div class="deleteMember" (click)="removeChannel(channel)"></div>
-                  </div>
-              </div>
-          </div>
-
-        <input class="distributor-input" type="text" placeholder="An: #channel, oder @jemand oder E-Mail Adresse" (input)="search($event)">
-
-        <div *ngIf="showDropdown" class="dropdown scroll-bar">
-          <p>Suche mit &commat; nach User and # nach Channels</p>
-  
-          <div class="search-channel">
-            <h3>Channel:</h3>
-            <p *ngIf="filteredChannels.length === 0">Keine Einträge gefunden</p>
-            <p
-              class="searched-channel-result" (click)="navigateToChannel(channel.channelId)"
-              *ngFor="let channel of filteredChannels"
-            >
-              #{{ channel.channelName }}
-            </p>
-          </div>
-          <div class="search-user">
-            <h3>Users:</h3>
-            <div
-              *ngFor="let user of filteredUsers"
-              class="searched-user-result" (click)="navigateToUser(user.userId)"
-            >
-              <img [src]="user.profileImg" alt="" />
-              <p class="user-name">{{ user.name }}</p>
-            </div>
+      <div
+        #membersField
+        class="members-field"
+        [style.padding-bottom.rem]="usersToDisplay.length === 0 ? 0 : 1.25"
+      >
+        <div class="dFlex member-scroll-box scroll-bar">
+          <div
+            *ngFor="let user of usersToDisplay"
+            class="addedMembers input-slide-down"
+          >
+            <img
+              [src]="user.profileImg"
+              class="profile-img-small"
+              alt="Profilbild"
+            />
+            <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
+            <div class="deleteMember" (click)="removeUser(user)"></div>
           </div>
         </div>
-      </header>
+      </div>
 
-
-
-      
-  <div class="message-box">
-    <div class="selected-file" *ngIf="selectedFile">
-      Selected file: {{ selectedFile.name }}
-    </div>
-    <div *ngIf="mentionedUsers.length > 0" class="mentioned-users-container">
       <div
-        *ngFor="let user of mentionedUsers; let i = index"
-        (click)="selectMention(i)"
-        class="mentioned-users"
+        #channelsField
+        class="members-field"
+        [style.padding-bottom.rem]="channelsToDisplay.length === 0 ? 0 : 1.25"
       >
-        <img [src]="user.profilePicture" class="suggest-profile-picture" />
-        <!-- Display profile picture -->
-        <span>{{ user.name }}</span>
-        <!-- Display name -->
+        <div class="dFlex member-scroll-box scroll-bar">
+          <div
+            *ngFor="let channel of channelsToDisplay"
+            class="addedMembers input-slide-down"
+          >
+            <span class="fs18 userName maxNameLenth">#&nbsp;{{
+              channel.channelName
+            }}</span>
+            <div class="deleteMember" (click)="removeChannel(channel)"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-and-arrow horicontal">
+        <input
+          class="distributor-input"
+          type="text"
+          placeholder="An: #channel, oder @jemand oder E-Mail Adresse"
+          (input)="showDropdown = true; search($event)"
+          (click)="showDropdown = true; search($event)"
+        />
+        <div class="arrow-box middle" [class.arrow-box-true]="!showDropdown" (click)="hideDropdown()">
+          <img [src]="showDropdown ? './../../assets/img/arrow-drop-up-black.png' : './../../assets/img/arrow-drop-down-black.png'">
+        </div>
+      </div>
+
+      <!-- <div *ngIf="showDropdown" class="dropdown scroll-bar">
+        <p>Suche mit &commat; nach User and # nach Channels</p>
+
+        <div class="search-channel">
+          <h3>Channel:</h3>
+          <p *ngIf="filteredChannels.length === 0">Keine Einträge gefunden</p>
+          <p
+            class="searched-channel-result"
+            (click)="navigateToChannel(channel.channelId)"
+            *ngFor="let channel of filteredChannels"
+          >
+            #{{ channel.channelName }}
+          </p>
+        </div>
+        <div class="search-user">
+          <h3>Users:</h3>
+          <div
+            *ngFor="let user of filteredUsers"
+            class="searched-user-result"
+            (click)="navigateToUser(user.userId)"
+          >
+            <img [src]="user.profileImg" alt="" />
+            <p class="user-name">{{ user.name }}</p>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="members-list-box" *ngIf="showDropdown">
+        <div class="members-list-scroll-box scroll-bar">
+          <h3 class="bold">Channels:</h3>
+          <div
+            class="members-list horicontal"
+            *ngFor="let channel of filteredChannels"
+            (click)="handleChannelClick(channel)"
+            [style.background-color]="
+              channel.selected ? 'var(--primary)' : 'white'
+            "
+          >
+            <div class="profile-img-and-status">
+              <div class="profile-img middle">
+                <img src="./../../assets/img/hashtag-black.png" />
+              </div>
+            </div>
+
+            <span class="fs18 userName">{{ channel.channelName }}</span>
+          </div>
+
+          <h3 class="bold">User:</h3>
+          <div
+            class="members-list horicontal"
+            *ngFor="let user of filteredUsers"
+            (click)="handleUserClick(user)"
+            [style.background-color]="
+              user.selected ? 'var(--primary)' : 'white'
+            "
+          >
+            <div class="profile-img-and-status">
+              <div
+                [style.background-image]="'url(' + user.profileImg + ')'"
+                class="profile-img"
+              ></div>
+              <img
+                [src]="
+                  user.status
+                    ? './../../../assets/img/online.png'
+                    : './../../../assets/img/offline.png'
+                "
+                class="status"
+              />
+            </div>
+
+            <span class="fs18 userName">{{ user.name }}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="message-box">
+      <div class="selected-file" *ngIf="selectedFile">
+        Selected file: {{ selectedFile.name }}
+      </div>
+      <div *ngIf="mentionedUsers.length > 0" class="mentioned-users-container">
+        <div
+          *ngFor="let user of mentionedUsers; let i = index"
+          (click)="selectMention(i)"
+          class="mentioned-users"
+        >
+          <img [src]="user.profilePicture" class="suggest-profile-picture" />
+          <!-- Display profile picture -->
+          <span>{{ user.name }}</span>
+          <!-- Display name -->
+        </div>
+      </div>
+
+      <textarea
+        class="textarea"
+        placeholder="Nachricht an #Entwicklerteam"
+        [(ngModel)]="textArea"
+        (input)="suggestUsers(); onTextAreaChange()"
+      ></textarea>
+
+      <div class="add-ons">
+        <input
+          type="file"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          #fileInput
+          style="display: none"
+        />
+        <img
+          matTooltip="Add Image"
+          src="../../../assets/img/add.png"
+          class="add"
+          (click)="fileInput.click()"
+        />
+        <mat-divider class="vertical-divider"></mat-divider>
+        <img
+          matTooltip="Open the emoji"
+          class="emoji"
+          src="../../../assets/img/emoji.png"
+          (click)="toggleEmojiPicker()"
+        />
+        <emoji-mart
+          class="emoji-mart"
+          *ngIf="isEmojiPickerVisible"
+          (emojiSelect)="addEmoji($event)"
+          title="Choose your emoji"
+        ></emoji-mart>
+        <img
+          matTooltip="mention someone"
+          src="../../../assets/img/at-grey.png"
+          alt=""
+          class="mention"
+          (click)="addMention()"
+        />
+
+        <img
+          matTooltip="Send"
+          src="../../../assets/img/send-dark-blue.png"
+          alt=""
+          class="send"
+          (click)="sendMessage()"
+        />
       </div>
     </div>
-  
-    <textarea
-      class="textarea"
-      placeholder="Nachricht an #Entwicklerteam"
-      [(ngModel)]="textArea"
-      (input)="suggestUsers(); onTextAreaChange()"
-    ></textarea>
-  
-    <div class="add-ons">
-      <input
-        type="file"
-        accept="image/*"
-        (change)="onFileSelected($event)"
-        #fileInput
-        style="display: none"
-      />
-      <img
-        matTooltip="Add Image"
-        src="../../../assets/img/add.png"
-        class="add"
-        (click)="fileInput.click()"
-      />
-      <mat-divider class="vertical-divider"></mat-divider>
-      <img
-        matTooltip="Open the emoji"
-        class="emoji"
-        src="../../../assets/img/emoji.png"
-        (click)="toggleEmojiPicker()"
-      />
-      <emoji-mart
-        class="emoji-mart"
-        *ngIf="isEmojiPickerVisible"
-        (emojiSelect)="addEmoji($event)"
-        title="Choose your emoji"
-      ></emoji-mart>
-      <img
-        matTooltip="mention someone"
-        src="../../../assets/img/at-grey.png"
-        alt=""
-        class="mention"
-        (click)="addMention()"
-      />
-  
-      <img
-        matTooltip="Send"
-        src="../../../assets/img/send-dark-blue.png"
-        alt=""
-        class="send"
-        (click)="sendMessage()"
-      />
-    </div>
-  </div>
   </section>
 
-
-  
-<!--         (click)="sendMessage()" -->
+  <!--         (click)="sendMessage()" -->
 </div>

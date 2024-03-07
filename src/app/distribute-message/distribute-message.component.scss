@@ -17,17 +17,34 @@
     .header-chat {
       padding: 2rem 2.8125rem 1.25rem 2.8125rem; // 32px 45px 20px 45px
       box-sizing: border-box;
-      
+
       box-shadow: 0px 10px 10px -10px rgba(0, 0, 0, 0.08);
 
-      input {
-        border-radius: 1.875rem; // 30px
-        padding: 0.9375rem 1.25rem; // 15px 20px
-        border: 0.0625rem solid var(--light-purple); // 1px
-        outline: none;
+      .input-and-arrow {
+        gap: 12px;
+        position: relative;
+        input {
+          width: 100%;
+          border-radius: 1.875rem; // 30px
+          padding: 0.9375rem 1.25rem; // 15px 20px
+          border: 0.0625rem solid var(--light-purple); // 1px
+          outline: none;
+          cursor: pointer;
 
-        &::placeholder {
-          font-size: 18px;
+          &::placeholder {
+            font-size: 18px;
+          }
+        }
+        .arrow-box {
+          position: absolute;
+          top: 0;
+          right: 0;
+          height: 100%;
+          aspect-ratio: 1/1;
+          cursor: pointer;
+        }
+        .arrow-box-true {
+          pointer-events: none;
         }
       }
     }
@@ -245,4 +262,59 @@ emoji-mart {
     opacity: 1;
     transform: translateY(0%);
   }
+}
+
+.members-list-box {
+  margin: 0.9375rem 0; // 15px
+
+  .members-list-scroll-box {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 12.5rem; // 200px
+    gap: 0.8125rem; // 13px
+  }
+
+  .members-list {
+    display: flex;
+    gap: 0.9375rem; // 15px
+    cursor: pointer;
+    padding: 0.25rem 1.25rem; // 4px 20px
+    border-radius: 1.875rem; // 30px
+    margin-right: 0.25rem; // 4px
+
+    &:not([style*="--primary"]) {
+      &:hover {
+        background-color: var(--background-color) !important;
+      }
+    }
+  }
+}
+
+.profile-img-and-status {
+  width: 3.125rem; // 50px
+  height: 3.125rem;
+  position: relative;
+
+  .profile-img {
+    height: 100%;
+    aspect-ratio: 1/1;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+  }
+
+  .status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: 2px solid var(--background-color);
+    border-radius: 100%;
+    width: 0.875rem; // 14px
+    height: 0.875rem; // 14px
+  }
+}
+
+.userName {
+  cursor: pointer !important;
 }
