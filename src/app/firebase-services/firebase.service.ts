@@ -105,7 +105,7 @@ export class FirebaseService {
       now.getFullYear(),
       now.getMonth(),
       now.getDate(),
-      21,
+      17,
       0
     );
     let delay = targetTime.getTime() - now.getTime();

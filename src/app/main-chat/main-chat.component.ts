@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { ThreadComponent } from './thread/thread.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { MessageLayoutComponent } from './message-layout/message-layout.component';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { UserListService } from '../firebase-services/user-list.service';
@@ -57,7 +57,8 @@ export class MainChatComponent implements OnInit {
     public firebase: FirebaseService,
     public dialog: MatDialog,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private location: Location
     ) { }
 
   onMessageSelected(message: Message): void {
@@ -129,12 +130,15 @@ export class MainChatComponent implements OnInit {
         if (inputEmail) {
           await this.firebase.changeEmail(inputEmail);
           localStorage.removeItem('inputEmail');
-          this.router.navigateByUrl(`/main?userId=${this.userId}`, { skipLocationChange: true }).then(() => {
-            this.router.navigate([this.router.url]);
-          });
+          this.router.navigate(['/main'], { queryParams: { userId: this.firebase.loggedInUserId } });
+          this.reloadPage();
         }
       }
     });
   }  
+
+  reloadPage(): void {
+    window.location.reload();
+  }
 
 }
