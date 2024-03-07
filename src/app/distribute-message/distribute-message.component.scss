@@ -264,8 +264,20 @@ emoji-mart {
   }
 }
 
+@keyframes slideDownDropdown {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .members-list-box {
   margin: 0.9375rem 0; // 15px
+  animation: slideDownDropdown 0.5s ease forwards;
 
   .members-list-scroll-box {
     display: flex;
