@@ -169,14 +169,22 @@
   }
 }
 
+.channel-distance-welcome {
+  margin-bottom: 0.8125rem; // 13px
+}
+
+// // .channel-distance {
+// //   &:last-child {
+// //     margin-bottom: 0;
+// //   }
+// // }
+
 .channel-area {
   display: flex;
   flex-direction: column;
-  gap: 0.8125rem; // 13px
 
   .channel {
     padding: 0 0.9375rem; // 15px
-    gap: 0.625rem; // 10px
 
     .hashtag-and-name {
       gap: 0.625rem; // 10px
@@ -254,7 +262,8 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    box-shadow: inset 0 0 0 2px var(--background-color), 0 0 0 2px var(--background-color);
+    box-shadow: inset 0 0 0 2px var(--background-color),
+      0 0 0 2px var(--background-color);
     border-radius: 100%;
     width: 0.875rem; // 14px
     height: 0.875rem; // 14px

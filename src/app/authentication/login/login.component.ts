@@ -368,7 +368,7 @@ private showSuccessToastGuest(message: string): void {
         this.userId = userCredential.user?.uid;
 
         const userDocId = await this.findUserDocumentId(this.userId);
-
+        
         if (userDocId) {
             this.clearStorage();
             localStorage.setItem('userId', userDocId);

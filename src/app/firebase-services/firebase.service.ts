@@ -82,7 +82,7 @@ export class FirebaseService {
     await this.subAllMessages();
     await this.subAllChannels();
     await this.checkChannelRights();
-    this.showOnlyChannelsWithRights();
+    await this.showOnlyChannelsWithRights();
     await this.subAllPrivateMessages();
     await this.selectLastOpenedChannel();
     this.scheduleAutomaticUpdate();
@@ -118,7 +118,6 @@ export class FirebaseService {
     const updatePromises: Promise<void>[] = [];
     usersSnapshot.forEach((userDoc) => {
       const userRef = doc(this.firestore, 'users', userDoc.id);
-      console.log('test');
       const updatePromise = setDoc(
         userRef,
         {
@@ -349,7 +348,6 @@ export class FirebaseService {
     const channelDocRef = doc(this.getChannelColRef(), channelId);
     try {
       await updateDoc(channelDocRef, { members: updatedMembers });
-      // console.log("Channel updated successfully in Firebase");
     } catch (error) {
       // console.error("Error updating channel in Firebase: ", error);
     }
@@ -376,7 +374,7 @@ export class FirebaseService {
 
   async selectLastOpenedChannel() {
     const currentChannelId = this.loggedInUserArray[0].activeChannelId;
-    const lastOpenedOnSideNav = this.loggedInUserArray[0].lastOpened;
+    const lastOpenedOnSideNav = this.loggedInUserArray[0].lastOpened; // channel or private chat
     const correctedPrivateMessageId =
       this.correctedPrivateMessageId(currentChannelId);
     const reversePrivateMessageId =
@@ -391,19 +389,33 @@ export class FirebaseService {
         const channelToSelect = this.channelsArray.find(
           (channel) => channel.channelId === currentChannelId
         );
-        await this.activeChannelId('channel', channelToSelect.channelId);
-        this.setSelectedChannelId(channelToSelect.channelId);
+        if (channelToSelect) { // Check if channel was found
+          await this.activeChannelId('channel', channelToSelect.channelId);
+          this.setSelectedChannelId(channelToSelect.channelId);
+        } else {
+          await this.selectWelcomeChannel();
+        }
       } else if (lastOpenedOnSideNav === 'privateChat') {
-        const privateMessageToSelect = this.privateMessagesArray.find(
-          (privateMessages) =>
-            privateMessages.privateMessageId === currentChannelId ||
-            privateMessages.privateMessageId === reversePrivateMessageId
-        );
-        this.addNewPrivateMessage(chatPartner);
-        await this.activeChannelId('privateChat', correctedPrivateMessageId);
+        // this.privateMessagesArray.find(
+        //   (privateMessages) =>
+        //     privateMessages.privateMessageId === currentChannelId ||
+        //     privateMessages.privateMessageId === reversePrivateMessageId
+        // );
+          if (chatPartner) {
+            this.addNewPrivateMessage(chatPartner);
+          await this.activeChannelId('privateChat', correctedPrivateMessageId);
+          } else {
+            await this.selectWelcomeChannel();
+          }
         // this.lastOpenedPrivateMessageArray = privateMessageToSelect['members'][0];
       }
     }
+  }
+
+  async selectWelcomeChannel() {
+    await this.channelOrPrivateChat('channel');
+    await this.activeChannelId('channel', 'D67s4fa5cA1KoJPzjRJd');
+    this.setSelectedChannelId('D67s4fa5cA1KoJPzjRJd');
   }
 
   async addNewPrivateMessage(user: any) {
@@ -546,16 +558,14 @@ export class FirebaseService {
     );
   }
 
-  showOnlyChannelsWithRights() {
+  async showOnlyChannelsWithRights() {
     const filteredChannels = [];
     for (const channel of this.channelsArray) {
       if (this.channelRightsIds.includes(channel.channelId)) {
         filteredChannels.push(channel);
       }
     }
-
     this.currentUserWithRights = filteredChannels;
-
     this.channelsDataWithRights = filteredChannels;
   }
 

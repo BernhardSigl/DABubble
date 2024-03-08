@@ -60,6 +60,7 @@ export class SideNavComponent implements OnInit {
   loggedInUserName!: string;
   loggedInUserProfileImg!: string;
   loggedInUserStatus!: boolean;
+  // welcomeChannel: any[] = [];
 
   constructor(
     public dialog: MatDialog,
@@ -71,8 +72,29 @@ export class SideNavComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.checkSideNavBtnStatus();
-    // await this.firebase.ngOnInit(); // performance test: alt
-    this.lastOpenedPrivateChatAtStartup();
+    await this.subChannels();
+    this.displayWelcomeChannel();
+    // console.log('test', this.welcomeChannel);
+    // console.log(typeof this.welcomeChannel);
+    
+  }
+
+  async subChannels() {
+    await this.firebase.subAllChannels();
+    await this.firebase.checkChannelRights();
+    await this.firebase.showOnlyChannelsWithRights();
+  }
+
+  displayWelcomeChannel() {
+    const welcomeChannel = this.firebase.currentUserWithRights.find(
+      (channel) => channel.channelId === 'D67s4fa5cA1KoJPzjRJd'
+    );
+  
+    if (welcomeChannel) {
+      console.log('Welcome channel name:', welcomeChannel['channelName']);
+    } else {
+      console.log('User with channelId "D67s4fa5cA1KoJPzjRJd" not found.');
+    }
   }
 
   lastOpenedPrivateChatAtStartup() {

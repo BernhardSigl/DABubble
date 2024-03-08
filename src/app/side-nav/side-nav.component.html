@@ -48,26 +48,58 @@
             <div
               *ngFor="let channel of firebase.currentUserWithRights"
               class="channel"
-              (click)="selectChannel('channel', channel.channelId)"
+              (click)="selectChannel('channel', 'D67s4fa5cA1KoJPzjRJd')"
             >
               <div
-                class="hashtag-and-name horicontal"
+                *ngIf="channel.channelId === 'D67s4fa5cA1KoJPzjRJd'"
+                class="hashtag-and-name horicontal channel-distance-welcome"
                 [ngClass]="{
                   channelIsActive:
                     channel.channelId === firebase.currentChannelId
                 }"
               >
                 <div class="icon-size-24 hashtag"></div>
-                <span class="fs18 channel-name">{{ channel.channelName }}</span>
+                <span
+                  class="fs18 channel-name"
+                  *ngIf="channel.channelId === 'D67s4fa5cA1KoJPzjRJd'"
+                  >{{ channel.channelName }}</span
+                >
+              </div>
+            </div>
+
+            <div class="column" style="gap:12px">
+            <div
+              *ngFor="let channel of firebase.currentUserWithRights"
+              class="channel"
+              (click)="selectChannel('channel', channel.channelId)"
+              [ngStyle]="{
+                'margin-bottom': channel.channelId === 'D67s4fa5cA1KoJPzjRJd' ? '-13px' : null
+              }"
+            >
+              <div
+                class="hashtag-and-name horicontal"
+                *ngIf="!(channel.channelId === 'D67s4fa5cA1KoJPzjRJd')"
+                [ngClass]="{
+                  channelIsActive:
+                    channel.channelId === firebase.currentChannelId,
+                }" 
+              >
+                <div class="icon-size-24 hashtag"></div>
+                <span
+                  class="fs18 channel-name"
+                  *ngIf="!(channel.channelId === 'D67s4fa5cA1KoJPzjRJd')"
+                  >{{ channel.channelName }}</span
+                >
               </div>
             </div>
           </div>
+          </div>
         </div>
+      </div>
 
-        <div class="horicontal add-channel-text" (click)="openAddChannels()">
-          <div class="circle-add-channel-img"></div>
-          <span class="fs18">Channel hinzufügen</span>
-        </div>
+      <div class="horicontal add-channel-text" (click)="openAddChannels()">
+        <div class="circle-add-channel-img"></div>
+        <span class="fs18">Channel hinzufügen</span>
       </div>
     </div>
 
