@@ -50,7 +50,7 @@
 
         <span class="fs18 bold">Erstellt von</span>
 
-        <h4 class="created-by-text">{{ firebase.channelCreatedBy }}</h4>
+        <h4 class="created-by-text" (click)="showProfile(channelCreatedBy)">{{ firebase.channelCreatedBy }}</h4>
     </div>
 
     <div class="dFlex spaceBetween">
