@@ -31,6 +31,10 @@
   gap: 0.9375rem; // 15px
 }
 
+.add-channel {
+ margin-top: 1.5625rem;
+}
+
 .add-channel-img {
   @include hoverSymbol(
     $path: "./../../assets/img/edit-channel.png",
@@ -81,10 +85,6 @@
 
 .dropdown {
   padding: 0.5938rem 0; // 9.5px
-}
-
-.channels-content {
-  gap: 1.5625rem; // 25px
 }
 
 .open-channel {
@@ -172,12 +172,6 @@
 .channel-distance-welcome {
   margin-bottom: 0.8125rem; // 13px
 }
-
-// // .channel-distance {
-// //   &:last-child {
-// //     margin-bottom: 0;
-// //   }
-// // }
 
 .channel-area {
   display: flex;
@@ -279,6 +273,5 @@
   flex-direction: column;
   overflow-y: auto;
   max-height: calc(100vh - 942px); // -900px
-  gap: 0.8125rem; // 13px
-  min-height: calc(100vh - 830px);
+  height: calc(100% + 1px);
 }

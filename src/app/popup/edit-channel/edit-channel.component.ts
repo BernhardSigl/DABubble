@@ -24,8 +24,6 @@ export class EditChannelComponent {
 
   async ngOnInit(): Promise<void> {
     // await this.firebase.ngOnInit(); // performance: alt
-    console.log(this.firebase.channelCreatedBy);
-    console.log(this.firebase.usersArray);
     const channelCreator = this.firebase.usersArray.find(
       (user) => user.name === this.firebase.channelCreatedBy
     );
