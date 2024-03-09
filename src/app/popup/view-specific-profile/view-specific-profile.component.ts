@@ -33,7 +33,6 @@ constructor(
 }
 
 async routeToPrivateChat(userId:string){
-  console.log(this.data.user.userId);
   const user = this.firebase.usersArray.find(
     (user)=>user.userId === userId
   )

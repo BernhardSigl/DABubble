@@ -750,7 +750,6 @@ export class FirebaseService {
           const messageData = doc.data(); // Retrieve the document data
           const channelMessagesId = doc.id;
           this.channelMessagesId = channelMessagesId;
-          console.log(this.channelMessagesId)
           if (messageData['senderId'] === userId) {
             const messageRef = doc.ref; // Access the document reference
             // Update the user name in the message data

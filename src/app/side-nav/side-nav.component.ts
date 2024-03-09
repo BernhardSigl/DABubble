@@ -60,7 +60,9 @@ export class SideNavComponent implements OnInit {
   loggedInUserName!: string;
   loggedInUserProfileImg!: string;
   loggedInUserStatus!: boolean;
-  // welcomeChannel: any[] = [];
+
+  lastOpened!: string;
+  activeChannelId!: string;
 
   constructor(
     public dialog: MatDialog,
@@ -73,28 +75,19 @@ export class SideNavComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.checkSideNavBtnStatus();
     await this.subChannels();
-    this.displayWelcomeChannel();
-    // console.log('test', this.welcomeChannel);
-    // console.log(typeof this.welcomeChannel);
-    
+    await this.subUser();
+  }
+
+  async subUser() {
+    await this.firebase.subAllUsers();
+    this.lastOpened = this.firebase.loggedInUserArray[0].lastOpened;
+    this.activeChannelId = this.firebase.loggedInUserArray[0].activeChannelId;
   }
 
   async subChannels() {
     await this.firebase.subAllChannels();
     await this.firebase.checkChannelRights();
-    await this.firebase.showOnlyChannelsWithRights();
-  }
-
-  displayWelcomeChannel() {
-    const welcomeChannel = this.firebase.currentUserWithRights.find(
-      (channel) => channel.channelId === 'D67s4fa5cA1KoJPzjRJd'
-    );
-  
-    if (welcomeChannel) {
-      console.log('Welcome channel name:', welcomeChannel['channelName']);
-    } else {
-      console.log('User with channelId "D67s4fa5cA1KoJPzjRJd" not found.');
-    }
+    await this.firebase.showOnlyChannelsWithRights(); 
   }
 
   lastOpenedPrivateChatAtStartup() {

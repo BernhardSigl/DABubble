@@ -95,7 +95,6 @@ export class DistributeMessageComponent implements OnInit {
       // console.log('selectedPrivateChatId: ', this.selectedPrivateChatId);
       // // console.log('filteredUsers: ', this.filteredUsers);
     }, 2000);
-    console.log(this.firebase.channelsArray);
   }
 
   convertUserId() {

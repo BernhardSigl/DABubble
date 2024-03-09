@@ -105,3 +105,13 @@
         }
     }
 }
+
+.scroll-bar {
+    max-height: 30vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+ul {
+    padding-left: 0 !important;
+}
