@@ -53,7 +53,7 @@
         <h4 class="created-by-text" (click)="showProfile(channelCreatedBy)">{{ firebase.channelCreatedBy }}</h4>
     </div>
 
-    <div class="dFlex spaceBetween">
+    <div class="dFlex spaceBetween" *ngIf="firebase.currentChannelId !== 'D67s4fa5cA1KoJPzjRJd'">
         <div></div>
         <button class="leave-channel" (click)="leaveChannel()">Channel verlassen</button>
     </div>

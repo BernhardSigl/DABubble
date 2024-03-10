@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MatDividerModule } from '@angular/material/divider';
@@ -7,7 +8,7 @@ import { ViewSpecificProfileComponent } from '../view-specific-profile/view-spec
 @Component({
   selector: 'app-edit-channel',
   standalone: true,
-  imports: [MatDividerModule],
+  imports: [MatDividerModule, CommonModule],
   templateUrl: './edit-channel.component.html',
   styleUrl: './edit-channel.component.scss',
 })
@@ -24,6 +25,12 @@ export class EditChannelComponent {
 
   async ngOnInit(): Promise<void> {
     // await this.firebase.ngOnInit(); // performance: alt
+    this.checkChannelCreator();
+    console.log(this.firebase.currentChannelId);
+    
+  }
+
+  checkChannelCreator() {
     const channelCreator = this.firebase.usersArray.find(
       (user) => user.name === this.firebase.channelCreatedBy
     );
