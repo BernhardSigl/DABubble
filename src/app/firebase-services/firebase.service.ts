@@ -177,7 +177,7 @@ export class FirebaseService {
     return collection(this.firestore, 'users');
   }
 
-  getSingleUserDocRef() {
+  getSingleUserDocRef() { 
     return doc(this.getUsersColRef(), this.loggedInUserId);
   }
 
@@ -410,9 +410,19 @@ export class FirebaseService {
         // this.lastOpenedPrivateMessageArray = privateMessageToSelect['members'][0];
       }
     } else {
-      console.log('no channel!');
-      
+        await this.addToWelcomeChannel();
     }
+  }
+
+  async addToWelcomeChannel() {    
+    this.channelMembers.push(this.loggedInUserArray[0]);
+    await this.updateChannel(this.channelMembers);
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { channelRights: 'D67s4fa5cA1KoJPzjRJd' },
+      { merge: true }
+    );
+    await this.selectWelcomeChannel();
   }
 
   async selectWelcomeChannel() {
