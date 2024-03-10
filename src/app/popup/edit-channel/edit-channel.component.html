@@ -48,14 +48,14 @@
 
         <mat-divider></mat-divider>
 
-        <span class="fs18 bold">Erstellt von</span>
+        
 
         <h4 class="created-by-text" (click)="showProfile(channelCreatedBy)">{{ firebase.channelCreatedBy }}</h4>
     </div>
 
-    <div class="dFlex spaceBetween" *ngIf="firebase.currentChannelId !== 'D67s4fa5cA1KoJPzjRJd'">
-        <div></div>
-        <button class="leave-channel" (click)="leaveChannel()">Channel verlassen</button>
+    <div class="dFlex spaceBetween">
+        <div><span class="fs18" *ngIf="firebase.currentChannelId === 'D67s4fa5cA1KoJPzjRJd'">Dieser Channel kann nicht verlassen werden.</span></div>
+        <button class="leave-channel" (click)="leaveChannel()" *ngIf="firebase.currentChannelId !== 'D67s4fa5cA1KoJPzjRJd'">Channel verlassen</button>
     </div>
 
 </div>

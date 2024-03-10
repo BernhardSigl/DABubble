@@ -26,8 +26,6 @@ export class EditChannelComponent {
   async ngOnInit(): Promise<void> {
     // await this.firebase.ngOnInit(); // performance: alt
     this.checkChannelCreator();
-    console.log(this.firebase.currentChannelId);
-    
   }
 
   checkChannelCreator() {

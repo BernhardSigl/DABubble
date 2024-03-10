@@ -26,6 +26,7 @@ constructor(
 
 async ngOnInit(): Promise<void> {
    await this.updateOnlineStatus();
+   console.log(this.firebase.currentChannelId);
 }
 
 async updateOnlineStatus(): Promise <void> {

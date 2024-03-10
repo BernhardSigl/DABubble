@@ -51,7 +51,7 @@ export class HeaderComponent implements OnInit {
     this.channelId = this.firebase.channelId;
     this.userArr = this.firebase.usersArray;
     this.filteredChannels = [...this.channelArr];
-    this.filteredUsers = [...this.userArr];
+    this.filteredUsers = [...this.userArr];   
   }
 
   async loadFirebaseContent() {
