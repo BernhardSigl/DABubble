@@ -8,12 +8,13 @@
   </div>
 
   <div
-    class="message-card"
+    class="message-card scroll-container"
     *ngFor="let message of messageGroup.messages"
     [ngClass]="{
       'current-user': message.senderId === userId,
       'other-user': message.senderId !== userId
     }"
+    #scrollContainer
   >
     <div>
       <div

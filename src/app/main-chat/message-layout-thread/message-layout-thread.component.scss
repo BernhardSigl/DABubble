@@ -109,7 +109,11 @@
   gap: 35px;
   padding-left: 30px;
   mat-divider {
-    width: 70%;
+    width: 60%;
+  }
+
+  p{
+    font-size: 10px;
   }
 }
 
@@ -155,7 +159,7 @@ emoji-mart{
   gap: 10px;
   padding: 5px;
   bottom: 75px;
-  right:160px;
+  right:120px;
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
@@ -171,7 +175,7 @@ emoji-mart{
   gap: 10px;
   padding: 5px;
   bottom: 75px;
-  left:240px;
+  left:140px;
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;

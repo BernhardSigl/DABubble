@@ -4,7 +4,7 @@
   background: var(--white);
   border-radius: 30px;
   display: flex;
-  width: 400px;
+  width: 340px;
   justify-content: space-between;
   flex-direction: column;
   margin-right: 20px;
@@ -52,4 +52,5 @@ mat-drawer-container{
 
 mat-drawer{
   overflow-x: hidden;
+  box-shadow: none;
 }

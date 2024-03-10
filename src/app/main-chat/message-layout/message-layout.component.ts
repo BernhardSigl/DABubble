@@ -46,7 +46,7 @@ import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/
   templateUrl: './message-layout.component.html',
   styleUrls: ['./message-layout.component.scss'],
 })
-export class MessageLayoutComponent implements OnInit {
+export class MessageLayoutComponent implements OnInit ,AfterViewChecked {
   @Input() userId?: string = '';
   @Input() userName!: string;
   @Input() userImage!: string;
@@ -90,7 +90,16 @@ export class MessageLayoutComponent implements OnInit {
         this.selectedChannelId = undefined; // or set to a default/fallback value if suitable
       }
     });
+
   }
+
+  ngAfterViewChecked() {
+    
+  }
+
+
+  
+  
 
   openThread(message: Message): void {
     this.drawerService.openDrawer(message);
@@ -128,6 +137,7 @@ export class MessageLayoutComponent implements OnInit {
         this.messages = messages.reverse(); // Set messages directly
         this.messagesSubject.next(this.messages); // Update the messages
         this.groupMessagesByDate(); // Group messages after setting
+        
       },
       (error) => console.error('Error fetching messages:', error)
     );
@@ -159,7 +169,6 @@ export class MessageLayoutComponent implements OnInit {
         messages: messages,
       })
     );
-    console.log(this.groupedMessages);
   }
 
   ngAfterContentChecked(): void {

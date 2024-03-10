@@ -27,6 +27,10 @@ body {
     --light-purple: #adb0d9;
 }
 
+.mat-drawer{
+    box-shadow: unset;
+}
+
 app-login {
     display: flex;
     justify-content: center;
@@ -301,4 +305,11 @@ simple-snack-bar{
 .mat-drawer-inner-container {
   overflow-x: hidden;
   display: contents;
+}
+
+textarea{
+    max-height: 162px;
+    min-height: 130px;
+    max-width: 95%;   
+
 }
