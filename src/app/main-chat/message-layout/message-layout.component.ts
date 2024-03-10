@@ -58,9 +58,11 @@ export class MessageLayoutComponent implements OnInit {
   public isEditingEnabled: { [key: string]: boolean } = {};
   public isEditEnabled: { [key: string]: boolean } = {};
   public editedMessage: { [key: string]: string } = {};
+  messages: Message[] = [];
   public selectedMessage: Message | null = null;
   public channelDoc: any;
   channelIds: string[] = [];
+  groupedMessages: { date: Date; messages: Message[] }[] = [];
   selectedChannelId?: string;
   private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
     Message[]
@@ -75,20 +77,6 @@ export class MessageLayoutComponent implements OnInit {
     private changeDetector: ChangeDetectorRef
   ) {}
 
-
-  // ngAfterViewChecked() {
-  //   this.scrollToBottom();
-  // }
-
-  // scrollToBottom(): void {
-  //   console.log(this.scrollContainer)
-  //   if (this.scrollContainer) {
-  //     console.log('ji')
-  //     try {
-  //       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
-  //     } catch(err) { }
-  //   }
-  // }
   ngOnInit() {
     this.firebase.selectedChannelId$.subscribe((channelId) => {
       if (channelId !== null) {
@@ -103,8 +91,6 @@ export class MessageLayoutComponent implements OnInit {
       }
     });
   }
-
-
 
   openThread(message: Message): void {
     this.drawerService.openDrawer(message);
@@ -139,13 +125,42 @@ export class MessageLayoutComponent implements OnInit {
           }
           messages.push(message);
         });
-        this.messagesSubject.next(messages.reverse()); // Update the messages
-
+        this.messages = messages.reverse(); // Set messages directly
+        this.messagesSubject.next(this.messages); // Update the messages
+        this.groupMessagesByDate(); // Group messages after setting
       },
       (error) => console.error('Error fetching messages:', error)
     );
   }
   
+  clearMessages(): void {
+    this.messages = [];
+    this.messagesSubject.next([]);
+  }
+  
+
+  groupMessagesByDate() {
+    const groups = new Map<string, Message[]>();
+
+    this.messages.forEach((message) => {
+      const messageDate = new Date(message.time);
+      const formattedDate = messageDate.toISOString().split('T')[0];
+
+      if (!groups.has(formattedDate)) {
+        groups.set(formattedDate, []);
+      }
+
+      groups.get(formattedDate)?.push(message);
+    });
+
+    this.groupedMessages = Array.from(groups.entries()).map(
+      ([date, messages]) => ({
+        date: new Date(date),
+        messages: messages,
+      })
+    );
+    console.log(this.groupedMessages);
+  }
 
   ngAfterContentChecked(): void {
     this.changeDetector.detectChanges();

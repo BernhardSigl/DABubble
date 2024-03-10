@@ -1,18 +1,7 @@
 .message-card {
   width: 100%;
 
-  .btn-date {
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
-    button {
-      border-radius: 30px;
-      border: 1px solid #adb0d9;
-      padding: 5px 15px;
-      background: #fff;
-    }
-  }
 }
 .message-image {
   width: 350px;
@@ -39,7 +28,7 @@
   flex-direction: row-reverse;
 }
 
-.other-user .emoji-reaction{
+.other-user .emoji-reaction {
   justify-content: flex-start;
 }
 
@@ -64,7 +53,7 @@
   color: white;
 }
 
-.edit-message{
+.edit-message {
   display: flex;
 }
 
@@ -90,24 +79,6 @@
   }
 }
 
-.sent-date {
-  display: flex;
-  align-items: center;
-  margin-bottom: 35px;
-  justify-content: space-between;
-
-  .one-divider {
-    width: 40%;
-
-  }
-
-  .two-divider {
-
-    width: 40%;
-
-  }
-}
-
 .emoji-reaction {
   display: flex;
   justify-content: flex-end;
@@ -116,24 +87,24 @@
   gap: 10px;
 }
 
-emoji-mart{
+emoji-mart {
   position: absolute;
-  bottom:32px;
+  bottom: 32px;
   z-index: 9999;
 }
 
-.reactions-container{
+.reactions-container {
   display: flex;
   gap: 10px;
 
-  .reactions{
+  .reactions {
     border: 1px solid #8c91f7;
     background-color: transparent;
     border-radius: 10px;
   }
 }
 
-.current-user .hover-options{
+.current-user .hover-options {
   border: 1px solid #8c91f7;
   border-radius: 30px 00px 30px 30px;
   position: absolute;
@@ -142,7 +113,7 @@ emoji-mart{
   gap: 10px;
   padding: 5px;
   bottom: 75px;
-  right:300px;
+  right: 300px;
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
@@ -154,7 +125,7 @@ emoji-mart{
   opacity: 1;
 }
 
-.other-user  .hover-options{
+.other-user .hover-options {
   border: 1px solid #8c91f7;
   border-radius: 0px 30px 30px 30px;
   position: absolute;
@@ -163,15 +134,14 @@ emoji-mart{
   gap: 10px;
   padding: 5px;
   bottom: 75px;
-  left:300px;
+  left: 300px;
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   background-color: white;
 }
 
-
-.edit-message-popup{
+.edit-message-popup {
   border-radius: 0px 30px 30px 30px;
   position: absolute;
   bottom: 55px;
@@ -181,67 +151,95 @@ emoji-mart{
   background-color: white;
   right: 250px;
   z-index: 10;
-  p{
+  p {
     font-weight: 900;
     font-size: 18px;
 
-    &:hover{
+    &:hover {
       color: var(--primary);
       cursor: pointer;
     }
-  }}
+  }
+}
 
-  .edit-message{
-    display: flex;
-    flex-direction: column;
+.edit-message {
+  display: flex;
+  flex-direction: column;
 
+  textarea {
+    position: relative;
+    padding: 40px;
+    min-height: 10vh;
+    cursor: text;
+    caret-color: black;
+    color: #686868;
+    border: 1px solid var(--dark-purple);
+    border-radius: 30px 0px 30px 30px;
 
-    textarea{
-      position: relative;
-      padding: 40px;
-      min-height: 10vh;
-      cursor: text;
-      caret-color:black;
-      color: #686868;
-      border: 1px solid var(--dark-purple);
-      border-radius: 30px 0px 30px 30px;
-
-      &:focus{
-        outline: none;
-      }
-    }
-    button{
-      position: absolute;
-      bottom: 5px;
-      cursor: pointer;
+    &:focus {
+      outline: none;
     }
   }
-
-  .edit-cancel{
-    right: 380px;
-    border-radius: 20px;
-    padding: 10px;
-    background-color: transparent;
-    border: 1px solid var(--primary);
-    color:var(--primary);
-
-    &:hover{
-      background-color: var(--primary);
-      color: white;
-      transition: background-color 225ms ease-in-out, color 225ms ease-in-out;
-    }
+  button {
+    position: absolute;
+    bottom: 5px;
+    cursor: pointer;
   }
+}
 
-  .edit-save{
-    right: 250px;
+.edit-cancel {
+  right: 380px;
+  border-radius: 20px;
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+
+  &:hover {
     background-color: var(--primary);
     color: white;
-    border: transparent;
-    border-radius: 20px;
-    padding: 10px;
-
-    &:hover{
-      background-color: var(--dark-purple);
-      transition:  background-color 225ms ease-in-out;
-    }
+    transition: background-color 225ms ease-in-out, color 225ms ease-in-out;
   }
+}
+
+.edit-save {
+  right: 250px;
+  background-color: var(--primary);
+  color: white;
+  border: transparent;
+  border-radius: 20px;
+  padding: 10px;
+
+  &:hover {
+    background-color: var(--dark-purple);
+    transition: background-color 225ms ease-in-out;
+  }
+}
+.sent-date {
+  display: flex;
+  align-items: center;
+  margin-bottom: 35px;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 1rem;
+  .one-divider {
+    width: 40%;
+  }
+  .two-divider {
+
+    width: 40%;
+
+  }
+}
+.btn-date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    border-radius: 30px;
+    border: 1px solid #adb0d9;
+    padding: 5px 15px;
+    background: #fff;
+  }
+}

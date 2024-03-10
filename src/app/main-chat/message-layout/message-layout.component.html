@@ -1,126 +1,126 @@
-
-<div 
-  class="message-card"
-  *ngFor="let message of messages$ | async;"
-  [ngClass]="{
-    'current-user': message.senderId === userId,
-    'other-user': message.senderId !== userId
-  }"
->
+<ng-container *ngFor="let messageGroup of groupedMessages">
   <div class="sent-date">
     <mat-divider class="one-divider"></mat-divider>
     <div class="btn-date">
-      <button>{{ message.time | date : "d/M/yy" }}</button>
+      <button>{{ messageGroup.date | date : "d/M/yy" }}</button>
     </div>
     <mat-divider class="two-divider"></mat-divider>
   </div>
 
-  <div>
-    <div
-      class="content-container"
-      (mouseenter)="toggleHoverOptions(message.messageId, true)"
-      (mouseleave)="toggleHoverOptions(message.messageId, false)"
-    >
-      <div class="card-content">
-        <div class="time-name">
-          <p>{{ message.time | date : "HH:mm" }}</p>
-          <h3 (click)="showProfile(message.name)">{{ message.name }}</h3>
-        </div>
-        <img
-          class="message-image"
-          [src]="message.messageImage"
-          alt="Message Image"
-          *ngIf="message.messageImage"
-        />
-        <div
-          class="message"
-          *ngIf="
-            !isEditEnabled[message.messageId] && message.message.length > 0
-          "
-        >
-          <div *ngFor="let msg of message.message">
-            <div *ngIf="msg.trim() !== ''">{{ msg }}</div>
+  <div
+    class="message-card"
+    *ngFor="let message of messageGroup.messages"
+    [ngClass]="{
+      'current-user': message.senderId === userId,
+      'other-user': message.senderId !== userId
+    }"
+  >
+    <div>
+      <div
+        class="content-container"
+        (mouseenter)="toggleHoverOptions(message.messageId, true)"
+        (mouseleave)="toggleHoverOptions(message.messageId, false)"
+      >
+        <div class="card-content">
+          <div class="time-name">
+            <p>{{ message.time | date : "HH:mm" }}</p>
+            <h3 (click)="showProfile(message.name)">{{ message.name }}</h3>
           </div>
-        </div>
-
-        <div class="emoji-reaction" *ngIf="!isEditEnabled[message.messageId]">
           <img
-            src="../../../assets/img/add-reaction.png"
-            (click)="toggleEmojiPicker(message.messageId)"
-            alt=""
+            class="message-image"
+            [src]="message.messageImage"
+            alt="Message Image"
+            *ngIf="message.messageImage"
           />
-          <div class="reactions-container">
-            <button
-              *ngFor="let reaction of message.reactions | keyvalue"
-              class="reactions"
-              (click)="toggleReaction(message, reaction.key, userId!)"
-            >
-              {{ reaction.key }} {{ reaction.value.count }}
-            </button>
+          <div
+            class="message"
+            *ngIf="
+              !isEditEnabled[message.messageId] && message.message.length > 0
+            "
+          >
+            <div *ngFor="let msg of message.message">
+              <div *ngIf="msg.trim() !== ''">{{ msg }}</div>
+            </div>
           </div>
 
-          <emoji-mart
-            class="emoji-mart"
-            *ngIf="isEmojiPickerVisible[message.messageId]"
-            title="Choose your emoji"
-            (emojiClick)="onEmojiClick($event, message)"
-          ></emoji-mart>
-          <!--   -->
-          <div class="hover-options" *ngIf="isHovered[message.messageId]">
+          <div class="emoji-reaction" *ngIf="!isEditEnabled[message.messageId]">
             <img
               src="../../../assets/img/add-reaction.png"
               (click)="toggleEmojiPicker(message.messageId)"
               alt=""
             />
-            <img
-              src="../../../assets/img/thread.png"
-              alt=""
-              (click)="openThread(message)"
-            />
-            <img
-              *ngIf="message.senderId === userId"
-              src="../../../assets/img/three-dots-vertical.png"
-              alt=""
-              (click)="toggleEditMessage(message.messageId)"
-            />
+            <div class="reactions-container">
+              <button
+                *ngFor="let reaction of message.reactions | keyvalue"
+                class="reactions"
+                (click)="toggleReaction(message, reaction.key, userId!)"
+              >
+                {{ reaction.key }} {{ reaction.value.count }}
+              </button>
+            </div>
+
+            <emoji-mart
+              class="emoji-mart"
+              *ngIf="isEmojiPickerVisible[message.messageId]"
+              title="Choose your emoji"
+              (emojiClick)="onEmojiClick($event, message)"
+            ></emoji-mart>
+
+            <div class="hover-options" *ngIf="isHovered[message.messageId]">
+              <img
+                src="../../../assets/img/add-reaction.png"
+                (click)="toggleEmojiPicker(message.messageId)"
+                alt=""
+              />
+              <img
+                src="../../../assets/img/thread.png"
+                alt=""
+                (click)="openThread(message)"
+              />
+              <img
+                *ngIf="message.senderId === userId"
+                src="../../../assets/img/three-dots-vertical.png"
+                alt=""
+                (click)="toggleEditMessage(message.messageId)"
+              />
+            </div>
+          </div>
+
+          <div
+            class="edit-message-popup"
+            *ngIf="isEditingEnabled[message.messageId]"
+          >
+            <p (click)="toggleToTextArea(message.messageId)">
+              Nachricht Bearbeiten
+            </p>
+          </div>
+
+          <div class="edit-message" *ngIf="isEditEnabled[message.messageId]">
+            <textarea
+              [(ngModel)]="editedMessage[message.messageId]"
+              rows="3"
+              cols="50"
+              >{{ getMessageText(message.messageId) | async }}</textarea
+            >
+            <button (click)="cancelEdit(message.messageId)" class="edit-cancel">
+              Abbrechen
+            </button>
+            <button
+              *ngIf="selectedChannelId"
+              (click)="saveEditedMessage(selectedChannelId, message)"
+              class="edit-save"
+            >
+              Speichern
+            </button>
           </div>
         </div>
-        <!--  -->
-        <div
-          class="edit-message-popup"
-          *ngIf="isEditingEnabled[message.messageId]"
-        >
-          <p (click)="toggleToTextArea(message.messageId)">
-            Nachricht Bearbeiten
-          </p>
-        </div>
-
-        <!-- Inside your message-layout.component.html file -->
-        <div class="edit-message" *ngIf="isEditEnabled[message.messageId]">
-          <textarea
-            [(ngModel)]="editedMessage[message.messageId]"
-            rows="3"
-            cols="50"
-            >{{ getMessageText(message.messageId) | async }}</textarea
-          >
-          <button (click)="cancelEdit(message.messageId)" class="edit-cancel">
-            Abbrechen
-          </button>
-          <button
-            *ngIf="selectedChannelId"
-            (click)="saveEditedMessage(selectedChannelId, message)"
-            class="edit-save"
-          >
-            Speichern
-          </button>
-        </div>
+        <img
+          class="card-profile-img"
+          [src]="message.image"
+          alt="User Image"
+          (click)="showProfile(message.name)"
+        />
       </div>
-      <img
-        class="card-profile-img"
-        [src]="message.image"
-        alt="User Image"
-        (click)="showProfile(message.name)"
-      />
     </div>
   </div>
-</div>
+</ng-container>
