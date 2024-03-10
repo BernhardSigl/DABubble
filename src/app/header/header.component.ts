@@ -18,10 +18,11 @@ import { user } from '@angular/fire/auth';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [AngularFirestoreModule, CommonModule],
+  imports: [AngularFirestoreModule, CommonModule, FormsModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
@@ -45,7 +46,7 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.loadFirebaseContent();
+    await this.loadFirebaseContent();
     this.channelArr = this.firebase.channelsArray;
     this.channelId = this.firebase.channelId;
     this.userArr = this.firebase.usersArray;
@@ -79,10 +80,10 @@ export class HeaderComponent implements OnInit {
 
     if (query.startsWith('@')) {
         this.filteredUsers = this.filterArray(this.userArr, 'name', searchTerm);
-        this.filteredChannels = []; // Reset channels
+        this.firebase.channelsDataWithRights = []; // Reset channels
         this.showDropdown = true;
     } else if (query.startsWith('#')) {
-        this.filteredChannels = this.filterChannelsWithRights(
+      this.firebase.channelsDataWithRights = this.filterChannelsWithRights(
             this.channelArr,
             'channelName',
             searchTerm,
@@ -92,7 +93,7 @@ export class HeaderComponent implements OnInit {
         this.showDropdown = true;
     } else {
         // Show both channels and users if no specific symbol is entered
-        this.filteredChannels = this.filterChannelsWithRights(
+        this.firebase.channelsDataWithRights = this.filterChannelsWithRights(
             this.channelArr,
             'channelName',
             searchTerm,

@@ -409,6 +409,9 @@ export class FirebaseService {
           }
         // this.lastOpenedPrivateMessageArray = privateMessageToSelect['members'][0];
       }
+    } else {
+      console.log('no channel!');
+      
     }
   }
 

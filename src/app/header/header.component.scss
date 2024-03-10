@@ -145,16 +145,19 @@
 }
 
 .members-list-box {
-  margin: 0.9375rem 0; // 15px
   animation: slideDownDropdown 0.5s ease forwards;
   position: absolute;
   top: 100px;
+  padding: 1.25rem 1.3125rem;
+  background: white;
+  border-radius: 1.875rem 0 1.875rem 1.875rem; 
+  box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
 
   .members-list-scroll-box {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    max-height: 12.5rem; // 200px
+    max-height: 30.9375rem; // 495px
     gap: 0.8125rem; // 13px
   }
 
