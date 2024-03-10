@@ -205,3 +205,23 @@
 .userName {
   cursor: pointer !important;
 }
+
+
+.input-slide-down {
+  animation: slideDown 0.5s ease forwards;
+  opacity: 0;
+  transform: translateY(-100%);
+  display: flex;
+  align-items: center;
+}
+
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

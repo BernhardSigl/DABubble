@@ -159,4 +159,8 @@ export class HeaderComponent implements OnInit {
     this.showDropdown=false;
     this.searchQuery='';
   }
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
 }

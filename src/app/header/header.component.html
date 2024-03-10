@@ -20,7 +20,11 @@
           (click)="showDropdown = true"
           (input)="search($event)"
         />
-        <img src="./../../assets/img/search.png" class="icon-size-35" />
+        <img
+        [src]="!showDropdown ? './../../assets/img/search.png' : './../../assets/img/arrow-drop-up-black.png'"
+        class="icon-size-35"
+        (click)="toggleDropdown()"
+      />
       </div>
 
       <!-- 
@@ -52,7 +56,7 @@
         </div>
       </div> -->
 
-      <div class="members-list-box" *ngIf="showDropdown">
+      <div class="members-list-box input-slide-down" *ngIf="showDropdown">
         <div class="members-list-scroll-box scroll-bar">
           <span
             class="fs18"
