@@ -46,29 +46,32 @@ import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/
   templateUrl: './message-layout.component.html',
   styleUrls: ['./message-layout.component.scss'],
 })
-export class MessageLayoutComponent implements OnInit ,AfterViewChecked {
+export class MessageLayoutComponent implements OnInit, AfterViewChecked {
   @Input() userId?: string = '';
   @Input() userName!: string;
   @Input() userImage!: string;
   @ViewChild('drawer') drawer!: MatDrawer;
   @ViewChild('scrollContainer') private scrollContainer: ElementRef | undefined;
-  isHovered: { [key: string]: boolean } = {};
+  @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
+
+  private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
+    Message[]
+  >([]);
   public textArea: string = '';
   public isEmojiPickerVisible: { [key: string]: boolean } = {};
   public isEditingEnabled: { [key: string]: boolean } = {};
   public isEditEnabled: { [key: string]: boolean } = {};
   public editedMessage: { [key: string]: string } = {};
-  messages: Message[] = [];
   public selectedMessage: Message | null = null;
   public channelDoc: any;
+
+  messages: Message[] = [];
+  isHovered: { [key: string]: boolean } = {};
   channelIds: string[] = [];
   groupedMessages: { date: Date; messages: Message[] }[] = [];
   selectedChannelId?: string;
-  private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
-    Message[]
-  >([]);
   messages$: Observable<Message[]> = this.messagesSubject.asObservable();
-  @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
+
   constructor(
     private firestore: Firestore,
     private drawerService: DrawerService,
@@ -90,16 +93,23 @@ export class MessageLayoutComponent implements OnInit ,AfterViewChecked {
         this.selectedChannelId = undefined; // or set to a default/fallback value if suitable
       }
     });
-
   }
 
   ngAfterViewChecked() {
-    
+    this.scrollToBottom()
   }
 
-
-  
-  
+  scrollToBottom(): void {
+    try {
+      if (this.scrollContainer) {
+        console.log(this.scrollContainer,this.scrollContainer.nativeElement.scrollHeight)
+        this.scrollContainer.nativeElement.scrollTop =
+          this.scrollContainer.nativeElement.scrollHeight;
+      }
+    } catch (err) {
+      console.error('Error scrolling to bottom:', err);
+    }
+  }
 
   openThread(message: Message): void {
     this.drawerService.openDrawer(message);
@@ -112,7 +122,7 @@ export class MessageLayoutComponent implements OnInit ,AfterViewChecked {
       `channels/${channelId}/channelMessages`
     );
     const q = query(messagesCollection, orderBy('time', 'desc'));
-  
+
     onSnapshot(
       q,
       (querySnapshot) => {
@@ -137,17 +147,16 @@ export class MessageLayoutComponent implements OnInit ,AfterViewChecked {
         this.messages = messages.reverse(); // Set messages directly
         this.messagesSubject.next(this.messages); // Update the messages
         this.groupMessagesByDate(); // Group messages after setting
-        
+        this.scrollToBottom()
       },
       (error) => console.error('Error fetching messages:', error)
     );
   }
-  
+
   clearMessages(): void {
     this.messages = [];
     this.messagesSubject.next([]);
   }
-  
 
   groupMessagesByDate() {
     const groups = new Map<string, Message[]>();

@@ -356,7 +356,6 @@ private showSuccessToastGuest(message: string): void {
       this.loginForm.enable();
       this.isLoading = false;
     }else{
-      console.log('Fill in the form')
       this.email?.markAsTouched();
       this.password?.markAsTouched();
     }
