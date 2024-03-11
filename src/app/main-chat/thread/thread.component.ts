@@ -45,13 +45,18 @@ export class ThreadComponent implements OnInit {
   ngOnInit(): void {
     this.drawerService.isOpen$.subscribe((isOpen) => {
       this.isOpen = isOpen;
+      if (isOpen) {
+        this.drawer.close(); // Close the sidenav when thread is opened
+      }
     });
 
   }
 
   toggleThread(): void {
     this.isOpen = !this.isOpen;
-    console.log(this.isOpen);
+    if (this.isOpen) {
+      this.drawerService.setSideNavBtnStatus(false);
+    }
   }
 
   sendMessage(message: string): void {

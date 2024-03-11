@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Message } from '../classes/message.class';
 import { Firestore, addDoc, collection, doc, getDocs, onSnapshot, query, setDoc } from '@angular/fire/firestore';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -9,17 +10,19 @@ export class DrawerService {
   private isOpenSubject = new BehaviorSubject<boolean>(false);
   isOpen$ = this.isOpenSubject.asObservable();
   selectedMessageChanged: EventEmitter<Message | null> = new EventEmitter();
-
-  constructor(private firestore:Firestore) {}
-
   private selectedMessage: Message | null = null;
   private selectedThreadMessagesSource = new BehaviorSubject<Message[]>([]);
   selectedThreadMessages$ = this.selectedThreadMessagesSource.asObservable();
+  private sideNavBtnStatusSubject = new BehaviorSubject<boolean>(true);
+  sideNavBtnStatus$ = this.sideNavBtnStatusSubject.asObservable();
+  threadOpened: EventEmitter<boolean> = new EventEmitter<boolean>();
+  constructor(private firestore:Firestore) {}
 
   setSelectedMessage(message: Message): void {
     this.selectedMessage = message;
     this.selectedMessageChanged.emit(this.selectedMessage);
     this.loadThreadMessages(message);
+    this.setSideNavBtnStatus(false);
   }
 
   private async loadThreadMessages(mainMessage: Message): Promise<void> {
@@ -48,6 +51,7 @@ export class DrawerService {
   getSelectedMessage(): Message | null {
     return this.selectedMessage;
   }
+
   openDrawer(message: Message): void {
     this.setSelectedMessage(message);
     this.isOpenSubject.next(true);
@@ -55,5 +59,14 @@ export class DrawerService {
 
   closeDrawer(): void {
     this.isOpenSubject.next(false);
+    this.setSideNavBtnStatus(true);
+  }
+
+  setSideNavBtnStatus(status: boolean): void {
+    this.sideNavBtnStatusSubject.next(status);
+  }
+
+  openThread() {
+    this.threadOpened.emit(true);
   }
 }

@@ -25,6 +25,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { PrivateMessage } from '../classes/private-message.class';
 import { PrivateMessageService } from '../firebase-services/private-message.service';
 import { Router } from '@angular/router';
+import { DrawerService } from '../firebase-services/drawer.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+
+
 @Component({
   selector: 'app-side-nav',
   standalone: true,
@@ -70,13 +74,24 @@ export class SideNavComponent implements OnInit {
     private privateMessageService: PrivateMessageService,
     private router: Router,
     private changeDetector: ChangeDetectorRef,
+    private drawerService:DrawerService,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   async ngOnInit(): Promise<void> {
     this.checkSideNavBtnStatus();
     await this.subChannels();
     await this.subUser();
+
+    this.drawerService.threadOpened.subscribe((opened: boolean) => {
+      // Check if the screen width is under 1400px
+      if (window.innerWidth < 1300 && opened) {
+        // Close the sidebar when a thread is opened
+        this.drawer.close();
+      }
+    });
   }
+  
 
   async subUser() {
     await this.firebase.subAllUsers();

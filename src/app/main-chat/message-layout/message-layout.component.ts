@@ -102,7 +102,6 @@ export class MessageLayoutComponent implements OnInit, AfterViewChecked {
   scrollToBottom(): void {
     try {
       if (this.scrollContainer) {
-        console.log(this.scrollContainer,this.scrollContainer.nativeElement.scrollHeight)
         this.scrollContainer.nativeElement.scrollTop =
           this.scrollContainer.nativeElement.scrollHeight;
       }
@@ -114,6 +113,7 @@ export class MessageLayoutComponent implements OnInit, AfterViewChecked {
   openThread(message: Message): void {
     this.drawerService.openDrawer(message);
     this.drawerService.setSelectedMessage(message);
+    this.drawerService.openThread();
   }
 
   loadMessages(channelId: string): void {
