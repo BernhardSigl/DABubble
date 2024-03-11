@@ -1,4 +1,12 @@
-import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  NgZone,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
 import { SideNavComponent } from '../side-nav/side-nav.component';
 import { MessageBoxComponent } from './message-box/message-box.component';
@@ -36,13 +44,15 @@ import { ActivatedRoute, Router } from '@angular/router';
     AngularFirestoreModule,
     AddMembersRetrospectivelyComponent,
     ListMembersComponent,
-    EditChannelComponent
+    EditChannelComponent,
   ],
   templateUrl: './main-chat.component.html',
   styleUrl: './main-chat.component.scss',
 })
 export class MainChatComponent implements OnInit {
+  @ViewChild('scrollContainer') scrollContainer: ElementRef | undefined;
   @ViewChild('messageContainer') messageContainer!: ElementRef;
+
   userName: string = '';
   userImage: string = '';
   userId: string = '';
@@ -50,6 +60,8 @@ export class MainChatComponent implements OnInit {
   @ViewChild(MessageLayoutComponent)
   messageLayout!: MessageLayoutComponent;
   messages$: Observable<Message[]> | undefined;
+
+  scrollToBottomExecuted = false;
 
   constructor(
     private userDataService: UserListService,
@@ -59,19 +71,19 @@ export class MainChatComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location
-    ) { }
+  ) {}
 
   onMessageSelected(message: Message): void {
     this.selectedMessage = message;
   }
 
-  async ngOnInit(): Promise<void>{
+  async ngOnInit(): Promise<void> {
     // performance test: alt
-    
-    await this.firebase.pullLoggedInUserId();  // performance test: neu
+
+    await this.firebase.pullLoggedInUserId(); // performance test: neu
 
     this.userId = this.firebase.loggedInUserId;
-    this.getUserData(this.userId);
+    await this.getUserData(this.userId);
     if (this.messageLayout) {
       this.messages$ = this.messageLayout.messages$;
     }
@@ -79,12 +91,32 @@ export class MainChatComponent implements OnInit {
     this.firebase.scheduleAutomaticUpdate();
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+        this.scrollToBottom();
+    }, 2000);
+    
+    // this.scrollToBottomExecuted = true;
+  }
+
+  async scrollToBottom() {
+    try {
+      const messageLayoutElement = this.messageLayout?.getNativeElement();
+
+      if (messageLayoutElement && !this.scrollToBottomExecuted) {
+        messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
+      }
+    } catch (err) {
+      console.error('Error scrolling to bottom:', err);
+    }
+  }
+
   async getUserData(userId: string): Promise<void> {
     await this.userDataService.fetchUserData(userId);
-    this.userDataService.userName$.subscribe(userName => {
+    this.userDataService.userName$.subscribe((userName) => {
       this.userName = userName;
     });
-    this.userDataService.userImage$.subscribe(userImage => {
+    this.userDataService.userImage$.subscribe((userImage) => {
       this.userImage = userImage;
     });
   }
@@ -111,7 +143,7 @@ export class MainChatComponent implements OnInit {
   }
 
   async checkEmailChange() {
-    this.route.queryParams.subscribe(async params => {
+    this.route.queryParams.subscribe(async (params) => {
       const userIdParam = params['userId'];
       if (userIdParam && userIdParam.endsWith('_email')) {
         await this.firebase.ngOnInit();
@@ -119,15 +151,16 @@ export class MainChatComponent implements OnInit {
         if (inputEmail) {
           await this.firebase.changeEmail(inputEmail);
           localStorage.removeItem('inputEmail');
-          this.router.navigate(['/main'], { queryParams: { userId: this.firebase.loggedInUserId } });
+          this.router.navigate(['/main'], {
+            queryParams: { userId: this.firebase.loggedInUserId },
+          });
           this.reloadPage();
         }
       }
     });
-  }  
+  }
 
   reloadPage(): void {
     window.location.reload();
   }
-
 }

@@ -7,6 +7,8 @@ import {
   ChangeDetectorRef,
   AfterViewChecked,
   AfterViewInit,
+  EventEmitter,
+  Output,
 } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MainChatComponent } from '../main-chat.component';
@@ -46,12 +48,12 @@ import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/
   templateUrl: './message-layout.component.html',
   styleUrls: ['./message-layout.component.scss'],
 })
-export class MessageLayoutComponent implements OnInit, AfterViewChecked {
+export class MessageLayoutComponent implements OnInit, AfterViewInit  {
   @Input() userId?: string = '';
   @Input() userName!: string;
   @Input() userImage!: string;
   @ViewChild('drawer') drawer!: MatDrawer;
-  @ViewChild('scrollContainer') private scrollContainer: ElementRef | undefined;
+  // @ViewChild('scrollContainer') private scrollContainer: ElementRef | undefined;
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
 
   private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
@@ -77,8 +79,13 @@ export class MessageLayoutComponent implements OnInit, AfterViewChecked {
     private drawerService: DrawerService,
     private firebase: FirebaseService,
     public dialog: MatDialog,
-    private changeDetector: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef,
+    private el: ElementRef
   ) {}
+
+  getNativeElement(): HTMLElement {
+    return this.el.nativeElement;
+  }
 
   ngOnInit() {
     this.firebase.selectedChannelId$.subscribe((channelId) => {
@@ -95,21 +102,27 @@ export class MessageLayoutComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  ngAfterViewChecked() {
-    this.scrollToBottom()
+  ngAfterViewInit(): void {
+    console.log('ngAfterViewInit in MessageLayoutComponent');
   }
 
-  scrollToBottom(): void {
-    try {
-      if (this.scrollContainer) {
-        console.log(this.scrollContainer,this.scrollContainer.nativeElement.scrollHeight)
-        this.scrollContainer.nativeElement.scrollTop =
-          this.scrollContainer.nativeElement.scrollHeight;
-      }
-    } catch (err) {
-      console.error('Error scrolling to bottom:', err);
-    }
-  }
+  // ngAfterViewChecked() {
+    // this.scrollToBottom()
+  // }
+
+  // scrollToBottom(): void {  
+  //   try {
+  //     if (this.scrollContainer) {
+  //       console.log(this.scrollContainer);
+        
+  //       // console.log(this.scrollContainer,this.scrollContainer.nativeElement.scrollHeight)
+  //       this.scrollContainer.nativeElement.scrollTop =
+  //         this.scrollContainer.nativeElement.scrollHeight;
+  //     }
+  //   } catch (err) {
+  //     console.error('Error scrolling to bottom:', err);
+  //   }
+  // }
 
   openThread(message: Message): void {
     this.drawerService.openDrawer(message);
@@ -147,7 +160,7 @@ export class MessageLayoutComponent implements OnInit, AfterViewChecked {
         this.messages = messages.reverse(); // Set messages directly
         this.messagesSubject.next(this.messages); // Update the messages
         this.groupMessagesByDate(); // Group messages after setting
-        this.scrollToBottom()
+        // this.scrollToBottom()
       },
       (error) => console.error('Error fetching messages:', error)
     );
