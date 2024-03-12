@@ -3,8 +3,10 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  EventEmitter,
   NgZone,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';
@@ -52,6 +54,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class MainChatComponent implements OnInit {
   @ViewChild('scrollContainer') scrollContainer: ElementRef | undefined;
   @ViewChild('messageContainer') messageContainer!: ElementRef;
+  @Output() scrollToBottomEvent: EventEmitter<void> = new EventEmitter<void>();
 
   userName: string = '';
   userImage: string = '';
@@ -61,7 +64,9 @@ export class MainChatComponent implements OnInit {
   messageLayout!: MessageLayoutComponent;
   messages$: Observable<Message[]> | undefined;
 
-  scrollToBottomExecuted = false;
+  startTime!: number;
+  initTime!: number;
+  loadTime!: number;
 
   constructor(
     private userDataService: UserListService,
@@ -71,15 +76,17 @@ export class MainChatComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private location: Location
-  ) {}
+  ) {
+    this.startTime = window.performance.now();
+  }
 
   onMessageSelected(message: Message): void {
     this.selectedMessage = message;
   }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnInit(): Promise<void> {   
+    // this.hideChatDuringLoad('hidden');
     // performance test: alt
-
     await this.firebase.pullLoggedInUserId(); // performance test: neu
 
     this.userId = this.firebase.loggedInUserId;
@@ -87,23 +94,43 @@ export class MainChatComponent implements OnInit {
     if (this.messageLayout) {
       this.messages$ = this.messageLayout.messages$;
     }
-    this.checkEmailChange();
+    this.checkLoadingTime();
+    await this.waitForScroll();
+    // this.hideChatDuringLoad('visible');
     this.firebase.scheduleAutomaticUpdate();
+    this.checkEmailChange();
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
+  checkLoadingTime() {
+    this.initTime = window.performance.now();
+    this.printTime(this.initTime);
+  }
+
+  async waitForScroll(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
         this.scrollToBottom();
-    }, 2000);
-    
-    // this.scrollToBottomExecuted = true;
+        resolve();
+      }, this.loadTime);
+    });
+  }
+
+  hideChatDuringLoad(visibilty: string) {
+    const chats = document.getElementById('message-box-id');    
+    if (chats) {
+      chats.style.visibility = visibilty;
+    }
+  }
+
+  async printTime(time: number) {
+    this.loadTime = time + time - this.startTime;
   }
 
   async scrollToBottom() {
     try {
       const messageLayoutElement = this.messageLayout?.getNativeElement();
 
-      if (messageLayoutElement && !this.scrollToBottomExecuted) {
+      if (messageLayoutElement) {
         messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
       }
     } catch (err) {

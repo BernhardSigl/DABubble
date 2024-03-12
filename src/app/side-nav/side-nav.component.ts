@@ -28,7 +28,6 @@ import { Router } from '@angular/router';
 import { DrawerService } from '../firebase-services/drawer.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
-
 @Component({
   selector: 'app-side-nav',
   standalone: true,
@@ -75,7 +74,7 @@ export class SideNavComponent implements OnInit {
     private router: Router,
     private changeDetector: ChangeDetectorRef,
     private drawerService:DrawerService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -92,7 +91,6 @@ export class SideNavComponent implements OnInit {
     });
   }
   
-
   async subUser() {
     await this.firebase.subAllUsers();
     this.lastOpened = this.firebase.loggedInUserArray[0].lastOpened;

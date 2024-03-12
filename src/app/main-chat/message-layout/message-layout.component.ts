@@ -103,7 +103,7 @@ export class MessageLayoutComponent implements OnInit, AfterViewInit  {
   }
 
   ngAfterViewInit(): void {
-    console.log('ngAfterViewInit in MessageLayoutComponent');
+    // console.log('ngAfterViewInit in MessageLayoutComponent');
   }
 
 
