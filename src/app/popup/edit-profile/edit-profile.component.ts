@@ -82,7 +82,6 @@ export class EditProfileComponent {
     }
 
     if (this.inputEmail.trim() !== '' && this.isEmailValid) {
-      // this.firebase.changeEmail(this.inputEmail);
       if (localStorage.getItem('inputEmail')) {
         localStorage.removeItem('inputEmail');
       }
@@ -91,9 +90,6 @@ export class EditProfileComponent {
       this.verify(this.inputEmail);
     }
   }
-
-
-
   async verify(inputEmail: string) {
     const dialogRef=this.dialog.open(VerifyComponent, {
       panelClass: 'border',
@@ -104,11 +100,10 @@ export class EditProfileComponent {
     await dialogRef.afterClosed().toPromise(); 
   }
 
-  // sentMailPopup() {
-  //   this.dialog.open(EmailSentComponent, {
-  //     panelClass: 'border'
-  //   });
-  // }
+  googleMailNotChangeable(): boolean {
+    const invalidEmails = ['gmail', 'googlemail'];
+    return invalidEmails.some(email => this.firebase.email.includes(email));
+  }
 
   validateEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

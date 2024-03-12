@@ -19,7 +19,7 @@
         <input [placeholder]="firebase.name" [(ngModel)]="inputName" name="inputName">
     </div>
 
-    <div class="edit-email" >
+    <div class="edit-email" *ngIf="!googleMailNotChangeable()">
         <div class="email-img-and-email-title horicontal">
             <img src="./../../../assets/img/mail-black.png">
             <h5 class="bold">E-Mail Adresse</h5>
