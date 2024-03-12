@@ -206,11 +206,15 @@
         }
     }
 
-    a {
+    button {
         color: var(--secondary);
         padding: 5px 4px;
-        margin: 0 -4px;
+        margin: 1px -4px 0 -4px;
         border-radius: 30px;
+        border: none;
+        background-color: white;
+        cursor: pointer;
+        font-size: 18px;
 
         &:hover {
             background-color: #eceefe;
@@ -225,14 +229,17 @@
     gap: 1rem;
     color: var(--secondary);
     font-size: 1.125rem;
+    align-items: center;
 
-    a {
+    button {
         text-decoration: none;
         color: var(--secondary);
         cursor: pointer;
         box-sizing: border-box;
         padding: .625rem .9375rem;
         border: .0625rem solid transparent;
+        background-color: var(--background-color);
+        font-size: 18px;
 
         &:hover {
             border: 1px solid #686868;

@@ -22,6 +22,9 @@ import {
   getDownloadURL,
 } from 'firebase/storage';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PolicyPopupComponent } from '../../../popup/policy-popup/policy-popup.component';
+import { ImprintPopupComponent } from '../../../popup/imprint-popup/imprint-popup.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-choose-avater',
@@ -43,7 +46,8 @@ export class ChooseAvaterComponent implements OnInit {
     private avatarDataService: AvatarDataService,
     private authyService: AuthyService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit() {
@@ -212,5 +216,17 @@ private async updateUserDataWithImageURL(downloadURL: string): Promise<void> {
       u8arr[n] = bstr.charCodeAt(n);
     }
     return new Blob([u8arr], { type: mime });
+  }
+
+  showPrivacy(){
+    this.dialog.open(PolicyPopupComponent, {
+      panelClass: 'border'
+    });
+  }
+
+  showImprint() {
+    this.dialog.open(ImprintPopupComponent, {
+      panelClass: 'border'
+    });
   }
 }

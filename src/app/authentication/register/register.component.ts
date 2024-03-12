@@ -10,6 +10,9 @@ import { User, AppUser } from '../../classes/user.class';
 import { AvatarDataService } from '../../firebase-services/avatar-data.service';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { PolicyPopupComponent } from '../../popup/policy-popup/policy-popup.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ImprintPopupComponent } from '../../popup/imprint-popup/imprint-popup.component';
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -38,7 +41,8 @@ export class RegisterComponent {
     private router: Router,
     private authyService: AuthyService,
     private avatarDataService: AvatarDataService,
-    // private firestore: AngularFirestore
+    public dialog: MatDialog,
+    // public dialogRef: MatDialogRef<RegisterComponent>,
   ) {
     this.avatarDataService.selectedAvatar$.subscribe((avatarSrc) => { });
   }
@@ -59,5 +63,17 @@ export class RegisterComponent {
       const password = this.loginForm.get('password')?.value;
       this.router.navigate(['/chooseAvatar'], { queryParams: { name: name, email:email, password:password } });
     }
+  }
+
+  showPrivacy(){
+    this.dialog.open(PolicyPopupComponent, {
+      panelClass: 'border'
+    });
+  }
+
+  showImprint() {
+    this.dialog.open(ImprintPopupComponent, {
+      panelClass: 'border'
+    });
   }
 }

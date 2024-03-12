@@ -34,6 +34,9 @@ import { FirebaseService } from '../../firebase-services/firebase.service';
 import { DocumentReference } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { PolicyPopupComponent } from '../../popup/policy-popup/policy-popup.component';
+import { ImprintPopupComponent } from '../../popup/imprint-popup/imprint-popup.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -114,7 +117,8 @@ export class LoginComponent implements OnInit {
     private authyService: AuthyService,
     private ngZone: NgZone, // google
     public firebase: FirebaseService, // push userId in firebase service
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog,
   ) {}
   isGuest: boolean | undefined;
 
@@ -421,6 +425,18 @@ private showSuccessToast(message: string): void {
         horizontalPosition: 'center',
         verticalPosition: 'bottom',
     });
+}
+
+showPrivacy(){
+  this.dialog.open(PolicyPopupComponent, {
+    panelClass: 'border'
+  });
+}
+
+showImprint() {
+  this.dialog.open(ImprintPopupComponent, {
+    panelClass: 'border'
+  });
 }
 
 
