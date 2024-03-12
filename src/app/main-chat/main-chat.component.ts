@@ -107,13 +107,22 @@ export class MainChatComponent implements OnInit {
   }
 
   async waitForScroll(): Promise<void> {
+    let loadTime = this.loadTime;
+    if (performance.navigation.type === 1) {
+      console.log(performance.navigation.type)
+      loadTime = this.loadTime;
+    } else {
+      loadTime = 0;
+    }
+  
     return new Promise<void>((resolve) => {
       setTimeout(() => {
         this.scrollToBottom();
         resolve();
-      }, this.loadTime);
+      }, loadTime);
     });
   }
+  
 
   hideChatDuringLoad(visibilty: string) {
     const chats = document.getElementById('message-box-id');    

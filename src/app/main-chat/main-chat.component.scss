@@ -135,3 +135,13 @@
       margin-bottom: 38px;
     }
 
+    @media screen and (max-width: 980px) {
+      .desktop-view{
+
+        .main-chat{
+        margin: 20px 0 0 0 ;
+        height: 88vh;
+        border-radius: 0;
+      }
+      }
+    }
