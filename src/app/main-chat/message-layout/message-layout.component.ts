@@ -5,13 +5,8 @@ import {
   OnInit,
   ViewChild,
   ChangeDetectorRef,
-  AfterViewChecked,
-  AfterViewInit,
-  EventEmitter,
-  Output,
 } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
-import { MainChatComponent } from '../main-chat.component';
 import {
   Firestore,
   collection,
@@ -48,7 +43,7 @@ import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/
   templateUrl: './message-layout.component.html',
   styleUrls: ['./message-layout.component.scss'],
 })
-export class MessageLayoutComponent implements OnInit, AfterViewInit  {
+export class MessageLayoutComponent implements OnInit  {
   @Input() userId?: string = '';
   @Input() userName!: string;
   @Input() userImage!: string;
@@ -101,41 +96,6 @@ export class MessageLayoutComponent implements OnInit, AfterViewInit  {
       }
     });
   }
-
-  ngAfterViewInit(): void {
-    // console.log('ngAfterViewInit in MessageLayoutComponent');
-  }
-
-
-  // scrollToBottom(): void {
-  //   try {
-  //     if (this.scrollContainer) {
-  //       this.scrollContainer.nativeElement.scrollTop =
-  //         this.scrollContainer.nativeElement.scrollHeight;
-  //     }
-  //   } catch (err) {
-  //     console.error('Error scrolling to bottom:', err);
-  //   }
-  // }
-
-  // ngAfterViewChecked() {
-    // this.scrollToBottom()
-  // }
-
-  // scrollToBottom(): void {  
-  //   try {
-  //     if (this.scrollContainer) {
-  //       console.log(this.scrollContainer);
-        
-  //       // console.log(this.scrollContainer,this.scrollContainer.nativeElement.scrollHeight)
-  //       this.scrollContainer.nativeElement.scrollTop =
-  //         this.scrollContainer.nativeElement.scrollHeight;
-  //     }
-  //   } catch (err) {
-  //     console.error('Error scrolling to bottom:', err);
-  //   }
-  // }
-
 
   openThread(message: Message): void {
     this.drawerService.openDrawer(message);

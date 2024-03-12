@@ -25,7 +25,7 @@
     </header>
 
     <!-- message layout -->
-    <app-message-layout-pc class="scroll-bar"></app-message-layout-pc>
+    <app-message-layout-pc class="scroll-bar" #messageLayoutPC></app-message-layout-pc>
 
     <div class="empty-pc-content"  *ngIf="(messages$ | async) as messages">
       <ng-container *ngIf="messages.length === 0">

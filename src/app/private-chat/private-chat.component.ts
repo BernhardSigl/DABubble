@@ -17,6 +17,7 @@ import { Message } from '../classes/message.class';
 import { FirebaseService } from '../firebase-services/firebase.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewSpecificProfileComponent } from '../popup/view-specific-profile/view-specific-profile.component';
+import { MessageServiceService } from '../firebase-services/message-service.service';
 
 @Component({
   selector: 'app-private-chat',
@@ -32,25 +33,72 @@ import { ViewSpecificProfileComponent } from '../popup/view-specific-profile/vie
   styleUrl: './private-chat.component.scss',
 })
 export class PrivateChatComponent implements OnInit, AfterViewInit {
+  @ViewChild(MessageLayoutPcComponent)
+  messageLayoutPC!: MessageLayoutPcComponent;
+
   selectedUserName: string = '';
   selectedUserImage: string = '';
   selectedUserStatus!: boolean;
   userId: string = '';
+
+  startTime!: number;
+  initTime!: number;
+  loadTime!: number;
 
   constructor(
     public privateMessageService: PrivateMessageService,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private firebase: FirebaseService,
-    public dialog: MatDialog
-  ) {}
-  @ViewChild(MessageLayoutPcComponent)
-  messageLayoutPC!: MessageLayoutPcComponent;
+    public dialog: MatDialog,
+    private scrollHelper: MessageServiceService
+  ) {
+    this.startTime = window.performance.now();
+  }
   messages$: Observable<Message[]> | undefined;
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.subScrollEvent();   
     this.subscribeToSelectedUser();
+    
+    await this.waitForScroll();
   }
+
+  subScrollEvent() {
+    this.scrollHelper.scrollEventPrivateChat.subscribe(() => {
+      this.scrollToBottom();
+    });
+  }
+
+  checkLoadingTime() {
+    this.initTime = window.performance.now();
+    this.printTime(this.initTime);
+  }
+
+  printTime(time: number) {
+    this.loadTime = time + time - this.startTime;
+  }
+
+  async scrollToBottom() {
+    try {
+      const messageLayoutElement = this.messageLayoutPC?.getNativeElement();
+      messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
+    } catch (err) {
+      console.error('Error scrolling to bottom:', err);
+    }
+  }
+
+  async waitForScroll(): Promise<void> {
+    this.checkLoadingTime();
+    console.log(this.loadTime);
+    
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        this.scrollToBottom();
+        resolve();
+      }, this.loadTime);
+    });
+  } 
 
   ngAfterViewInit(): void {
     if (this.messageLayoutPC) {

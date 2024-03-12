@@ -63,12 +63,18 @@ export class MessageLayoutPcComponent {
   >([]);
   messages$: Observable<Message[]> = this.messagesSubject.asObservable();
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
+
   constructor(
     private firestore: Firestore,
     private firebase: FirebaseService,
     private privateMessage: PrivateMessageService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private el: ElementRef
   ) {}
+
+  getNativeElement(): HTMLElement {
+    return this.el.nativeElement;
+  }
 
   ngOnInit() {
     this.privateMessage.selectedUser$.subscribe(data => {

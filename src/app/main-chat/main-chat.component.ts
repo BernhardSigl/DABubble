@@ -1,10 +1,7 @@
 import {
-  AfterViewChecked,
-  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
-  NgZone,
   OnInit,
   Output,
   ViewChild,
@@ -20,7 +17,6 @@ import { CommonModule, Location } from '@angular/common';
 import { MessageLayoutComponent } from './message-layout/message-layout.component';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { UserListService } from '../firebase-services/user-list.service';
-import { AuthyService } from '../firebase-services/authy.service';
 import { Message } from '../classes/message.class';
 import { FirebaseService } from '../firebase-services/firebase.service';
 import { AddMembersRetrospectivelyComponent } from '../popup/add-members-retrospectively/add-members-retrospectively.component';
@@ -29,6 +25,7 @@ import { ListMembersComponent } from '../popup/list-members/list-members.compone
 import { EditChannelComponent } from '../popup/edit-channel/edit-channel.component';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageServiceService } from '../firebase-services/message-service.service';
 
 @Component({
   selector: 'app-main-chat',
@@ -52,9 +49,11 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './main-chat.component.scss',
 })
 export class MainChatComponent implements OnInit {
-  @ViewChild('scrollContainer') scrollContainer: ElementRef | undefined;
-  @ViewChild('messageContainer') messageContainer!: ElementRef;
-  @Output() scrollToBottomEvent: EventEmitter<void> = new EventEmitter<void>();
+  // @ViewChild('scrollContainer') scrollContainer: ElementRef | undefined;
+  // @ViewChild('messageContainer') messageContainer!: ElementRef;
+
+  // @Output() messageLayoutElementChange: EventEmitter<HTMLElement | undefined> = new EventEmitter<HTMLElement | undefined>();
+
 
   userName: string = '';
   userImage: string = '';
@@ -70,12 +69,11 @@ export class MainChatComponent implements OnInit {
 
   constructor(
     private userDataService: UserListService,
-    private auth: AuthyService,
     public firebase: FirebaseService,
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    private location: Location
+    private scrollHelper: MessageServiceService
   ) {
     this.startTime = window.performance.now();
   }
@@ -85,20 +83,26 @@ export class MainChatComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {   
+    this.subScrollEvent();
     // this.hideChatDuringLoad('hidden');
-    // performance test: alt
-    await this.firebase.pullLoggedInUserId(); // performance test: neu
+    await this.firebase.pullLoggedInUserId();
 
     this.userId = this.firebase.loggedInUserId;
     await this.getUserData(this.userId);
     if (this.messageLayout) {
       this.messages$ = this.messageLayout.messages$;
     }
-    this.checkLoadingTime();
+    
     await this.waitForScroll();
     // this.hideChatDuringLoad('visible');
     this.firebase.scheduleAutomaticUpdate();
-    this.checkEmailChange();
+    this.checkEmailChange();   
+  }
+
+  subScrollEvent() {
+    this.scrollHelper.scrollEventChannel.subscribe(() => {
+      this.scrollToBottom();
+    });
   }
 
   checkLoadingTime() {
@@ -107,22 +111,14 @@ export class MainChatComponent implements OnInit {
   }
 
   async waitForScroll(): Promise<void> {
-    let loadTime = this.loadTime;
-    if (performance.navigation.type === 1) {
-      console.log(performance.navigation.type)
-      loadTime = this.loadTime;
-    } else {
-      loadTime = 0;
-    }
-  
+    this.checkLoadingTime();
     return new Promise<void>((resolve) => {
       setTimeout(() => {
         this.scrollToBottom();
         resolve();
-      }, loadTime);
+      }, this.loadTime);
     });
-  }
-  
+  } 
 
   hideChatDuringLoad(visibilty: string) {
     const chats = document.getElementById('message-box-id');    
@@ -138,10 +134,7 @@ export class MainChatComponent implements OnInit {
   async scrollToBottom() {
     try {
       const messageLayoutElement = this.messageLayout?.getNativeElement();
-
-      if (messageLayoutElement) {
-        messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
-      }
+      messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
     } catch (err) {
       console.error('Error scrolling to bottom:', err);
     }

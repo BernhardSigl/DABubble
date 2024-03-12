@@ -27,6 +27,7 @@ import { PrivateMessageService } from '../firebase-services/private-message.serv
 import { Router } from '@angular/router';
 import { DrawerService } from '../firebase-services/drawer.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MessageServiceService } from '../firebase-services/message-service.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -73,8 +74,9 @@ export class SideNavComponent implements OnInit {
     private privateMessageService: PrivateMessageService,
     private router: Router,
     private changeDetector: ChangeDetectorRef,
-    private drawerService:DrawerService,
+    private drawerService: DrawerService,
     private breakpointObserver: BreakpointObserver,
+    public scrollHelper: MessageServiceService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -90,7 +92,7 @@ export class SideNavComponent implements OnInit {
       }
     });
   }
-  
+
   async subUser() {
     await this.firebase.subAllUsers();
     this.lastOpened = this.firebase.loggedInUserArray[0].lastOpened;
@@ -100,7 +102,7 @@ export class SideNavComponent implements OnInit {
   async subChannels() {
     await this.firebase.subAllChannels();
     await this.firebase.checkChannelRights();
-    await this.firebase.showOnlyChannelsWithRights(); 
+    await this.firebase.showOnlyChannelsWithRights();
   }
 
   lastOpenedPrivateChatAtStartup() {
@@ -108,7 +110,9 @@ export class SideNavComponent implements OnInit {
       this.firebase.lastOpenedPrivateMessageArray &&
       this.firebase.loggedInUserArray[0].lastOpened === 'privateChat'
     ) {
-      this.firebase.addNewPrivateMessage(this.firebase.lastOpenedPrivateMessageArray);
+      this.firebase.addNewPrivateMessage(
+        this.firebase.lastOpenedPrivateMessageArray
+      );
     }
   }
 
@@ -172,6 +176,9 @@ export class SideNavComponent implements OnInit {
       );
       await this.firebase.channelOrPrivateChat('channel');
       this.router.navigate(['/main', channelOrPrivateChatId]);
+      setTimeout(() => {
+        this.scrollHelper.scrollDown('channel');
+      }, 1);
     } else if (channelOrPrivateChat === 'privateChat') {
       this.firebase.setSelectedChannelId(channelOrPrivateChatId['userId']);
       await this.firebase.activeChannelId(
@@ -180,6 +187,9 @@ export class SideNavComponent implements OnInit {
       );
       await this.firebase.channelOrPrivateChat('privateChat');
       await this.firebase.addNewPrivateMessage(channelOrPrivateChatId);
+      setTimeout(() => {
+        this.scrollHelper.scrollDown('privateChat');
+      }, 1);
     }
   }
 
@@ -200,7 +210,7 @@ export class SideNavComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
-  routeToDistribute(){
-    this.router.navigate(['/distributor'])
+  routeToDistribute() {
+    this.router.navigate(['/distributor']);
   }
 }
