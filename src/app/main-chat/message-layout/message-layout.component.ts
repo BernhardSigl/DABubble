@@ -30,6 +30,7 @@ import { DrawerService } from '../../firebase-services/drawer.service';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/view-specific-profile.component';
+import { MessageServiceService } from '../../firebase-services/message-service.service';
 @Component({
   selector: 'app-message-layout',
   standalone: true,
@@ -43,12 +44,11 @@ import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/
   templateUrl: './message-layout.component.html',
   styleUrls: ['./message-layout.component.scss'],
 })
-export class MessageLayoutComponent implements OnInit  {
+export class MessageLayoutComponent implements OnInit {
   @Input() userId?: string = '';
   @Input() userName!: string;
   @Input() userImage!: string;
   @ViewChild('drawer') drawer!: MatDrawer;
-  // @ViewChild('scrollContainer') private scrollContainer: ElementRef | undefined;
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
 
   private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
@@ -75,7 +75,8 @@ export class MessageLayoutComponent implements OnInit  {
     private firebase: FirebaseService,
     public dialog: MatDialog,
     private changeDetector: ChangeDetectorRef,
-    private el: ElementRef
+    private el: ElementRef,
+    private scrollHelper: MessageServiceService
   ) {}
 
   getNativeElement(): HTMLElement {
@@ -103,7 +104,8 @@ export class MessageLayoutComponent implements OnInit  {
     this.drawerService.openThread();
   }
 
-  loadMessages(channelId: string): void {
+
+  async loadMessages(channelId: string): Promise<void> {
     const messagesCollection = collection(
       this.firestore,
       `channels/${channelId}/channelMessages`
@@ -112,7 +114,7 @@ export class MessageLayoutComponent implements OnInit  {
 
     onSnapshot(
       q,
-      (querySnapshot) => {
+      async (querySnapshot) => {
         const messages: Message[] = [];
         querySnapshot.forEach((doc) => {
           const message = doc.data() as Message;
@@ -134,7 +136,7 @@ export class MessageLayoutComponent implements OnInit  {
         this.messages = messages.reverse(); // Set messages directly
         this.messagesSubject.next(this.messages); // Update the messages
         this.groupMessagesByDate(); // Group messages after setting
-        // this.scrollToBottom()
+        await this.scrollHelper.scrollDown('channel');
       },
       (error) => console.error('Error fetching messages:', error)
     );

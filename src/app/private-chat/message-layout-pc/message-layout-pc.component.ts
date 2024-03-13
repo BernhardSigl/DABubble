@@ -29,6 +29,7 @@ import { LocalStorage } from 'ngx-webstorage';
 import { PrivateMessageService } from '../../firebase-services/private-message.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/view-specific-profile.component';
+import { MessageServiceService } from '../../firebase-services/message-service.service';
 @Component({
   selector: 'app-message-layout-pc',
   standalone: true,
@@ -69,7 +70,8 @@ export class MessageLayoutPcComponent {
     private firebase: FirebaseService,
     private privateMessage: PrivateMessageService,
     public dialog: MatDialog,
-    private el: ElementRef
+    private el: ElementRef,
+    private scrollHelper: MessageServiceService
   ) {}
 
   getNativeElement(): HTMLElement {
@@ -91,7 +93,7 @@ export class MessageLayoutPcComponent {
 
   }
 
-  loadMessages(): void {
+  async loadMessages(): Promise<void> {
     if (!this.userId || !this.privateMessageId) {
       console.error('User ID or Private Message ID is missing.');
       return;
@@ -104,7 +106,7 @@ export class MessageLayoutPcComponent {
       orderBy('time', 'asc') // Order messages by time
     );
 
-    onSnapshot(q, (querySnapshot) => {
+    onSnapshot(q, async (querySnapshot) => {
       const messages: Message[] = [];
       querySnapshot.forEach((doc)=>{
         const message = doc.data() as Message;
@@ -118,6 +120,7 @@ export class MessageLayoutPcComponent {
         messages.push(message)
       })
       this.messagesSubject.next(messages);
+      await this.scrollHelper.scrollDown('privateChat');
     });
   }
 

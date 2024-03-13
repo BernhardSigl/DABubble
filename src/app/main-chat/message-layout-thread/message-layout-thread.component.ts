@@ -30,6 +30,8 @@ import { DrawerService } from '../../firebase-services/drawer.service';
 import { MessageBoxThreadComponent } from '../thread/message-box-thread/message-box-thread.component';
 import { GetIdService } from '../../firebase-services/get-id.service';
 import { FirebaseService } from '../../firebase-services/firebase.service';
+import { MessageServiceService } from '../../firebase-services/message-service.service';
+import { ThreadComponent } from '../thread/thread.component';
 
 @Component({
   selector: 'app-message-layout-thread',
@@ -51,8 +53,10 @@ export class MessageLayoutThreadComponent implements OnInit {
   constructor(
     private threadService: DrawerService,
     private firestore: Firestore,
-    private id:GetIdService,
-    private firebase:FirebaseService
+    private id: GetIdService,
+    private firebase: FirebaseService,
+    private el: ElementRef,
+    private scrollHelper: MessageServiceService
   ) {}
   selectedMessage: Message | null = null;
   threadMessages: Message[] = [];
@@ -71,7 +75,11 @@ export class MessageLayoutThreadComponent implements OnInit {
   messageId: string = '';
   selectedChannelId?: string;
 
- async ngOnInit() {
+  @ViewChild(ThreadComponent)
+  threadLayout!: ThreadComponent;
+
+  async ngOnInit() {
+    this.scrollHelper.registerThreadComponent(this);
     this.threadService.selectedMessageChanged.subscribe(
       (selectedMessage: Message | null) => {
         if (selectedMessage) {
@@ -81,8 +89,7 @@ export class MessageLayoutThreadComponent implements OnInit {
         }
       }
     );
-    this.firebase.selectedChannelId$.subscribe(channelId => {
-
+    this.firebase.selectedChannelId$.subscribe((channelId) => {
       if (channelId !== null) {
         this.selectedChannelId = channelId; // This will now only assign non-null values
       } else {
@@ -91,30 +98,35 @@ export class MessageLayoutThreadComponent implements OnInit {
       }
     });
     await this.firebase.ngOnInit();
-
   }
 
-
-
+  getNativeThreadElement(): HTMLElement {
+    return this.el.nativeElement;
+  }
 
   fetchThreadMessages(messageId: string): void {
-    const threadsRef = collection(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${messageId}/Thread`);
+    const threadsRef = collection(
+      this.firestore,
+      `channels/${this.selectedChannelId}/channelMessages/${messageId}/Thread`
+    );
     const q = query(threadsRef, orderBy('time')); // Assuming you have a 'time' field for ordering
 
     onSnapshot(
       q,
-      (querySnapshot) => {
+      async (querySnapshot) => {
         this.threadMessages = [];
         querySnapshot.forEach((doc) => {
           const message = { messageId: doc.id, ...doc.data() } as Message; // Add the doc.id as messageId if needed
 
-          if(this.firebase.updatedName){
+          if (this.firebase.updatedName) {
             message.name = this.firebase.updatedName;
-          }else{
-            message.name = message.name
+          } else {
+            message.name = message.name;
           }
           this.threadMessages.push(message);
         });
+        console.log('hi');
+        this.scrollHelper.scrollThreadToBottom();
       },
       (error) => {
         console.error('Error fetching thread messages:', error);
@@ -128,7 +140,8 @@ export class MessageLayoutThreadComponent implements OnInit {
         this.isEmojiPickerVisible[key] = false;
       });
     }
-    this.isEmojiPickerVisible[messageId] = !this.isEmojiPickerVisible[messageId];
+    this.isEmojiPickerVisible[messageId] =
+      !this.isEmojiPickerVisible[messageId];
   }
 
   onEmojiClick(event: any, message: Message) {
@@ -140,38 +153,38 @@ export class MessageLayoutThreadComponent implements OnInit {
       console.error('UserID is not defined.');
       return;
     }
-  
+
     if (!message.reactions[emoji]) {
       message.reactions[emoji] = { count: 0, users: {} };
     }
-  
+
     if (message.reactions[emoji].users[this.userId]) {
       // If the user has reacted with this emoji, remove their reaction
-      message.reactions[emoji].count = Math.max(0, message.reactions[emoji].count - 1);
+      message.reactions[emoji].count = Math.max(
+        0,
+        message.reactions[emoji].count - 1
+      );
       delete message.reactions[emoji].users[this.userId];
     } else {
       // If the user hasn't reacted with this emoji, add their reaction
       message.reactions[emoji].count++;
       message.reactions[emoji].users[this.userId] = true;
     }
-  
+
     // If no one has reacted with this emoji after toggling, consider removing the emoji from reactions
     if (message.reactions[emoji].count === 0) {
       delete message.reactions[emoji];
     }
-  
+
     await this.updateReactionsInFirestore(message);
   }
-  
-
-
 
   async addReactionThread(message: Message, emoji: string) {
     if (!this.userId) {
       console.error('UserID is not defined.');
       return;
     }
-  
+
     if (!message.reactions[emoji]) {
       message.reactions[emoji] = { count: 1, users: { [this.userId]: true } };
     } else {
@@ -184,26 +197,31 @@ export class MessageLayoutThreadComponent implements OnInit {
         return;
       }
     }
-  
+
     await this.updateReactionsInFirestore(message);
     this.closeEmojiPicker(message.messageId);
   }
-  
 
   async updateReactionsInFirestore(message: Message) {
     try {
-      const threadDocRef = doc(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${this.messageId}/Thread/${message.messageId}`);
-      await setDoc(threadDocRef, { reactions: message.reactions }, { merge: true });
+      const threadDocRef = doc(
+        this.firestore,
+        `channels/${this.selectedChannelId}/channelMessages/${this.messageId}/Thread/${message.messageId}`
+      );
+      await setDoc(
+        threadDocRef,
+        { reactions: message.reactions },
+        { merge: true }
+      );
       console.log('Reactions updated successfully in Firestore');
     } catch (error) {
       console.error('Error updating reactions in Firestore:', error);
     }
   }
-  
+
   closeEmojiPicker(messageId: string) {
     this.isEmojiPickerVisible[messageId] = false;
   }
-
 
   toggleEditMessageThread(messageId: string): void {
     // Set editing enabled state to true for "Nachricht Bearbeiten"
@@ -222,13 +240,15 @@ export class MessageLayoutThreadComponent implements OnInit {
       this.editedMessage[messageId] = messageText;
     });
     this.isEditingEnabled[messageId] = false;
-
   }
 
   saveEditedMessageThread(messageId: string, editedText: string): void {
     // Update the message in the Firebase Firestore
     // Assuming you have a way to identify the thread message document
-    const messageRef = doc(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${this.messageId}/Thread/${messageId}`);
+    const messageRef = doc(
+      this.firestore,
+      `channels/${this.selectedChannelId}/channelMessages/${this.messageId}/Thread/${messageId}`
+    );
     setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
       .then(() => {
         console.log('Message successfully updated.');
@@ -240,9 +260,7 @@ export class MessageLayoutThreadComponent implements OnInit {
       .catch((error) => {
         console.error('Error updating message:', error);
       });
-
   }
-
 
   cancelEditThread(messageId: string): void {
     // Disable edit mode and reset the edited message content
@@ -251,17 +269,14 @@ export class MessageLayoutThreadComponent implements OnInit {
     this.isEditingEnabled[messageId] = false;
   }
 
-
-
   getMessageText(messageId: string): Observable<string> {
     return this.messages$.pipe(
       map((messages) => {
-        const message = this.threadMessages.find((m) => m.messageId === messageId);
+        const message = this.threadMessages.find(
+          (m) => m.messageId === messageId
+        );
         return message ? message.message.join('\n') : '';
       })
     );
   }
-
-
-
 }

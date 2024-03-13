@@ -41,10 +41,6 @@ export class PrivateChatComponent implements OnInit, AfterViewInit {
   selectedUserStatus!: boolean;
   userId: string = '';
 
-  startTime!: number;
-  initTime!: number;
-  loadTime!: number;
-
   constructor(
     public privateMessageService: PrivateMessageService,
     private cdr: ChangeDetectorRef,
@@ -52,31 +48,18 @@ export class PrivateChatComponent implements OnInit, AfterViewInit {
     private firebase: FirebaseService,
     public dialog: MatDialog,
     private scrollHelper: MessageServiceService
-  ) {
-    this.startTime = window.performance.now();
-  }
+  ) {}
   messages$: Observable<Message[]> | undefined;
 
   async ngOnInit(): Promise<void> {
-    this.subScrollEvent();   
+    this.subScrollEvent();
     this.subscribeToSelectedUser();
-    
-    await this.waitForScroll();
   }
 
   subScrollEvent() {
     this.scrollHelper.scrollEventPrivateChat.subscribe(() => {
       this.scrollToBottom();
     });
-  }
-
-  checkLoadingTime() {
-    this.initTime = window.performance.now();
-    this.printTime(this.initTime);
-  }
-
-  printTime(time: number) {
-    this.loadTime = time + time - this.startTime;
   }
 
   async scrollToBottom() {
@@ -88,23 +71,22 @@ export class PrivateChatComponent implements OnInit, AfterViewInit {
     }
   }
 
-  async waitForScroll(): Promise<void> {
-    this.checkLoadingTime();
-    console.log(this.loadTime);
+  // async waitForScroll(): Promise<void> {
     
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        this.scrollToBottom();
-        resolve();
-      }, this.loadTime);
-    });
-  } 
+  //   this.scrollHelper.calc('privateChat');
+  //   setTimeout(() => {
+  //     this.scrollToBottom();
+  //   }, this.scrollHelper.loadTime);
+  // }
 
   ngAfterViewInit(): void {
     if (this.messageLayoutPC) {
       this.messages$ = this.messageLayoutPC.messages$;
       this.cdr.detectChanges();
     }
+    // this.waitForScroll();
+    // console.log('test');
+    
   }
 
   subscribeToSelectedUser() {

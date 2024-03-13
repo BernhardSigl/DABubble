@@ -5,6 +5,7 @@ import {
   Output,
   OnInit,
   ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { MessageBoxComponent } from '../message-box/message-box.component';
 import { MessageLayoutComponent } from '../message-layout/message-layout.component';
@@ -16,6 +17,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { NgControl } from '@angular/forms';
 import { DrawerService } from '../../firebase-services/drawer.service';
 import { MessageBoxThreadComponent } from './message-box-thread/message-box-thread.component';
+import { MessageServiceService } from '../../firebase-services/message-service.service';
 
 @Component({
   selector: 'app-thread',
@@ -40,7 +42,11 @@ export class ThreadComponent implements OnInit {
   threadMessages: string[] = [];
   isOpen = false;
   threadId: string = '';
-  constructor(private drawerService: DrawerService) {}
+  constructor(
+    private drawerService: DrawerService,
+    private el: ElementRef,
+    private scrollHelper: MessageServiceService
+    ) {}
 
   ngOnInit(): void {
     this.drawerService.isOpen$.subscribe((isOpen) => {
@@ -49,7 +55,6 @@ export class ThreadComponent implements OnInit {
         this.drawer.close(); // Close the sidenav when thread is opened
       }
     });
-
   }
 
   toggleThread(): void {

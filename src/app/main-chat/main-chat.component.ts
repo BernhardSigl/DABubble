@@ -26,6 +26,7 @@ import { EditChannelComponent } from '../popup/edit-channel/edit-channel.compone
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageServiceService } from '../firebase-services/message-service.service';
+import { MessageLayoutThreadComponent } from './message-layout-thread/message-layout-thread.component';
 
 @Component({
   selector: 'app-main-chat',
@@ -49,23 +50,17 @@ import { MessageServiceService } from '../firebase-services/message-service.serv
   styleUrl: './main-chat.component.scss',
 })
 export class MainChatComponent implements OnInit {
-  // @ViewChild('scrollContainer') scrollContainer: ElementRef | undefined;
-  // @ViewChild('messageContainer') messageContainer!: ElementRef;
-
-  // @Output() messageLayoutElementChange: EventEmitter<HTMLElement | undefined> = new EventEmitter<HTMLElement | undefined>();
-
-
   userName: string = '';
   userImage: string = '';
   userId: string = '';
   selectedMessage: Message | null = null;
-  @ViewChild(MessageLayoutComponent)
-  messageLayout!: MessageLayoutComponent;
   messages$: Observable<Message[]> | undefined;
 
-  startTime!: number;
-  initTime!: number;
-  loadTime!: number;
+  @ViewChild(MessageLayoutComponent)
+  messageLayout!: MessageLayoutComponent;
+
+  // @ViewChild(MessageLayoutThreadComponent)
+  // messageLayoutThread!: MessageLayoutThreadComponent;
 
   constructor(
     private userDataService: UserListService,
@@ -75,7 +70,6 @@ export class MainChatComponent implements OnInit {
     private router: Router,
     private scrollHelper: MessageServiceService
   ) {
-    this.startTime = window.performance.now();
   }
 
   onMessageSelected(message: Message): void {
@@ -92,8 +86,7 @@ export class MainChatComponent implements OnInit {
     if (this.messageLayout) {
       this.messages$ = this.messageLayout.messages$;
     }
-    
-    await this.waitForScroll();
+
     // this.hideChatDuringLoad('visible');
     this.firebase.scheduleAutomaticUpdate();
     this.checkEmailChange();   
@@ -105,21 +98,6 @@ export class MainChatComponent implements OnInit {
     });
   }
 
-  checkLoadingTime() {
-    this.initTime = window.performance.now();
-    this.printTime(this.initTime);
-  }
-
-  async waitForScroll(): Promise<void> {
-    this.checkLoadingTime();
-    return new Promise<void>((resolve) => {
-      setTimeout(() => {
-        this.scrollToBottom();
-        resolve();
-      }, this.loadTime);
-    });
-  } 
-
   hideChatDuringLoad(visibilty: string) {
     const chats = document.getElementById('message-box-id');    
     if (chats) {
@@ -127,11 +105,7 @@ export class MainChatComponent implements OnInit {
     }
   }
 
-  async printTime(time: number) {
-    this.loadTime = time + time - this.startTime;
-  }
-
-  async scrollToBottom() {
+scrollToBottom() {
     try {
       const messageLayoutElement = this.messageLayout?.getNativeElement();
       messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;

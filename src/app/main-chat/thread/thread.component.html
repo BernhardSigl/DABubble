@@ -10,7 +10,7 @@
       </div>
     </header>
 
-    <app-message-layout-thread [threadId]="threadId" class="scroll-bar" [userId]="userId"></app-message-layout-thread>
+    <app-message-layout-thread #threadLayout [threadId]="threadId" class="scroll-bar" [userId]="userId"></app-message-layout-thread>
 
     <app-message-box-thread (threadIdEmitter)="handleThreadId($event)" [userId]="userId"></app-message-box-thread>
   </mat-drawer>
