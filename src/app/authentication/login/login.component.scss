@@ -435,8 +435,7 @@ mat-error {
     max-width: 90vw;
   }
 
-  .imprint-wrapper,
-  .register-container-mobile {
+  .imprint-wrapper {
     margin-top: 1.875rem;
   }
 }
@@ -501,6 +500,10 @@ mat-error {
       display: none;
     }
   }
+
+  .header {
+    margin-top: 1.5rem;
+}
 }
 
 // @media (max-width: 701px) {
