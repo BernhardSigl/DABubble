@@ -268,7 +268,7 @@ mat-error {
   .login-container {
     min-width: 90vw !important;
     max-width: 90vw !important;
-    padding: 2.1875rem 1.25rem 2.1875rem 1.25rem !important;
+    padding: 20px 20px 30px 20px !important;
   }
 
   .form-login {
@@ -292,12 +292,13 @@ mat-error {
   }
 
   .imprint-wrapper {
-    margin-top: 1.875rem;
+    margin-top: .75rem;
   }
 
   .header {
     min-width: 90vw;
     max-width: 90vw;
+    justify-content: center;
   }
 
   .header {
