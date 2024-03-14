@@ -117,6 +117,7 @@ simple-snack-bar {
     max-width: 606px;
     padding: 2rem 2.3rem 2rem 2.3rem;
     box-sizing: border-box;
+    min-width: 606px;
 
     .login-header {
       text-align: center;
@@ -429,12 +430,7 @@ mat-error {
     }
   }
 
-  // .register-container {
-  //   display: none;
-  // }
-
   .header {
-    // justify-content: center;
     min-width: 90vw;
     max-width: 90vw;
   }
@@ -449,10 +445,10 @@ mat-error {
   .header {
     display: flex;
     align-items: center;
-      img {
-        height: 40px !important;
-      }
-}
+    img {
+      height: 40px !important;
+    }
+  }
 
   .google-login {
     gap: 5px !important;
@@ -471,15 +467,13 @@ mat-error {
   }
 
   input {
-    text-indent: 24px !important;
+    text-indent: 30px !important;
     padding: 8px 16px !important;
   }
 
-.login-btns-div {
-  gap: 10px !important;
-  //   display: flex !important;
-  //   justify-content: space-between !important;
-}
+  .login-btns-div {
+    gap: 10px !important;
+  }
 
   .login-btn,
   .guest-login {
@@ -488,12 +482,23 @@ mat-error {
   }
 
   .text-above-register {
-    display:none;
+    display: none;
   }
 
   .register-container {
     a {
-     margin-right:0;
+      margin-right: 0;
+    }
+  }
+}
+
+@media (max-height: 1000px) {
+  .imprint-wrapper {
+    margin-top: 1.5rem;
+  }
+  .login-header {
+    span {
+      display: none;
     }
   }
 }
