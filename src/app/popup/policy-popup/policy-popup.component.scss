@@ -1,102 +1,134 @@
 .login-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .login-container {
+    background-color: white;
+    border-radius: 1.5rem;
+    box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
+    padding: 2rem 2.3rem 2rem 2.3rem;
+    gap: 2rem; // 32px
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
 
-    .login-container {
-        background-color: white;
-        border-radius: 1.5rem;
-        box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
-        padding: 2rem 2.3rem 2rem 2.3rem;
-        gap: 2rem; // 32px
-        display:flex;
-        flex-direction: column;
+    .arrow-left {
+      cursor: pointer;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
-        .arrow-left {
-            cursor: pointer;
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+      .arrow-left-img {
+        width: 24px;
+        height: 24px;
+        background-image: url("./../../../assets/img/cross-black.png");
+      }
 
-            .arrow-left-img {
-                width: 24px;
-                height: 24px;
-                background-image: url('./../../../assets/img/cross-black.png');
-            }
+      &:hover {
+        background-color: #eceefe;
 
-            &:hover {
-                background-color: #eceefe;
-
-                .arrow-left-img {
-                    background-image: url('./../../../assets/img/cross-blue.png');
-                }
-            }
+        .arrow-left-img {
+          background-image: url("./../../../assets/img/cross-blue.png");
         }
-
-        .login-header {
-
-            h1, h2 {
-                color: var(--primary);
-                font-weight: 700;
-                margin-bottom: 1rem; // 16px
-            }
-
-            span {
-                font-size: 1.25rem;
-                font-weight: 400;
-            }
-        }
-
-        // Weiter Button
-        .login-methods {
-            margin-top: 2rem;
-
-            .login-btns-div {
-                margin-top: 2rem;
-                display: flex;
-                justify-content: center;
-                gap: 1.6rem;
-                justify-content: flex-end;
-
-                button {
-                    border-radius: 5rem;
-                    font-size: 1.125rem;
-                    padding: 0.9rem 1rem;
-                    border: none;
-                    outline: none;
-                    color: white;
-                    font-weight: 700;
-                    cursor: pointer;
-                }
-
-                .login-btn {
-                    background-color: var(--primary);
-
-                    &:hover {
-                        background-color: #797EF3;
-                    }
-                }
-            }
-        }
+      }
     }
+
+    .login-header {
+      h1 {
+        color: var(--primary);
+        font-weight: 700;
+        margin-bottom: 1rem; // 16px
+      }
+
+      span {
+        font-size: 1.25rem;
+        font-weight: 400;
+      }
+    }
+
+    // Weiter Button
+    .login-methods {
+      margin-top: 2rem;
+
+      .login-btns-div {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: center;
+        gap: 1.6rem;
+        justify-content: flex-end;
+
+        button {
+          border-radius: 5rem;
+          font-size: 1.125rem;
+          padding: 0.9rem 1rem;
+          border: none;
+          outline: none;
+          color: white;
+          font-weight: 700;
+          cursor: pointer;
+        }
+
+        .login-btn {
+          background-color: var(--primary);
+
+          &:hover {
+            background-color: #797ef3;
+          }
+        }
+      }
+    }
+  }
 }
 
 .scroll-bar {
-    max-height: 50vh;
-    overflow-y: auto;
-    overflow-x: hidden;
+  max-height: 50vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 ul {
-    padding-left: 0 !important;
+  padding-left: 0 !important;
 }
 
 .title-cross-position {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+h1 {
+  @media (min-width: 460px) {
+    &:before {
+      content: "Datenschutzerklärung";
+    }
+  }
+}
+
+h1 {
+    @media (max-width: 460px) {
+      &:before {
+        content: "Datenschutz";
+      }
+    }
+  }
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 28px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  h3,
+  span {
+    font-size: 14px !important;
+  }
+
+  .login-container {
+    padding: 18px 20px !important;
+  }
 }
