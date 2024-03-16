@@ -312,6 +312,10 @@ textarea {
   max-width: 95%;
 }
 
+.desktop-view {
+    height: calc(100vh - 95px) !important;
+}
+
 @media (max-width: 980px) {
   .main-chat,
   .private-chat-container,

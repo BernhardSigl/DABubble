@@ -1,6 +1,7 @@
 .thread-view{
   margin-top: 20px;
-  height: 80vh;
+  // height: 80vh;
+  height: calc(100vh - 140px);
   background: var(--white);
   border-radius: 30px;
   display: flex;

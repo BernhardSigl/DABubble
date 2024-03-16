@@ -2,7 +2,7 @@
 
 .sidenav-wrapper {
   display: flex;
-  height: 80vh;
+  height: calc(100% - 45px);
   top: 1.25rem;
   background: var(--Bg-color, #eceefe);
   position: relative;
