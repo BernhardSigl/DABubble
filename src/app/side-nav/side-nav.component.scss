@@ -288,9 +288,14 @@
   .sidenav-container {
     border-radius: 0 !important;
     min-width: 100vw !important;
+    align-items: center;
   }
 
   .side-nav-header {
     display: none;
+  }
+
+  .custom-scroll-box{
+    max-height: calc(100vh - 610px);
   }
 }
