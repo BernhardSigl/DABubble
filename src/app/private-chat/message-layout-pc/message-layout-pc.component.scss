@@ -1,17 +1,19 @@
 .message-card {
   width: 100%;
 
-  .btn-date {
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
-    button {
-      border-radius: 30px;
-      border: 1px solid #adb0d9;
-      padding: 5px 15px;
-      background: #fff;
-    }
+}
+
+.btn-date {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    border-radius: 30px;
+    border: 1px solid #adb0d9;
+    padding: 5px 15px;
+    background: #fff;
   }
 }
 .message-image {
@@ -95,7 +97,8 @@
   align-items: center;
   margin-bottom: 35px;
   justify-content: space-between;
-
+  width: 100%;
+  margin-top: 1rem;
   .one-divider {
     width: 40%;
 
