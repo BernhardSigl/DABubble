@@ -24,29 +24,29 @@
       box-shadow: 0px 10px 10px -10px rgba(0, 0, 0, 0.08);
 
       .left-side-header {
-        display:flex;
+        display: flex;
         flex-direction: column;
-        gap: .8125rem; // 13px
+        gap: 0.8125rem; // 13px
 
-       .channel {
-        padding: 0 .9375rem; // 15px
-        gap: .625rem; // 10px
+        .channel {
+          padding: 0 0.9375rem; // 15px
+          gap: 0.625rem; // 10px
 
-        .hashtag-and-name{
-            gap: .625rem; // 10px
-            padding: .25rem 1.25rem; // 4px 20px
+          .hashtag-and-name {
+            gap: 0.625rem; // 10px
+            padding: 0.25rem 1.25rem; // 4px 20px
             cursor: pointer;
 
             .hashtag {
-                background-image: url('./../../assets/img/hashtag-black.png');
-                background-position: center;
-                background-repeat: no-repeat;
+              background-image: url("./../../assets/img/hashtag-black.png");
+              background-position: center;
+              background-repeat: no-repeat;
             }
 
             .arrow-down-img {
               width: 1.875rem;
               height: 1.875rem;
-              background-image: url('./../../assets/img/keyboard-arrow-down-black.png');
+              background-image: url("./../../assets/img/keyboard-arrow-down-black.png");
               background-position: center;
               background-repeat: no-repeat;
             }
@@ -54,32 +54,32 @@
             border-radius: 1.25rem; // 20px
 
             &:hover {
-                color: var(--purple);
-                background-color: var(--background-color);
-                .hashtag {
-                    background-image: url('./../../assets/img/hashtag-blue.png');
-                }
-                .arrow-down-img {
-                  background-image: url('./../../assets/img/keyboard-arrow-down-blue.png');
-                }
+              color: var(--purple);
+              background-color: var(--background-color);
+              .hashtag {
+                background-image: url("./../../assets/img/hashtag-blue.png");
+              }
+              .arrow-down-img {
+                background-image: url("./../../assets/img/keyboard-arrow-down-blue.png");
+              }
             }
+          }
         }
-    }
-  }
+      }
 
       .right-side-header {
         display: flex;
         align-items: center;
-        gap: .625rem; // 10px
+        gap: 0.625rem; // 10px
 
         .profile-images {
-          gap: .625rem; // 10px
-          padding: .1875rem .625rem .1875rem calc(.625rem + 1.25rem); // 3px 10px 3px calc(10px + 20px from minus margin)
+          gap: 0.625rem; // 10px
+          padding: 0.1875rem 0.625rem 0.1875rem calc(0.625rem + 1.25rem); // 3px 10px 3px calc(10px + 20px from minus margin)
           cursor: pointer;
           border-radius: 1.875rem; // 30px
 
           .profile-counts {
-              font-weight: 600;
+            font-weight: 600;
           }
 
           img {
@@ -97,7 +97,7 @@
         }
 
         .add-member {
-          background-image: url('../../assets/img/add-person.png');
+          background-image: url("../../assets/img/add-person.png");
           width: 2.5rem; // 40px;
           height: 2.5rem;
           background-position: center;
@@ -106,42 +106,46 @@
           border-radius: 100%;
           cursor: pointer;
           &:hover {
-            background-image: url('../../assets/img/add-person-hover.png');
+            background-image: url("../../assets/img/add-person-hover.png");
           }
         }
       }
-    }}}
-
-    .empty-channel-content{
-      margin-bottom: 25px;
-      margin-left: 45px;
-      p{
-
-        span{
-          color: var(--purple);
-        }
-      }
     }
+  }
+}
 
-    app-message-layout {
-      position: relative;
-      margin-top: auto;
-      display: flex;
-      gap: 30px;
-      flex-direction: column;
-      align-items: flex-end;
-      overflow-y: auto;
-      max-height: 60vh;
-      margin-bottom: 38px;
+.empty-channel-content {
+  margin-bottom: 25px;
+  margin-left: 45px;
+  p {
+    span {
+      color: var(--purple);
     }
+  }
+}
 
-    @media screen and (max-width: 980px) {
-      .desktop-view{
+app-message-layout {
+  position: relative;
+  margin-top: auto;
+  display: flex;
+  gap: 30px;
+  flex-direction: column;
+  align-items: flex-end;
+  overflow-y: auto;
+  max-height: 60vh;
+  margin-bottom: 38px;
+}
 
-        .main-chat{
-        margin: 20px 0 0 0 ;
-        height: 88vh;
-        border-radius: 0;
-      }
-      }
+@media (max-width: 980px) {
+  .main-chat {
+    margin: 0 !important;
+    height: calc(100vh - 80px) !important;
+    border-radius: 0 !important;
+  }
+
+  .right-side-header{
+    .profile-images {
+      display: none;
     }
+  }
+}

@@ -68,6 +68,11 @@ export class SideNavComponent implements OnInit {
   lastOpened!: string;
   activeChannelId!: string;
 
+  // mobile start
+  @ViewChild('drawer') sideNavContent!: MatDrawer;
+  isSelectedForMobile: boolean = false;
+  // mobile end
+
   constructor(
     public dialog: MatDialog,
     public firebase: FirebaseService,
@@ -80,6 +85,7 @@ export class SideNavComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    localStorage.setItem('sideNavMobileStatus', 'visible');
     this.checkSideNavBtnStatus();
     await this.subChannels();
     await this.subUser();
@@ -91,6 +97,16 @@ export class SideNavComponent implements OnInit {
         this.drawer.close();
       }
     });
+    this.checkMobileStatus();
+  }
+
+  checkMobileStatus() {
+    const isSelectedForMobileStorage = localStorage.getItem('closeSideNav');
+    if (isSelectedForMobileStorage === 'close') {
+      this.isSelectedForMobile = true;
+      localStorage.removeItem('closeSideNav');
+      localStorage.setItem('sideNavMobileStatus', 'hidden');
+    }
   }
 
   async subUser() {
@@ -169,28 +185,56 @@ export class SideNavComponent implements OnInit {
     channelOrPrivateChatId: any
   ) {
     if (channelOrPrivateChat === 'channel') {
-      this.firebase.setSelectedChannelId(channelOrPrivateChatId);
-      await this.firebase.activeChannelId(
+      await this.channelWasSelected(
         channelOrPrivateChat,
         channelOrPrivateChatId
       );
-      await this.firebase.channelOrPrivateChat('channel');
-      this.router.navigate(['/main', channelOrPrivateChatId]);
-      setTimeout(() => {
-        this.scrollHelper.scrollDown('channel');
-      }, 1);
     } else if (channelOrPrivateChat === 'privateChat') {
-      this.firebase.setSelectedChannelId(channelOrPrivateChatId['userId']);
-      await this.firebase.activeChannelId(
+      await this.privateChatWasSelected(
         channelOrPrivateChat,
-        `${channelOrPrivateChatId['userId']}_${this.firebase.loggedInUserId}`
-      );
-      await this.firebase.channelOrPrivateChat('privateChat');
-      await this.firebase.addNewPrivateMessage(channelOrPrivateChatId);
-      setTimeout(() => {
-        this.scrollHelper.scrollDown('privateChat');
-      }, 1);
-    }
+        channelOrPrivateChatId
+      )
+    }   
+  }
+
+  async channelWasSelected(
+    channelOrPrivateChat: string,
+    channelOrPrivateChatId: any
+  ) {
+    this.firebase.setSelectedChannelId(channelOrPrivateChatId);
+    await this.firebase.activeChannelId(
+      channelOrPrivateChat,
+      channelOrPrivateChatId
+    );
+    await this.firebase.channelOrPrivateChat('channel');
+    this.hideSideNavOnMobile();
+    this.router.navigate(['/main', channelOrPrivateChatId]);
+    setTimeout(() => {
+      this.scrollHelper.scrollDown('channel');
+    }, 1);
+  }
+
+  async privateChatWasSelected(
+    channelOrPrivateChat: string,
+    channelOrPrivateChatId: any
+  ){
+    this.firebase.setSelectedChannelId(channelOrPrivateChatId['userId']);
+    await this.firebase.activeChannelId(
+      channelOrPrivateChat,
+      `${channelOrPrivateChatId['userId']}_${this.firebase.loggedInUserId}`
+    );
+    await this.firebase.channelOrPrivateChat('privateChat');
+    this.hideSideNavOnMobile();
+    await this.firebase.addNewPrivateMessage(channelOrPrivateChatId);
+    setTimeout(() => {
+      this.scrollHelper.scrollDown('privateChat');
+    }, 1);
+  }
+
+  hideSideNavOnMobile() {
+    this.isSelectedForMobile = true;
+    localStorage.setItem('closeSideNav', 'close');
+    localStorage.setItem('sideNavMobileStatus', 'hidden');
   }
 
   comparePrivateChatId(userId: string): boolean {

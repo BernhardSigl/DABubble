@@ -32,7 +32,7 @@
 }
 
 .add-channel {
- margin-top: 1.5625rem;
+  margin-top: 1.5625rem;
 }
 
 .add-channel-img {
@@ -195,28 +195,29 @@
       border-radius: 1.25rem; // 20px
       &:hover {
         background-color: var(--background-color);
-        .hashtag {
-          background-image: url("./../../assets/img/hashtag-blue.png");
-        }
       }
     }
   }
 
-  .channelIsActive {
-    background-color: var(--background-color);
-    color: var(--purple);
-    font-weight: 700;
-    .hashtag {
-      background-image: url("./../../assets/img/hashtag-blue.png") !important;
+  @media (min-width: 981px) {
+    .channelIsActive {
+      background-color: var(--background-color);
+      color: var(--purple);
+      font-weight: 700;
+      .hashtag {
+        background-image: url("./../../assets/img/hashtag-blue.png") !important;
+      }
+    }
+
+    .privateChatIsActive {
+      background-color: var(--background-color);
+      color: var(--purple);
+      font-weight: 700;
     }
   }
 }
 
-.privateChatIsActive {
-  background-color: var(--background-color);
-  color: var(--purple);
-  font-weight: 700;
-}
+
 
 .members-list-box {
   margin-bottom: 0.9375rem; // 15px
@@ -274,4 +275,22 @@
   overflow-y: auto;
   max-height: calc(100vh - 830px); // -900px 942px
   height: calc(100% + 1px);
+}
+
+@media (max-width: 980px) {
+  .sidenav-wrapper {
+    top: 0 !important;
+    border-radius: 0 !important;
+    margin-left: 0 !important;
+    height: calc(100vh - 80px) !important;
+  }
+
+  .sidenav-container {
+    border-radius: 0 !important;
+    min-width: 100vw !important;
+  }
+
+  .side-nav-header {
+    display: none;
+  }
 }

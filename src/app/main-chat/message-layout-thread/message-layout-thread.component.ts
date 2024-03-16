@@ -125,7 +125,6 @@ export class MessageLayoutThreadComponent implements OnInit {
           }
           this.threadMessages.push(message);
         });
-        console.log('hi');
         this.scrollHelper.scrollThreadToBottom();
       },
       (error) => {

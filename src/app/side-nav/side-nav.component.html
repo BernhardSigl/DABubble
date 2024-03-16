@@ -2,14 +2,15 @@
   class="sidenav-wrapper"
   [ngClass]="{
     'with-margin': sideNavBtnStatus,
-    'without-margin': !sideNavBtnStatus
+    'without-margin': !sideNavBtnStatus,
+    'hideForMobile': isSelectedForMobile
   }"
   autosize
   opened
   disableClose="true"
 >
   <mat-drawer #drawer class="sidenav-container" mode="side" opened="true">
-    <div class="horicontal spaceBetween">
+    <div class="horicontal spaceBetween side-nav-header">
       <div class="channel-header-left horicontal">
         <img src="./../../assets/img/channel-logo.png" />
         <h4 class="bold">Code learning</h4>
