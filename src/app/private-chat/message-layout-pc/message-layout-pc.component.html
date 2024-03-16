@@ -1,19 +1,19 @@
+<ng-container *ngFor="let messageGroup of groupedMessages">
+  <div class="sent-date">
+    <mat-divider class="one-divider"></mat-divider>
+    <div class="btn-date">
+      <button>{{ messageGroup.date | date : "mediumDate" }}</button>
+    </div>
+    <mat-divider class="two-divider"></mat-divider>
+  </div>
 <div
   class="message-card"
-  *ngFor="let message of messages$ | async"
+  *ngFor="let message of messageGroup.messages"
   [ngClass]="{
     'current-user': message.senderId === userId,
     'other-user': message.senderId !== userId
   }"
 >
-  <div class="sent-date">
-    <mat-divider class="one-divider"></mat-divider>
-    <div class="btn-date">
-      <button>{{ message.time | date : "mediumDate" }}</button>
-    </div>
-    <mat-divider class="two-divider"></mat-divider>
-  </div>
-
   <div>
     <div
       class="content-container"
@@ -110,3 +110,4 @@
     </div>
   </div>
 </div>
+</ng-container>

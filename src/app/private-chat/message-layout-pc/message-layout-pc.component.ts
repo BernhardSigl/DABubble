@@ -62,6 +62,7 @@ export class MessageLayoutPcComponent {
   private messagesSubject: BehaviorSubject<Message[]> = new BehaviorSubject<
     Message[]
   >([]);
+  groupedMessages: { date: Date; messages: Message[] }[] = [];
   messages$: Observable<Message[]> = this.messagesSubject.asObservable();
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
 
@@ -120,8 +121,34 @@ export class MessageLayoutPcComponent {
         messages.push(message)
       })
       this.messagesSubject.next(messages);
+      this.groupMessagesByDate();
       await this.scrollHelper.scrollDown('privateChat');
     });
+  }
+
+  groupMessagesByDate() {
+    this.messages$.subscribe(messages => {
+      const groups = new Map<string, Message[]>();
+    
+      messages.forEach((message) => {
+        const messageDate = new Date(message.time);
+        const formattedDate = messageDate.toISOString().split('T')[0];
+    
+        if (!groups.has(formattedDate)) {
+          groups.set(formattedDate, []);
+        }
+    
+        groups.get(formattedDate)?.push(message);
+      });
+    
+      this.groupedMessages = Array.from(groups.entries()).map(
+        ([date, messages]) => ({
+          date: new Date(date),
+          messages: messages,
+        })
+      );
+    });
+    console.log(this.groupedMessages)
   }
 
   toggleEmojiPicker(messageId: string) {
