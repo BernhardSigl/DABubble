@@ -1,140 +1,176 @@
 .popup {
-    width: 54.5rem; // 872px
-    padding: 2.5rem; // 40px
-    box-sizing: border-box;
-    gap: 1.25rem; // 20px
-    display:flex;
-    flex-direction: column;
+  width: 54.5rem; // 872px
+  padding: 2.5rem; // 40px
+  box-sizing: border-box;
+  gap: 1.25rem; // 20px
+  display: flex;
+  flex-direction: column;
 }
 
 .cross-icon {
-    background-image: url('./../../../assets/img/cross-black.png');
-    background-size: 1.5rem 1.5rem; // 24px
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 100%;
-    width: 2.5rem; // 40px
-    height: 2.5rem;
+  background-image: url("./../../../assets/img/cross-black.png");
+  background-size: 1.5rem 1.5rem; // 24px
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 100%;
+  width: 2.5rem; // 40px
+  height: 2.5rem;
 
-    &:hover {
-        background-color: var(--background-color);
-        background-image: url('./../../../assets/img/cross-blue.png');
-    }
+  &:hover {
+    background-color: var(--background-color);
+    background-image: url("./../../../assets/img/cross-blue.png");
+  }
 }
 
 .channel {
-    gap: .625rem; // 10px
+  gap: 0.625rem; // 10px
 
-    .hashtag-and-name{
-        gap: .625rem; // 10px
+  .hashtag-and-name {
+    gap: 0.625rem; // 10px
 
-        .hashtag {
-            background-image: url('./../../../assets/img/hashtag-black.png');
-            background-position: center;
-            background-repeat: no-repeat;
-        }
+    .hashtag {
+      background-image: url("./../../../assets/img/hashtag-black.png");
+      background-position: center;
+      background-repeat: no-repeat;
     }
+  }
 }
 
 .custom-frame {
-    padding: 1.25rem; // 20px
-    box-sizing: border-box;
-    border: solid 1px var(--light-purple);
-    border-radius: 1.25rem; // 20px
-    display:flex;
-    flex-direction: column;
-    gap: 1.25rem; // 20px
-    transition: all 0.5s ease;
+  padding: 1.25rem; // 20px
+  box-sizing: border-box;
+  border: solid 1px var(--light-purple);
+  border-radius: 1.25rem; // 20px
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; // 20px
+  transition: all 0.5s ease;
 }
 
-    .edit-text {
-        color: var(--purple);
-        cursor: pointer;
-        font-weight: 600;
-        &:hover {
-            transform: scale(1.01);
-        }
-    }
+.edit-text {
+  color: var(--purple);
+  cursor: pointer;
+  font-weight: 600;
+  &:hover {
+    transform: scale(1.01);
+  }
+}
 
-    .channel-small {
-        gap: .625rem; // 10px
-    
-        .hashtag-and-name-small{
-            gap: .625rem; // 10px
-    
-            .hashtag-small {
-                background-image: url('./../../../assets/img/hashtag-black.png');
-                background-position: center;
-                background-repeat: no-repeat;
-                background-size: 1.0294rem 1rem; // 16.47px 16px
-                cursor: default;
-            }
-        }
-    }
+.channel-small {
+  gap: 0.625rem; // 10px
 
-    .edit-mode {
-        
-        padding: 0 !important;
-        border: 0 !important;
-    }
+  .hashtag-and-name-small {
+    gap: 0.625rem; // 10px
 
-    .created-by-text {
-        cursor: pointer;
-        color: var(--purple);
+    .hashtag-small {
+      background-image: url("./../../../assets/img/hashtag-black.png");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 1.0294rem 1rem; // 16.47px 16px
+      cursor: default;
     }
+  }
+}
 
-    .leave-channel {
-        background-color: var(--primary);
-        border-radius: 5rem; // 80px
-        font-size: 1.125rem; // 18px
-        padding: .75rem 1.5625rem; // 12px 25px
-        border: none;
-        outline: none;
-        color: white;
-        font-weight: 700;
-        cursor: pointer;
-        width: auto;
-    
-        &:hover {
-            background-color: #797EF3;
-        }
-    }
+.edit-mode {
+  padding: 0 !important;
+  border: 0 !important;
+}
 
-    .input-box {
-        display: flex;
-        flex-direction: column;
-        gap: 1.25rem; // 20px
-    }
-    
-    .input-border {
-        display: flex;
-        width: fill;
-        box-sizing: border-box;
-        padding: 1.125rem 1.25rem; // 18px 20px
-        border-radius: 2.5rem; // 40px
-        border: 1px solid var(--light-purple);
-        border-radius: 2.5rem; // 40px
+.created-by-text {
+  cursor: pointer;
+  color: var(--purple);
+}
 
-        &:hover {
-            border: 1px solid var(--secondary);
-        }
-    
-        input {
-            color: black;
-            font-size: 1.125rem; // 18px
-            outline: none;
-            width: 100%;
-            border: none;
-            margin-left: .9375rem; // 15px
-    
-            input::placeholder {
-                color: var(--Text-gray, #686868);
-            }
-   
-        }
-    }
+.leave-channel {
+  background-color: var(--primary);
+  border-radius: 5rem; // 80px
+  font-size: 1.125rem; // 18px
+  padding: 0.75rem 1.5625rem; // 12px 25px
+  border: none;
+  outline: none;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  width: auto;
 
-    #channel-description-input-box,
-    #channel-name-input-box{
-        display: none;
+  &:hover {
+    background-color: #797ef3;
+  }
+}
+
+.input-box {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; // 20px
+}
+
+.input-border {
+  display: flex;
+  width: fill;
+  box-sizing: border-box;
+  padding: 1.125rem 1.25rem; // 18px 20px
+  border-radius: 2.5rem; // 40px
+  border: 1px solid var(--light-purple);
+  border-radius: 2.5rem; // 40px
+
+  &:hover {
+    border: 1px solid var(--secondary);
+  }
+
+  input {
+    color: black;
+    font-size: 1.125rem; // 18px
+    outline: none;
+    width: 100%;
+    border: none;
+    margin-left: 0.9375rem; // 15px
+
+    input::placeholder {
+      color: var(--Text-gray, #686868);
     }
+  }
+}
+
+#channel-description-input-box,
+#channel-name-input-box {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .popup {
+    width: 100vw !important;
+    height: 100vh !important;
+    padding: 40px 16px;
+  }
+
+  .shadow-line {
+    display: flex !important;
+    position: absolute;
+    top: 90px;
+    left: 0;
+    width: 100vw;
+    height: 1px;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.2);
+  }
+
+  .title {
+    margin-bottom: 10px;
+  }
+
+  .edit-text {
+    display: none;
+  }
+
+  .edit-img {
+    display: block !important;
+
+    background-image: url("./../../../assets/img/pencil.png");
+    background-size: 1.875rem 1.875rem; // 30px
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 100%;
+    width: 1.875rem; // 40px
+    height: 1.875rem;
+  }
+}

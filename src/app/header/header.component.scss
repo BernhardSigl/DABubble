@@ -236,7 +236,7 @@
     box-sizing: border-box;
   }
 
-  .channel-header-left{
+  .channel-header-left {
     display: flex;
     gap: 10px;
   }
@@ -244,7 +244,7 @@
   .header-logo {
     // width: auto;
     // height: 45px;
-  display: none;
+    display: none;
   }
 
   .header-input {
@@ -258,8 +258,14 @@
     }
   }
 
+  .code-learning-img,
   .profile-img-and-status {
     width: 50px !important;
     height: 50px !important;
+  }
+
+  .redirect {
+    rotate: 90deg;
+    margin-right: -8px;
   }
 }

@@ -127,22 +127,22 @@ scrollToBottom() {
 
   addMemberDropdown() {
     this.dialog.open(AddMembersRetrospectivelyComponent, {
-      position: { top: '210px', right: '550px' },
+      position: { top: '210px' },
       panelClass: 'no-border-tr',
     });
   }
 
   listMembers() {
     this.dialog.open(ListMembersComponent, {
-      position: { top: '210px', right: '650px' },
+      position: { top: '210px' },
       panelClass: 'no-border-tr',
     });
   }
 
   showChannelInfo() {
     this.dialog.open(EditChannelComponent, {
-      position: { top: '210px', right: '500px' },
-      panelClass: 'no-border-tl',
+      // position: { top: '210px' },
+      panelClass: ['no-border-tl', 'editChannelPopup'],
     });
   }
 

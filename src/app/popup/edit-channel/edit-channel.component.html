@@ -1,6 +1,8 @@
+<div class="shadow-line dNone"></div>
+
 <div class="popup">
 
-    <div class="spaceBetween horicontal">
+    <div class="spaceBetween horicontal title">
         <div class="channel">
             <div class="hashtag-and-name horicontal">
                 <div class="icon-size-24 hashtag"></div>
@@ -15,6 +17,8 @@
         <div class="horicontal spaceBetween">
             <span class="fs18 bold">Channel-Name</span>
             <span class="fs18 edit-text" (click)="channelNameEditMode ? saveChannelName(channelNameInput.value) : editChannelName()" id="channel-name-edit-text">Bearbeiten</span>
+            <div class="icon-size-24 edit-img dNone" (click)="channelNameEditMode ? saveChannelName(channelNameInput.value) : editChannelName()" id="channel-name-edit-text">
+            </div>
         </div>
 
         <div class="channel-small" id="hide-channel-name">
