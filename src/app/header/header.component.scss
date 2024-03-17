@@ -2,6 +2,9 @@
   display: flex;
   margin: 1.5625rem 2.125rem 0 2.8125rem; // 25px 0 34px 45px
 }
+.channel-header-left {
+  display: none;
+}
 
 .header-logo {
   width: 15.1319rem; // 242.11px
@@ -233,9 +236,15 @@
     box-sizing: border-box;
   }
 
+  .channel-header-left{
+    display: flex;
+    gap: 10px;
+  }
+
   .header-logo {
-    width: auto;
-    height: 45px;
+    // width: auto;
+    // height: 45px;
+  display: none;
   }
 
   .header-input {

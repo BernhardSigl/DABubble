@@ -33,6 +33,7 @@
 
 .add-channel {
   margin-top: 1.5625rem;
+  padding: 0rem .625rem;
 }
 
 .add-channel-img {
@@ -111,7 +112,7 @@
 
 .add-channel-text {
   gap: 0.625rem;
-  padding: 1.5625rem 0.9375rem 0 2.1875rem; // 25px 15px 0 35px
+  padding: 1.5625rem 2.6375rem 1.1875rem; // 25px 15px 0 35px
   cursor: pointer;
 
   .circle-add-channel-img {
@@ -288,7 +289,6 @@
   .sidenav-container {
     border-radius: 0 !important;
     min-width: 100vw !important;
-    align-items: center;
   }
 
   .side-nav-header {
