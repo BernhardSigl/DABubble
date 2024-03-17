@@ -19,13 +19,18 @@
 .add-ons{
   display: flex;
   gap: 13px;
-  position: absolute;
-  bottom: 25px;
-  left: 50px;
+  justify-content: space-between;
   width: 100%;
   img{
     cursor: pointer;
   }
+}
+
+.add-ons-left{
+  display: flex;
+  position: absolute;
+  bottom: 25px;
+  left: 50px;
 }
 
 .vertical-divider {
@@ -45,8 +50,8 @@ emoji-mart{
 
 .send{
   position: absolute;
-  right: 150px;
-  bottom: -5px;
+  right: 103px;
+  bottom: 20px;
 }
 
 .mentioned-users{
