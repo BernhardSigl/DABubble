@@ -42,7 +42,7 @@ addMemberDropdown() {
   this.dialogRef.close();
   this.dialog.open(AddMembersRetrospectivelyComponent, {
     position: { top: '210px' },
-    panelClass: 'no-border-tr',
+    panelClass: ['no-border-tr', 'addMembersRetrospectivePopup'],
   });
 }
 
