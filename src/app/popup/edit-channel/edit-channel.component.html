@@ -17,8 +17,7 @@
         <div class="horicontal spaceBetween">
             <span class="fs18 bold">Channel-Name</span>
             <span class="fs18 edit-text" (click)="channelNameEditMode ? saveChannelName(channelNameInput.value) : editChannelName()" id="channel-name-edit-text">Bearbeiten</span>
-            <div class="icon-size-24 edit-img dNone" (click)="channelNameEditMode ? saveChannelName(channelNameInput.value) : editChannelName()" id="channel-name-edit-text">
-            </div>
+            <img src="./../../../assets/img/pencil.png" class="icon-size-24 edit-img dNone" (click)="channelNameEditMode ? saveChannelName(channelNameInput.value) : editChannelName()" id="channel-name-edit-img">
         </div>
 
         <div class="channel-small" id="hide-channel-name">
@@ -40,6 +39,7 @@
         <div class="horicontal spaceBetween">
             <span class="fs18 bold">Beschreibung</span>
             <span class="fs18 edit-text"  (click)="channelDescriptionEditMode ? saveChannelDescription(channelDescriptionInput.value) : editChannelDescription()" id="channel-description-edit-text">Bearbeiten</span>
+            <img src="./../../../assets/img/pencil.png" class="icon-size-24 edit-img dNone" (click)="channelDescriptionEditMode ? saveChannelDescription(channelDescriptionInput.value) : editChannelDescription()" id="channel-description-edit-img">
         </div>
 
         <span class="fs18" id="hide-channel-description">{{ firebase.channelDescription }}</span>

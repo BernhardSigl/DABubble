@@ -10,11 +10,7 @@ import { AddMembersRetrospectivelyComponent } from '../add-members-retrospective
 @Component({
   selector: 'app-edit-channel',
   standalone: true,
-  imports: [
-    MatDividerModule,
-    CommonModule,
-    ListMembersComponent
-  ],
+  imports: [MatDividerModule, CommonModule, ListMembersComponent],
   templateUrl: './edit-channel.component.html',
   styleUrl: './edit-channel.component.scss',
 })
@@ -30,7 +26,6 @@ export class EditChannelComponent {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    // await this.firebase.ngOnInit(); // performance: alt
     this.checkChannelCreator();
   }
 
@@ -53,18 +48,20 @@ export class EditChannelComponent {
     const channelNameEditText = document.getElementById(
       'channel-name-edit-text'
     );
+    const channelNameEditImg = document.getElementById('channel-name-edit-img') as HTMLImageElement;;
     const channelNameInputBox = document.getElementById(
       'channel-name-input-box'
     );
     if (
       editModeChannelName &&
       hideChannelName &&
-      channelNameEditText &&
+      channelNameEditText && channelNameEditImg &&
       channelNameInputBox
     ) {
       editModeChannelName.classList.add('edit-mode');
       hideChannelName.style.display = 'none';
       channelNameEditText.innerHTML = 'Speichern';
+      channelNameEditImg.src = './../../../assets/img/hook.png';
       channelNameInputBox.style.display = 'flex';
       this.channelNameEditMode = true;
     }
@@ -78,6 +75,7 @@ export class EditChannelComponent {
     const channelNameEditText = document.getElementById(
       'channel-name-edit-text'
     );
+    const channelNameEditImg = document.getElementById('channel-name-edit-img') as HTMLImageElement;
     const channelNameInputBox = document.getElementById(
       'channel-name-input-box'
     );
@@ -86,12 +84,14 @@ export class EditChannelComponent {
       editModeChannelName &&
       hideChannelName &&
       channelNameEditText &&
-      channelNameInputBox
+      channelNameInputBox &&
+      channelNameEditImg
     ) {
       editModeChannelName.classList.remove('edit-mode');
       hideChannelName.style.display = 'flex';
       channelNameEditText.innerHTML = 'Bearbeiten';
       channelNameInputBox.style.display = 'none';
+      channelNameEditImg.src = './../../../assets/img/pencil.png';
       this.channelNameEditMode = false;
       await this.firebase.updatedChannelName(updatedChannelName);
       await this.updateChange();
@@ -102,6 +102,7 @@ export class EditChannelComponent {
     const channelDescriptionEditText = document.getElementById(
       'channel-description-edit-text'
     );
+    const channelDescriptionEditImg = document.getElementById('channel-description-edit-img') as HTMLImageElement;
     const editModeChannelDescription = document.getElementById(
       'edit-mode-channel-description'
     );
@@ -115,11 +116,13 @@ export class EditChannelComponent {
       channelDescriptionEditText &&
       editModeChannelDescription &&
       hideChannelDescription &&
-      channelDescriptionInputBox
+      channelDescriptionInputBox &&
+      channelDescriptionEditImg
     ) {
       hideChannelDescription.style.display = 'none';
       channelDescriptionInputBox.style.display = 'flex';
       editModeChannelDescription.classList.add('edit-mode');
+      channelDescriptionEditImg.src = './../../../assets/img/hook.png';
       channelDescriptionEditText.innerHTML = 'Speichern';
       this.channelDescriptionEditMode = true;
     }
@@ -129,6 +132,7 @@ export class EditChannelComponent {
     const channelDescriptionEditText = document.getElementById(
       'channel-description-edit-text'
     );
+    const channelDescriptionEditImg = document.getElementById('channel-description-edit-img') as HTMLImageElement;
     const editModeChannelDescription = document.getElementById(
       'edit-mode-channel-description'
     );
@@ -142,12 +146,14 @@ export class EditChannelComponent {
       channelDescriptionEditText &&
       editModeChannelDescription &&
       hideChannelDescription &&
-      channelDescriptionInputBox
+      channelDescriptionInputBox &&
+      channelDescriptionEditImg
     ) {
       hideChannelDescription.style.display = 'flex';
       channelDescriptionInputBox.style.display = 'none';
       editModeChannelDescription.classList.remove('edit-mode');
       channelDescriptionEditText.innerHTML = 'Bearbeiten';
+      channelDescriptionEditImg.src = './../../../assets/img/pencil.png';
       this.channelDescriptionEditMode = false;
       this.firebase.updatedChannelDescription(updatedChannelDescription);
       await this.updateChange();
