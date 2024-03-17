@@ -23,6 +23,7 @@
   ></textarea>
 
   <div class="add-ons">
+
     <input
       type="file"
       accept="image/*"
@@ -30,6 +31,8 @@
       #fileInput
       style="display: none"
     />
+    
+    <div class="add-ons-left">
     <img
       matTooltip="Add Image"
       src="../../../assets/img/add.png"
@@ -56,7 +59,7 @@
       class="mention"
       (click)="addMention()"
     />
-
+  </div>
     <img
       matTooltip="Send"
       src="../../../assets/img/send-dark-blue.png"
