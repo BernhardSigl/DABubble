@@ -1,103 +1,103 @@
-.popup{
-    padding: 2.5rem; // 40px
-    width: 25.9375rem; // 415px
-    box-sizing: border-box;
+.popup {
+  padding: 2.5rem; // 40px
+  width: 25.9375rem; // 415px
+  box-sizing: border-box;
 }
 
 .title {
-    margin-bottom: 1.25rem; // 20px
+  margin-bottom: 1.25rem; // 20px
 }
 
 .cross-icon {
-    background-image: url('./../../../assets/img/cross-black.png');
-    background-size: 1.5rem 1.5rem; // 24px
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 100%;
-    width: 2.5rem; // 40px
-    height: 2.5rem;
+  background-image: url("./../../../assets/img/cross-black.png");
+  background-size: 1.5rem 1.5rem; // 24px
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 100%;
+  width: 2.5rem; // 40px
+  height: 2.5rem;
 
-    &:hover {
-        background-color: var(--background-color);
-        background-image: url('./../../../assets/img/cross-blue.png');
-    }
+  &:hover {
+    background-color: var(--background-color);
+    background-image: url("./../../../assets/img/cross-blue.png");
+  }
 }
 
 .members-list-box {
-    margin-bottom: .9375rem; // 15px
+  margin-bottom: 0.9375rem; // 15px
 
-    .members-list-scroll-box {
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-        max-height: 12.5rem; // 200px
-        gap: .8125rem; // 13px
+  .members-list-scroll-box {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 12.5rem; // 200px
+    gap: 0.8125rem; // 13px
+  }
+
+  .members-list {
+    display: flex;
+    gap: 0.9375rem; // 15px
+    cursor: pointer;
+    padding: 0.25rem 1.25rem; // 4px 20px
+    border-radius: 1.875rem; // 30px
+    margin-right: 0.25rem; // 4px
+
+    &:not([style*="--primary"]) {
+      &:hover {
+        background-color: var(--background-color) !important;
+      }
     }
-
-    .members-list {
-        display: flex;
-        gap: .9375rem; // 15px
-        cursor: pointer;
-        padding: .25rem 1.25rem; // 4px 20px
-        border-radius: 1.875rem; // 30px
-        margin-right: .25rem; // 4px
-
-        &:not([style*="--primary"]) {
-            &:hover {
-                background-color: var(--background-color) !important;
-            }
-        }
-    }
+  }
 }
 
 .profile-img-and-status {
-    width: 3.125rem; // 50px
-    height: 3.125rem;
-    position: relative;
+  width: 3.125rem; // 50px
+  height: 3.125rem;
+  position: relative;
 
-    .profile-img {
-        height: 100%;
-        aspect-ratio: 1/1;
-        background-size: cover;
-        background-repeat: no-repeat;
-        border-radius: 50%;
-    }
+  .profile-img {
+    height: 100%;
+    aspect-ratio: 1/1;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+  }
 
-    .status {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        border: 2px solid var(--background-color);
-        border-radius: 100%;
-        width: .875rem; // 14px
-        height: .875rem; // 14px
-    }
+  .status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: 2px solid var(--background-color);
+    border-radius: 100%;
+    width: 0.875rem; // 14px
+    height: 0.875rem; // 14px
+  }
 }
 
 .userName {
-    min-width: 150px;
+  min-width: 150px;
 }
 
 .add-member-box {
- gap: .9375rem; // 15px
- padding: .75rem 1.8125rem; // 12px 29px
- box-sizing: border-box;
- border-radius: 1.875rem; // 30px
- cursor: pointer;
- &:hover {
+  gap: 0.9375rem; // 15px
+  padding: 0.75rem 1.8125rem; // 12px 29px
+  box-sizing: border-box;
+  border-radius: 1.875rem; // 30px
+  cursor: pointer;
+  &:hover {
     background-color: var(--background-color);
     color: var(--purple);
     .add-member {
-        background-image: url('../../../assets/img/add-person-hover.png');
+      background-image: url("../../../assets/img/add-person-hover.png");
     }
- }
+  }
 
-.add-member {
-    background-image: url('../../../assets/img/add-person.png');
+  .add-member {
+    background-image: url("../../../assets/img/add-person.png");
     width: 2.5rem; // 40px;
     height: 2.5rem;
     background-position: center;
     background-repeat: no-repeat;
     border-radius: 100%;
-}
+  }
 }

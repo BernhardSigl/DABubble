@@ -41,7 +41,7 @@ async updateOnlineStatus(): Promise <void> {
 addMemberDropdown() {
   this.dialogRef.close();
   this.dialog.open(AddMembersRetrospectivelyComponent, {
-    position: { top: '210px', right: '550px' },
+    position: { top: '210px' },
     panelClass: 'no-border-tr',
   });
 }

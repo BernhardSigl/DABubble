@@ -4,11 +4,17 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { ViewSpecificProfileComponent } from '../view-specific-profile/view-specific-profile.component';
+import { ListMembersComponent } from '../list-members/list-members.component';
+import { AddMembersRetrospectivelyComponent } from '../add-members-retrospectively/add-members-retrospectively.component';
 
 @Component({
   selector: 'app-edit-channel',
   standalone: true,
-  imports: [MatDividerModule, CommonModule],
+  imports: [
+    MatDividerModule,
+    CommonModule,
+    ListMembersComponent
+  ],
   templateUrl: './edit-channel.component.html',
   styleUrl: './edit-channel.component.scss',
 })
@@ -174,6 +180,13 @@ export class EditChannelComponent {
         user: user,
       },
       panelClass: 'border',
+    });
+  }
+
+  addMemberDropdown() {
+    this.dialog.open(AddMembersRetrospectivelyComponent, {
+      position: { top: '210px' },
+      panelClass: 'no-border-tr',
     });
   }
 }

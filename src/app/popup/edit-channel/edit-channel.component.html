@@ -57,6 +57,34 @@
         <h4 class="created-by-text" (click)="showProfile(channelCreatedBy)">{{ firebase.channelCreatedBy }}</h4>
     </div>
 
+    <div class="custom-frame list-members-box">
+        <div class="spaceBetween horicontal title-members">
+            <h4 class="bold">Mitglieder</h4>
+        </div>
+    
+        <div class="members-list-box">
+            <div class="members-list-scroll-box scroll-bar">
+                <div class="members-list horicontal" (click)="showProfile(user)"
+                *ngFor="let user of firebase.currentChannelData[0].members">
+        
+                    <div class="profile-img-and-status">
+                        <div [style.background-image]="'url(' + user.profileImg + ')'" class="profile-img"></div>
+                        <img [src]="user.status ? './../../../assets/img/online.png' : './../../../assets/img/offline.png'"
+                            class="status">
+                    </div>
+    
+                    <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
+        
+            </div>
+            </div>
+        </div>
+    
+        <div class="add-member-box horicontal" *ngIf="firebase.currentChannelId !== 'D67s4fa5cA1KoJPzjRJd'" (click)="addMemberDropdown()">
+            <div class="add-member"></div>
+            <span class="fs18">Mitglieder hinzufügen</span>
+        </div>
+    </div>
+
     <div class="dFlex spaceBetween">
         <div><span class="fs18" *ngIf="firebase.currentChannelId === 'D67s4fa5cA1KoJPzjRJd'">Dieser Channel kann nicht verlassen werden.</span></div>
         <button class="leave-channel" (click)="leaveChannel()" *ngIf="firebase.currentChannelId !== 'D67s4fa5cA1KoJPzjRJd'">Channel verlassen</button>

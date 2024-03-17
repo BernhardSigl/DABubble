@@ -132,9 +132,92 @@
   }
 }
 
+.list-members-box,
 #channel-description-input-box,
 #channel-name-input-box {
   display: none;
+}
+
+// list members on mobile:
+.title-members {
+  margin-bottom: -5px !important;
+}
+
+.members-list-box {
+  .members-list-scroll-box {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: calc(100vh - 715px) !important;
+    gap: 0.8125rem; // 13px
+  }
+
+  .members-list {
+    display: flex;
+    gap: 0.9375rem; // 15px
+    cursor: pointer;
+    padding: 0.25rem 1.25rem; // 4px 20px
+    border-radius: 1.875rem; // 30px
+    margin-right: 0.25rem; // 4px
+
+    &:not([style*="--primary"]) {
+      &:hover {
+        background-color: var(--background-color) !important;
+      }
+    }
+  }
+}
+
+.profile-img-and-status {
+  width: 3.125rem; // 50px
+  height: 3.125rem;
+  position: relative;
+
+  .profile-img {
+    height: 100%;
+    aspect-ratio: 1/1;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+  }
+
+  .status {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    border: 2px solid var(--background-color);
+    border-radius: 100%;
+    width: 0.875rem; // 14px
+    height: 0.875rem; // 14px
+  }
+}
+
+.userName {
+  min-width: 150px;
+}
+
+.add-member-box {
+  gap: 0.9375rem; // 15px
+  padding: 0.75rem 1.8125rem; // 12px 29px
+  box-sizing: border-box;
+  border-radius: 1.875rem; // 30px
+  cursor: pointer;
+  &:hover {
+    background-color: var(--background-color);
+    color: var(--purple);
+    .add-member {
+      background-image: url("../../../assets/img/add-person-hover.png");
+    }
+  }
+
+  .add-member {
+    background-image: url("../../../assets/img/add-person.png");
+    width: 2.5rem; // 40px;
+    height: 2.5rem;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 100%;
+  }
 }
 
 @media (max-width: 980px) {
@@ -172,5 +255,13 @@
     border-radius: 100%;
     width: 1.875rem; // 40px
     height: 1.875rem;
+  }
+
+  .list-members-box {
+    display: flex !important;
+  }
+
+  app-list-members {
+    margin: -2.5rem !important;
   }
 }
