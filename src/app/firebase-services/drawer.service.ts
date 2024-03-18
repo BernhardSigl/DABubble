@@ -29,8 +29,7 @@ export class DrawerService {
   isSelectedForMobile: boolean = false;
   threadIsOpen!: boolean;
 
-  constructor(private firestore: Firestore) {
-  }
+  constructor(private firestore: Firestore) {}
 
   setSelectedMessage(message: Message): void {
     this.selectedMessage = message;
@@ -99,7 +98,11 @@ export class DrawerService {
   }
 
   isSideNavMobileVisible(): boolean {
-    return window.localStorage.getItem('sideNavMobileStatus') === 'visible';
+    if (window.innerWidth > 980) {
+      return true;
+    } else {
+      return window.localStorage.getItem('sideNavMobileStatus') === 'visible';
+    }
   }
 
   redirectToSideNav() {

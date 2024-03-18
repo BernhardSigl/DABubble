@@ -470,7 +470,7 @@ export class FirebaseService {
     }
   }
 
-  getFirstId(id: string): string {
+  getFirstId(id: string): string {   
     const parts = id.split('_');
     if (parts.length === 2) {
       return parts[0]; // Gibt die ID vor dem Unterstrich zurück

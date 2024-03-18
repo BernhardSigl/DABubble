@@ -221,7 +221,7 @@ export class SideNavComponent implements OnInit {
     this.firebase.setSelectedChannelId(channelOrPrivateChatId['userId']);
     await this.firebase.activeChannelId(
       channelOrPrivateChat,
-      `${channelOrPrivateChatId['userId']}_${this.firebase.loggedInUserId}`
+      `${channelOrPrivateChatId['userId']}`
     );
     await this.firebase.channelOrPrivateChat('privateChat');
     this.hideSideNavOnMobile();
