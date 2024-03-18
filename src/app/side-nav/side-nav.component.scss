@@ -199,6 +199,7 @@
       }
     }
   }
+}
 
   @media (min-width: 981px) {
     .channelIsActive {
@@ -211,14 +212,11 @@
     }
 
     .privateChatIsActive {
-      background-color: var(--background-color);
+      background-color: var(--background-color) !important;
       color: var(--purple);
       font-weight: 700;
     }
   }
-}
-
-
 
 .members-list-box {
   margin-bottom: 0.9375rem; // 15px

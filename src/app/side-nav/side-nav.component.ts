@@ -221,7 +221,7 @@ export class SideNavComponent implements OnInit {
     this.firebase.setSelectedChannelId(channelOrPrivateChatId['userId']);
     await this.firebase.activeChannelId(
       channelOrPrivateChat,
-      `${channelOrPrivateChatId['userId']}`
+      `${channelOrPrivateChatId['userId']}_${this.firebase.loggedInUserId}`
     );
     await this.firebase.channelOrPrivateChat('privateChat');
     this.hideSideNavOnMobile();
@@ -237,7 +237,7 @@ export class SideNavComponent implements OnInit {
     localStorage.setItem('sideNavMobileStatus', 'hidden');
   }
 
-  comparePrivateChatId(userId: string): boolean {
+  comparePrivateChatId(userId: string): boolean {   
     const updadetUserId = userId + '_' + this.firebase.loggedInUserId;
     return updadetUserId === this.firebase.currentChannelId;
   }
