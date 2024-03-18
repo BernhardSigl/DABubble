@@ -34,6 +34,9 @@
 .add-channel {
   margin-top: 1.5625rem;
   padding: 0rem .625rem;
+  .custom-scroll-box {
+    max-height: calc(100vh - 945px);
+  }
 }
 
 .add-channel-img {
@@ -112,8 +115,9 @@
 
 .add-channel-text {
   gap: 0.625rem;
-  padding: 1.5625rem 2.6375rem 1.1875rem; // 25px 15px 0 35px
+  padding: 25px 35px 0 35px;
   cursor: pointer;
+  height: 33px;
 
   .circle-add-channel-img {
     @include hoverSymbol(
@@ -155,7 +159,6 @@
   flex-direction: column;
   gap: 0.8125rem;
   padding: 0 0 0 1.5625rem; // 25px
-  // padding: 0 calc(1.5625rem - 0.25rem) 0 1.5625rem; // 25px
 
   .messages-user {
     display: flex;
@@ -167,6 +170,10 @@
       width: 3.125rem;
       height: 3.125rem;
     }
+  }
+
+  .custom-scroll-box {
+    max-height: calc(100vh - 742px);
   }
 }
 
@@ -219,7 +226,6 @@
   }
 
 .members-list-box {
-  margin-bottom: 0.9375rem; // 15px
   display: flex;
   flex-direction: column;
   gap: 0.8125rem; // 13px;
@@ -272,8 +278,11 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  max-height: calc(100vh - 830px);
-  height: calc(100% + 1px);
+}
+
+.messages-header,
+.channel-dropdown {
+  height: 46px !important;
 }
 
 @media (max-width: 980px) {
@@ -293,9 +302,20 @@
     display: none;
   }
 
-  .custom-scroll-box{
-    max-height: calc(100vh - 610px);
+  .add-channel {
+    .custom-scroll-box {
+      min-height: 11.5vh;
+      max-height: 26vh;
+    }
   }
+
+  .messages-users { 
+    .custom-scroll-box {
+      min-height: 30vh;
+      max-height: 42vh;
+    }
+  }
+  
 
   .message-to-all-mobile {
     display: flex !important;
