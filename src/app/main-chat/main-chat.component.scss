@@ -96,6 +96,7 @@
           }
         }
 
+        .add-member-mobile,
         .add-member {
           background-image: url("../../assets/img/add-person.png");
           width: 2.5rem; // 40px;
@@ -136,10 +137,56 @@ app-message-layout {
   margin-bottom: 38px;
 }
 
+.add-member-mobile {
+  display: none;
+}
+
 @media (max-width: 980px) {
   .main-chat {
     margin: 0 !important;
     height: calc(100vh - 80px) !important;
     border-radius: 0 !important;
+  }
+
+  .header-chat {
+    padding: 13px 16px !important;
+    height: 60px !important;
+}
+
+.hashtag-and-name,
+.channel {
+  padding: 0 !important;
+}
+
+  .add-member-mobile {
+    display: flex !important;
+    width: 32px !important;
+    height: 32px !important;
+    background-size: 18px;
+  }
+
+  .profile-images,
+  .add-member {
+    display: none !important;
+  }
+
+  .arrow-down-img {
+    background-size: 24px;
+}
+
+  .icon-size-24 {
+    width: 16px;
+    height: 17px;
+}
+
+  .hashtag-and-name{
+    gap: 5px !important;
+    &:hover {
+      background-color: white !important;
+    }
+  }
+
+  .channel-name {
+    font-size: 20px;
   }
 }

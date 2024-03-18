@@ -2,8 +2,10 @@
   display: flex;
   margin: 1.5625rem 2.125rem 0 2.8125rem; // 25px 0 34px 45px
 }
+
 .channel-header-left {
   display: none;
+  cursor: pointer;
 }
 
 .header-logo {
@@ -242,9 +244,9 @@
   }
 
   .header-logo {
-    // width: auto;
-    // height: 45px;
-    display: none;
+    width: auto;
+    height: 45px;
+    // display: none;
   }
 
   .header-input {

@@ -8,9 +8,13 @@
       <img class="logout-img" src="./../../assets/img/keyboard-arrow-down-black.png"> -->
 
 <div class="header-wrapper spaceBetween horicontal">
-  <img src="./../../assets/img/text-logo.png" class="header-logo" />
+  <img src="./../../assets/img/text-logo.png" class="header-logo" 
+  [style.display]="drawerService.isSideNavMobileVisible() ? 'flex' : 'none'"
+  />
 
-  <div class="channel-header-left horicontal">
+  <div class="channel-header-left horicontal" (click)="drawerService.redirectToSideNav()"
+  [style.display]="drawerService.isSideNavMobileVisible() ? 'none' : 'flex'"
+  >
     <img src="./../../assets/img/keyboard-arrow-down-black.png" class="redirect">
     <img src="./../../assets/img/channel-logo.png" class="code-learning-img"/>
     <h4 class="bold">Code learning</h4>

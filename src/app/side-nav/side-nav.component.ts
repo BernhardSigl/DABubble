@@ -70,7 +70,7 @@ export class SideNavComponent implements OnInit {
 
   // mobile start
   @ViewChild('drawer') sideNavContent!: MatDrawer;
-  isSelectedForMobile: boolean = false;
+  // isSelectedForMobile: boolean = false;
   // mobile end
 
   constructor(
@@ -79,7 +79,7 @@ export class SideNavComponent implements OnInit {
     private privateMessageService: PrivateMessageService,
     private router: Router,
     private changeDetector: ChangeDetectorRef,
-    private drawerService: DrawerService,
+    public drawerService: DrawerService,
     private breakpointObserver: BreakpointObserver,
     public scrollHelper: MessageServiceService
   ) {}
@@ -103,7 +103,7 @@ export class SideNavComponent implements OnInit {
   checkMobileStatus() {
     const isSelectedForMobileStorage = localStorage.getItem('closeSideNav');
     if (isSelectedForMobileStorage === 'close') {
-      this.isSelectedForMobile = true;
+      this.drawerService.isSelectedForMobile = true;
       localStorage.removeItem('closeSideNav');
       localStorage.setItem('sideNavMobileStatus', 'hidden');
     }
@@ -232,7 +232,7 @@ export class SideNavComponent implements OnInit {
   }
 
   hideSideNavOnMobile() {
-    this.isSelectedForMobile = true;
+    this.drawerService.isSelectedForMobile = true;
     localStorage.setItem('closeSideNav', 'close');
     localStorage.setItem('sideNavMobileStatus', 'hidden');
   }

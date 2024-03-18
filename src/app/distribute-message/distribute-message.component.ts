@@ -91,10 +91,6 @@ export class DistributeMessageComponent implements OnInit {
 
   async ngOnInit() {
     await this.firebase.ngOnInit();
-    setInterval(() => {
-      // console.log('selectedPrivateChatId: ', this.selectedPrivateChatId);
-      // // console.log('filteredUsers: ', this.filteredUsers);
-    }, 2000);
   }
 
   convertUserId() {

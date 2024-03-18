@@ -298,4 +298,26 @@
   .custom-scroll-box{
     max-height: calc(100vh - 610px);
   }
+
+  .message-to-all-mobile {
+    display: flex !important;
+    position: absolute;
+    right: 16px;
+    bottom: 57px;
+    background-color: var(--primary);
+    border: none;
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    .icon-size-24 {
+      margin: 0 0 2px 3px;
+    }
+    &:hover {
+      transform: scale(1.025);
+    }
+  }
 }

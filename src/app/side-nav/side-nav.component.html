@@ -3,7 +3,7 @@
   [ngClass]="{
     'with-margin': sideNavBtnStatus,
     'without-margin': !sideNavBtnStatus,
-    'hideForMobile': isSelectedForMobile
+    'hideForMobile': drawerService.isSelectedForMobile
   }"
   autosize
   opened
@@ -183,6 +183,11 @@
             </ng-container>
           </div>
         </div>
+
+        <button class="message-to-all-mobile dNone boxShadow"  (click)="routeToDistribute()">
+          <img src="./../../assets/img/edit-channel-white.png" class="icon-size-24">
+        </button>
+
       </div>
     </div>
   </mat-drawer>

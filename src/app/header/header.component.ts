@@ -19,6 +19,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { filter } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { DrawerService } from '../firebase-services/drawer.service';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -42,7 +43,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     public firebase: FirebaseService,
     public dialog: MatDialog,
-    public router: Router
+    public router: Router,
+    public drawerService: DrawerService
   ) {}
 
   async ngOnInit(): Promise<void> {

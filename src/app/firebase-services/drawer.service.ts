@@ -1,7 +1,16 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Message } from '../classes/message.class';
-import { Firestore, addDoc, collection, doc, getDocs, onSnapshot, query, setDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  query,
+  setDoc,
+} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +25,12 @@ export class DrawerService {
   private sideNavBtnStatusSubject = new BehaviorSubject<boolean>(true);
   sideNavBtnStatus$ = this.sideNavBtnStatusSubject.asObservable();
   threadOpened: EventEmitter<boolean> = new EventEmitter<boolean>();
-  constructor(private firestore:Firestore) {}
+
+  isSelectedForMobile: boolean = false;
+  threadIsOpen!: boolean;
+
+  constructor(private firestore: Firestore) {
+  }
 
   setSelectedMessage(message: Message): void {
     this.selectedMessage = message;
@@ -31,7 +45,10 @@ export class DrawerService {
       return;
     }
 
-    const threadsRef = collection(this.firestore, `messages/${mainMessage.messageId}/threads`);
+    const threadsRef = collection(
+      this.firestore,
+      `messages/${mainMessage.messageId}/threads`
+    );
     const q = query(threadsRef); // Add orderBy here if you want to sort the messages
 
     try {
@@ -44,7 +61,7 @@ export class DrawerService {
       });
       this.selectedThreadMessagesSource.next(threadMessages);
     } catch (error) {
-      console.error("Error fetching thread messages:", error);
+      console.error('Error fetching thread messages:', error);
     }
   }
 
@@ -60,6 +77,7 @@ export class DrawerService {
   closeDrawer(): void {
     this.isOpenSubject.next(false);
     this.setSideNavBtnStatus(true);
+    console.log('close');
   }
 
   setSideNavBtnStatus(status: boolean): void {
@@ -67,6 +85,26 @@ export class DrawerService {
   }
 
   openThread() {
+    this.threadIsOpen = !this.threadIsOpen;
     this.threadOpened.emit(true);
+    console.log(this.threadIsOpen);
+  }
+
+  openThreadMobile() {
+    console.log('thread is open');
+  }
+
+  closeThreadMobile() {
+    console.log('thread is closed');
+  }
+
+  isSideNavMobileVisible(): boolean {
+    return window.localStorage.getItem('sideNavMobileStatus') === 'visible';
+  }
+
+  redirectToSideNav() {
+    this.isSelectedForMobile = false;
+    window.localStorage.setItem('sideNavMobileStatus', 'visible');
+    window.localStorage.removeItem('closeSideNav');
   }
 }

@@ -28,7 +28,16 @@
             </h3>
           </ng-container>
         </div>
-        <div class="add-member" (click)="addMemberDropdown()" *ngIf="firebase.currentChannelId !== 'D67s4fa5cA1KoJPzjRJd'"></div>
+        <div
+          class="add-member"
+          (click)="addMemberDropdown()"
+          *ngIf="firebase.currentChannelId !== 'D67s4fa5cA1KoJPzjRJd'"
+        ></div>
+        <div
+        class="add-member-mobile"
+        (click)="listMembers()"
+        *ngIf="firebase.currentChannelId !== 'D67s4fa5cA1KoJPzjRJd'"
+      ></div>
       </div>
     </header>
 
@@ -40,7 +49,7 @@
       [userName]="userName"
       [userImage]="userImage"
       #messageLayout
-      id = 'message-box-id'
+      id="message-box-id"
     ></app-message-layout>
 
     <!-- If there are no text messages in the Channel -->

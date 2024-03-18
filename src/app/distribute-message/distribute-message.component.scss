@@ -111,6 +111,7 @@ app-message-layout {
   position: relative;
   padding: 0 35px 10px 35px;
   width: 100%;
+  box-sizing: border-box;
   textarea {
     width: calc(100% - 120px);
     border-radius: 20px;

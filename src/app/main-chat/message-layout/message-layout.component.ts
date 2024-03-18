@@ -101,7 +101,7 @@ export class MessageLayoutComponent implements OnInit {
   openThread(message: Message): void {
     this.drawerService.openDrawer(message);
     this.drawerService.setSelectedMessage(message);
-    this.drawerService.openThread();
+    this.drawerService.openThread();    
   }
 
 

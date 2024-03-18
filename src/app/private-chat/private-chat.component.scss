@@ -58,7 +58,8 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    box-shadow: inset 0 0 0 2px var(--background-color), 0 0 0 2px var(--background-color);
+    box-shadow: inset 0 0 0 2px var(--background-color),
+      0 0 0 2px var(--background-color);
     border-radius: 100%;
     width: 0.875rem; // 14px
     height: 0.875rem; // 14px
@@ -102,11 +103,35 @@ app-message-layout-pc {
   }
 }
 
-.chat-partner{
+.chat-partner {
   color: var(--purple);
   cursor: pointer;
   text-align: center;
-  &:hover{
+  &:hover {
     font-weight: 700;
+  }
+}
+
+@media (max-width: 980px) {
+  .private-chat-container {
+    margin-top: 0 !important;
+    height: calc(100vh - 80px) !important;
+    border-radius: 0 !important;
+  }
+
+  .channel-name {
+    font-size: 20px;
+  }
+
+  .hashtag-and-name {
+    padding: 0 !important;
+    &:hover {
+      background-color: white !important;
+    }
+  }
+
+  .header-chat {
+    padding: 10px 16px !important;
+    height: 78px;
   }
 }

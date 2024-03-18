@@ -77,7 +77,7 @@ export class MainChatComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {   
-    localStorage.removeItem('closeSideNav');
+    // localStorage.removeItem('closeSideNav');
     this.subScrollEvent();
     // this.hideChatDuringLoad('hidden');
     await this.firebase.pullLoggedInUserId();
