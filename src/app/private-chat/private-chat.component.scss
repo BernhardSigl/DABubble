@@ -6,7 +6,7 @@
   .private-chat-container {
     flex-grow: 1;
     margin-top: 20px;
-    height: 80vh;
+    height: calc(100vh - 140px);
     background: var(--white);
     border-radius: 30px;
     width: 100%;
