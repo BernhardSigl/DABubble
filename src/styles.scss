@@ -196,6 +196,12 @@ h5 {
   overflow: hidden !important;
 }
 
+.editChannelPopup .mat-mdc-dialog-container,
+.editChannelPopup .mdc-dialog__surface {
+  border-radius: 0 1.875rem 1.875rem 1.875rem !important;
+  overflow: hidden !important;
+}
+
 // select members at channel creation
 .transparent-backdrop {
   background-color: transparent !important;
@@ -208,24 +214,6 @@ h5 {
   background-size: 0 0 !important;
   background-image: none !important;
 }
-
-// .scroll-bar::-webkit-scrollbar-button:start:decrement {
-//     background-position: center;
-//     background-image: url('./assets/img/arrow-drop-up-grey.png');
-//     border-top-right-radius: 100%;
-//     border-top-left-radius: 100%;
-//     background-size: auto 4px;
-//     background-repeat: no-repeat;
-// }
-
-// .scroll-bar::-webkit-scrollbar-button:end:increment {
-//     background-position: center;
-//     background-image: url('./assets/img/arrow-drop-down-grey.png');
-//     border-bottom-right-radius: 100%;
-//     border-bottom-left-radius: 100%;
-//     background-size: auto 4px;
-//     background-repeat: no-repeat;
-// }
 
 .scroll-bar-transparent::-webkit-scrollbar {
   width: 0 !important;
@@ -323,13 +311,21 @@ textarea {
   border: 0 !important;
 }
 
-.test{
+.test {
   background-color: green !important;
 }
 
 .addMembersRetrospectivePopup,
 .editChannelPopup {
   max-width: 100vw !important;
+}
+
+.list-members-main-dialog {
+  position: absolute !important;
+  top: 215px !important;
+  .userName {
+    min-width: 245px !important;
+  }
 }
 
 @media (max-width: 980px) {
@@ -354,17 +350,69 @@ textarea {
     display: none !important;
   }
 
-  .no-border-tl .mat-mdc-dialog-container,
-  .no-border-tl .mdc-dialog__surface {
-    border-radius: 0 !important;
+  .list-members-main-dialog {
+    top: 140px !important;
+    max-width: 100vw !important;
+    left: 15px;
+    right: 15px;
+    display: flex;
+    justify-content: center !important;
+    .popup {
+      padding: 20px 16px !important;
+      width: 100% !important;
+      .add-member-box {
+        padding: 0.75rem .75rem !important;
+        &:hover {
+          background-color: white !important;
+        }
+        .add-member {
+          background-color: var(--background-color) !important;
+          background-size: 22px 16px !important;
+          &:hover {
+            color: var(--purple);
+            background-image: url("./assets/img/add-person-hover.png") !important;
+            background-size: 22px 16px !important;
+          }
+        }
+      }
+    }
+    .userName {
+      min-width: 70% !important;
+    }
   }
 
-  // edit channel popup
+  // popup profile-dialogs and header dropdown:
+  .no-border-tr .mat-mdc-dialog-container,
+  .no-border-tr .mdc-dialog__surface {
+    border-radius: 1.25rem 0 1.25rem 1.25rem !important;
+    overflow: hidden !important;
+  }
+
+  // popup profile-dialogs and header dropdown:
+  .no-border-tl .mat-mdc-dialog-container,
+  .no-border-tl .mdc-dialog__surface {
+    border-radius: 0 1.25rem 1.25rem 1.25rem !important;
+    overflow: hidden !important;
+  }
+
+  // popup channels:
+  .border .mat-mdc-dialog-container,
+  .border .mdc-dialog__surface {
+    border-radius: 1.25rem !important;
+    overflow: hidden !important;
+  }
+
   .editChannelPopup {
     margin: 0 !important;
     max-width: 100vw !important;
     position: absolute !important;
     top: 0;
     left: 0;
+  }
+
+  .editChannelPopup .mat-mdc-dialog-container,
+  .editChannelPopup .mdc-dialog__surface {
+    border-radius: 0 !important;
+    overflow: hidden !important;
   }
 }

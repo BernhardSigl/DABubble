@@ -141,15 +141,14 @@ scrollToBottom() {
 
   listMembers() {
     this.dialog.open(ListMembersComponent, {
-      position: { top: '210px' },
-      panelClass: 'no-border-tr',
+      // position: { top: '210px' },
+      panelClass: ['no-border-tr', 'list-members-main-dialog'],
     });
   }
 
   showChannelInfo() {
     this.dialog.open(EditChannelComponent, {
-      // position: { top: '210px' },
-      panelClass: ['no-border-tl', 'editChannelPopup'],
+      panelClass: ['editChannelPopup'],
     });
   }
 
