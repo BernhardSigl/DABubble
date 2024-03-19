@@ -69,8 +69,7 @@ export class HeaderComponent implements OnInit {
 
   headerDropdownMenu() {
     this.dialog.open(HeaderDropdownComponent, {
-      position: { top: '6.875rem', right: '1.25rem' },
-      panelClass: 'no-border-tr',
+      panelClass: 'header-dropdown-menu',
     });
   }
 
