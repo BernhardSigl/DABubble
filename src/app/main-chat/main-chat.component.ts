@@ -27,6 +27,7 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageServiceService } from '../firebase-services/message-service.service';
 import { MessageLayoutThreadComponent } from './message-layout-thread/message-layout-thread.component';
+import { DrawerService } from '../firebase-services/drawer.service';
 
 @Component({
   selector: 'app-main-chat',
@@ -59,6 +60,7 @@ export class MainChatComponent implements OnInit {
   @ViewChild(MessageLayoutComponent)
   messageLayout!: MessageLayoutComponent;
 
+  public windowWidth!: number;
   // @ViewChild(MessageLayoutThreadComponent)
   // messageLayoutThread!: MessageLayoutThreadComponent;
 
@@ -68,7 +70,8 @@ export class MainChatComponent implements OnInit {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    private scrollHelper: MessageServiceService
+    private scrollHelper: MessageServiceService,
+    public drawerService: DrawerService
   ) {
   }
 
@@ -90,7 +93,11 @@ export class MainChatComponent implements OnInit {
 
     // this.hideChatDuringLoad('visible');
     this.firebase.scheduleAutomaticUpdate();
-    this.checkEmailChange();   
+    this.checkEmailChange();
+
+    this.drawerService.windowWidth.subscribe(width => {
+      this.windowWidth = width;
+    });
   }
 
   subScrollEvent() {
@@ -167,4 +174,7 @@ scrollToBottom() {
   reloadPage(): void {
     window.location.reload();
   }
+
+  
+  
 }

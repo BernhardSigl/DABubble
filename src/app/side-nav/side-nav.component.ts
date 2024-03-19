@@ -70,7 +70,7 @@ export class SideNavComponent implements OnInit {
 
   // mobile start
   @ViewChild('drawer') sideNavContent!: MatDrawer;
-  // isSelectedForMobile: boolean = false;
+  hideThreadMobile: boolean = false;
   // mobile end
 
   constructor(
@@ -98,6 +98,18 @@ export class SideNavComponent implements OnInit {
       }
     });
     this.checkMobileStatus();
+    this.subscribeToCallToggleSideNavMobile();
+  }
+
+  subscribeToCallToggleSideNavMobile(): void {
+    this.drawerService.showSideNavOnMobileToggle.subscribe(() => {
+      this.showSideNavOnMobileToggle();
+    });
+
+  }
+
+  showSideNavOnMobileToggle() {
+    this.drawer.toggle();
   }
 
   checkMobileStatus() {
@@ -194,7 +206,7 @@ export class SideNavComponent implements OnInit {
         channelOrPrivateChat,
         channelOrPrivateChatId
       )
-    }   
+    }
   }
 
   async channelWasSelected(

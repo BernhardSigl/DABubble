@@ -25,11 +25,17 @@ export class DrawerService {
   private sideNavBtnStatusSubject = new BehaviorSubject<boolean>(true);
   sideNavBtnStatus$ = this.sideNavBtnStatusSubject.asObservable();
   threadOpened: EventEmitter<boolean> = new EventEmitter<boolean>();
+  showSideNavOnMobileToggle: EventEmitter<void> = new EventEmitter<void>();
+  public windowWidth: BehaviorSubject<number> = new BehaviorSubject<number>(window.innerWidth);
 
   isSelectedForMobile: boolean = false;
   threadIsOpen!: boolean;
 
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore) {   
+    window.addEventListener('resize', () => {
+      this.windowWidth.next(window.innerWidth);
+    });
+  }
 
   setSelectedMessage(message: Message): void {
     this.selectedMessage = message;
@@ -68,7 +74,7 @@ export class DrawerService {
     return this.selectedMessage;
   }
 
-  openDrawer(message: Message): void {
+  openDrawer(message: Message): void {   
     this.setSelectedMessage(message);
     this.isOpenSubject.next(true);
   }
@@ -87,14 +93,6 @@ export class DrawerService {
     this.threadOpened.emit(true);
   }
 
-  openThreadMobile() {
-    console.log('thread is open');
-  }
-
-  closeThreadMobile() {
-    console.log('thread is closed');
-  }
-
   isSideNavMobileVisible(): boolean {
     if (window.innerWidth > 980) {
       return true;
@@ -104,8 +102,14 @@ export class DrawerService {
   }
 
   redirectToSideNav() {
+    if (this.threadIsOpen === true) {
+      this.closeDrawer();
+      this.showSideNavOnMobileToggle.emit();
+    }
     this.isSelectedForMobile = false;
+    this.threadIsOpen = false;
     window.localStorage.setItem('sideNavMobileStatus', 'visible');
     window.localStorage.removeItem('closeSideNav');
   }
+
 }
