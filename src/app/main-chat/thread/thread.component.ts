@@ -58,8 +58,7 @@ export class ThreadComponent implements OnInit {
   }
 
   toggleThread(): void {
-    this.isOpen = !this.isOpen;
-    this.drawerService.threadIsOpen = false;
+    this.drawerService.closeDrawer();
     if (this.isOpen) {
       this.drawerService.setSideNavBtnStatus(false);
     }

@@ -76,7 +76,6 @@ export class DrawerService {
   closeDrawer(): void {
     this.isOpenSubject.next(false);
     this.setSideNavBtnStatus(true);
-    console.log('close');
   }
 
   setSideNavBtnStatus(status: boolean): void {
@@ -86,7 +85,6 @@ export class DrawerService {
   openThread() {
     this.threadIsOpen = !this.threadIsOpen;
     this.threadOpened.emit(true);
-    console.log(this.threadIsOpen);
   }
 
   openThreadMobile() {
