@@ -192,7 +192,7 @@ export class EditChannelComponent {
   addMemberDropdown() {
     this.dialog.open(AddMembersRetrospectivelyComponent, {
       position: { top: '210px' },
-      panelClass: ['no-border-tr', 'addMembersRetrospectivePopup'],
+      panelClass: ['addMembersRetrospectiveChannelPopup'],
     });
   }
 }
