@@ -37,7 +37,7 @@ export class AddChannelComponent {
   addMember() {
     if (this.addChannelForm.value.channelName.trim() !== '') {
       this.dialog.open(AddMemberComponent, {
-        panelClass: 'border',
+        panelClass: 'add-members-popup',
         data: {
           channelName: this.addChannelForm.value.channelName,
           channelDescription: this.addChannelForm.value.channelDescription,

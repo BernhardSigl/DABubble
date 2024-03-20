@@ -134,14 +134,13 @@ scrollToBottom() {
 
   addMemberDropdown() {
     this.dialog.open(AddMembersRetrospectivelyComponent, {
-      position: { top: '210px' },
+      position: { top: '215px' },
       panelClass: ['no-border-tr', 'addMembersRetrospectivePopup'],
     });
   }
 
   listMembers() {
     this.dialog.open(ListMembersComponent, {
-      // position: { top: '210px' },
       panelClass: ['no-border-tr', 'list-members-main-dialog'],
     });
   }

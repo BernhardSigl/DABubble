@@ -146,7 +146,7 @@ export class SideNavComponent implements OnInit {
 
   openAddChannels() {
     this.dialog.open(AddChannelComponent, {
-      panelClass: 'border',
+      panelClass: 'add-channel-popup',
     });
   }
 
