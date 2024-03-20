@@ -201,7 +201,7 @@ export class EditChannelComponent {
       data: {
         user: user,
       },
-      panelClass: 'border',
+      panelClass: ['border', 'view-profile-popup']
     });
   }
 

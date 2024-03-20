@@ -332,7 +332,7 @@ export class MessageLayoutComponent implements OnInit {
       data: {
         user: filteredUsers[0],
       },
-      panelClass: 'border',
+      panelClass: ['border', 'view-profile-popup']
     });
   }
 }

@@ -108,7 +108,7 @@ export class PrivateChatComponent implements OnInit, AfterViewInit {
       data: {
         user: filteredUsers[0],
       },
-      panelClass: 'border',
+      panelClass: ['border', 'view-profile-popup']
     });
   }
 }

@@ -176,6 +176,8 @@ h5 {
 }
 
 // popup profile-dialogs and header dropdown:
+.view-profile-dropdown-popup .mat-mdc-dialog-container,
+.view-profile-dropdown-popup .mat-mdc-dialog-container,
 .header-dropdown-menu .mat-mdc-dialog-container,
 .header-dropdown-menu .mdc-dialog__surface,
 .no-border-tr .mat-mdc-dialog-container,
@@ -507,5 +509,45 @@ textarea {
     right: 0;
     bottom: 0;
     max-width: 100vw !important;
+  }
+
+  .view-profile-dropdown-popup .mat-mdc-dialog-container,
+  .view-profile-dropdown-popup .mat-mdc-dialog-container {
+    border-radius: 1.875rem !important;
+  }
+
+  .view-profile-popup,
+  .view-profile-dropdown-popup {
+    position: absolute !important;
+    left: 15px;
+    right: 15px;
+    margin: 0 !important;
+    max-width: 100vw !important;
+
+    .popup {
+      max-width: 100% !important;
+      width: 100% !important;
+      box-sizing: border-box;
+      gap: 2.1875rem !important;
+      .email {
+        min-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .view-profile-dropdown-popup {
+      top: 15px !important;
+      bottom: 15px !important;
+    .popup {
+      .email {
+        min-width: 160px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
 }

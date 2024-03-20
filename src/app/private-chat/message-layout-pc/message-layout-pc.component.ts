@@ -312,7 +312,7 @@ export class MessageLayoutPcComponent {
       data: {
         user: filteredUsers[0],
       },
-      panelClass: 'border',
+      panelClass: ['border', 'view-profile-popup']
     });
   }
 }

@@ -51,7 +51,7 @@ showProfile(user: any) {
     data: {
       user: user,
     },
-    panelClass: 'border',
+    panelClass: ['border', 'view-profile-popup']
   });
 }
 
