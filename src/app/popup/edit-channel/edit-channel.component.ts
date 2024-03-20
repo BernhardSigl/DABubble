@@ -26,7 +26,14 @@ export class EditChannelComponent {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    const content = document.getElementById('hideContent');
+    const scrollBarDiv = document.getElementById('scroll');
+    content!.style.visibility = 'hidden';
     this.checkChannelCreator();
+      setTimeout(() => {
+        scrollBarDiv!.scrollTop = 0;
+        content!.style.visibility = 'visible';
+      }, 150);
   }
 
   checkChannelCreator() {
@@ -48,14 +55,17 @@ export class EditChannelComponent {
     const channelNameEditText = document.getElementById(
       'channel-name-edit-text'
     );
-    const channelNameEditImg = document.getElementById('channel-name-edit-img') as HTMLImageElement;;
+    const channelNameEditImg = document.getElementById(
+      'channel-name-edit-img'
+    ) as HTMLImageElement;
     const channelNameInputBox = document.getElementById(
       'channel-name-input-box'
     );
     if (
       editModeChannelName &&
       hideChannelName &&
-      channelNameEditText && channelNameEditImg &&
+      channelNameEditText &&
+      channelNameEditImg &&
       channelNameInputBox
     ) {
       editModeChannelName.classList.add('edit-mode');
@@ -75,7 +85,9 @@ export class EditChannelComponent {
     const channelNameEditText = document.getElementById(
       'channel-name-edit-text'
     );
-    const channelNameEditImg = document.getElementById('channel-name-edit-img') as HTMLImageElement;
+    const channelNameEditImg = document.getElementById(
+      'channel-name-edit-img'
+    ) as HTMLImageElement;
     const channelNameInputBox = document.getElementById(
       'channel-name-input-box'
     );
@@ -102,7 +114,9 @@ export class EditChannelComponent {
     const channelDescriptionEditText = document.getElementById(
       'channel-description-edit-text'
     );
-    const channelDescriptionEditImg = document.getElementById('channel-description-edit-img') as HTMLImageElement;
+    const channelDescriptionEditImg = document.getElementById(
+      'channel-description-edit-img'
+    ) as HTMLImageElement;
     const editModeChannelDescription = document.getElementById(
       'edit-mode-channel-description'
     );
@@ -132,7 +146,9 @@ export class EditChannelComponent {
     const channelDescriptionEditText = document.getElementById(
       'channel-description-edit-text'
     );
-    const channelDescriptionEditImg = document.getElementById('channel-description-edit-img') as HTMLImageElement;
+    const channelDescriptionEditImg = document.getElementById(
+      'channel-description-edit-img'
+    ) as HTMLImageElement;
     const editModeChannelDescription = document.getElementById(
       'edit-mode-channel-description'
     );

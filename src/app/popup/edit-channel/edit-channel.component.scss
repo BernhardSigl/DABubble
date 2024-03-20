@@ -220,6 +220,10 @@
   }
 }
 
+.channel-name-and-description {
+  gap: 20px;
+}
+
 @media (max-width: 980px) {
   .popup {
     width: 100vw !important;
@@ -263,5 +267,24 @@
 
   app-list-members {
     margin: -2.5rem !important;
+  }
+
+  .channel-name-and-description {
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+  }
+
+  .members-list-box,
+  .members-list-scroll-box {
+    min-height: 200px !important;
+  }
+
+  .leave-channel,
+  .custom-frame {
+    margin-right: 3px !important;
+  }
+
+  .created-by-text {
+    font-size: 20px;
   }
 }

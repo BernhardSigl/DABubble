@@ -221,9 +221,9 @@ export class SideNavComponent implements OnInit {
     await this.firebase.channelOrPrivateChat('channel');
     this.hideSideNavOnMobile();
     this.router.navigate(['/main', channelOrPrivateChatId]);
-    setTimeout(() => {
-      this.scrollHelper.scrollDown('channel');
-    }, 1);
+    // setTimeout(() => {
+      // this.scrollHelper.scrollDown('channel');
+    // }, 1);
   }
 
   async privateChatWasSelected(
@@ -238,9 +238,9 @@ export class SideNavComponent implements OnInit {
     await this.firebase.channelOrPrivateChat('privateChat');
     this.hideSideNavOnMobile();
     await this.firebase.addNewPrivateMessage(channelOrPrivateChatId);
-    setTimeout(() => {
-      this.scrollHelper.scrollDown('privateChat');
-    }, 1);
+    // setTimeout(() => {
+      // this.scrollHelper.scrollDown('privateChat');
+    // }, 1);
   }
 
   hideSideNavOnMobile() {
