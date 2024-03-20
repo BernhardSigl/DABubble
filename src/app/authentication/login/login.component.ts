@@ -455,10 +455,10 @@ showImprint() {
     }, 1000);
     setTimeout(() => {
       this.moveState = 'top-left';
-    }, 2600);
+    }, 2400);
     setTimeout(() => {
       this.backgroundState = 'mid';
-    }, 2700);
+    }, 2900);
     setTimeout(() => {
       this.backgroundState = 'final';
       this.setNone = true;

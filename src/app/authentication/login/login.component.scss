@@ -30,7 +30,6 @@ simple-snack-bar {
   align-items: center;
   justify-content: center;
   z-index: 9;
-
   display: none; // vorübergehend deaktiviert
 }
 
@@ -42,6 +41,18 @@ simple-snack-bar {
   overflow: hidden;
   height: 150px;
   font-weight: 700;
+
+  @media screen and (max-width: 768px) {
+    span {
+      font-size: 20px !important;
+    }
+
+    @media screen and (max-width: 480px) {
+      span {
+        font-size: 14px !important;
+      }
+    }
+  }
 }
 
 .low-opacity-background {
@@ -62,6 +73,30 @@ simple-snack-bar {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+
+  img {
+    @media screen and (max-width: 768px) {
+      width: 50%;
+    }
+
+    @media screen and (max-width: 480px) {
+      .content {
+        width: 20%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .content {
+    max-width: 80%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .content {
+    max-width: 50%;
+  }
 }
 
 .start-animation.none {

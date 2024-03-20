@@ -5,7 +5,11 @@ import { ChooseAvaterComponent } from './authentication/register/choose-avater/c
 import { MainChatComponent } from './main-chat/main-chat.component';
 import { ForgetPasswordComponent } from './authentication/forget-password/forget-password.component';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
-import { canActivate, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
+import {
+  canActivate,
+  redirectUnauthorizedTo,
+  redirectLoggedInTo,
+} from '@angular/fire/auth-guard';
 import { PrivateChatComponent } from './private-chat/private-chat.component';
 import { ImprintComponent } from './authentication/imprint/imprint.component';
 import { PrivacyPolicyComponent } from './authentication/privacy-policy/privacy-policy.component';
@@ -15,7 +19,6 @@ const redirectLoggedIn = () => redirectUnauthorizedTo(['login']);
 const redirectToMain = () => redirectLoggedInTo(['main']);
 
 export const routes: Routes = [
-
   {
     path: 'login',
     component: LoginComponent,
@@ -38,6 +41,8 @@ export const routes: Routes = [
     path: 'policy',
     component: PrivacyPolicyComponent,
   },
+  { path: 'forgot', 
+    component: ForgetPasswordComponent },
   {
     path: 'main',
     component: MainChatComponent,
@@ -48,19 +53,21 @@ export const routes: Routes = [
     component: MainChatComponent,
     canActivate: [redirectLoggedIn],
   },
-  { path: 'chooseAvatar',
+  {
+    path: 'chooseAvatar',
     component: ChooseAvaterComponent,
     canActivate: [redirectLoggedIn],
   },
-  { path: 'forgot',
-  component: ForgetPasswordComponent,
-},
-{ path: 'distributor',
-component: DistributeMessageComponent,
-},
+
   {
-    path:'private-chat/:userId',
-    component:PrivateChatComponent
+    path: 'distributor',
+    component: DistributeMessageComponent,
+    canActivate: [redirectLoggedIn],
+  },
+  {
+    path: 'private-chat/:userId',
+    component: PrivateChatComponent,
+    canActivate: [redirectLoggedIn],
   },
 
   { path: '**', redirectTo: 'login' },
