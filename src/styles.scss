@@ -550,4 +550,14 @@ textarea {
       }
     }
   }
+
+  .imprint-policy-popup {
+    position: absolute !important;
+    left: 15px;
+    right: 15px;
+    top: 15px;
+    bottom: 15px;
+    margin: 0 !important;
+    max-width: 100vw !important;
+  }
 }

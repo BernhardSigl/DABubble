@@ -36,14 +36,14 @@ export class HeaderDropdownComponent {
   showImprint() {
     this.dialogRef.close();
     this.dialog.open(ImprintPopupComponent, {
-      panelClass: 'border'
+      panelClass: ['border', 'imprint-policy-popup']
     });
   }
 
   showPrivacy(){
     this.dialogRef.close();
     this.dialog.open(PolicyPopupComponent, {
-      panelClass: 'border'
+      panelClass: ['border', 'imprint-policy-popup']
     });
   }
 

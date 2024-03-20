@@ -220,13 +220,13 @@ private async updateUserDataWithImageURL(downloadURL: string): Promise<void> {
 
   showPrivacy(){
     this.dialog.open(PolicyPopupComponent, {
-      panelClass: 'border'
+      panelClass: ['border', 'imprint-policy-popup']
     });
   }
 
   showImprint() {
     this.dialog.open(ImprintPopupComponent, {
-      panelClass: 'border'
+      panelClass: ['border', 'imprint-policy-popup']
     });
   }
 }

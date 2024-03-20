@@ -116,7 +116,7 @@ h1 {
     }
   }
 
-@media (max-width: 768px) {
+@media (max-width: 980px) {
   h1 {
     font-size: 28px;
     white-space: nowrap;
@@ -130,5 +130,9 @@ h1 {
 
   .login-container {
     padding: 18px 20px !important;
+    .scroll-bar {
+      max-height: calc(100vh - 120px);
+      overflow-y: auto;
+    }
   }
 }

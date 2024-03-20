@@ -429,13 +429,13 @@ private showSuccessToast(message: string): void {
 
 showPrivacy(){
   this.dialog.open(PolicyPopupComponent, {
-    panelClass: 'border'
+    panelClass: ['border', 'imprint-policy-popup']
   });
 }
 
 showImprint() {
   this.dialog.open(ImprintPopupComponent, {
-    panelClass: 'border'
+    panelClass: ['border', 'imprint-policy-popup']
   });
 }
 
