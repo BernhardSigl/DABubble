@@ -2,9 +2,15 @@
   width: 100%;
 }
 .message-image {
-  width: 350px;
-  height: 350px;
+  width: auto;
+  height: auto;
+  max-width: 350px;
+  max-height: 350px;
   object-fit: contain;
+  background-color: #797EF3;
+  padding: 8px;
+  border-radius: 20px;
+  box-sizing: border-box;
 }
 
 .current-user {
