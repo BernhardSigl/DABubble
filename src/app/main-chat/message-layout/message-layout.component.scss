@@ -1,7 +1,5 @@
 .message-card {
   width: 100%;
-
-
 }
 .message-image {
   width: 350px;
@@ -18,7 +16,7 @@
 }
 
 .other-user .message {
-  background-color: #eceeef;
+  background-color: #ECEEFE;
   color: black;
   border-radius: 0px 30px 30px 30px;
   margin-left: 0;
@@ -40,12 +38,17 @@
   border-radius: 10px;
 }
 
+.card-content {
+  gap: 8px;
+}
+
 .card-profile-img {
   border-radius: 100%;
   width: 70px;
   height: 70px;
-  margin-right: 45px;
-  margin-left: 30px;
+  margin-right: 35px;
+  margin-left: 35px;
+  cursor: pointer;
   @media (max-width: 780px) {
     margin-right: 20px;
   }
@@ -73,9 +76,9 @@
   justify-content: flex-end;
   align-items: center;
   gap: 20px;
-
-  p {
-    color: #686868;
+  height: 25px;
+  .name-in-chat {
+    cursor: pointer;
   }
 }
 
@@ -93,9 +96,15 @@
 .emoji-reaction {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   position: relative;
-  margin-top: 10px;
   gap: 10px;
+  height: 34px !important;
+  img {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+  }
 }
 
 emoji-mart {
@@ -107,11 +116,27 @@ emoji-mart {
 .reactions-container {
   display: flex;
   gap: 10px;
+  height: 34px;
 
   .reactions {
     border: 1px solid #8c91f7;
     background-color: transparent;
-    border-radius: 10px;
+    border-radius: 20px;
+    padding: 5px 10px;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    .emoji-in-chat {
+      font-size: 18px;
+    }
+    .counter {
+      font-size: 16px;
+      font-weight: 400;
+    }
   }
 }
 
@@ -229,17 +254,15 @@ emoji-mart {
 .sent-date {
   display: flex;
   align-items: center;
-  margin-bottom: 35px;
+  margin-bottom: 20px;
   justify-content: space-between;
   width: 100%;
-  margin-top: 1rem;
+  margin-top: 20px;
   .one-divider {
     width: 40%;
   }
   .two-divider {
-
     width: 40%;
-
   }
 }
 .btn-date {

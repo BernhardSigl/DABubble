@@ -155,12 +155,12 @@ app-message-layout {
   .header-chat {
     padding: 13px 16px !important;
     height: 60px !important;
-}
+  }
 
-.hashtag-and-name,
-.channel {
-  padding: 0 !important;
-}
+  .hashtag-and-name,
+  .channel {
+    padding: 0 !important;
+  }
 
   .add-member-mobile {
     display: flex !important;
@@ -176,14 +176,14 @@ app-message-layout {
 
   .arrow-down-img {
     background-size: 24px;
-}
+  }
 
   .icon-size-24 {
     width: 16px;
     height: 17px;
-}
+  }
 
-  .hashtag-and-name{
+  .hashtag-and-name {
     gap: 5px !important;
     &:hover {
       background-color: white !important;
@@ -196,5 +196,10 @@ app-message-layout {
 
   .hide-thread {
     display: none !important;
+  }
+
+  #message-box-id {
+    margin-bottom: 10px;
+    max-height: 100% !important;
   }
 }
