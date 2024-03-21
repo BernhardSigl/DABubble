@@ -22,6 +22,10 @@
   color: black;
   border-radius: 0px 30px 30px 30px;
   margin-left: 0;
+
+  @media (max-width: 780px) {
+    max-width: 10rem;
+  }
 }
 
 .other-user .time-name {
@@ -42,6 +46,9 @@
   height: 70px;
   margin-right: 45px;
   margin-left: 30px;
+  @media (max-width: 780px) {
+    margin-right: 20px;
+  }
 }
 
 .message {
@@ -51,6 +58,10 @@
   max-width: 698px;
   margin-left: 30px;
   color: white;
+
+  @media (max-width: 780px) {
+    max-width: 10rem;
+  }
 }
 
 .edit-message {
@@ -113,7 +124,7 @@ emoji-mart {
   gap: 10px;
   padding: 5px;
   bottom: 75px;
-  right: 300px;
+  right: 75%;
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
@@ -133,8 +144,8 @@ emoji-mart {
   align-items: center;
   gap: 10px;
   padding: 5px;
-  bottom: 75px;
-  left: 300px;
+  bottom: 50px;
+  left: 75%;
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;

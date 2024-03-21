@@ -148,7 +148,6 @@ export class MessageLayoutPcComponent {
         })
       );
     });
-    console.log(this.groupedMessages)
   }
 
   toggleEmojiPicker(messageId: string) {

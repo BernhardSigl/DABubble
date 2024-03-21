@@ -6,7 +6,7 @@
     <div
       *ngFor="let user of mentionedUsers; let i = index"
       (click)="selectMention(i)"
-      class="mentioned-users"
+      class="mentioned-users scroll-container"
     >
       <img [src]="user.profilePicture" class="suggest-profile-picture" />
       <!-- Display profile picture -->
@@ -17,7 +17,7 @@
 
   <textarea
     class="textarea"
-    placeholder="Nachricht an #Entwicklerteam"
+    placeholder="Nachricht an #{{this.currentChannelName}}"
     [(ngModel)]="textArea"
     (input)="suggestUsers(); onTextAreaChange()"
   ></textarea>

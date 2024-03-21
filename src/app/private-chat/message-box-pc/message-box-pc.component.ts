@@ -22,6 +22,7 @@ import {
 import { Observable } from 'rxjs';
 import { PrivateMessage } from '../../classes/private-message.class';
 import { PrivateMessageService } from '../../firebase-services/private-message.service';
+import { FirebaseService } from '../../firebase-services/firebase.service';
 
 @Component({
   selector: 'app-message-box-pc',
@@ -45,7 +46,8 @@ export class MessageBoxPcComponent {
     private elementRef: ElementRef,
     private firestore: Firestore,
     private userDataService: UserListService,
-    private privateMessageService: PrivateMessageService
+    private privateMessageService: PrivateMessageService,
+    private firebase:FirebaseService
   ) {}
 
   userId: string | null = null;
@@ -54,6 +56,7 @@ export class MessageBoxPcComponent {
   selectedFile?: File;
   messages$!: Observable<Message[]>;
   private currentPrivateMessageId: string | null = null;
+  chatUserName:string='';
 
   async ngOnInit() {
     this.userId = localStorage.getItem('userId');
@@ -80,6 +83,7 @@ export class MessageBoxPcComponent {
   private subscribeToSelectedPrivateMessage(): void {
     this.privateMessageService.selectedPrivateMessage$.subscribe(
       (privateMessage) => {
+        this.chatUserName = privateMessage?.members[0].name
         this.currentPrivateMessageId = privateMessage
           ? privateMessage.privateMessageId
           : null;

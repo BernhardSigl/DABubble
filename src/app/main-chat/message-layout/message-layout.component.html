@@ -66,8 +66,8 @@
               title="Choose your emoji"
               (emojiClick)="onEmojiClick($event, message)"
             ></emoji-mart>
-
-            <div class="hover-options" *ngIf="isHovered[message.messageId]">
+<!--  *ngIf="isHovered[message.messageId]" -->
+            <div class="hover-options">
               <img
                 src="../../../assets/img/add-reaction.png"
                 (click)="toggleEmojiPicker(message.messageId)"

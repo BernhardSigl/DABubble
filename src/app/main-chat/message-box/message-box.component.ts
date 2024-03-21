@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PickerModule } from "@ctrl/ngx-emoji-mart";
@@ -19,7 +19,7 @@ import { FirebaseService } from '../../firebase-services/firebase.service';
   templateUrl: './message-box.component.html',
   styleUrls: ['./message-box.component.scss'],
 })
-export class MessageBoxComponent {
+export class MessageBoxComponent implements OnInit{
 
   public textArea: string = "";
   public isEmojiPickerVisible: boolean = false;
@@ -42,6 +42,7 @@ export class MessageBoxComponent {
   userName: string = '';
   userImage: string = '';
   channelIds: string[] = [];
+currentChannelName :string='';
   selectedFile?: File;
   sendButtonDisabled: boolean = true;
   messages$!: Observable<Message[]>;
@@ -61,6 +62,11 @@ export class MessageBoxComponent {
     this.firebase.selectedChannelId$.subscribe(channelId => {
       this.currentChannelId = channelId;
     });
+  }
+
+  async ngOnInit() {
+   await this.firebase.ngOnInit()
+    this.currentChannelName = this.firebase.currentChannelName;
   }
 
   toggleEmojiPicker() {
