@@ -1,12 +1,11 @@
 .desktop-view {
   display: flex;
-  gap: 20px;
   margin-bottom: 25px;
 
   .private-chat-container {
     flex-grow: 1;
-    margin-top: 20px;
-    height: calc(100vh - 140px);
+    margin: 20px 20px 0 20px;
+    height: calc(100% - 45px);
     background: var(--white);
     border-radius: 30px;
     width: 100%;
@@ -36,12 +35,6 @@
           &:hover {
             color: var(--purple);
             background-color: var(--background-color);
-            .hashtag {
-              background-image: url("./../../assets/img/hashtag-blue.png");
-            }
-            .arrow-down-img {
-              background-image: url("./../../assets/img/keyboard-arrow-down-blue.png");
-            }
           }
         }
       }
@@ -66,11 +59,16 @@
   }
 }
 
+.empty-pc-content {
+  margin-bottom: 25px;
+  margin-left: 45px;
+}
+
 app-message-layout-pc {
   position: relative;
   margin-top: auto;
   display: flex;
-  gap: 20px;
+  gap: 30px;
   flex-direction: column;
   align-items: flex-end;
   overflow-y: scroll;
@@ -80,11 +78,6 @@ app-message-layout-pc {
 
 .user-img {
   border-radius: 100% !important; // 30px
-}
-
-.empty-pc-content {
-  margin-bottom: 25px;
-  margin-left: 45px;
 }
 
 .name-pimg {
