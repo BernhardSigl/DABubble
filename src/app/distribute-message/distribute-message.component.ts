@@ -90,8 +90,12 @@ export class DistributeMessageComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    await this.firebase.ngOnInit();
-    debugger;
+    await this.firebase.pullLoggedInUserId();
+    if (this.firebase.usersArray.length === 0) {
+      await this.firebase.subAllUsers();
+    }
+    await this.firebase.activeChannelId('distribute', 'distribute-id');
+    await this.firebase.channelOrPrivateChat('distribute');
   }
 
   convertUserId() {

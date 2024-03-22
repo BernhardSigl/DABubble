@@ -375,6 +375,8 @@ export class FirebaseService {
   async selectLastOpenedChannel() {
     const currentChannelId = this.loggedInUserArray[0].activeChannelId;
     const lastOpenedOnSideNav = this.loggedInUserArray[0].lastOpened; // channel or private chat
+    console.log(this.loggedInUserArray[0].lastOpened);
+    
     const correctedPrivateMessageId =
       this.correctedPrivateMessageId(currentChannelId);
     const reversePrivateMessageId =
@@ -408,6 +410,8 @@ export class FirebaseService {
             await this.selectWelcomeChannel();
           }
         // this.lastOpenedPrivateMessageArray = privateMessageToSelect['members'][0];
+      } else if (lastOpenedOnSideNav === 'distribute') {
+        this.router.navigate(['/distributor']);
       }
     } else {
         await this.addToWelcomeChannel();
