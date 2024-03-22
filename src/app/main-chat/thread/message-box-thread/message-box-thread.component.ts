@@ -143,10 +143,13 @@ export class MessageBoxThreadComponent implements OnInit {
   }
 
   createThreadMessageFromInput(): Message {
+    const isTextAreaNotEmpty = this.textArea.trim() !== '';
     const newThreadMessage = new Message();
     newThreadMessage.name = this.userName;
     newThreadMessage.time = Date.now();
-    newThreadMessage.message.push(this.textArea);
+    if (isTextAreaNotEmpty) {
+      newThreadMessage.message.push(this.textArea);
+    }
     newThreadMessage.senderId = this.userId || '';
     newThreadMessage.image = this.userImage;
     return newThreadMessage;

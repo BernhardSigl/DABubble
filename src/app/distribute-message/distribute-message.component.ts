@@ -91,6 +91,7 @@ export class DistributeMessageComponent implements OnInit {
 
   async ngOnInit() {
     await this.firebase.ngOnInit();
+    debugger;
   }
 
   convertUserId() {

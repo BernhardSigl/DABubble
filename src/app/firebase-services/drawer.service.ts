@@ -80,6 +80,7 @@ export class DrawerService {
   }
 
   closeDrawer(): void {
+    this.threadIsOpen = !this.threadIsOpen;
     this.isOpenSubject.next(false);
     this.setSideNavBtnStatus(true);
   }

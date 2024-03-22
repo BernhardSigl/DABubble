@@ -87,13 +87,13 @@ currentChannelName :string='';
         const newMessage = new Message();
         newMessage.name = this.userName;
         newMessage.time = Date.now();
-        newMessage.message.push(this.textArea);
+        if (isTextAreaNotEmpty) {
+          newMessage.message.push(this.textArea);
+        }
         newMessage.image = this.userImage;
         if (this.userId) {
           newMessage.senderId = this.userId;
         }
-
-        console.log(this.currentChannelId);
         if (this.selectedFile) {
           await this.uploadSelectedFile(newMessage, this.currentChannelId);
         } else {

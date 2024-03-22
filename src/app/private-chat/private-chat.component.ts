@@ -10,7 +10,6 @@ import { SideNavComponent } from '../side-nav/side-nav.component';
 import { MessageBoxPcComponent } from './message-box-pc/message-box-pc.component';
 import { MessageLayoutPcComponent } from './message-layout-pc/message-layout-pc.component';
 import { PrivateMessageService } from '../firebase-services/private-message.service';
-import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { Message } from '../classes/message.class';
@@ -44,7 +43,6 @@ export class PrivateChatComponent implements OnInit, AfterViewInit {
   constructor(
     public privateMessageService: PrivateMessageService,
     private cdr: ChangeDetectorRef,
-    private route: ActivatedRoute,
     private firebase: FirebaseService,
     public dialog: MatDialog,
     private scrollHelper: MessageServiceService
