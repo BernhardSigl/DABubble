@@ -59,6 +59,9 @@
                 <span class="emoji-in-chat">{{ reaction.key }}</span><span class="counter">{{ reaction.value.count }}</span>
               </button>
             </div>
+            <div class="thread-answer">
+              <a (click)="openThread(message)">antworten</a>
+            </div>
 
             <emoji-mart
               class="emoji-mart"

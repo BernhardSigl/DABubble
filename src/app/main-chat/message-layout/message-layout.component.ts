@@ -99,12 +99,17 @@ export class MessageLayoutComponent implements OnInit {
   }
 
   openThread(message: Message): void {
-    this.drawerService.openDrawer(message);
-    this.drawerService.openThread();    
-
-    if(this.drawerService.threadIsOpen===false){
-        this.drawerService.closeDrawer();
+    if(this.drawerService.threadIsOpen===true){
+      this.drawerService.openDrawer(message);
+      this.drawerService.openThread();   
+    }else{
+      this.drawerService.closeDrawer();
     }
+
+    // if (this.drawerService.threadIsOpen && this.selectedMessage && this.selectedMessage.messageId == message.messageId) {
+    //   this.drawerService.openDrawer(message);
+    //   this.drawerService.openThread();   
+    // }
   }
 
 

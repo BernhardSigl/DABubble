@@ -29,12 +29,12 @@ export class DrawerService {
   public windowWidth: BehaviorSubject<number> = new BehaviorSubject<number>(window.innerWidth);
 
   isSelectedForMobile: boolean = false;
-  threadIsOpen!: boolean;
+  threadIsOpen: boolean=true;
 
   constructor(private firestore: Firestore) {   
     window.addEventListener('resize', () => {
       this.windowWidth.next(window.innerWidth);
-    });
+    }); 
   }
 
   setSelectedMessage(message: Message): void {
@@ -81,6 +81,7 @@ export class DrawerService {
 
   closeDrawer(): void {
     this.threadIsOpen = !this.threadIsOpen;
+    console.log(this.threadIsOpen)
     this.isOpenSubject.next(false);
     this.setSideNavBtnStatus(true);
   }
@@ -91,7 +92,9 @@ export class DrawerService {
 
   openThread() {
     this.threadIsOpen = !this.threadIsOpen;
+    this.isOpenSubject.next(true);
     this.threadOpened.emit(true);
+    console.log(this.threadIsOpen)
   }
 
   isSideNavMobileVisible(): boolean {
