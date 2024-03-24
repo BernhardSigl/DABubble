@@ -24,7 +24,11 @@
         <div class="card-content column">
           <div class="time-name">
             <span class="fs14 bold">{{ message.time | date : "HH:mm" }}</span>
-            <span class="fs18 bold name-in-chat" (click)="showProfile(message.name)">{{ message.name }}</span>
+            <span
+              class="fs18 bold name-in-chat"
+              (click)="showProfile(message.name)"
+              >{{ message.name }}</span
+            >
           </div>
           <img
             class="message-image"
@@ -55,7 +59,8 @@
                 class="reactions"
                 (click)="toggleReaction(message, reaction.key, userId!)"
               >
-                <span class="emoji-in-chat">{{ reaction.key }}</span><span class="counter">{{ reaction.value.count }}</span>
+                <span class="emoji-in-chat">{{ reaction.key }}</span
+                ><span class="counter">{{ reaction.value.count }}</span>
               </button>
             </div>
             <div class="thread-answer">
@@ -68,7 +73,7 @@
               title="Choose your emoji"
               (emojiClick)="onEmojiClick($event, message)"
             ></emoji-mart>
-<!--  *ngIf="isHovered[message.messageId]" -->
+            <!--  *ngIf="isHovered[message.messageId]" -->
             <div class="hover-options">
               <img
                 src="../../../assets/img/add-reaction.png"
@@ -105,16 +110,21 @@
               cols="50"
               >{{ getMessageText(message.messageId) | async }}</textarea
             >
-            <button (click)="cancelEdit(message.messageId)" class="edit-cancel">
-              Abbrechen
-            </button>
-            <button
-              *ngIf="selectedChannelId"
-              (click)="saveEditedMessage(selectedChannelId, message)"
-              class="edit-save"
-            >
-              Speichern
-            </button>
+            <div class="edit-text-buttons">
+              <button
+                (click)="cancelEdit(message.messageId)"
+                class="edit-cancel"
+              >
+                Abbrechen
+              </button>
+              <button
+                *ngIf="selectedChannelId"
+                (click)="saveEditedMessage(selectedChannelId, message)"
+                class="edit-save"
+              >
+                Speichern
+              </button>
+            </div>
           </div>
         </div>
         <img
