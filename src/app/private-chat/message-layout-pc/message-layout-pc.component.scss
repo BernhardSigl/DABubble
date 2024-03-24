@@ -49,8 +49,8 @@
   border-radius: 100%;
   width: 70px;
   height: 70px;
-  margin-right: 45px;
-  margin-left: 30px;
+  margin-right: 35px;
+  margin-left: 35px;
 }
 
 .message {
@@ -94,6 +94,7 @@
   position: relative;
   gap: 10px;
   height: 34px !important;
+  margin-bottom: 1px;
   img {
     width: 24px;
     height: 24px;
@@ -110,11 +111,14 @@ emoji-mart {
 .reactions-container {
   display: flex;
   gap: 10px;
+  padding: 0;
 
   .reactions {
     border: 1px solid #8c91f7;
     background-color: transparent;
-    border-radius: 10px;
+    border-radius: 20px;
+    padding: 5px 10px;
+    height: 34px;
   }
 
   button {
@@ -219,15 +223,22 @@ emoji-mart {
   display: flex;
   align-items: center;
   margin-bottom: 35px;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
   margin-top: 1rem;
+  position: relative;
   .one-divider {
-    width: 40%;
+    width: calc(100% - 35px * 2);
+    position: absolute;
+    left: 35px;
+    right: 0;
+    top: 50%;
+    border-top-color: #ADB0D9 !important;
   }
-
-  .two-divider {
-    width: 40%;
+  .btn-date {
+    button {
+      z-index: 0;
+    }
   }
 }
 
@@ -270,5 +281,6 @@ emoji-mart {
     border: 1px solid #adb0d9;
     padding: 5px 15px;
     background: #fff;
+    font-size: 18px;
   }
 }

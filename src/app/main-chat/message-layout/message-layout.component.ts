@@ -31,6 +31,9 @@ import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/view-specific-profile.component';
 import { MessageServiceService } from '../../firebase-services/message-service.service';
+import { DatePipe, registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import { LOCALE_ID } from '@angular/core';
 @Component({
   selector: 'app-message-layout',
   standalone: true,
@@ -43,6 +46,10 @@ import { MessageServiceService } from '../../firebase-services/message-service.s
   ],
   templateUrl: './message-layout.component.html',
   styleUrls: ['./message-layout.component.scss'],
+  providers: [
+    DatePipe,
+    { provide: LOCALE_ID, useValue: 'de' } // Setzen Sie die Locale auf Deutsch
+  ]
 })
 export class MessageLayoutComponent implements OnInit {
   @Input() userId?: string = '';
@@ -76,7 +83,8 @@ export class MessageLayoutComponent implements OnInit {
     public dialog: MatDialog,
     private changeDetector: ChangeDetectorRef,
     private el: ElementRef,
-    private scrollHelper: MessageServiceService
+    private scrollHelper: MessageServiceService,
+    private datePipe: DatePipe,
   ) {}
 
   getNativeElement(): HTMLElement {
@@ -96,6 +104,29 @@ export class MessageLayoutComponent implements OnInit {
         this.selectedChannelId = undefined; // or set to a default/fallback value if suitable
       }
     });
+    registerLocaleData(localeDe);
+    this.changeDetector.detectChanges();
+  }
+
+  formatMessageDate(date: Date | null): string {
+    if (!date) {
+      return '';
+    }
+
+    const today = new Date();
+    if (this.isSameDay(date, today)) {
+      return 'Heute';
+    }
+
+    return this.datePipe.transform(date, 'EEEE, dd MMMM', 'de') || '';
+  }
+
+  private isSameDay(date1: Date, date2: Date): boolean {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
   }
 
   openThread(message: Message): void {

@@ -132,6 +132,7 @@
   position: relative;
   gap: 10px;
   height: 34px !important;
+  margin-bottom: 1px;
   img {
     width: 24px;
     height: 24px;
@@ -149,6 +150,7 @@ emoji-mart {
   display: flex;
   gap: 10px;
   height: 34px;
+  padding: 0;
 
   .reactions {
     border: 1px solid #8c91f7;
@@ -283,20 +285,25 @@ emoji-mart {
     transition: background-color 225ms ease-in-out;
   }
 }
+
 .sent-date {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  justify-content: space-between;
+  margin-bottom: 35px;
+  justify-content: center;
   width: 100%;
-  margin-top: 20px;
+  margin-top: 1rem;
+  position: relative;
   .one-divider {
-    width: 40%;
-  }
-  .two-divider {
-    width: 40%;
+    width: calc(100% - 35px * 2);
+    position: absolute;
+    left: 35px;
+    right: 0;
+    top: 50%;
+    border-top-color: #ADB0D9 !important;
   }
 }
+
 .btn-date {
   display: flex;
   justify-content: center;
@@ -307,5 +314,7 @@ emoji-mart {
     border: 1px solid #adb0d9;
     padding: 5px 15px;
     background: #fff;
+    z-index: 0;
+    font-size: 18px;
   }
 }

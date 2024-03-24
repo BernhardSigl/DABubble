@@ -21,14 +21,14 @@
       
       <div class="add-ons-left">
         <img
-          matTooltip="Add Image"
+          matTooltip="Bild hinzufügen"
           src="../../../assets/img/add.png"
           class="add"
           (click)="fileInput.click()"
         />
         <mat-divider class="vertical-divider"></mat-divider>
         <img
-          matTooltip="Open the emoji"
+          matTooltip="Wähle dein Emoji"
           class="emoji"
           src="../../../assets/img/emoji.png"
           (click)="toggleEmojiPicker()"
@@ -37,11 +37,11 @@
           class="emoji-mart"
           *ngIf="isEmojiPickerVisible"
           (emojiSelect)="addEmoji($event)"
-          title="Choose your emoji"
+          title="Wähle dein Emoji"
         ></emoji-mart>
       </div>
       <img
-        matTooltip="Send"
+        matTooltip="Markiere jemanden"
         src="../../../assets/img/send-dark-blue.png"
         alt=""
         class="send"

@@ -38,9 +38,9 @@
             *ngFor="let channel of channelsToDisplay"
             class="addedMembers input-slide-down"
           >
-            <span class="fs18 userName maxNameLenth">#&nbsp;{{
-              channel.channelName
-            }}</span>
+            <span class="fs18 userName maxNameLenth"
+              >#&nbsp;{{ channel.channelName }}</span
+            >
             <div class="deleteMember" (click)="removeChannel(channel)"></div>
           </div>
         </div>
@@ -54,37 +54,20 @@
           (input)="showDropdown = true; search($event)"
           (click)="showDropdown = true; search($event)"
         />
-        <div class="arrow-box middle" [class.arrow-box-true]="!showDropdown" (click)="hideDropdown()">
-          <img [src]="showDropdown ? './../../assets/img/arrow-drop-up-black.png' : './../../assets/img/arrow-drop-down-black.png'">
+        <div
+          class="arrow-box middle"
+          [class.arrow-box-true]="!showDropdown"
+          (click)="hideDropdown()"
+        >
+          <img
+            [src]="
+              showDropdown
+                ? './../../assets/img/arrow-drop-up-black.png'
+                : './../../assets/img/arrow-drop-down-black.png'
+            "
+          />
         </div>
       </div>
-
-      <!-- <div *ngIf="showDropdown" class="dropdown scroll-bar">
-        <p>Suche mit &commat; nach User and # nach Channels</p>
-
-        <div class="search-channel">
-          <h3>Channel:</h3>
-          <p *ngIf="filteredChannels.length === 0">Keine Einträge gefunden</p>
-          <p
-            class="searched-channel-result"
-            (click)="navigateToChannel(channel.channelId)"
-            *ngFor="let channel of filteredChannels"
-          >
-            #{{ channel.channelName }}
-          </p>
-        </div>
-        <div class="search-user">
-          <h3>Users:</h3>
-          <div
-            *ngFor="let user of filteredUsers"
-            class="searched-user-result"
-            (click)="navigateToUser(user.userId)"
-          >
-            <img [src]="user.profileImg" alt="" />
-            <p class="user-name">{{ user.name }}</p>
-          </div>
-        </div>
-      </div> -->
 
       <div class="members-list-box" *ngIf="showDropdown">
         <div class="members-list-scroll-box scroll-bar">
@@ -153,55 +136,59 @@
         </div>
       </div>
 
-      <textarea
-        class="textarea"
-        placeholder="Nachricht an #Entwicklerteam"
-        [(ngModel)]="textArea"
-        (input)="suggestUsers(); onTextAreaChange()"
-      ></textarea>
+      <div class="textarea-with-addons">
+        <textarea
+          class="textarea"
+          placeholder="Nachricht an #Entwicklerteam"
+          [(ngModel)]="textArea"
+          (input)="suggestUsers(); onTextAreaChange()"
+        ></textarea>
 
-      <div class="add-ons">
-        <input
-          type="file"
-          accept="image/*"
-          (change)="onFileSelected($event)"
-          #fileInput
-          style="display: none"
-        />
-        <img
-          matTooltip="Add Image"
-          src="../../../assets/img/add.png"
-          class="add"
-          (click)="fileInput.click()"
-        />
-        <mat-divider class="vertical-divider"></mat-divider>
-        <img
-          matTooltip="Open the emoji"
-          class="emoji"
-          src="../../../assets/img/emoji.png"
-          (click)="toggleEmojiPicker()"
-        />
-        <emoji-mart
-          class="emoji-mart"
-          *ngIf="isEmojiPickerVisible"
-          (emojiSelect)="addEmoji($event)"
-          title="Choose your emoji"
-        ></emoji-mart>
-        <img
-          matTooltip="mention someone"
-          src="../../../assets/img/at-grey.png"
-          alt=""
-          class="mention"
-          (click)="addMention()"
-        />
+        <div class="add-ons">
+          <input
+            type="file"
+            accept="image/*"
+            (change)="onFileSelected($event)"
+            #fileInput
+            style="display: none"
+          />
 
-        <img
-          matTooltip="Send"
-          src="../../../assets/img/send-dark-blue.png"
-          alt=""
-          class="send"
-          (click)="sendMessage()"
-        />
+          <div class="add-ons-left">
+          <img
+            matTooltip="Add Image"
+            src="../../../assets/img/add.png"
+            class="add"
+            (click)="fileInput.click()"
+          />
+          <mat-divider class="vertical-divider"></mat-divider>
+          <img
+            matTooltip="Open the emoji"
+            class="emoji"
+            src="../../../assets/img/emoji.png"
+            (click)="toggleEmojiPicker()"
+          />
+          <emoji-mart
+            class="emoji-mart"
+            *ngIf="isEmojiPickerVisible"
+            (emojiSelect)="addEmoji($event)"
+            title="Choose your emoji"
+          ></emoji-mart>
+          <img
+            matTooltip="mention someone"
+            src="../../../assets/img/at-grey.png"
+            alt=""
+            class="mention"
+            (click)="addMention()"
+          />
+        </div>
+          <img
+            matTooltip="Send"
+            src="../../../assets/img/send-dark-blue.png"
+            alt=""
+            class="send"
+            (click)="sendMessage()"
+          />
+        </div>
       </div>
     </div>
   </section>

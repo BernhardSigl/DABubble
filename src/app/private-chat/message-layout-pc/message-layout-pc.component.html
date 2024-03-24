@@ -2,9 +2,8 @@
   <div class="sent-date">
     <mat-divider class="one-divider"></mat-divider>
     <div class="btn-date">
-      <button>{{ messageGroup.date | date : "mediumDate" }}</button>
+      <button>{{ formatMessageDate(messageGroup.date) }}</button>
     </div>
-    <mat-divider class="two-divider"></mat-divider>
   </div>
 <div
   class="message-card"

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import {
   Firestore,
@@ -30,6 +30,9 @@ import { PrivateMessageService } from '../../firebase-services/private-message.s
 import { MatDialog } from '@angular/material/dialog';
 import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/view-specific-profile.component';
 import { MessageServiceService } from '../../firebase-services/message-service.service';
+import { DatePipe, registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
+import { LOCALE_ID } from '@angular/core';
 @Component({
   selector: 'app-message-layout-pc',
   standalone: true,
@@ -42,6 +45,10 @@ import { MessageServiceService } from '../../firebase-services/message-service.s
   ],
   templateUrl: './message-layout-pc.component.html',
   styleUrl: './message-layout-pc.component.scss',
+  providers: [
+    DatePipe,
+    { provide: LOCALE_ID, useValue: 'de' } // Setzen Sie die Locale auf Deutsch
+  ]
 })
 export class MessageLayoutPcComponent {
   @Input() userId: string | null = null;
@@ -72,7 +79,9 @@ export class MessageLayoutPcComponent {
     private privateMessage: PrivateMessageService,
     public dialog: MatDialog,
     private el: ElementRef,
-    private scrollHelper: MessageServiceService
+    private scrollHelper: MessageServiceService,
+    private datePipe: DatePipe,
+    private changeDetector: ChangeDetectorRef,
   ) {}
 
   getNativeElement(): HTMLElement {
@@ -91,7 +100,29 @@ export class MessageLayoutPcComponent {
         }
       }
     });
+    registerLocaleData(localeDe);
+    this.changeDetector.detectChanges();
+  }
 
+  formatMessageDate(date: Date | null): string {
+    if (!date) {
+      return '';
+    }
+
+    const today = new Date();
+    if (this.isSameDay(date, today)) {
+      return 'Heute';
+    }
+
+    return this.datePipe.transform(date, 'EEEE, dd MMMM', 'de') || '';
+  }
+
+  private isSameDay(date1: Date, date2: Date): boolean {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
   }
 
   async loadMessages(): Promise<void> {
