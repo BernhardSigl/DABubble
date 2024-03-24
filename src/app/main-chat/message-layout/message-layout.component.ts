@@ -79,7 +79,7 @@ export class MessageLayoutComponent implements OnInit {
   constructor(
     private firestore: Firestore,
     private drawerService: DrawerService,
-    private firebase: FirebaseService,
+    public firebase: FirebaseService,
     public dialog: MatDialog,
     private changeDetector: ChangeDetectorRef,
     private el: ElementRef,

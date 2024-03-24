@@ -21,7 +21,9 @@
         (mouseenter)="toggleHoverOptions(message.messageId, true)"
         (mouseleave)="toggleHoverOptions(message.messageId, false)"
       >
-        <div class="card-content column">
+        <div class="card-content column"
+        [ngStyle]="{ 'align-items': firebase.loggedInUserId === message.senderId ? 'flex-end' : 'initial' }"
+        >
           <div class="time-name">
             <span class="fs14 bold">{{ message.time | date : "HH:mm" }}</span>
             <span

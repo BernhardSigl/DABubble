@@ -90,3 +90,15 @@ emoji-mart {
   font-weight: 800;
   cursor: pointer;
 }
+
+@media (max-width: 980px) {
+  .message-box {
+    padding: 0 16px 30px 16px;
+  }
+
+  .textarea-with-addons {
+    .add-ons {
+      padding: 0 35px 50px 35px !important;
+    }
+  }
+}

@@ -108,6 +108,7 @@ app-message-layout-pc {
 @media (max-width: 980px) {
   .private-chat-container {
     margin-top: 0 !important;
+    margin-left: 0 !important;
     height: calc(100vh - 80px) !important;
     border-radius: 0 !important;
   }
@@ -126,5 +127,9 @@ app-message-layout-pc {
   .header-chat {
     padding: 10px 16px !important;
     height: 78px;
+  }
+
+  app-message-layout-pc {
+    margin-bottom: 0;
   }
 }

@@ -75,7 +75,7 @@ export class MessageLayoutPcComponent {
 
   constructor(
     private firestore: Firestore,
-    private firebase: FirebaseService,
+    public firebase: FirebaseService,
     private privateMessage: PrivateMessageService,
     public dialog: MatDialog,
     private el: ElementRef,
