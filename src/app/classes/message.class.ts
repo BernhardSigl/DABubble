@@ -16,7 +16,7 @@ export class Message {
   public users: { [key: string]: number } = {};
   reactionsByUser?: ReactionsByUser;
   public threadId: string = '';
-
+  public threadLength: number = 0;
   public toJson() {
     const json: any = {
       messageId: this.messageId,
@@ -28,6 +28,7 @@ export class Message {
       senderId: this.senderId,
       reactions: this.reactions,
       users: this.users,
+      threadLength: this.threadLength, 
     };
 
     if (this.messageImage !== undefined) {

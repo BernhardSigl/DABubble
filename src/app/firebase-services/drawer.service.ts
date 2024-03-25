@@ -70,6 +70,8 @@ export class DrawerService {
     }
   }
 
+
+
   getSelectedMessage(): Message | null {
     return this.selectedMessage;
   }

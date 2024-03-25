@@ -15,6 +15,7 @@ import {
   onSnapshot,
   doc,
   setDoc,
+  getDocs,
 } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '../../classes/message.class';
@@ -75,6 +76,7 @@ export class MessageLayoutComponent implements OnInit {
   groupedMessages: { date: Date; messages: Message[] }[] = [];
   selectedChannelId?: string;
   messages$: Observable<Message[]> = this.messagesSubject.asObservable();
+  threadLength: number = 0;
 
   currentThreadId!: string;
 
@@ -149,43 +151,76 @@ export class MessageLayoutComponent implements OnInit {
     }
   } 
 
-  async loadMessages(channelId: string): Promise<void> {
-    const messagesCollection = collection(
-      this.firestore,
-      `channels/${channelId}/channelMessages`
-    );
-    const q = query(messagesCollection, orderBy('time', 'desc'));
+// Call getThreadMessagesCount when loading messages
+async loadMessages(channelId: string): Promise<void> {
+  const messagesCollection = collection(
+    this.firestore,
+    `channels/${channelId}/channelMessages`
+  );
+  const q = query(messagesCollection, orderBy('time', 'desc'));
 
-    onSnapshot(
-      q,
-      async (querySnapshot) => {
-        const messages: Message[] = [];
-        querySnapshot.forEach((doc) => {
-          const message = doc.data() as Message;
-          message.messageId = doc.id;
-          if (message.senderId === this.userId) {
-            // Check if the user has updated their name
-            if (this.firebase.updatedName) {
-              message.name = this.firebase.updatedName;
-            } else {
-              // Use the default user name
-              message.name = this.userName;
-            }
+  onSnapshot(
+    q,
+    async (querySnapshot) => {
+      const messages: Message[] = [];
+      querySnapshot.forEach(async (doc) => {
+        const message = doc.data() as Message;
+        message.messageId = doc.id;
+
+        // Load thread messages count and update message.threadLength
+         this.getThreadMessagesCount(message.messageId, message);
+
+        if (message.senderId === this.userId) {
+          // Check if the user has updated their name
+          if (this.firebase.updatedName) {
+            message.name = this.firebase.updatedName;
           } else {
-            // For messages from other users, use their default name
-            message.name = message.name;
+            // Use the default user name
+            message.name = this.userName;
           }
-          messages.push(message);
-        });
-        this.messages = messages.reverse(); // Set messages directly
-        this.messagesSubject.next(this.messages); // Update the messages
-        this.groupMessagesByDate(); // Group messages after setting
-        await this.scrollHelper.scrollDown('channel');
-      },
-      (error) => console.error('Error fetching messages:', error)
-    );
-  }
+        } else {
+          // For messages from other users, use their default name
+          message.name = message.name;
+        }
+        messages.push(message);
+      });
+      this.messages = messages.reverse(); // Set messages directly
+      this.messagesSubject.next(this.messages); // Update the messages
+      this.groupMessagesByDate(); // Group messages after setting
+      await this.scrollHelper.scrollDown('channel');
+    },
+    (error) => console.error('Error fetching messages:', error)
+  );
+}
 
+  
+
+  async getThreadMessagesCount(mainMessageId: string, message: Message): Promise<void> {
+    const threadsRef = collection(
+      this.firestore,
+      `channels/${this.selectedChannelId}/channelMessages/${mainMessageId}/Thread`
+    );
+    const q = query(threadsRef);
+  
+    try {
+      const querySnapshot = await getDocs(q);
+      const threadMessagesCount = querySnapshot.size;
+  
+      // Update message.threadLength
+      message.threadLength = threadMessagesCount;
+  
+      // Update Firestore document with the new thread length
+      await setDoc(doc(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${mainMessageId}`), { threadLength: threadMessagesCount }, { merge: true });
+  
+    } catch (error) {
+      console.error('Error fetching thread messages:', error);
+    }
+  }
+  
+
+  
+
+  
   clearMessages(): void {
     this.messages = [];
     this.messagesSubject.next([]);
@@ -286,7 +321,6 @@ export class MessageLayoutComponent implements OnInit {
   }
 
   updateMessageReactions(channelId: string, message: Message) {
-    // Construct the correct path using the provided channelId
     const messageRef = doc(
       this.firestore,
       `channels/${channelId}/channelMessages`,
