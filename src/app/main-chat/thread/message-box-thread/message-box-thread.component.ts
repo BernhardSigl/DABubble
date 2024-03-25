@@ -97,7 +97,7 @@ export class MessageBoxThreadComponent implements OnInit {
     } else {
       this.selectedChannelId = undefined;
     }
-  });
+  });   
   }
 
   getUserData(): void {

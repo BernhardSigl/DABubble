@@ -1,25 +1,25 @@
 .thread-card {
   width: 100%;
-  padding: 20px;
+  padding: 30px 0 10px;
 }
 
 .selected-msg-container {
   display: flex;
   flex-direction: row-reverse;
   .thread-profile-img {
+    margin: 0 20px;
 
-    margin-right: 45px;
-    margin-left: 15px;
     img {
       border-radius: 100%;
-      width: 50px;
-      height: 50px;
+      width: 70px;
+      height: 70px;
+      cursor: pointer;
     }
   }
 }
 
-.other-user .selected-msg-container{
-  flex-direction:row ;
+.other-user .selected-msg-container {
+  flex-direction: row;
 }
 
 .thread-messages-list {
@@ -32,12 +32,12 @@
   display: flex;
   flex-direction: row-reverse;
   .thread-profile-img {
-    width: 70px;
-    height: 70px;
-    margin-right: 45px;
-    margin-left: 15px;
+    margin: 0 20px;
     img {
       border-radius: 100%;
+      width: 70px;
+      height: 70px;
+      cursor: pointer;
     }
   }
 }
@@ -49,30 +49,29 @@
 .name-time {
   display: flex;
   align-items: center;
-  gap: 30px;
-  h3 {
-    font-weight: 800;
+  gap: 20px;
+  .fs18 {
+    cursor: pointer;
   }
-  p {
+  .fs14 {
     color: #686868;
-    font-size: 14px;
   }
 }
 
-.msg-content{
+.msg-content {
   display: flex;
-    flex-direction: column;
-
+  flex-direction: column;
 }
 
 .message {
   border-radius: 30px 0px 30px 30px;
   background-color: #797ef3;
   padding: 15px;
-  max-width: 200px;
+  max-width: calc(100% - 50px);
   margin-left: 30px;
   color: white;
 }
+
 .message-image {
   width: 150px;
   height: 150px;
@@ -89,7 +88,7 @@
 }
 
 .other-user .message {
-  background-color: #eceeef;
+  background-color: #ECEEFE;
   color: black;
   border-radius: 0px 30px 30px 30px;
   margin-left: 0;
@@ -106,21 +105,21 @@
 .divider {
   display: flex;
   align-items: center;
-  gap: 35px;
-  padding-left: 30px;
-  mat-divider {
-    width: 60%;
-  }
+  gap: 20px;
+  padding: 0 30px 27px;
 
-  p{
-    font-size: 10px;
+  mat-divider {
+    width: 100%;
+  }
+  .answers {
+    color: #adb0d9;
+    display: flex;
+    flex-wrap: nowrap;
   }
 }
 
-
-.thread-message{
-
-  &:hover{
+.thread-message {
+  &:hover {
     background: #eceefe;
     transition: background 225ms ease-in-out;
   }
@@ -132,25 +131,49 @@
   position: relative;
   margin-top: 10px;
   gap: 10px;
-}
-
-emoji-mart{
-  position: absolute;
-  bottom:32px;
-  z-index: 9999;
-}
-.reactions-container{
-  display: flex;
-  gap: 10px;
-
-  .reactions{
-    border: 1px solid #8c91f7;
-    background-color: transparent;
-    border-radius: 10px;
+  align-items: center;
+  img {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
   }
 }
 
-.current-user .hover-options{
+emoji-mart {
+  position: absolute;
+  bottom: 32px;
+  z-index: 9999;
+}
+.reactions-container {
+  display: flex;
+  gap: 10px;
+  height: 34px;
+  padding: 0;
+
+  .reactions {
+    border: 1px solid #8c91f7;
+    background-color: transparent;
+    border-radius: 10px;
+    border-radius: 20px;
+    padding: 5px 10px;
+  }
+
+  button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    .emoji-in-chat {
+      font-size: 18px;
+    }
+    .counter {
+      font-size: 16px;
+      font-weight: 400;
+    }
+  }
+}
+
+.current-user .hover-options {
   border: 1px solid #8c91f7;
   border-radius: 30px 00px 30px 30px;
   position: absolute;
@@ -159,14 +182,14 @@ emoji-mart{
   gap: 10px;
   padding: 5px;
   bottom: 75px;
-  right:120px;
+  right: 120px;
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   background-color: white;
 }
 
-.other-user  .hover-options{
+.other-user .hover-options {
   border: 1px solid #8c91f7;
   border-radius: 0px 30px 30px 30px;
   position: absolute;
@@ -175,7 +198,7 @@ emoji-mart{
   gap: 10px;
   padding: 5px;
   bottom: 75px;
-  left:140px;
+  left: 140px;
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
@@ -187,7 +210,7 @@ emoji-mart{
   opacity: 1;
 }
 
-.edit-message-popup{
+.edit-message-popup {
   border-radius: 0px 30px 30px 30px;
   position: absolute;
   display: flex;
@@ -196,69 +219,69 @@ emoji-mart{
   background-color: white;
   right: 250px;
   z-index: 10;
-  p{
+  p {
     font-weight: 900;
     font-size: 18px;
 
-    &:hover{
+    &:hover {
       color: var(--primary);
       cursor: pointer;
     }
-  }}
+  }
+}
 
-  .edit-message{
-    display: flex;
-    flex-direction: column;
-    justify-content: end;
+.edit-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
 
+  textarea {
+    position: relative;
+    max-width: 200px;
+    padding: 20px;
+    min-height: 4vh;
+    cursor: text;
+    caret-color: black;
+    color: #686868;
+    border: 1px solid var(--dark-purple);
+    border-radius: 30px 0px 30px 30px;
 
-    textarea{
-      position: relative;
-      max-width: 200px;
-      padding: 20px;
-      min-height: 4vh;
-      cursor: text;
-      caret-color:black;
-      color: #686868;
-      border: 1px solid var(--dark-purple);
-      border-radius: 30px 0px 30px 30px;
-
-      &:focus{
-        outline: none;
-      }
-    }
-    button{
-      position: absolute;
-      cursor: pointer;
-      margin-bottom: 5px;
+    &:focus {
+      outline: none;
     }
   }
-
-  .edit-cancel{
-    right: 235px;
-    border-radius: 20px;
-    padding: 10px;
-    background-color: transparent;
-    border: 1px solid var(--primary);
-    color:var(--primary);
-
-    &:hover{
-      background-color: var(--primary);
-      color: white;
-      transition: background-color 225ms ease-in-out, color 225ms ease-in-out;
-    }
+  button {
+    position: absolute;
+    cursor: pointer;
+    margin-bottom: 5px;
   }
+}
 
-  .edit-save{
-    right: 140px;
+.edit-cancel {
+  right: 235px;
+  border-radius: 20px;
+  padding: 10px;
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+
+  &:hover {
     background-color: var(--primary);
     color: white;
-    border: transparent;
-    border-radius: 20px;
-    padding: 10px;
-
-    &:hover{
-      background-color: var(--dark-purple);
-      transition:  background-color 225ms ease-in-out;
-    }
+    transition: background-color 225ms ease-in-out, color 225ms ease-in-out;
   }
+}
+
+.edit-save {
+  right: 140px;
+  background-color: var(--primary);
+  color: white;
+  border: transparent;
+  border-radius: 20px;
+  padding: 10px;
+
+  &:hover {
+    background-color: var(--dark-purple);
+    transition: background-color 225ms ease-in-out;
+  }
+}

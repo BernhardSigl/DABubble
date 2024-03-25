@@ -1,15 +1,19 @@
-<div class="thread-card" *ngIf="selectedMessage"   [ngClass]="{
-  'current-user': selectedMessage.senderId === userId,
-  'other-user': selectedMessage.senderId !== userId
-}">
+<div
+  class="thread-card"
+  *ngIf="selectedMessage"
+  [ngClass]="{
+    'current-user': selectedMessage.senderId === userId,
+    'other-user': selectedMessage.senderId !== userId
+  }"
+>
   <div class="selected-msg-container">
     <div class="thread-profile-img">
       <img src="{{ selectedMessage.image }}" alt="" width="70px" />
     </div>
     <div class="msg-content">
       <div class="name-time">
-        <h3>{{ selectedMessage.name }}</h3>
-        <p>{{ selectedMessage.time | date : "HH:mm" }}</p>
+        <span class="fs18 bold">{{ selectedMessage.name }}</span>
+        <span class="fs14">{{ selectedMessage.time | date : "HH:mm" }}</span>
       </div>
 
       <img
@@ -19,33 +23,44 @@
         *ngIf="selectedMessage.messageImage"
       />
 
-      <div class="message">{{selectedMessage.message}}</div>
+      <div class="message">{{ selectedMessage.message }}</div>
     </div>
   </div>
 </div>
 
 <div class="divider" *ngIf="selectedMessage">
-  <p>{{threadMessages.length}} Antworten</p>
+  <span class="fs18 answers">
+    <span>
+      {{ threadMessages.length }}&nbsp;
+    </span>
+    <span>Antworten</span>
+  </span>
   <mat-divider></mat-divider>
 </div>
 
 <div *ngIf="threadMessages.length > 0">
   <div class="thread-messages-list">
-    <div *ngFor="let message of threadMessages" class="thread-message" [ngClass]="{
-      'current-user': message.senderId === userId,
-      'other-user': message.senderId !== userId,
-      'hovered': isHovered[message.messageId]
-    }"
-    (mouseenter)="isHovered[message.messageId] = true"
-    (mouseleave)="isHovered[message.messageId] = true">
+    <div
+      *ngFor="let message of threadMessages"
+      class="thread-message"
+      [ngClass]="{
+        'current-user': message.senderId === userId,
+        'other-user': message.senderId !== userId,
+        hovered: isHovered[message.messageId]
+      }"
+      (mouseenter)="isHovered[message.messageId] = true"
+      (mouseleave)="isHovered[message.messageId] = true"
+    >
       <div class="thread-msg-container">
         <div class="thread-profile-img">
           <img src="{{ message.image }}" alt="" width="70px" />
         </div>
-        <div class="msg-content">
+        <div class="msg-content column"
+        [ngStyle]="{ 'align-items': firebase.loggedInUserId === message.senderId ? 'flex-end' : 'flex-start' }"
+        >
           <div class="name-time">
-            <h3>{{ message.name }}</h3>
-            <p>{{ message.time | date: 'HH:mm' }}</p>
+            <span class="fs18 bold">{{ message.name }}</span>
+            <span class="fs14">{{ message.time | date : "HH:mm" }}</span>
           </div>
 
           <img
@@ -55,7 +70,9 @@
             *ngIf="message.messageImage"
           />
 
-          <div  *ngIf="!isEditEnabled[message.messageId]" class="message">{{ message.message }}</div>
+          <div *ngIf="!isEditEnabled[message.messageId]" class="message">
+            {{ message.message }}
+          </div>
 
           <div class="emoji-reaction" *ngIf="!isEditEnabled[message.messageId]">
             <img
@@ -69,7 +86,8 @@
                 class="reactions"
                 (click)="toggleReactionThread(message, reaction.key)"
               >
-                {{ reaction.key }} {{ reaction.value.count }}
+              <span class="emoji-in-chat">{{ reaction.key }}</span>
+              <span class="counter">{{ reaction.value.count }}</span>
               </button>
             </div>
 
@@ -95,29 +113,40 @@
             </div>
           </div>
           <div
-          class="edit-message-popup"
-          *ngIf="isEditingEnabled[message.messageId]"
-        >
-          <p (click)="toggleToTextArea(message.messageId)">
-            Nachricht Bearbeiten
-          </p>
-        </div>
-        <div class="edit-message" *ngIf="isEditEnabled[message.messageId]">
-          <textarea
-            [(ngModel)]="editedMessage[message.messageId]"
-            rows="3"
-            cols="50"
-            >{{ getMessageText(message.messageId) | async }}</textarea
+            class="edit-message-popup"
+            *ngIf="isEditingEnabled[message.messageId]"
           >
-          <button (click)="cancelEditThread(message.messageId)" class="edit-cancel">
-            Abbrechen
-          </button>
-          <button (click)="saveEditedMessageThread(message.messageId, editedMessage[message.messageId])" class="edit-save">
-            Speichern
-          </button>
-            </div>
-        </div>
-      </div>
+            <p (click)="toggleToTextArea(message.messageId)">
+              Nachricht Bearbeiten
+            </p>
+          </div>
+          <div class="edit-message" *ngIf="isEditEnabled[message.messageId]">
+            <textarea
+              [(ngModel)]="editedMessage[message.messageId]"
+              rows="3"
+              cols="50"
+              >{{ getMessageText(message.messageId) | async }}</textarea
+            >
+            <button
+              (click)="cancelEditThread(message.messageId)"
+              class="edit-cancel"
+            >
+              Abbrechen
+            </button>
+            <button
+              (click)="
+                saveEditedMessageThread(
+                  message.messageId,
+                  editedMessage[message.messageId]
+                )
+              "
+              class="edit-save"
+            >
+              Speichern
+            </button>
+          </div>
         </div>
       </div>
     </div>
+  </div>
+</div>

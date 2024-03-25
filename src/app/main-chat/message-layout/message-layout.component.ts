@@ -88,7 +88,7 @@ export class MessageLayoutComponent implements OnInit {
     private changeDetector: ChangeDetectorRef,
     private el: ElementRef,
     private scrollHelper: MessageServiceService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
   ) {}
 
   getNativeElement(): HTMLElement {
@@ -110,6 +110,13 @@ export class MessageLayoutComponent implements OnInit {
     });
     registerLocaleData(localeDe);
     this.changeDetector.detectChanges();
+  }
+
+  async test(message: any) {
+  this.firebase.ngOnInit();
+  console.log(this.firebase.threadsArray.filter((element) => element.senderId === 'QenNGVUMEUZUE8FrrYSw7eCA8Tl2'));
+  
+  console.log('message', message);
   }
 
   formatMessageDate(date: Date | null): string {
