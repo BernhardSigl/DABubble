@@ -48,8 +48,8 @@ import { LOCALE_ID } from '@angular/core';
   styleUrls: ['./message-layout.component.scss'],
   providers: [
     DatePipe,
-    { provide: LOCALE_ID, useValue: 'de' } // Setzen Sie die Locale auf Deutsch
-  ]
+    { provide: LOCALE_ID, useValue: 'de' }, // Setzen Sie die Locale auf Deutsch
+  ],
 })
 export class MessageLayoutComponent implements OnInit {
   @Input() userId?: string = '';
@@ -76,6 +76,8 @@ export class MessageLayoutComponent implements OnInit {
   selectedChannelId?: string;
   messages$: Observable<Message[]> = this.messagesSubject.asObservable();
 
+  currentThreadId!: string;
+
   constructor(
     private firestore: Firestore,
     private drawerService: DrawerService,
@@ -84,7 +86,7 @@ export class MessageLayoutComponent implements OnInit {
     private changeDetector: ChangeDetectorRef,
     private el: ElementRef,
     private scrollHelper: MessageServiceService,
-    private datePipe: DatePipe,
+    private datePipe: DatePipe
   ) {}
 
   getNativeElement(): HTMLElement {
@@ -129,20 +131,23 @@ export class MessageLayoutComponent implements OnInit {
     );
   }
 
-  openThread(message: Message): void {
-    if(this.drawerService.threadIsOpen===true){
+  openThread(message: Message, messageId: string): void {
+    if (this.drawerService.threadIsOpen === false) {
+      this.currentThreadId = messageId;
+      this.drawerService.threadIsOpen = true;
       this.drawerService.openDrawer(message);
-      this.drawerService.openThread();   
-    }else{
+      this.drawerService.openThread();
+    } else {
       this.drawerService.closeDrawer();
+      if (this.currentThreadId && this.currentThreadId !== messageId) {
+        setTimeout(() => {
+          this.drawerService.openDrawer(message);
+          this.drawerService.openThread();
+          this.currentThreadId = messageId;
+        }, 750); // ~ Closing time of the already opened thread
+      }
     }
-
-    // if (this.drawerService.threadIsOpen && this.selectedMessage && this.selectedMessage.messageId == message.messageId) {
-    //   this.drawerService.openDrawer(message);
-    //   this.drawerService.openThread();   
-    // }
   }
-
 
   async loadMessages(channelId: string): Promise<void> {
     const messagesCollection = collection(
@@ -368,7 +373,7 @@ export class MessageLayoutComponent implements OnInit {
       data: {
         user: filteredUsers[0],
       },
-      panelClass: ['border', 'view-profile-popup']
+      panelClass: ['border', 'view-profile-popup'],
     });
   }
 }
