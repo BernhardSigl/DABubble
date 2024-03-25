@@ -68,7 +68,7 @@ export class MessageLayoutComponent implements OnInit {
   public editedMessage: { [key: string]: string } = {};
   public selectedMessage: Message | null = null;
   public channelDoc: any;
-
+  public openedThreadId: string | null = null;
   messages: Message[] = [];
   isHovered: { [key: string]: boolean } = {};
   channelIds: string[] = [];
@@ -147,7 +147,7 @@ export class MessageLayoutComponent implements OnInit {
         }, 750); // ~ Closing time of the already opened thread
       }
     }
-  }
+  } 
 
   async loadMessages(channelId: string): Promise<void> {
     const messagesCollection = collection(
