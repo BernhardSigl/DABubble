@@ -22,7 +22,7 @@
         (mouseleave)="toggleHoverOptions(message.messageId, false)"
       >
         <div class="card-content column"
-        [ngStyle]="{ 'align-items': firebase.loggedInUserId === message.senderId ? 'flex-end' : 'initial' }"
+        [ngStyle]="{ 'align-items': firebase.loggedInUserId === message.senderId ? 'flex-end' : 'flex-start' }"
         >
           <div class="time-name">
             <span class="fs14 bold">{{ message.time | date : "HH:mm" }}</span>
@@ -66,13 +66,14 @@
               </button>
             </div>
             <div class="thread-answer">
+              <button (click)="test(message)">test</button>
               <a (click)="openThread(message, message.messageId)">antworten</a>
             </div>
 
             <emoji-mart
               class="emoji-mart"
               *ngIf="isEmojiPickerVisible[message.messageId]"
-              title="Choose your emoji"
+              title="Wähle dein Emoji"
               (emojiClick)="onEmojiClick($event, message)"
             ></emoji-mart>
             <!--  *ngIf="isHovered[message.messageId]" -->

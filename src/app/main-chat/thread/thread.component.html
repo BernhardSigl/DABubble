@@ -1,17 +1,27 @@
-<mat-drawer-container >
+<mat-drawer-container>
   <mat-drawer #drawer [opened]="isOpen" class="thread-view">
     <header class="thread-header">
       <div class="left-thread-side">
-        <h2>Thread</h2>
-        <a>#Entwicklerteam</a>
+        <h4 class="bold">Thread</h4>
+        <span class="fs14">#</span>
+        <span class="fs14">{{ firebase.currentChannelName }}</span>
       </div>
-      <div class="right-thread-side" (click)="toggleThread()">
-        <img src="../../assets/img/close.png">
-      </div>
+      <div
+        class="icon-size-24 cross-icon right-thread-side"
+        (click)="toggleThread()"
+      ></div>
     </header>
 
-    <app-message-layout-thread #threadLayout [threadId]="threadId" class="scroll-bar" [userId]="userId"></app-message-layout-thread>
+    <app-message-layout-thread
+      #threadLayout
+      [threadId]="threadId"
+      class="scroll-bar"
+      [userId]="userId"
+    ></app-message-layout-thread>
 
-    <app-message-box-thread (threadIdEmitter)="handleThreadId($event)" [userId]="userId"></app-message-box-thread>
+    <app-message-box-thread
+      (threadIdEmitter)="handleThreadId($event)"
+      [userId]="userId"
+    ></app-message-box-thread>
   </mat-drawer>
 </mat-drawer-container>

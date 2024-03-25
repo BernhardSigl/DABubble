@@ -54,7 +54,7 @@ export class MessageLayoutThreadComponent implements OnInit {
     private threadService: DrawerService,
     private firestore: Firestore,
     private id: GetIdService,
-    private firebase: FirebaseService,
+    public firebase: FirebaseService,
     private el: ElementRef,
     private scrollHelper: MessageServiceService
   ) {}
@@ -78,7 +78,7 @@ export class MessageLayoutThreadComponent implements OnInit {
   @ViewChild(ThreadComponent)
   threadLayout!: ThreadComponent;
 
-  async ngOnInit() {
+  async ngOnInit(): Promise<void> {
     this.scrollHelper.registerThreadComponent(this);
     this.threadService.selectedMessageChanged.subscribe(
       (selectedMessage: Message | null) => {

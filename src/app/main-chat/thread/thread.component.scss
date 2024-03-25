@@ -1,6 +1,5 @@
-.thread-view{
+.thread-view {
   margin-top: 20px;
-  // height: 80vh;
   height: calc(100vh - 140px);
   background: var(--white);
   border-radius: 30px;
@@ -10,24 +9,22 @@
   flex-direction: column;
   margin-right: 20px;
   position: relative;
-  .thread-header{
+
+  .thread-header {
     display: flex;
     justify-content: space-between;
     box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.08);
-    width: 83%;
-    padding: 32px 40px;
-    .left-thread-side{
+    width: 100%;
+    padding: 35.5px 40px;
+    box-sizing: border-box;
+    height: 96px;
+    align-items: center;
+    .left-thread-side {
       display: flex;
       align-items: center;
-
-      h2{
-        font-size: 24px;
-        font-weight: 700;
-      }
-
-      a{
-        color:var(--primary);
-        font-size: 14px;
+      gap: 5px;
+      .fs14 {
+        color: var(--secondary);
       }
     }
   }
@@ -37,11 +34,10 @@
   cursor: pointer;
 }
 
-app-message-layout-thread{
+app-message-layout-thread {
   position: relative;
   margin-top: auto;
   display: flex;
-  gap: 20px;
   margin-bottom: 38px;
   flex-direction: column;
   height: 100%;
@@ -49,15 +45,28 @@ app-message-layout-thread{
   overflow-x: hidden;
 }
 
-mat-drawer-container{
+mat-drawer-container {
   visibility: hidden;
-
-
 }
 
-mat-drawer{
+mat-drawer {
   overflow-x: hidden;
   box-shadow: none;
+}
+
+.cross-icon {
+  background-image: url("./../../../assets/img/cross-black.png");
+  background-size: 1.5rem 1.5rem; // 24px
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 100%;
+  width: 2.5rem; // 40px
+  height: 2.5rem;
+
+  &:hover {
+    background-color: var(--background-color);
+    background-image: url("./../../../assets/img/cross-blue.png");
+  }
 }
 
 @media (max-width: 980px) {
@@ -66,10 +75,10 @@ mat-drawer{
     height: calc(100vh - 80px) !important;
     border-radius: 0 !important;
     width: 100vw !important;
-   .thread-header {
+    .thread-header {
       width: 100%;
       padding: 32px 40px;
       box-sizing: border-box;
+    }
   }
-}
 }

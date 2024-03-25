@@ -18,6 +18,7 @@ import { NgControl } from '@angular/forms';
 import { DrawerService } from '../../firebase-services/drawer.service';
 import { MessageBoxThreadComponent } from './message-box-thread/message-box-thread.component';
 import { MessageServiceService } from '../../firebase-services/message-service.service';
+import { FirebaseService } from '../../firebase-services/firebase.service';
 
 @Component({
   selector: 'app-thread',
@@ -42,19 +43,28 @@ export class ThreadComponent implements OnInit {
   threadMessages: string[] = [];
   isOpen = false;
   threadId: string = '';
+
   constructor(
     private drawerService: DrawerService,
     private el: ElementRef,
-    private scrollHelper: MessageServiceService
+    private scrollHelper: MessageServiceService,
+    public firebase: FirebaseService
     ) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.drawerService.isOpen$.subscribe((isOpen) => {
       this.isOpen = isOpen;
       if (isOpen) {
         this.drawer.close(); // Close the sidenav when thread is opened
       }
     });
+    await this.loadCurrentChannelName();
+  }
+
+  async loadCurrentChannelName() {
+    await this.firebase.subAllUsers();
+    await this.firebase.loggedInUserData();
+    await this.firebase.selectLastOpenedChannel();
   }
 
   toggleThread(): void {    

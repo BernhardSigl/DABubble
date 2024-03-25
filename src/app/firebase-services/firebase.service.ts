@@ -42,6 +42,7 @@ export class FirebaseService {
   channel!: Channel;
   channelId!: string;
   channelsArray: any[] = [];
+  threadsArray: any[] = [];
   currentChannelData: any[] = [];
   currentChannelName!: string;
   currentChannelId!: string;
@@ -79,12 +80,13 @@ export class FirebaseService {
     await this.pullLoggedInUserId();
     await this.subAllUsers();
     await this.loggedInUserData();
-    await this.subAllMessages();
+    // await this.subAllMessages();
     await this.subAllChannels();
     await this.checkChannelRights();
     await this.showOnlyChannelsWithRights();
     await this.subAllPrivateMessages();
     await this.selectLastOpenedChannel();
+    await this.subAllThreadMessages();
     this.scheduleAutomaticUpdate();
   }
 
@@ -131,15 +133,25 @@ export class FirebaseService {
     await Promise.all(updatePromises);
   }
 
-  async subAllMessages(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      const q = query(this.getMessagesColRef());
-      onSnapshot(q, async (querySnapshot) => {
-        // Handle message changes here, if necessary
-        resolve();
-      });
-    });
-  }
+  // async subAllMessages(): Promise<void> {
+  //   return new Promise<void>((resolve) => {
+  //     const q = query(this.getChannelsColRef());
+  //     onSnapshot(q, async (querySnapshot) => {
+  //       this.threadMessages = [];
+  //       querySnapshot.forEach(async (doc) => {
+  //         const usersData = doc.data();
+  //         this.threadMessages.push(usersData);
+  //       });
+  //       await this.getLoggedInUserInfos();
+  //       if (!this.statusChangeable) {
+  //         await this.setOnlineStatus();
+  //       } else {
+  //         await this.setOfflineStatus();
+  //       }
+  //       resolve();
+  //     });
+  //   });
+  // }
 
   getMessagesColRef() {
     return collection(this.firestore, 'messages');
@@ -310,6 +322,10 @@ export class FirebaseService {
     return collection(this.firestore, 'channels');
   }
 
+  getThreadMessagesColRef() {
+    return collection(this.firestore, 'channelMessages');
+  }
+
   getSingleChannelDocRef() {
     return doc(this.getChannelColRef(), this.channelId);
   }
@@ -339,6 +355,19 @@ export class FirebaseService {
         resolve();
       });
     });
+  }
+
+  async subAllThreadMessages(): Promise<void> {
+    const channelsQuerySnapshot = await getDocs(this.getChannelColRef());
+    for (const channelDoc of channelsQuerySnapshot.docs) {
+      const channelId = channelDoc.id;
+      const channelMessagesColRef = collection(channelDoc.ref, 'channelMessages');
+      const channelMessagesQuerySnapshot = await getDocs(channelMessagesColRef);
+      // console.log(`Messages for channel ${channelId}:`);
+      channelMessagesQuerySnapshot.forEach((messageDoc) => {
+      this.threadsArray.push(messageDoc.data());
+      });
+    }
   }
 
   async updateChannelInFirebase(
