@@ -44,7 +44,7 @@ export class DrawerService {
     this.setSideNavBtnStatus(false);
   }
 
-  private async loadThreadMessages(mainMessage: Message): Promise<void> {
+   async loadThreadMessages(mainMessage: Message): Promise<void> {
     if (!mainMessage.messageId) {
       console.error('Main message ID is required to load thread messages.');
       return;
@@ -94,7 +94,6 @@ export class DrawerService {
     this.threadIsOpen = !this.threadIsOpen;
     this.isOpenSubject.next(true);
     this.threadOpened.emit(true);
-    console.log(this.threadIsOpen)
   }
 
   isSideNavMobileVisible(): boolean {

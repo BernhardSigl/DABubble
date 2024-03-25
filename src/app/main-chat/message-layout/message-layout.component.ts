@@ -68,7 +68,7 @@ export class MessageLayoutComponent implements OnInit {
   public editedMessage: { [key: string]: string } = {};
   public selectedMessage: Message | null = null;
   public channelDoc: any;
-
+  public openedThreadId: string | null = null;
   messages: Message[] = [];
   isHovered: { [key: string]: boolean } = {};
   channelIds: string[] = [];
@@ -129,19 +129,42 @@ export class MessageLayoutComponent implements OnInit {
     );
   }
 
+  // openThread(message: Message): void {
+  //   if(this.drawerService.threadIsOpen===true){
+  //     this.drawerService.openDrawer(message);
+  //     this.drawerService.openThread();   
+  //     console.log(this.drawerService.threadIsOpen)
+  //   }else{
+  //     this.drawerService.closeDrawer();
+  //   }
+  // }
+
   openThread(message: Message): void {
-    if(this.drawerService.threadIsOpen===true){
+    console.log(this.drawerService.threadIsOpen)
+    if (this.drawerService.threadIsOpen===false) {  //check if its false
+      if (this.openedThreadId === message.messageId) { //check if it has the same id
+        console.log(this.openedThreadId,message.messageId)
+        this.drawerService.closeDrawer();//if they have same id close the drawer
+        this.openedThreadId = null;//set to null
+        console.log('closed')
+      } else if(this.openedThreadId !== message.messageId){ //if not 
+        this.drawerService.closeDrawer();//close the drawer
+        console.log(this.openedThreadId,message.messageId)
+        console.log('closing oldOne')
+        this.drawerService.openDrawer(message);//open the drawer of the newly clicked thread
+        this.drawerService.openThread();
+        this.openedThreadId = message.messageId;//update the threadId
+        console.log('opening new one ', this.openedThreadId)
+      }
+    } else {// open normally
+      console.log('opning')
       this.drawerService.openDrawer(message);
       this.drawerService.openThread();   
-    }else{
-      this.drawerService.closeDrawer();
+      this.openedThreadId = message.messageId;
     }
-
-    // if (this.drawerService.threadIsOpen && this.selectedMessage && this.selectedMessage.messageId == message.messageId) {
-    //   this.drawerService.openDrawer(message);
-    //   this.drawerService.openThread();   
-    // }
   }
+  
+  
 
 
   async loadMessages(channelId: string): Promise<void> {
