@@ -202,28 +202,28 @@ async loadMessages(channelId: string): Promise<void> {
 
   
 
-  async getThreadMessagesCount(mainMessageId: string, message: Message): Promise<void> {
-    const threadsRef = collection(
-      this.firestore,
-      `channels/${this.selectedChannelId}/channelMessages/${mainMessageId}/Thread`
+async getThreadMessagesCount(mainMessageId: string, message: Message): Promise<void> {
+  const threadsRef = collection(
+    this.firestore,
+    `channels/${this.selectedChannelId}/channelMessages/${mainMessageId}/Thread`
+  );
+
+  // Listen to changes in the thread collection
+  onSnapshot(threadsRef, (querySnapshot) => {
+    const threadMessagesCount = querySnapshot.size;
+
+    // Update message.threadLength
+    message.threadLength = threadMessagesCount;
+
+    // Update Firestore document with the new thread length
+    setDoc(
+      doc(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${mainMessageId}`),
+      { threadLength: threadMessagesCount },
+      { merge: true }
     );
-    const q = query(threadsRef);
-  
-    try {
-      const querySnapshot = await getDocs(q);
-      const threadMessagesCount = querySnapshot.size;
-  
-      // Update message.threadLength
-      message.threadLength = threadMessagesCount;
-  
-      // Update Firestore document with the new thread length
-      await setDoc(doc(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${mainMessageId}`), { threadLength: threadMessagesCount }, { merge: true });
-  
-    } catch (error) {
-      console.error('Error fetching thread messages:', error);
-    }
-  }
-  
+  });
+}
+
 
   
 
