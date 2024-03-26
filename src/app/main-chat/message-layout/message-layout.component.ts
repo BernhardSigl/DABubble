@@ -88,7 +88,7 @@ export class MessageLayoutComponent implements OnInit {
     private changeDetector: ChangeDetectorRef,
     private el: ElementRef,
     private scrollHelper: MessageServiceService,
-    private datePipe: DatePipe,
+    private datePipe: DatePipe
   ) {}
 
   getNativeElement(): HTMLElement {
@@ -113,10 +113,14 @@ export class MessageLayoutComponent implements OnInit {
   }
 
   async test(message: any) {
-  this.firebase.ngOnInit();
-  console.log(this.firebase.threadsArray.filter((element) => element.senderId === 'QenNGVUMEUZUE8FrrYSw7eCA8Tl2'));
-  
-  console.log('message', message);
+    this.firebase.ngOnInit();
+    console.log(
+      this.firebase.threadsArray.filter(
+        (element) => element.senderId === 'QenNGVUMEUZUE8FrrYSw7eCA8Tl2'
+      )
+    );
+
+    console.log('message', message);
   }
 
   formatMessageDate(date: Date | null): string {
@@ -153,81 +157,81 @@ export class MessageLayoutComponent implements OnInit {
           this.drawerService.openDrawer(message);
           this.drawerService.openThread();
           this.currentThreadId = messageId;
-        }, 750); // ~ Closing time of the already opened thread
+        }, 0);
       }
     }
-  } 
+  }
 
-// Call getThreadMessagesCount when loading messages
-async loadMessages(channelId: string): Promise<void> {
-  const messagesCollection = collection(
-    this.firestore,
-    `channels/${channelId}/channelMessages`
-  );
-  const q = query(messagesCollection, orderBy('time', 'desc'));
-
-  onSnapshot(
-    q,
-    async (querySnapshot) => {
-      const messages: Message[] = [];
-      querySnapshot.forEach(async (doc) => {
-        const message = doc.data() as Message;
-        message.messageId = doc.id;
-
-        // Load thread messages count and update message.threadLength
-         this.getThreadMessagesCount(message.messageId, message);
-
-        if (message.senderId === this.userId) {
-          // Check if the user has updated their name
-          if (this.firebase.updatedName) {
-            message.name = this.firebase.updatedName;
-          } else {
-            // Use the default user name
-            message.name = this.userName;
-          }
-        } else {
-          // For messages from other users, use their default name
-          message.name = message.name;
-        }
-        messages.push(message);
-      });
-      this.messages = messages.reverse(); // Set messages directly
-      this.messagesSubject.next(this.messages); // Update the messages
-      this.groupMessagesByDate(); // Group messages after setting
-      await this.scrollHelper.scrollDown('channel');
-    },
-    (error) => console.error('Error fetching messages:', error)
-  );
-}
-
-  
-
-async getThreadMessagesCount(mainMessageId: string, message: Message): Promise<void> {
-  const threadsRef = collection(
-    this.firestore,
-    `channels/${this.selectedChannelId}/channelMessages/${mainMessageId}/Thread`
-  );
-
-  // Listen to changes in the thread collection
-  onSnapshot(threadsRef, (querySnapshot) => {
-    const threadMessagesCount = querySnapshot.size;
-
-    // Update message.threadLength
-    message.threadLength = threadMessagesCount;
-
-    // Update Firestore document with the new thread length
-    setDoc(
-      doc(this.firestore, `channels/${this.selectedChannelId}/channelMessages/${mainMessageId}`),
-      { threadLength: threadMessagesCount },
-      { merge: true }
+  // Call getThreadMessagesCount when loading messages
+  async loadMessages(channelId: string): Promise<void> {
+    const messagesCollection = collection(
+      this.firestore,
+      `channels/${channelId}/channelMessages`
     );
-  });
-}
+    const q = query(messagesCollection, orderBy('time', 'desc'));
 
+    onSnapshot(
+      q,
+      async (querySnapshot) => {
+        const messages: Message[] = [];
+        querySnapshot.forEach(async (doc) => {
+          const message = doc.data() as Message;
+          message.messageId = doc.id;
 
-  
+          // Load thread messages count and update message.threadLength
+          this.getThreadMessagesCount(message.messageId, message);
 
-  
+          if (message.senderId === this.userId) {
+            // Check if the user has updated their name
+            if (this.firebase.updatedName) {
+              message.name = this.firebase.updatedName;
+            } else {
+              // Use the default user name
+              message.name = this.userName;
+            }
+          } else {
+            // For messages from other users, use their default name
+            message.name = message.name;
+          }
+          messages.push(message);
+        });
+        this.messages = messages.reverse(); // Set messages directly
+        this.messagesSubject.next(this.messages); // Update the messages
+        this.groupMessagesByDate(); // Group messages after setting
+        await this.scrollHelper.scrollDown('channel');
+      },
+      (error) => console.error('Error fetching messages:', error)
+    );
+  }
+
+  async getThreadMessagesCount(
+    mainMessageId: string,
+    message: Message
+  ): Promise<void> {
+    const threadsRef = collection(
+      this.firestore,
+      `channels/${this.selectedChannelId}/channelMessages/${mainMessageId}/Thread`
+    );
+
+    // Listen to changes in the thread collection
+    onSnapshot(threadsRef, (querySnapshot) => {
+      const threadMessagesCount = querySnapshot.size;
+
+      // Update message.threadLength
+      message.threadLength = threadMessagesCount;
+
+      // Update Firestore document with the new thread length
+      setDoc(
+        doc(
+          this.firestore,
+          `channels/${this.selectedChannelId}/channelMessages/${mainMessageId}`
+        ),
+        { threadLength: threadMessagesCount },
+        { merge: true }
+      );
+    });
+  }
+
   clearMessages(): void {
     this.messages = [];
     this.messagesSubject.next([]);
