@@ -65,9 +65,9 @@
                 ><span class="counter">{{ reaction.value.count }}</span>
               </button>
             </div>
-            <div class="thread-answer">
+            <div class="thread-answer" *ngIf="message.threadLength !== 0">
               <a (click)="openThread(message, message.messageId)">
-                {{ message.threadLength }} Antworten
+                {{ message.threadLength === 1 ? message.threadLength + ' Antwort' : message.threadLength + ' Antworten' }}
               </a>
             </div>
 
