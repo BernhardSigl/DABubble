@@ -39,6 +39,9 @@
     cursor: pointer;
     position: relative;
     text-decoration: none;
+    display: flex;
+    width: 102px;
+    justify-content: center;
     &:before {
       content: "";
       position: absolute;
