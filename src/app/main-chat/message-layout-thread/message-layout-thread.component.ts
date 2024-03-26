@@ -80,6 +80,12 @@ export class MessageLayoutThreadComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.scrollHelper.registerThreadComponent(this);
+    await this.subThreadService();
+    await this.subSelectedChannel();
+    await this.firebase.ngOnInit();
+  }
+
+  async subThreadService() {
     this.threadService.selectedMessageChanged.subscribe(
       (selectedMessage: Message | null) => {
         if (selectedMessage) {
@@ -89,6 +95,9 @@ export class MessageLayoutThreadComponent implements OnInit {
         }
       }
     );
+  }
+
+  async subSelectedChannel() {
     this.firebase.selectedChannelId$.subscribe((channelId) => {
       if (channelId !== null) {
         this.selectedChannelId = channelId; // This will now only assign non-null values
@@ -97,7 +106,6 @@ export class MessageLayoutThreadComponent implements OnInit {
         this.selectedChannelId = undefined; // or set to a default/fallback value if suitable
       }
     });
-    await this.firebase.ngOnInit();
   }
 
   getNativeThreadElement(): HTMLElement {
@@ -125,7 +133,6 @@ export class MessageLayoutThreadComponent implements OnInit {
           }
           this.threadMessages.push(message);
         });
-        this.scrollHelper.scrollThreadToBottom();
       },
       (error) => {
         console.error('Error fetching thread messages:', error);

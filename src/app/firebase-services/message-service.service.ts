@@ -29,15 +29,20 @@ export class MessageServiceService {
 
   scrollThreadToBottom() {
     try {
-        const messageLayoutElement = this.threadComponent?.getNativeThreadElement();
-        if (messageLayoutElement) {
-          messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
-        } else {
-          console.warn('messageLayoutElement is undefined. Unable to scroll to bottom.');
-        }      
+      const messageLayoutElement =
+        this.threadComponent?.getNativeThreadElement();
+      if (messageLayoutElement) {
+        // setTimeout(() => {
+                  messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
+
+        // }, 500);
+      } else {
+        console.warn(
+          'messageLayoutElement is undefined. Unable to scroll to bottom.'
+        );
+      }
     } catch (err) {
       console.error('Error scrolling to bottom:', err);
     }
   }
-
 }

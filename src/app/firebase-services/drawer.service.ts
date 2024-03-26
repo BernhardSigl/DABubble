@@ -11,6 +11,7 @@ import {
   query,
   setDoc,
 } from '@angular/fire/firestore';
+import { MessageServiceService } from './message-service.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,15 +27,20 @@ export class DrawerService {
   sideNavBtnStatus$ = this.sideNavBtnStatusSubject.asObservable();
   threadOpened: EventEmitter<boolean> = new EventEmitter<boolean>();
   showSideNavOnMobileToggle: EventEmitter<void> = new EventEmitter<void>();
-  public windowWidth: BehaviorSubject<number> = new BehaviorSubject<number>(window.innerWidth);
+  public windowWidth: BehaviorSubject<number> = new BehaviorSubject<number>(
+    window.innerWidth
+  );
 
   isSelectedForMobile: boolean = false;
   threadIsOpen: boolean = false;
 
-  constructor(private firestore: Firestore) {   
+  constructor(
+    private firestore: Firestore,
+    private scrollHelper: MessageServiceService
+  ) {
     window.addEventListener('resize', () => {
       this.windowWidth.next(window.innerWidth);
-    }); 
+    });
   }
 
   setSelectedMessage(message: Message): void {
@@ -44,7 +50,7 @@ export class DrawerService {
     this.setSideNavBtnStatus(false);
   }
 
-   async loadThreadMessages(mainMessage: Message): Promise<void> {
+  async loadThreadMessages(mainMessage: Message): Promise<void> {
     if (!mainMessage.messageId) {
       console.error('Main message ID is required to load thread messages.');
       return;
@@ -70,13 +76,11 @@ export class DrawerService {
     }
   }
 
-
-
   getSelectedMessage(): Message | null {
     return this.selectedMessage;
   }
 
-  openDrawer(message: Message): void {   
+  openDrawer(message: Message): void {
     this.setSelectedMessage(message);
     this.isOpenSubject.next(true);
   }
@@ -85,6 +89,9 @@ export class DrawerService {
     this.threadIsOpen = true;
     this.isOpenSubject.next(true);
     this.threadOpened.emit(true);
+    setTimeout(() => {
+      this.scrollHelper.scrollThreadToBottom();
+    }, 410);
   }
 
   closeDrawer(): void {
@@ -115,5 +122,4 @@ export class DrawerService {
     window.localStorage.setItem('sideNavMobileStatus', 'visible');
     window.localStorage.removeItem('closeSideNav');
   }
-
 }
