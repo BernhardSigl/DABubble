@@ -15,8 +15,8 @@
   max-width: 1440px;
 }
 
-simple-snack-bar {
-  background-color: var(--primary);
+.disabled-cursor {
+  cursor: not-allowed !important;
 }
 
 .start-animation {

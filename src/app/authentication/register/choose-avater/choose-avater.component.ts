@@ -157,17 +157,19 @@ private async updateUserDataWithImageURL(downloadURL: string): Promise<void> {
       this.user = user;
 
       await this.addUser().then((result: any) => {
-        this.snackBar.open('Successfully Registered', 'Close', {
+        this.snackBar.open('Successfully Registered', '', {
           duration: 3000, // Duration the toast is shown (in milliseconds)
-          horizontalPosition: 'center', // Position of the toast
+          horizontalPosition: 'right', // Position of the toast
           verticalPosition: 'bottom',
+          panelClass: ['no-close-button'], 
         });
       });
     } catch (error) {
-      this.snackBar.open('Registration failed. Please try again.', 'Close', {
+      this.snackBar.open('Registration failed. Please try again.', '', {
         duration: 3000, // Duration the toast is shown (in milliseconds)
-        horizontalPosition: 'center', // Position of the toast
+        horizontalPosition: 'right', // Position of the toast
         verticalPosition: 'bottom',
+        panelClass: ['no-close-button'], 
       });
     }
   }

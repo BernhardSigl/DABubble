@@ -42,10 +42,11 @@ export class ForgetPasswordComponent implements OnInit {
 
         if (emailExists) {
           await this.authService.forgotPassword(email);
-          this.snackBar.open('Email sent to reset', 'Close', {
+          this.snackBar.open('Email sent to reset', '', {
             duration: 3000, // Duration the toast is shown (in milliseconds)
-            horizontalPosition: 'center', // Position of the toast
+            horizontalPosition: 'right', // Position of the toast
             verticalPosition: 'bottom',
+            panelClass: ['no-close-button'], 
           });
         } else {
           this.snackBar.open(
@@ -53,8 +54,9 @@ export class ForgetPasswordComponent implements OnInit {
             'Close',
             {
               duration: 3000, // Duration the toast is shown (in milliseconds)
-              horizontalPosition: 'center', // Position of the toast
+              horizontalPosition: 'right', // Position of the toast
               verticalPosition: 'bottom',
+              panelClass: ['no-close-button'], 
             }
           );
         }
@@ -65,8 +67,9 @@ export class ForgetPasswordComponent implements OnInit {
           'Close',
           {
             duration: 3000, // Duration the toast is shown (in milliseconds)
-            horizontalPosition: 'center', // Position of the toast
+            horizontalPosition: 'right', // Position of the toast
             verticalPosition: 'bottom',
+            panelClass: ['no-close-button'], 
           }
         );
       }

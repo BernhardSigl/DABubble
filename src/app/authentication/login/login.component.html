@@ -62,7 +62,7 @@
             </div>
           </div>
           <div class="login-btns-div">
-            <button type="submit" class="login-btn">Anmelden</button>
+            <button type="submit" class="login-btn" [class.disabled-cursor]="loginForm.invalid">Anmelden</button>
             <button (click)="loginAsGuest()" class="guest-login">Gäste-Login</button>
           </div>
         </div>

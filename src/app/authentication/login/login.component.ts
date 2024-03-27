@@ -324,19 +324,21 @@ private handleLoginErrorGuest(error: any): void {
         errorMessage = 'Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.';
     }
 
-    this.snackBar.open(errorMessage, 'Close', {
-        duration: 5000,
-        horizontalPosition: 'center',
+    this.snackBar.open(errorMessage, '', {
+        duration: 3000,
+        horizontalPosition: 'right',
         verticalPosition: error.code === 'auth/invalid-email' ? 'top' : 'bottom',
+        panelClass: ['no-close-button'], 
     });
 }
 
 private showSuccessToastGuest(message: string): void {
-    this.snackBar.open(message, 'Close', {
-        duration: 3000,
-        horizontalPosition: 'center',
-        verticalPosition: 'bottom',
-    });
+  this.snackBar.open(message, '', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+      panelClass: ['no-close-button'], 
+  });
 }
 
 
@@ -408,10 +410,11 @@ private handleLoginError(error: any): void {
         errorMessage = 'Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.';
     }
 
-    this.snackBar.open(errorMessage, 'Close', {
-        duration: 5000,
-        horizontalPosition: 'center',
+    this.snackBar.open(errorMessage, '', {
+        duration: 3000,
+        horizontalPosition: 'right',
         verticalPosition: error.code === 'auth/invalid-email' ? 'top' : 'bottom',
+        panelClass: ['no-close-button'], 
     });
 }
 
@@ -422,8 +425,9 @@ private navigateToMainPage(): void {
 private showSuccessToast(message: string): void {
     this.snackBar.open(message, '', {
         duration: 3000,
-        horizontalPosition: 'center',
+        horizontalPosition: 'right',
         verticalPosition: 'bottom',
+        panelClass: ['no-close-button'], 
     });
 }
 
