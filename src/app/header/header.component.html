@@ -1,12 +1,3 @@
-<!--<div class="header-wrapper">
-  <div class="header-logo">
-      <img src="./../../assets/img/text-logo.png">
-
-  <div class="header-profil" (click)="headerDropdownMenu()">
-      <! <p>{{ firebase.name }}</p> -->
-<!-- <img class="profil-img" src="./../../assets/img/profile-1.png">
-      <img class="logout-img" src="./../../assets/img/keyboard-arrow-down-black.png"> -->
-
 <div class="header-wrapper spaceBetween horicontal">
   <img src="./../../assets/img/text-logo.png" class="header-logo" 
   [style.display]="drawerService.isSideNavMobileVisible() ? 'flex' : 'none'"
@@ -19,7 +10,6 @@
     <h4 class="bold">Code learning</h4>
   </div>
 
-  <div class="horicontal">
     <div class="search">
       <div class="header-input">
         <input
@@ -35,35 +25,6 @@
         (click)="toggleDropdown()"
       />
       </div>
-
-      <!-- 
-      <div *ngIf="showDropdown" class="dropdown scroll-bar">
-        <p>Suche mit &commat; nach User and # nach Channels</p>
-
-        <div class="search-channel">
-          <h3>Channel:</h3>
-          <p *ngIf="filteredChannels.length === 0">Keine Einträge gefunden</p>
-          <p
-            class="searched-channel-result"
-            (click)="navigateToChannel(channel.channelId)"
-            *ngFor="let channel of filteredChannels"
-          >
-            #{{ channel.channelName }}
-          </p>
-        </div>
-        <div class="search-user">
-          <h3>Users:</h3>
-          <p *ngIf="filteredUsers.length === 0">Keine Einträge gefunden</p>
-          <div
-            *ngFor="let user of filteredUsers"
-            (click)="navigateToUser(user.userId)"
-            class="searched-user-result"
-          >
-            <img [src]="user.profileImg" alt="" />
-            <p class="user-name">{{ user.name }}</p>
-          </div>
-        </div>
-      </div> -->
 
       <div class="members-list-box input-slide-down" *ngIf="showDropdown">
         <div class="members-list-scroll-box scroll-bar">
@@ -150,4 +111,4 @@
       />
     </div>
   </div>
-</div>
+

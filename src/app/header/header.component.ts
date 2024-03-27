@@ -53,18 +53,19 @@ export class HeaderComponent implements OnInit {
     this.channelId = this.firebase.channelId;
     this.userArr = this.firebase.usersArray;
     this.filteredChannels = [...this.channelArr];
-    this.filteredUsers = [...this.userArr];   
+    this.filteredUsers = [...this.userArr];
+    console.log(this.drawerService.threadIsOpen);
+     
   }
 
   async loadFirebaseContent() {
-    // await this.firebase.ngOnInit(); // performance: alt
-    await this.firebase.pullLoggedInUserId(); // performance: neu
-    await this.firebase.subAllUsers(); // performance: neu
-    await this.firebase.loggedInUserData(); // performance: neu
-    await this.firebase.subAllChannels(); // performance: neu
-    await this.firebase.checkChannelRights(); // performance: neu
-    this.firebase.showOnlyChannelsWithRights(); // performance: neu
-    await this.firebase.selectLastOpenedChannel(); // performance: neu
+    await this.firebase.pullLoggedInUserId();
+    await this.firebase.subAllUsers();
+    await this.firebase.loggedInUserData();
+    await this.firebase.subAllChannels();
+    await this.firebase.checkChannelRights();
+    this.firebase.showOnlyChannelsWithRights();
+    await this.firebase.selectLastOpenedChannel();
   }
 
   headerDropdownMenu() {
