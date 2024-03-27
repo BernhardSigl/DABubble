@@ -1,4 +1,4 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { EventEmitter, HostListener, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Message } from '../classes/message.class';
 import {
@@ -30,13 +30,14 @@ export class DrawerService {
   public windowWidth: BehaviorSubject<number> = new BehaviorSubject<number>(
     window.innerWidth
   );
+  closeSideNav$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   isSelectedForMobile: boolean = false;
   threadIsOpen: boolean = false;
 
   constructor(
     private firestore: Firestore,
-    private scrollHelper: MessageServiceService
+    private scrollHelper: MessageServiceService,
   ) {
     window.addEventListener('resize', () => {
       this.windowWidth.next(window.innerWidth);
@@ -121,5 +122,9 @@ export class DrawerService {
     this.threadIsOpen = false;
     window.localStorage.setItem('sideNavMobileStatus', 'visible');
     window.localStorage.removeItem('closeSideNav');
+  }
+
+  closeSideNav() {
+    this.closeSideNav$.next(true);
   }
 }

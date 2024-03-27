@@ -81,7 +81,6 @@ export class ThreadComponent implements OnInit {
 
   handleThreadId(threadId: string) {
     // Handle the received threadId here
-    console.log('Received threadId:', threadId);
     // You can use this threadId as needed in your component logic
     this.threadId = threadId;
   }

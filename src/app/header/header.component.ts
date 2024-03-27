@@ -54,8 +54,6 @@ export class HeaderComponent implements OnInit {
     this.userArr = this.firebase.usersArray;
     this.filteredChannels = [...this.channelArr];
     this.filteredUsers = [...this.userArr];
-    console.log(this.drawerService.threadIsOpen);
-     
   }
 
   async loadFirebaseContent() {

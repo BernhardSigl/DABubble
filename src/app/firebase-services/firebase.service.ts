@@ -386,8 +386,6 @@ export class FirebaseService {
   async selectLastOpenedChannel() {
     const currentChannelId = this.loggedInUserArray[0].activeChannelId;
     const lastOpenedOnSideNav = this.loggedInUserArray[0].lastOpened; // channel or private chat
-    console.log(this.loggedInUserArray[0].lastOpened);
-    
     const correctedPrivateMessageId =
       this.correctedPrivateMessageId(currentChannelId);
     const reversePrivateMessageId =

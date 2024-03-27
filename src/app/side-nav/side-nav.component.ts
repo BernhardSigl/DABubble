@@ -6,6 +6,7 @@ import {
   Output,
   ChangeDetectorRef,
   ChangeDetectionStrategy,
+  HostListener,
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDrawer } from '@angular/material/sidenav';
@@ -89,23 +90,45 @@ export class SideNavComponent implements OnInit {
     this.checkSideNavBtnStatus();
     await this.subChannels();
     await this.subUser();
-
-    this.drawerService.threadOpened.subscribe((opened: boolean) => {
-      // Check if the screen width is under 1400px
-      if (window.innerWidth < 1300 && opened) {
-        // Close the sidebar when a thread is opened
-        this.drawer.close();
-      }
-    });
     this.checkMobileStatus();
     this.subscribeToCallToggleSideNavMobile();
+    this.subscribeSideNavClosingFunction();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (window.innerWidth < 1400) {
+      this.navBehaviour();
+    }
+    if (window.innerWidth < 980) {
+      this.drawerService.closeDrawer(); // close thread
+      this.drawer.open(); // open side-nav
+    }
+  }
+
+  navBehaviour() {
+    if (
+      window.innerWidth < 1400 &&
+      this.drawerService.threadIsOpen &&
+      this.sideNavBtnStatus
+    ) {
+      this.drawer.close();
+      this.checkSideNavBtnStatus();
+    }
+  }
+
+  subscribeSideNavClosingFunction() {
+    this.drawerService.closeSideNav$.subscribe((shouldClose) => {
+      if (shouldClose) {
+        this.navBehaviour();
+      }
+    });
   }
 
   subscribeToCallToggleSideNavMobile(): void {
     this.drawerService.showSideNavOnMobileToggle.subscribe(() => {
       this.showSideNavOnMobileToggle();
     });
-
   }
 
   showSideNavOnMobileToggle() {
@@ -205,7 +228,7 @@ export class SideNavComponent implements OnInit {
       await this.privateChatWasSelected(
         channelOrPrivateChat,
         channelOrPrivateChatId
-      )
+      );
     }
   }
 
@@ -221,15 +244,12 @@ export class SideNavComponent implements OnInit {
     await this.firebase.channelOrPrivateChat('channel');
     this.hideSideNavOnMobile();
     this.router.navigate(['/main', channelOrPrivateChatId]);
-    // setTimeout(() => {
-      // this.scrollHelper.scrollDown('channel');
-    // }, 1);
   }
 
   async privateChatWasSelected(
     channelOrPrivateChat: string,
     channelOrPrivateChatId: any
-  ){
+  ) {
     this.firebase.setSelectedChannelId(channelOrPrivateChatId['userId']);
     await this.firebase.activeChannelId(
       channelOrPrivateChat,
@@ -238,9 +258,6 @@ export class SideNavComponent implements OnInit {
     await this.firebase.channelOrPrivateChat('privateChat');
     this.hideSideNavOnMobile();
     await this.firebase.addNewPrivateMessage(channelOrPrivateChatId);
-    // setTimeout(() => {
-      // this.scrollHelper.scrollDown('privateChat');
-    // }, 1);
   }
 
   hideSideNavOnMobile() {
@@ -249,7 +266,7 @@ export class SideNavComponent implements OnInit {
     localStorage.setItem('sideNavMobileStatus', 'hidden');
   }
 
-  comparePrivateChatId(userId: string): boolean {   
+  comparePrivateChatId(userId: string): boolean {
     const updadetUserId = userId + '_' + this.firebase.loggedInUserId;
     return updadetUserId === this.firebase.currentChannelId;
   }
@@ -268,5 +285,13 @@ export class SideNavComponent implements OnInit {
 
   routeToDistribute() {
     this.router.navigate(['/distributor']);
+  }
+
+  toggleSideNav() {
+    this.drawer.toggle();
+    this.checkSideNavBtnStatus();
+    if (window.innerWidth < 1400) {
+      this.drawerService.closeDrawer();
+    }
   }
 }

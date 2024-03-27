@@ -69,22 +69,11 @@ export class PrivateChatComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // async waitForScroll(): Promise<void> {
-    
-  //   this.scrollHelper.calc('privateChat');
-  //   setTimeout(() => {
-  //     this.scrollToBottom();
-  //   }, this.scrollHelper.loadTime);
-  // }
-
   ngAfterViewInit(): void {
     if (this.messageLayoutPC) {
       this.messages$ = this.messageLayoutPC.messages$;
       this.cdr.detectChanges();
     }
-    // this.waitForScroll();
-    // console.log('test');
-    
   }
 
   subscribeToSelectedUser() {

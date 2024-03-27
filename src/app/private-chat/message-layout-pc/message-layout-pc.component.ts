@@ -297,9 +297,6 @@ export class MessageLayoutPcComponent {
       console.error('Missing required IDs for updating message.');
       return;
     }
-
-    console.log(this.messageId)
-
     const messageRef = doc(
       this.firestore,
       `privateMessages/${this.privateMessageId}/messages/${messageId}`

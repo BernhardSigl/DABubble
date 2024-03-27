@@ -5,6 +5,7 @@ import {
   OnInit,
   ViewChild,
   ChangeDetectorRef,
+  HostListener,
 } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import {
@@ -112,15 +113,13 @@ export class MessageLayoutComponent implements OnInit {
     this.changeDetector.detectChanges();
   }
 
-  async test(message: any) {
-    this.firebase.ngOnInit();
-    console.log(
-      this.firebase.threadsArray.filter(
-        (element) => element.senderId === 'QenNGVUMEUZUE8FrrYSw7eCA8Tl2'
-      )
-    );
-
-    console.log('message', message);
+  navBehaviour() {
+    if (
+      window.innerWidth < 1400 &&
+      this.drawerService.threadIsOpen
+    ) {
+      this.drawerService.closeSideNav();
+    }
   }
 
   formatMessageDate(date: Date | null): string {
@@ -160,6 +159,7 @@ export class MessageLayoutComponent implements OnInit {
         }, 0);
       }
     }
+    this.navBehaviour();
   }
 
   // Call getThreadMessagesCount when loading messages
