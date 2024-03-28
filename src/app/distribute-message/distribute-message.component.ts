@@ -37,6 +37,7 @@ import {
   collection,
   getFirestore,
 } from '@angular/fire/firestore';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-distribute-message',
   standalone: true,
@@ -79,14 +80,17 @@ export class DistributeMessageComponent implements OnInit {
   private currentChannelId: string | null = null;
   selectedChannelIds: string[] = [];
   selectedPrivateChatId: string[] = [];
-
+  selectedChannelName: string[] = [];
+  selectedPrivateChatName: string[] = [];
   usersToDisplay: any[] = [];
   channelsToDisplay: any[] = [];
-
+  selectedChannelNames:string[]=[];
+  selectedUserName:string[]=[];
   constructor(
     private firebase: FirebaseService,
     private router: Router,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private snackBar: MatSnackBar,
   ) {}
 
   async ngOnInit() {
@@ -337,37 +341,81 @@ export class DistributeMessageComponent implements OnInit {
 
   async sendMessage(): Promise<void> {
     try {
-      if (this.textArea.trim() || this.selectedFile) {
-        const newMessage = new Message();
-        newMessage.senderId = this.firebase.loggedInUserId;
-        newMessage.message = [this.textArea.trim()];
-        newMessage.time = Date.now();
-        newMessage.name = this.firebase.loggedInUserArray[0].name;
-        newMessage.image = this.firebase.loggedInUserArray[0].profileImg;
-
-        // Check if any channel is selected
-        if (this.selectedChannelIds.length > 0) {
-          // Iterate over each selected channel ID and send the message
-          for (const channelId of this.selectedChannelIds) {
-            await this.sendMessageToChannel(newMessage, channelId);
-          }
-        }
-        if (this.selectedPrivateChatId.length > 0) {
-          for (const pcId of this.selectedPrivateChatId) {
-            await this.sendMessageToPrivateChat(newMessage, pcId);
-          }
-        }
-
-        this.clearInputFields();
-      }
+      if (!(this.textArea.trim() || this.selectedFile)) return;
+  
+      const newMessage = this.constructMessageObject();
+      const channelNames = this.getSelectedChannelNames();
+      const userNames = this.getSelectedUserNames();
+  
+      await this.sendMessagesToChannels(newMessage);
+      await this.sendMessagesToPrivateChats(newMessage);
+  
+      const message = this.constructSnackbarMessage(channelNames, userNames);
+      this.showSnackbar(message);
+  
+      this.clearInputFields();
     } catch (error) {
       console.error('Error sending message:', error);
     }
   }
+  
+  private constructMessageObject(): Message {
+    const newMessage = new Message();
+    newMessage.senderId = this.firebase.loggedInUserId;
+    newMessage.message = [this.textArea.trim()];
+    newMessage.time = Date.now();
+    newMessage.name = this.firebase.loggedInUserArray[0].name;
+    newMessage.image = this.firebase.loggedInUserArray[0].profileImg;
+    return newMessage;
+  }
+  
+  private getSelectedChannelNames(): string[] {
+    return this.selectedChannelIds.map(channelId => {
+      const channel = this.filteredChannels.find(c => c.channelId === channelId);
+      return channel ? channel.channelName : '';
+    });
+  }
+  
+  private getSelectedUserNames(): string[] {
+    return this.selectedPrivateChatId.map(pcId => {
+      const user = this.filteredUsers.find(u => u.userId === pcId.split('_')[0]);
+      return user ? user.name : '';
+    });
+  }
+  
+  private async sendMessagesToChannels(newMessage: Message): Promise<void> {
+    for (const channelId of this.selectedChannelIds) {
+      await this.sendMessageToChannel(newMessage, channelId);
+    }
+  }
+  
+  private async sendMessagesToPrivateChats(newMessage: Message): Promise<void> {
+    for (const pcId of this.selectedPrivateChatId) {
+      await this.sendMessageToPrivateChat(newMessage, pcId);
+    }
+  }
+  
+  private constructSnackbarMessage(channelNames: string[], userNames: string[]): string {
+    let message = 'Nachricht wurde an ';
+    if (channelNames.length > 0) {
+      message += channelNames.join(', ');
+      if (userNames.length > 0) {
+        message += ' und ';
+      }
+    }
+    if (userNames.length > 0) {
+      message += userNames.join(', ');
+    }
+    message += ' geschickt';
+    return message;
+  }
+  
+  
 
   async sendMessageToChannel(
     newMessage: Message,
-    channelId: string
+    channelId: string,
+
   ): Promise<void> {
     try {
       if (channelId) {
@@ -392,9 +440,12 @@ export class DistributeMessageComponent implements OnInit {
     }
   }
 
+
+
   async sendMessageToPrivateChat(
     newMessage: Message,
-    pcId: string
+    pcId: string,
+
   ): Promise<void> {
     try {
       if (pcId) {
@@ -415,6 +466,14 @@ export class DistributeMessageComponent implements OnInit {
       console.error('Error sending message to private chat:', error);
     }
   }
+
+  private showSnackbar(message: string) {
+    this.snackBar.open(message, '', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'bottom',
+        panelClass: ['no-close-button'], 
+    });}
 
   private subscribeToChannelChanges(): void {
     // This subscription will update the local variable whenever the selected channel changes.
