@@ -54,7 +54,6 @@ export class PrivateChatComponent implements OnInit, AfterViewInit {
   async ngOnInit(): Promise<void> {
     this.subScrollEvent();
     this.subscribeToSelectedUser();
-    console.log('hi');
     this.drawerService.closeDrawer();
   }
 

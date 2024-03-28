@@ -175,18 +175,10 @@ emoji-mart {
 
 .current-user .hover-options {
   border: 1px solid #8c91f7;
-  border-radius: 30px 00px 30px 30px;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 5px;
+  border-radius: 25px 25px 0 25px;
   bottom: 75px;
   right: 75%;
   display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  background-color: white;
 }
 
 .content-container:hover .hover-options {
@@ -196,18 +188,28 @@ emoji-mart {
 
 .other-user .hover-options {
   border: 1px solid #8c91f7;
-  border-radius: 0px 30px 30px 30px;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 5px;
+  border-radius: 0px 25px 25px 25px;
   bottom: 50px;
   left: 75%;
   display: none;
+}
+
+.hover-options {
+  padding: 10px 20px;
+  position: absolute;
+  display: flex;
+  align-items: center;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   background-color: white;
+  gap: 20px;
+  img {
+    width: 24px;
+    height: 24px;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 }
 
 .edit-message-popup {

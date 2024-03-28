@@ -262,6 +262,7 @@ export class MessageLayoutComponent implements OnInit {
   ngAfterContentChecked(): void {
     this.changeDetector.detectChanges();
   }
+  
   toggleEmojiPicker(messageId: string) {
     if (!this.isEmojiPickerVisible[messageId]) {
       Object.keys(this.isEmojiPickerVisible).forEach((key) => {
