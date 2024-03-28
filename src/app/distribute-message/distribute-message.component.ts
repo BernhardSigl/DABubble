@@ -84,13 +84,14 @@ export class DistributeMessageComponent implements OnInit {
   selectedPrivateChatName: string[] = [];
   usersToDisplay: any[] = [];
   channelsToDisplay: any[] = [];
-  selectedChannelNames:string[]=[];
-  selectedUserName:string[]=[];
+  selectedChannelNames: string[] = [];
+  selectedUserName: string[] = [];
+
   constructor(
     private firebase: FirebaseService,
     private router: Router,
     private firestore: Firestore,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar
   ) {}
 
   async ngOnInit() {
@@ -340,25 +341,38 @@ export class DistributeMessageComponent implements OnInit {
   }
 
   async sendMessage(): Promise<void> {
-    try {
-      if (!(this.textArea.trim() || this.selectedFile)) return;
-  
-      const newMessage = this.constructMessageObject();
-      const channelNames = this.getSelectedChannelNames();
-      const userNames = this.getSelectedUserNames();
-  
-      await this.sendMessagesToChannels(newMessage);
-      await this.sendMessagesToPrivateChats(newMessage);
-  
-      const message = this.constructSnackbarMessage(channelNames, userNames);
-      this.showSnackbar(message);
-  
-      this.clearInputFields();
-    } catch (error) {
-      console.error('Error sending message:', error);
+    if (this.sendMessageBehaviour()) {
+      try {
+        if (!(this.textArea.trim() || this.selectedFile)) return;
+
+        const newMessage = this.constructMessageObject();
+        const channelNames = this.getSelectedChannelNames();
+        const userNames = this.getSelectedUserNames();
+
+        await this.sendMessagesToChannels(newMessage);
+        await this.sendMessagesToPrivateChats(newMessage);
+
+        const message = this.constructSnackbarMessage(channelNames, userNames);
+        this.showSnackbar(message);
+
+        this.clearInputFields();
+        this.usersToDisplay.forEach((user) => this.removeUser(user));
+        this.channelsToDisplay.forEach((channel) =>
+          this.removeChannel(channel)
+        );
+        this.hideDropdown();
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
+    } else {
+      console.warn('No channel, member or textmessage found');
     }
   }
-  
+
+  sendMessageBehaviour() {
+    return this.sendButtonDisabled === false && (this.selectedChannelIds.length!== 0 || this.selectedPrivateChatId.length);
+  }
+
   private constructMessageObject(): Message {
     const newMessage = new Message();
     newMessage.senderId = this.firebase.loggedInUserId;
@@ -368,34 +382,41 @@ export class DistributeMessageComponent implements OnInit {
     newMessage.image = this.firebase.loggedInUserArray[0].profileImg;
     return newMessage;
   }
-  
+
   private getSelectedChannelNames(): string[] {
-    return this.selectedChannelIds.map(channelId => {
-      const channel = this.filteredChannels.find(c => c.channelId === channelId);
+    return this.selectedChannelIds.map((channelId) => {
+      const channel = this.filteredChannels.find(
+        (c) => c.channelId === channelId
+      );
       return channel ? channel.channelName : '';
     });
   }
-  
+
   private getSelectedUserNames(): string[] {
-    return this.selectedPrivateChatId.map(pcId => {
-      const user = this.filteredUsers.find(u => u.userId === pcId.split('_')[0]);
+    return this.selectedPrivateChatId.map((pcId) => {
+      const user = this.filteredUsers.find(
+        (u) => u.userId === pcId.split('_')[0]
+      );
       return user ? user.name : '';
     });
   }
-  
+
   private async sendMessagesToChannels(newMessage: Message): Promise<void> {
     for (const channelId of this.selectedChannelIds) {
       await this.sendMessageToChannel(newMessage, channelId);
     }
   }
-  
+
   private async sendMessagesToPrivateChats(newMessage: Message): Promise<void> {
     for (const pcId of this.selectedPrivateChatId) {
       await this.sendMessageToPrivateChat(newMessage, pcId);
     }
   }
-  
-  private constructSnackbarMessage(channelNames: string[], userNames: string[]): string {
+
+  private constructSnackbarMessage(
+    channelNames: string[],
+    userNames: string[]
+  ): string {
     let message = 'Nachricht wurde an ';
     if (channelNames.length > 0) {
       message += channelNames.join(', ');
@@ -409,13 +430,10 @@ export class DistributeMessageComponent implements OnInit {
     message += ' geschickt';
     return message;
   }
-  
-  
 
   async sendMessageToChannel(
     newMessage: Message,
-    channelId: string,
-
+    channelId: string
   ): Promise<void> {
     try {
       if (channelId) {
@@ -440,12 +458,9 @@ export class DistributeMessageComponent implements OnInit {
     }
   }
 
-
-
   async sendMessageToPrivateChat(
     newMessage: Message,
-    pcId: string,
-
+    pcId: string
   ): Promise<void> {
     try {
       if (pcId) {
@@ -469,11 +484,12 @@ export class DistributeMessageComponent implements OnInit {
 
   private showSnackbar(message: string) {
     this.snackBar.open(message, '', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'bottom',
-        panelClass: ['no-close-button'], 
-    });}
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+      panelClass: ['no-close-button'],
+    });
+  }
 
   private subscribeToChannelChanges(): void {
     // This subscription will update the local variable whenever the selected channel changes.
@@ -554,6 +570,7 @@ export class DistributeMessageComponent implements OnInit {
 
   onTextAreaChange() {
     this.suggestUsers();
+    this.sendButtonDisabled = this.textArea.trim() === '';
   }
 
   suggestUsers() {

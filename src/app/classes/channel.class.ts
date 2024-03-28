@@ -3,7 +3,7 @@ export class Channel {
     channelDescription: string;
     members: any[] = [];
     messages: any[] = [];
-    createdBy: string;
+    createdBy?: string;
     channelId: string;
 
     constructor(obj?: any) {

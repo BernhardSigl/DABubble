@@ -17,6 +17,7 @@ import { FirebaseService } from '../firebase-services/firebase.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewSpecificProfileComponent } from '../popup/view-specific-profile/view-specific-profile.component';
 import { MessageServiceService } from '../firebase-services/message-service.service';
+import { DrawerService } from '../firebase-services/drawer.service';
 
 @Component({
   selector: 'app-private-chat',
@@ -45,13 +46,16 @@ export class PrivateChatComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private firebase: FirebaseService,
     public dialog: MatDialog,
-    private scrollHelper: MessageServiceService
+    private scrollHelper: MessageServiceService,
+    private drawerService: DrawerService
   ) {}
   messages$: Observable<Message[]> | undefined;
 
   async ngOnInit(): Promise<void> {
     this.subScrollEvent();
     this.subscribeToSelectedUser();
+    console.log('hi');
+    this.drawerService.closeDrawer();
   }
 
   subScrollEvent() {

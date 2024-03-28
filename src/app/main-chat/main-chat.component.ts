@@ -72,32 +72,28 @@ export class MainChatComponent implements OnInit {
     private router: Router,
     private scrollHelper: MessageServiceService,
     public drawerService: DrawerService
-  ) {
-  }
+  ) {}
 
   onMessageSelected(message: Message): void {
     this.selectedMessage = message;
   }
 
-  async ngOnInit(): Promise<void> {   
+  async ngOnInit(): Promise<void> {
     // localStorage.removeItem('closeSideNav');
     this.subScrollEvent();
     // this.hideChatDuringLoad('hidden');
     await this.firebase.pullLoggedInUserId();
-
+    
     this.userId = this.firebase.loggedInUserId;
+
     await this.getUserData(this.userId);
     if (this.messageLayout) {
       this.messages$ = this.messageLayout.messages$;
     }
-
+    
     // this.hideChatDuringLoad('visible');
     this.firebase.scheduleAutomaticUpdate();
     this.checkEmailChange();
-
-    this.drawerService.windowWidth.subscribe(width => {
-      this.windowWidth = width;
-    });
   }
 
   subScrollEvent() {
@@ -107,13 +103,13 @@ export class MainChatComponent implements OnInit {
   }
 
   hideChatDuringLoad(visibilty: string) {
-    const chats = document.getElementById('message-box-id');    
+    const chats = document.getElementById('message-box-id');
     if (chats) {
       chats.style.visibility = visibilty;
     }
   }
 
-scrollToBottom() {
+  scrollToBottom() {
     try {
       const messageLayoutElement = this.messageLayout?.getNativeElement();
       messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
@@ -172,7 +168,4 @@ scrollToBottom() {
   reloadPage(): void {
     window.location.reload();
   }
-
-  
-  
 }
