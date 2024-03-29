@@ -68,10 +68,10 @@
     <!-- Message box -->
     <app-message-box [userId]="userId"></app-message-box>
   </section>
-  <!-- <div class="thread-content"> -->
+  <div class="thread-content" *ngIf="drawerService.isOpen$|async">
     <app-thread id="thread"
       [selectedMessage]="selectedMessage"
       [userId]="userId"
     ></app-thread>
-  <!-- </div> -->
+  </div>
 </div>

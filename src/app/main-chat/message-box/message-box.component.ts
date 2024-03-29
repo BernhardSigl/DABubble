@@ -11,6 +11,7 @@ import { getDownloadURL, getStorage, ref, uploadString } from 'firebase/storage'
 import { Observable } from 'rxjs';
 import { GetIdService } from '../../firebase-services/get-id.service';
 import { FirebaseService } from '../../firebase-services/firebase.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-message-box',
@@ -31,7 +32,8 @@ export class MessageBoxComponent implements OnInit{
     private firestore: Firestore,
     private userDataService: UserListService,
     private id: GetIdService,
-    private firebase: FirebaseService
+    private firebase: FirebaseService,
+    private snackbar:MatSnackBar
   ) {
     this.getUserData();
     this.subscribeToChannelChanges();
@@ -104,7 +106,11 @@ currentChannelName :string='';
         console.error('Error sending message:', error);
       }
     } else {
-      console.error('No channel selected or text area is empty.');
+      this.snackbar.open('Cannot send empty message', '', {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'bottom',
+      });
     }
   }
 

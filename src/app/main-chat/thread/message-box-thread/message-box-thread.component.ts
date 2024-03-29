@@ -127,7 +127,7 @@ export class MessageBoxThreadComponent implements OnInit {
     } catch (error) {
       this.snackBar.open('Cannot send empty message', '', {
         duration: 3000,
-        horizontalPosition: 'center',
+        horizontalPosition: 'right',
         verticalPosition: 'bottom',
       });
     }
@@ -166,7 +166,6 @@ export class MessageBoxThreadComponent implements OnInit {
     );
     // Emit the threadId received from the child component
     this.threadIdEmitter.emit(newThreadMessage.messageId);
-    console.log(newThreadMessage.messageId)
 
     // Emit the threadId to the parent component
     this.threadIdEmitter.emit(newThreadMessage.messageId);

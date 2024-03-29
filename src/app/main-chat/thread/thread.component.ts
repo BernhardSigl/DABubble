@@ -54,6 +54,7 @@ export class ThreadComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.drawerService.isOpen$.subscribe((isOpen) => {
       this.isOpen = isOpen;
+      console.log(this.isOpen, isOpen)
       if (isOpen) {
         this.drawer.close(); // Close the sidenav when thread is opened
       }
