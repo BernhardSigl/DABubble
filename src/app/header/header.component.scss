@@ -194,12 +194,15 @@
   .channel-header-left {
     display: flex;
     gap: 10px;
+    h4{
+      width: 156px;
+    }
   }
 
   .header-logo {
     width: auto;
     height: 45px;
-    // display: none;
+    margin-right: 0;
   }
 
   .header-input {
@@ -207,6 +210,8 @@
   }
 
   .header-profile {
+    margin-left: 0;
+    min-width: auto;
     img,
     .name {
       display: none;
@@ -223,4 +228,12 @@
     rotate: 90deg;
     margin-right: -8px;
   }
+}
+
+@media (max-width: 350px) {
+.channel-header-left {
+  h4 {
+    font-size: 18px;
+  }
+}
 }
