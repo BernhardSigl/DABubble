@@ -61,8 +61,7 @@
 }
 
 .empty-pc-content {
-  margin-bottom: 25px;
-  margin-left: 45px;
+  margin: 0 45px 25px;
 }
 
 app-message-layout-pc {
@@ -84,16 +83,16 @@ app-message-layout-pc {
 .name-pimg {
   display: flex;
   align-items: end;
-  margin-bottom: 10px;
-  gap: 21px;
+  margin-bottom: 24px;
+  gap: 25px;
   .user-pimg {
     border-radius: 100%;
     width: 100px;
     height: 100px;
+    cursor: pointer;
   }
-  p {
-    font-size: 21px;
-    font-size: 800;
+  h4 {
+    cursor: pointer;
   }
 }
 
@@ -133,4 +132,20 @@ app-message-layout-pc {
   app-message-layout-pc {
     margin-bottom: 0;
   }
+
+  .empty-pc-content {
+    margin: 0 16px 45px;
+    .name-pimg {
+      display: flex;
+      align-items: end;
+      margin-bottom: 24px;
+      gap: 10px;
+      .user-pimg {
+        width: 88px;
+        height: 88px;
+      }
+    }
+  }
+
+  
 }

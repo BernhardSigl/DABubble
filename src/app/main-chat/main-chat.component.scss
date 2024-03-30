@@ -116,9 +116,19 @@
 }
 
 .empty-channel-content {
-  margin-bottom: 25px;
-  margin-left: 45px;
-  p {
+  margin: 0 45px 73px;
+  gap: 13px;
+  display:flex;
+  flex-direction: column;
+  h4 {
+    display:flex;
+    align-items: center;
+  }
+  img {
+    margin-right: 10px;
+    cursor: default !important;
+  }
+  h5 {
     span {
       color: var(--purple);
     }

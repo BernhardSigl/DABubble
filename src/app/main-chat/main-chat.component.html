@@ -34,10 +34,10 @@
           *ngIf="firebase.currentChannelId !== 't2dQ3EBs7tqADWn2ju5u'"
         ></div>
         <div
-        class="add-member-mobile"
-        (click)="listMembers()"
-        *ngIf="firebase.currentChannelId !== 't2dQ3EBs7tqADWn2ju5u'"
-      ></div>
+          class="add-member-mobile"
+          (click)="listMembers()"
+          *ngIf="firebase.currentChannelId !== 't2dQ3EBs7tqADWn2ju5u'"
+        ></div>
       </div>
     </header>
 
@@ -58,18 +58,22 @@
       class="empty-channel-content"
       *ngIf="(messageLayout.messages$ | async)?.length === 0"
     >
-      <h2>#{{ firebase.currentChannelName }}</h2>
-      <p>
+      <h4 class="bold">
+        <img class="icon-size-20" src="./../../assets/img/hashtag-black.png" />
+        {{ firebase.currentChannelName }}
+      </h4>
+      <h5>
         {{ firebase.channelCreatedBy }} hat diesen Channel erstellt. Das ist der
         Anfang des Channels <span>#{{ firebase.currentChannelName }}</span>
-      </p>
+      </h5>
     </div>
 
     <!-- Message box -->
     <app-message-box [userId]="userId"></app-message-box>
   </section>
-  <div class="thread-content" *ngIf="drawerService.isOpen$|async">
-    <app-thread id="thread"
+  <div class="thread-content" *ngIf="drawerService.isOpen$ | async">
+    <app-thread
+      id="thread"
       [selectedMessage]="selectedMessage"
       [userId]="userId"
     ></app-thread>
