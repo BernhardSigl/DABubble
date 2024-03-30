@@ -366,17 +366,29 @@ export class FirebaseService {
 
   async updateChannelMembers(channelsData: any): Promise<void> {
     const updatedMembers = [];
+    console.log(channelsData);
+    
     for (let member of channelsData.members) {
       const updatedMember = this.usersArray.find(
         (user) => user.userId === member.userId
-      );
+      );      
       if (updatedMember) {
         member.name = updatedMember.name;
         member.email = updatedMember.email;
+        
       }
       updatedMembers.push(member);
     }
     channelsData.members = updatedMembers;
+
+    // for (let member of channelsData.members) {
+    //   const userExists = this.usersArray.some(
+    //     (user) => user.userId === member.userId
+    //   );
+    //   if (!userExists) {
+    //     console.log(`User with userId ${member.userId} not found in usersArray`);
+    //   }
+    // }
   }
 
   setSelectedChannelId(channelId: string) {
@@ -432,7 +444,7 @@ export class FirebaseService {
     await this.updateChannel(this.channelMembers);
     await setDoc(
       this.getSingleUserDocRef(),
-      { channelRights: 'D67s4fa5cA1KoJPzjRJd' },
+      { channelRights: 'Mk9bhrqmVq2ln3hOp0nL' },
       { merge: true }
     );
     await this.selectWelcomeChannel();
@@ -440,8 +452,8 @@ export class FirebaseService {
 
   async selectWelcomeChannel() {
     await this.channelOrPrivateChat('channel');
-    await this.activeChannelId('channel', 'D67s4fa5cA1KoJPzjRJd');
-    this.setSelectedChannelId('D67s4fa5cA1KoJPzjRJd');
+    await this.activeChannelId('channel', 'Mk9bhrqmVq2ln3hOp0nL');
+    this.setSelectedChannelId('Mk9bhrqmVq2ln3hOp0nL');
   }
 
   async addNewPrivateMessage(user: any) {
