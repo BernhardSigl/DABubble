@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit {
     await this.firebase.loggedInUserData();
     await this.firebase.subAllChannels();
     await this.firebase.checkChannelRights();
-    this.firebase.showOnlyChannelsWithRights();
+    await this.firebase.showOnlyChannelsWithRights();
     await this.firebase.selectLastOpenedChannel();
   }
 

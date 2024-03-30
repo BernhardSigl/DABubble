@@ -33,10 +33,11 @@
 
 .add-channel {
   margin-top: 1.5625rem;
-  padding: 0rem .625rem;
-  .custom-scroll-box {
-    max-height: calc(100vh - 830px ); //945px
-  }
+  padding: 0rem 0.625rem;
+  // .custom-scroll-box {
+  //   min-height: calc(100vh - 590px);
+  //   max-height: calc(100vh - 945px);
+  // }
 }
 
 .add-channel-img {
@@ -54,13 +55,14 @@
   left: 0;
   bottom: 9.5rem;
   writing-mode: vertical-lr;
-  height: auto;
   width: auto;
   border-top-right-radius: 2.5rem;
   border-bottom-right-radius: 2.5rem;
   border: unset;
   background: var(--White, #fff);
   box-shadow: 0.25rem 0.25rem 0.4375rem #0003;
+  height: 402px;
+  box-sizing: border-box;
   cursor: pointer;
   padding: 1.4375rem 0.875rem; // 23px 14px
 
@@ -79,6 +81,9 @@
     background: var(--White, #fff);
     border: none;
     font-size: 1.25rem;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
 
     &:hover {
       color: #535af1;
@@ -172,9 +177,10 @@
     }
   }
 
-  .custom-scroll-box {
-    max-height: calc(100vh - 742px);
-  }
+  // .custom-scroll-box {
+  //   max-height: calc(100vh - 740px);
+  //   min-height: calc(100vh - 540px);
+  // }
 }
 
 .channel-distance-welcome {
@@ -208,22 +214,22 @@
   }
 }
 
-  @media (min-width: 981px) {
-    .channelIsActive {
-      background-color: var(--background-color);
-      color: var(--purple);
-      font-weight: 700;
-      .hashtag {
-        background-image: url("./../../assets/img/hashtag-blue.png") !important;
-      }
-    }
-
-    .privateChatIsActive {
-      background-color: var(--background-color) !important;
-      color: var(--purple);
-      font-weight: 700;
+@media (min-width: 980px) {
+  .channelIsActive {
+    background-color: var(--background-color);
+    color: var(--purple);
+    font-weight: 700;
+    .hashtag {
+      background-image: url("./../../assets/img/hashtag-blue.png") !important;
     }
   }
+
+  .privateChatIsActive {
+    background-color: var(--background-color) !important;
+    color: var(--purple);
+    font-weight: 700;
+  }
+}
 
 .members-list-box {
   display: flex;
@@ -278,12 +284,86 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  gap: 25px;
 }
 
 .messages-header,
 .channel-dropdown {
   height: 46px !important;
 }
+
+// search start
+.search {
+  width: 100%;
+  display: none;
+}
+
+.header-input {
+  display: flex;
+  box-sizing: border-box;
+  padding: 8px 24px;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 2.625rem;
+  height: 48px;
+  width: 100%;
+  border: solid 1px var(--light-purple);
+
+  .search-icon {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+  }
+
+  input {
+    color: black;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 0;
+    input::placeholder {
+      color: var(--Text-gray, #686868);
+    }
+  }
+}
+
+.members-list-box-search {
+  animation: slideDownDropdown 0.5s ease forwards;
+  position: absolute;
+  top: 80px;
+  left: 30px;
+  padding: 1.25rem 1.3125rem;
+  background: white;
+  border-radius: 1.875rem;
+  box-shadow: 0px 5px 7px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+
+  .members-list-scroll-box-search {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 30.9375rem; // 495px
+    gap: 0.8125rem;
+    width: calc(100vw - 105px);
+  }
+
+  .members-list-search {
+    display: flex;
+    gap: 0.9375rem; // 15px
+    cursor: pointer;
+    padding: 0.25rem 1.25rem; // 4px 20px
+    border-radius: 1.875rem; // 30px
+    margin-right: 0.25rem; // 4px
+
+    &:not([style*="--primary"]) {
+      &:hover {
+        background-color: var(--background-color) !important;
+      }
+    }
+  }
+}
+// search end
 
 @media (max-width: 980px) {
   .sidenav-wrapper {
@@ -302,20 +382,17 @@
     display: none;
   }
 
-  .add-channel {
-    .custom-scroll-box {
-      min-height: 11.5vh;
-      max-height: 26vh;
-    }
-  }
+  // .add-channel {
+  //   .custom-scroll-box {
+  //     max-height: calc(100vh - 930px);
+  //   }
+  // }
 
-  .messages-users { 
-    .custom-scroll-box {
-      min-height: 30vh;
-      max-height: 42vh;
-    }
-  }
-  
+  // .messages-users {
+  //   .custom-scroll-box {
+  //     max-height: calc(100vh - 670px);
+  //   }
+  // }
 
   .message-to-all-mobile {
     display: flex !important;
@@ -337,5 +414,12 @@
     &:hover {
       transform: scale(1.025);
     }
+  }
+  .search {
+    display: flex !important;
+  }
+
+  .members-list-scroll-box-search {
+    max-height: calc(100vh - 240px) !important;
   }
 }

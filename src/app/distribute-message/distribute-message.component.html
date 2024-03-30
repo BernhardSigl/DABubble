@@ -50,7 +50,7 @@
         <input
           class="distributor-input"
           type="text"
-          placeholder="An: #channel, oder @jemand oder E-Mail Adresse"
+          placeholder="An: #channel oder @jemand"
           (input)="showDropdown = true; search($event)"
           (click)="showDropdown = true; search($event)"
         />
@@ -155,14 +155,14 @@
 
           <div class="add-ons-left">
           <img
-            matTooltip="Add Image"
+            matTooltip="Bild hinzufügen"
             src="../../../assets/img/add.png"
             class="add"
             (click)="fileInput.click()"
           />
           <mat-divider class="vertical-divider"></mat-divider>
           <img
-            matTooltip="Open the emoji"
+            matTooltip="Wähle dein Emoji"
             class="emoji"
             src="../../../assets/img/emoji.png"
             (click)="toggleEmojiPicker()"
@@ -171,13 +171,13 @@
             class="emoji-mart"
             *ngIf="isEmojiPickerVisible"
             (emojiSelect)="addEmoji($event)"
-            title="Choose your emoji"
+            title="Wähle dein Emoji"
           ></emoji-mart>
           <img
-            matTooltip="mention someone"
+            matTooltip="Markiere jemanden"
             src="../../../assets/img/at-grey.png"
             alt=""
-            class="mention"
+            class="mention dNone"
             (click)="addMention()"
           />
         </div>
@@ -192,6 +192,4 @@
       </div>
     </div>
   </section>
-
-  <!--         (click)="sendMessage()" -->
 </div>

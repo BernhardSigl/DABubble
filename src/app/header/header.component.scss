@@ -194,7 +194,7 @@
   .channel-header-left {
     display: flex;
     gap: 10px;
-    h4{
+    h4 {
       width: 156px;
     }
   }
@@ -231,9 +231,9 @@
 }
 
 @media (max-width: 350px) {
-.channel-header-left {
-  h4 {
-    font-size: 18px;
+  .channel-header-left {
+    h4 {
+      font-size: 18px;
+    }
   }
-}
 }

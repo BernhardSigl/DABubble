@@ -3,7 +3,7 @@
   [ngClass]="{
     'with-margin': sideNavBtnStatus,
     'without-margin': !sideNavBtnStatus,
-    'hideForMobile': drawerService.isSelectedForMobile
+    hideForMobile: drawerService.isSelectedForMobile
   }"
   autosize
   opened
@@ -17,6 +17,92 @@
       </div>
       <div class="add-channel-img" (click)="routeToDistribute()"></div>
     </div>
+
+    <!-- search start -->
+    <div class="search">
+      <div class="header-input">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          placeholder="Code learning durchsuchen"
+          (click)="showDropdown = true"
+          (input)="search($event)"
+        />
+        <img
+          [src]="
+            !showDropdown
+              ? './../../assets/img/search.png'
+              : './../../assets/img/arrow-drop-up-black.png'
+          "
+          class="search-icon"
+          (click)="toggleDropdown()"
+        />
+      </div>
+
+      <div class="members-list-box-search input-slide-down" *ngIf="showDropdown">
+        <div class="members-list-scroll-box-search scroll-bar">
+          <span
+            class="fs18"
+            *ngIf="
+              firebase.channelsDataWithRights.length === 0 &&
+              this.filteredUsers.length === 0
+            "
+          >
+            Keine Einträge gefunden.
+          </span>
+
+          <h3 class="bold" *ngIf="firebase.channelsDataWithRights.length !== 0">
+            Channels:
+          </h3>
+          <div
+            class="members-list-search horicontal"
+            *ngFor="let channel of firebase.channelsDataWithRights"
+            [style.background-color]="
+              channel.selected ? 'var(--primary)' : 'white'
+            "
+            (click)="navigateToChannel(channel.channelId)"
+          >
+            <div class="profile-img-and-status">
+              <div class="profile-img middle">
+                <img src="./../../assets/img/hashtag-black.png" />
+              </div>
+            </div>
+
+            <span class="fs18 userName">{{ channel.channelName }}</span>
+          </div>
+
+          <h3 class="bold" *ngIf="this.filteredUsers.length !== 0">User:</h3>
+          <div
+            class="members-list-search horicontal"
+            *ngFor="let user of filteredUsers"
+            [style.background-color]="
+              user.selected ? 'var(--primary)' : 'white'
+            "
+            (click)="navigateToUser(user.userId)"
+          >
+            <div class="profile-img-and-status">
+              <div
+                [style.background-image]="'url(' + user.profileImg + ')'"
+                class="profile-img"
+              ></div>
+              <img
+                [src]="
+                  user.status
+                    ? './../../../assets/img/online.png'
+                    : './../../../assets/img/offline.png'
+                "
+                class="status"
+              />
+            </div>
+
+            <span class="fs18 userName">{{ user.name }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- search end -->
+
+    <div class="custom-scroll-box scroll-bar">
 
     <div class="channels-content column">
       <div class="horicontal spaceBetween channel-dropdown">
@@ -37,7 +123,7 @@
         </div>
         <div class="add-channel-plus-img" (click)="openAddChannels()"></div>
       </div>
-      
+
       <div *ngIf="!isOpen" class="add-channel">
         <div class="custom-scroll-box scroll-bar">
           <div
@@ -68,32 +154,35 @@
               </div>
             </div>
 
-            <div class="column" style="gap:12px">
-            <div
-              *ngFor="let channel of firebase.currentUserWithRights"
-              class="channel"
-              (click)="selectChannel('channel', channel.channelId)"
-              [ngStyle]="{
-                'margin-bottom': channel.channelId === 'D67s4fa5cA1KoJPzjRJd' ? '-13px' : null
-              }"
-            >
+            <div class="column" style="gap: 12px">
               <div
-                class="hashtag-and-name horicontal"
-                *ngIf="!(channel.channelId === 'D67s4fa5cA1KoJPzjRJd')"
-                [ngClass]="{
+                *ngFor="let channel of firebase.currentUserWithRights"
+                class="channel"
+                (click)="selectChannel('channel', channel.channelId)"
+                [ngStyle]="{
+                  'margin-bottom':
+                    channel.channelId === 'D67s4fa5cA1KoJPzjRJd'
+                      ? '-13px'
+                      : null
+                }"
+              >
+                <div
+                  class="hashtag-and-name horicontal"
+                  *ngIf="!(channel.channelId === 'D67s4fa5cA1KoJPzjRJd')"
+                  [ngClass]="{
                   channelIsActive:
                     channel.channelId === firebase.currentChannelId,
-                }" 
-              >
-                <div class="icon-size-24 hashtag"></div>
-                <span
-                  class="fs18 channel-name"
-                  *ngIf="!(channel.channelId === 'D67s4fa5cA1KoJPzjRJd')"
-                  >{{ channel.channelName }}</span
+                }"
                 >
+                  <div class="icon-size-24 hashtag"></div>
+                  <span
+                    class="fs18 channel-name"
+                    *ngIf="!(channel.channelId === 'D67s4fa5cA1KoJPzjRJd')"
+                    >{{ channel.channelName }}</span
+                  >
+                </div>
               </div>
             </div>
-          </div>
           </div>
         </div>
       </div>
@@ -153,7 +242,7 @@
                 >{{ loggedInUser.name }} (Du)</span
               >
             </div>
-            
+
             <ng-container *ngFor="let user of firebase.usersArray">
               <div
                 class="members-list horicontal"
@@ -184,11 +273,18 @@
           </div>
         </div>
 
-        <button class="message-to-all-mobile dNone boxShadow"  (click)="routeToDistribute()">
-          <img src="./../../assets/img/edit-channel-white.png" class="icon-size-24">
+        <button
+          class="message-to-all-mobile dNone boxShadow"
+          (click)="routeToDistribute()"
+        >
+          <img
+            src="./../../assets/img/edit-channel-white.png"
+            class="icon-size-24"
+          />
         </button>
-
       </div>
+    </div>
+
     </div>
   </mat-drawer>
 </mat-drawer-container>
@@ -202,7 +298,7 @@
     (mouseenter)="changeImagesButton(true)"
     (mouseleave)="changeImagesButton(false)"
   >
-    <h4 class="close-btn-text">Workspace-Menü schließen</h4>
+    <h4 class="close-btn-text">{{ buttonLabel }}</h4>
     <img [src]="buttonImage" />
   </button>
 </div>

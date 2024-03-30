@@ -29,11 +29,18 @@ import { Router } from '@angular/router';
 import { DrawerService } from '../firebase-services/drawer.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MessageServiceService } from '../firebase-services/message-service.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-side-nav',
   standalone: true,
-  imports: [CommonModule, MatSidenavModule, MatDrawer, CommonModule],
+  imports: [
+    CommonModule,
+    MatSidenavModule,
+    MatDrawer,
+    CommonModule,
+    FormsModule,
+  ],
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.scss',
   animations: [
@@ -69,9 +76,17 @@ export class SideNavComponent implements OnInit {
   lastOpened!: string;
   activeChannelId!: string;
 
+  buttonLabel: string = "Workspace-Menü schließen";
+
   // mobile start
   @ViewChild('drawer') sideNavContent!: MatDrawer;
   hideThreadMobile: boolean = false;
+
+  showDropdown: boolean = false;
+  searchQuery: string = '';
+  userArr: any = '';
+  channelArr: any = '';
+  filteredChannels: any[] = [];
   // mobile end
 
   constructor(
@@ -93,6 +108,11 @@ export class SideNavComponent implements OnInit {
     this.checkMobileStatus();
     this.subscribeToCallToggleSideNavMobile();
     this.subscribeSideNavClosingFunction();
+
+    this.channelArr = this.firebase.channelsArray;
+    this.userArr = this.firebase.usersArray;
+    this.filteredChannels = [...this.channelArr];
+    this.filteredUsers = [...this.userArr];
   }
 
   @HostListener('window:resize', ['$event'])
@@ -285,13 +305,113 @@ export class SideNavComponent implements OnInit {
 
   routeToDistribute() {
     this.router.navigate(['/distributor']);
+    this.hideSideNavOnMobile();
   }
 
   toggleSideNav() {
     this.drawer.toggle();
+    this.updateButtonLabel();
+    
     this.checkSideNavBtnStatus();
     if (window.innerWidth < 1400) {
       this.drawerService.closeDrawer();
     }
   }
+
+   updateButtonLabel() {
+    this.buttonLabel = this.sideNavBtnStatus ? "Workspace-Menü öffnen" : "Workspace-Menü schließen";
+  }
+
+  // search start
+  async navigateToChannel(channelId: string) {
+    this.firebase.setSelectedChannelId(channelId);
+    await this.firebase.activeChannelId('channel', channelId);
+    await this.firebase.channelOrPrivateChat('channel');
+    this.router.navigate(['/main', channelId]);
+    this.showDropdown = false;
+    this.searchQuery = '';
+    this.hideSideNavOnMobile();
+  }
+
+  async navigateToUser(userId: string) {
+    const user = this.firebase.usersArray.find(
+      (user) => user.userId === userId
+    );
+    this.firebase.setSelectedChannelId(userId);
+    await this.firebase.activeChannelId(
+      'privateChat',
+      `${userId}_${this.firebase.loggedInUserId}`
+    );
+    await this.firebase.channelOrPrivateChat('privateChat');
+    await this.firebase.addNewPrivateMessage(user);
+    this.showDropdown = false;
+    this.searchQuery = '';
+    this.hideSideNavOnMobile();
+  }
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+
+  search(event: Event) {
+    const query = (event.target as HTMLInputElement).value.trim();
+    const searchTerm = query.substring(1).toLowerCase();
+    this.searchQuery = query;
+
+    if (query.startsWith('@')) {
+      this.filteredUsers = this.filterArray(this.userArr, 'name', searchTerm);
+      this.firebase.channelsDataWithRights = []; // Reset channels
+      this.showDropdown = true;
+    } else if (query.startsWith('#')) {
+      this.firebase.channelsDataWithRights = this.filterChannelsWithRights(
+        this.channelArr,
+        'channelName',
+        searchTerm,
+        this.userId
+      );
+      this.filteredUsers = []; // Reset users
+      this.showDropdown = true;
+    } else {
+      // Show both channels and users if no specific symbol is entered
+      this.firebase.channelsDataWithRights = this.filterChannelsWithRights(
+        this.channelArr,
+        'channelName',
+        searchTerm,
+        this.userId
+      );
+      this.filteredUsers = this.filterArray(this.userArr, 'name', searchTerm);
+      this.showDropdown = true;
+    }
+  }
+
+  filterArray(array: any[], propertyName: string, searchTerm: string): any[] {
+    return array.filter((item: any) => {
+      return (
+        item &&
+        item[propertyName] &&
+        item[propertyName].toLowerCase().includes(searchTerm)
+      );
+    });
+  }
+
+  filterChannelsWithRights(channels: any[], propertyName: string, searchTerm: string, userId: string): any[] {
+
+    userId = this.firebase.loggedInUserId
+    const user = this.userArr.find((u: { userId: string; }) => u.userId === userId);
+   
+    if (!user || !user.channelRights) {
+
+      return []; // Return empty if no user or user has no channel rights
+    }
+  
+
+    const filteredChannels = channels.filter(channel => {
+      const hasRight = user.channelRights.includes(channel.channelId);
+      const nameMatches = channel && channel[propertyName] && channel[propertyName].toLowerCase().includes(searchTerm);
+      return hasRight && nameMatches;
+    });
+
+    return filteredChannels;
+  }
+  // search end
 }
