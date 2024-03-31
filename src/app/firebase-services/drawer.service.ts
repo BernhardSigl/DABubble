@@ -114,7 +114,8 @@ export class DrawerService {
   }
 
   redirectToSideNav() {
-    if (this.threadIsOpen === true) {
+    const threadStatus = localStorage.getItem('thread-status');
+    if (threadStatus === 'open') {
       this.closeDrawer();
       this.showSideNavOnMobileToggle.emit();
     }

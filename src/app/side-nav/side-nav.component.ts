@@ -240,6 +240,7 @@ export class SideNavComponent implements OnInit {
     channelOrPrivateChatId: any
   ) {
     if (channelOrPrivateChat === 'channel') {
+      this.drawerService.closeDrawer();
       await this.channelWasSelected(
         channelOrPrivateChat,
         channelOrPrivateChatId
