@@ -49,17 +49,28 @@ export class ThreadComponent implements OnInit {
     private el: ElementRef,
     private scrollHelper: MessageServiceService,
     public firebase: FirebaseService
-    ) {}
-
+  ) {}
+  // *ngIf="drawerService.isOpen$ | async"
   async ngOnInit(): Promise<void> {
     this.drawerService.isOpen$.subscribe((isOpen) => {
       this.isOpen = isOpen;
-      console.log(this.isOpen, isOpen)
       if (isOpen) {
-        this.drawer.close(); // Close the sidenav when thread is opened
+        this.drawer.close();
+        this.threadWindowBehaviour('open');
+      } else {
+        this.threadWindowBehaviour('close');
       }
     });
     await this.loadCurrentChannelName();
+  }
+
+  threadWindowBehaviour(openOrClosed: string) {
+    const threadContentElement = document.getElementById('thread-content');
+    if (openOrClosed === 'open' && threadContentElement) {
+      threadContentElement.style.width = '400px';
+    } else if (openOrClosed === 'close' && threadContentElement) {
+      threadContentElement.style.width = '0';
+    }
   }
 
   async loadCurrentChannelName() {
@@ -68,7 +79,7 @@ export class ThreadComponent implements OnInit {
     await this.firebase.selectLastOpenedChannel();
   }
 
-  toggleThread(): void {    
+  toggleThread(): void {
     this.drawerService.closeDrawer();
     if (this.isOpen) {
       this.drawerService.setSideNavBtnStatus(false);

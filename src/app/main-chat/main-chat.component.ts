@@ -96,6 +96,11 @@ export class MainChatComponent implements OnInit {
     this.checkEmailChange();
   }
 
+  test() {
+    this.drawerService.setSideNavBtnStatus(false);
+    this.drawerService.closeDrawer();
+  }
+
   subScrollEvent() {
     this.scrollHelper.scrollEventChannel.subscribe(() => {
       this.scrollToBottom();
