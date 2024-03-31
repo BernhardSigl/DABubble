@@ -56,9 +56,9 @@ export class ThreadComponent implements OnInit {
       this.isOpen = isOpen;
       if (isOpen) {
         this.drawer.close();
-        this.threadWindowBehaviour('open');
+        // this.threadWindowBehaviour('open');
       } else {
-        this.threadWindowBehaviour('close');
+        // this.threadWindowBehaviour('close');
       }
     });
     await this.loadCurrentChannelName();
@@ -67,7 +67,7 @@ export class ThreadComponent implements OnInit {
   threadWindowBehaviour(openOrClosed: string) {
     const threadContentElement = document.getElementById('thread-content');
     if (openOrClosed === 'open' && threadContentElement) {
-      threadContentElement.style.width = '400px';
+      threadContentElement.style.width = '386px';
     } else if (openOrClosed === 'close' && threadContentElement) {
       threadContentElement.style.width = '0';
     }
