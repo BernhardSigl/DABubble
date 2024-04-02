@@ -10,7 +10,7 @@
   <!-- Intro -->
   <div [@backgroundAnimation]="backgroundState" [class.none]="setNone" class="start-animation">
     <div class="content" [@moveAnimation]="moveState">
-      <img  [@slideAnimation]="svgTransform" src="../../assets/img/Logo.svg" />
+      <img class="animation-logo" [@slideAnimation]="svgTransform" src="../../assets/img/Logo.svg" />
       <div class="text">
         <span [@textAnimation]="textState">DABubble</span>
       </div>
@@ -70,12 +70,6 @@
       </form>
     </div>
 
-    <!-- Mobiles Ansicht -->
-
-    <!-- <div class="register-container-mobile">
-      <span class="fs18 text-above-register">Neu bei DABubble?</span>
-      <a routerLink="/register">Konto erstellen</a>
-    </div> -->
     <!-- Imprint Data Policy -->
     <div class="imprint-wrapper">
       <button (click)="showImprint()" class="imprint">Impressum</button>

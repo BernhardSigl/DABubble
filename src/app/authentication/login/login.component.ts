@@ -135,6 +135,7 @@ export class LoginComponent implements OnInit {
         callback: (resp: any) => this.handleLogin(resp),
       });
     });
+    localStorage.clear();
   }
 
   // google login window
@@ -353,7 +354,6 @@ private showSuccessToastGuest(message: string): void {
     ) {
       this.loginForm.disable();
       this.isLoading = true;
-      console.log(this.isLoading)
       try {
         await this.login(email, password);
       } catch (err) {
@@ -380,7 +380,6 @@ private showSuccessToastGuest(message: string): void {
             await this.firebase.online();
             this.navigateToMainPage();
             this.showSuccessToast('Successfully logged in');
-            console.log('logged in');
         } else {
             console.log('User document does not exist.');
         }

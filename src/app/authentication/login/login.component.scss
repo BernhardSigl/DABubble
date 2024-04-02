@@ -30,7 +30,7 @@
   align-items: center;
   justify-content: center;
   z-index: 9;
-  display: none; // vorübergehend deaktiviert
+  // display: none; // vorübergehend deaktiviert
 }
 
 .text {
@@ -41,15 +41,16 @@
   overflow: hidden;
   height: 150px;
   font-weight: 700;
+  width: auto;
 
   @media screen and (max-width: 768px) {
     span {
-      font-size: 20px !important;
+      font-size: 24px !important;
     }
 
     @media screen and (max-width: 480px) {
       span {
-        font-size: 14px !important;
+        font-size: 16px !important;
       }
     }
   }
@@ -399,6 +400,15 @@ mat-error {
 }
 
 @media (max-width: 768px) {
+  .animation-logo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .text {
+    min-width: 150px;
+  }
+
   h1 {
     font-size: 2rem;
     margin-bottom: 0.9375rem !important;
@@ -540,154 +550,3 @@ mat-error {
     margin-top: 1.5rem;
   }
 }
-
-// @media (max-width: 701px) {
-//   .container {
-//     gap: 0;
-//     padding-left: 0;
-//     padding-right: 0;
-//   }
-//   .register-container-mobile {
-//     display: flex;
-//     margin-top: 3rem;
-//     align-items: baseline;
-//     a {
-//       border: 1px solid var(--primary);
-//       border-radius: 30px;
-//       text-align: center;
-//     }
-//   }
-//   .imprint-wrapper {
-//     display: none;
-//   }
-//   .register-container {
-//     display: none;
-//   }
-//   .header {
-//     justify-content: center;
-//   }
-//   .password-field {
-//     margin-bottom: 0 !important;
-//   }
-// }
-
-// @media (max-width: 600px) {
-//   .login-container {
-//     display: flex;
-//     flex-direction: column;
-//     width: 70%;
-//     padding: 1rem 1.3rem 1rem 1.3rem !important;
-//     margin-top: 1rem;
-//   }
-
-//   .header {
-//     margin-top: 4rem;
-//     img {
-//       height: 56px;
-//     }
-//   }
-
-//   form {
-//     margin-top: 1rem;
-//   }
-
-//   .login-wrapper {
-//     height: 80vh;
-//   }
-
-//   .login-header {
-//     h1 {
-//       margin-bottom: 1rem !important;
-//       font-size: 1.875rem !important;
-//     }
-
-//     span {
-//       font-size: 1rem !important;
-//     }
-//   }
-
-//   mat-divider {
-//     min-width: 140px !important;
-//   }
-
-//   .register-container-mobile {
-//     margin-top: 2rem;
-//   }
-
-//   .forgot-password {
-//     a {
-//       margin-top: 1rem !important;
-//       margin-bottom: 1rem !important;
-//     }
-//   }
-//   .login-methods {
-//     margin-top: 1rem !important;
-//   }
-//   .login-btns-div {
-//     margin-top: 1rem !important;
-//   }
-// }
-
-// @media (max-width: 520px) {
-//   .login-container {
-//     display: flex;
-//     flex-direction: column;
-//     width: 75%;
-//   }
-
-//   mat-divider {
-//     min-width: 120px !important;
-//   }
-// }
-
-// @media (max-width: 400px) {
-//   .header {
-//     margin-top: 1rem !important;
-//   }
-
-//   .container {
-//     gap: 1rem !important;
-//   }
-
-//   mat-divider {
-//     min-width: 90px !important;
-//   }
-
-//   .login-header {
-//     h1 {
-//       margin-bottom: 0 !important;
-//     }
-//     span {
-//       font-size: 0.85rem !important;
-//     }
-//   }
-
-//   .login-container {
-//     width: 80% !important;
-//     margin-top: 2rem !important;
-//   }
-
-//   .forgot-password {
-//     a {
-//       margin-top: 0.6rem !important;
-//       margin-bottom: 0.6rem !important;
-//     }
-//   }
-//   .email-field {
-//     margin-bottom: 1rem !important;
-//   }
-
-//   form {
-//     margin-top: 0.6rem !important;
-//   }
-
-//   .register-container-mobile{
-//     margin-top: 1rem;
-//     a{
-//       padding: 0.3rem 1rem;
-//     }
-//   }
-// .login-btn{
-//   padding:0.45rem 1rem !important;
-// }
-// }

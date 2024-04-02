@@ -26,13 +26,6 @@ export class AuthyService {
     this.auth = getAuth();
   }
 
-  // checkEmailChange() {
-  //   // const currentUser = this.auth.currentUser;
-  //   // if (currentUser) {
-  //   // console.log(currentUser);
-  //   // }
-  // }
-
   async registerWithEmailAndPassword(user: AppUser) {
     try {
       const userCredential = await createUserWithEmailAndPassword(
