@@ -80,7 +80,6 @@ export class FirebaseService {
     await this.pullLoggedInUserId();
     await this.subAllUsers();
     await this.loggedInUserData();
-    // await this.subAllMessages();
     await this.subAllChannels();
     await this.checkChannelRights();
     await this.showOnlyChannelsWithRights();
@@ -131,26 +130,6 @@ export class FirebaseService {
     });
     await Promise.all(updatePromises);
   }
-
-  // async subAllMessages(): Promise<void> {
-  //   return new Promise<void>((resolve) => {
-  //     const q = query(this.getChannelsColRef());
-  //     onSnapshot(q, async (querySnapshot) => {
-  //       this.threadMessages = [];
-  //       querySnapshot.forEach(async (doc) => {
-  //         const usersData = doc.data();
-  //         this.threadMessages.push(usersData);
-  //       });
-  //       await this.getLoggedInUserInfos();
-  //       if (!this.statusChangeable) {
-  //         await this.setOnlineStatus();
-  //       } else {
-  //         await this.setOfflineStatus();
-  //       }
-  //       resolve();
-  //     });
-  //   });
-  // }
 
   getMessagesColRef() {
     return collection(this.firestore, 'messages');
@@ -244,12 +223,13 @@ export class FirebaseService {
     const loggedInUserInfo = this.usersArray.find(
       (user) => user.userId === this.loggedInUserId
     );
-
-    this.name = loggedInUserInfo.name;
-    this.status = loggedInUserInfo.status;
-    this.statusChangeable = loggedInUserInfo.statusChangeable;
-    this.email = loggedInUserInfo.email;
-    this.profileImg = loggedInUserInfo.profileImg;
+    if (loggedInUserInfo !== undefined) {
+      this.name = loggedInUserInfo.name;
+      this.status = loggedInUserInfo.status;
+      this.statusChangeable = loggedInUserInfo.statusChangeable;
+      this.email = loggedInUserInfo.email;
+      this.profileImg = loggedInUserInfo.profileImg;
+    }
   }
 
   async changeName(newName: string): Promise<void> {
