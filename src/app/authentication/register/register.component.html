@@ -98,7 +98,7 @@
                 >zu.
               </span>
           </div>
-          <mat-error *ngIf="!checkboxChecked">
+          <mat-error *ngIf="this.showCheckboxError">
             Bitte stimmen Sie der Datenschutzerklärung zu.
           </mat-error>
         </div>
@@ -108,7 +108,6 @@
         <div class="login-btns-div">
           <button
             class="login-btn"
-            [disabled]="!isValidForm()"
             (click)="navigateToChooseAvatar()"
           >
             Weiter

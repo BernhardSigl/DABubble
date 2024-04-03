@@ -26,6 +26,7 @@ import { ImprintPopupComponent } from '../../popup/imprint-popup/imprint-popup.c
 })
 export class RegisterComponent {
   checkboxChecked: boolean = false;
+  showCheckboxError: boolean = false;
 
   loginForm = new FormGroup({
     name: new FormControl('', Validators.required),
@@ -51,9 +52,21 @@ export class RegisterComponent {
 
   toggleCheckbox() {
     this.checkboxChecked = !this.checkboxChecked;
+    if (this.checkboxChecked) {
+      this.showCheckboxError = false;
+    } else {
+      this.showCheckboxError = true;
+    }
   }
 
   navigateToChooseAvatar() {
+    if (!this.checkboxChecked) {
+      this.showCheckboxError = true;
+    }
+    this.loginForm.get('password')?.markAsTouched();
+    this.loginForm.get('email')?.markAsTouched();
+    this.loginForm.get('name')?.markAsTouched();
+    
     if (this.isValidForm()) {
       const name = this.loginForm.get('name')?.value;
       const email = this.loginForm.get('email')?.value;
