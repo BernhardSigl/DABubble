@@ -73,7 +73,7 @@
           </mat-error>
         </div>
 
-        <div class="checkbox-field" style="cursor: pointer">
+        <div class="checkbox-field" style="cursor: pointer; position: relative">
           <img
             (click)="toggleCheckbox()"
             class="checkbox"
@@ -84,20 +84,23 @@
             "
           />
           <div class="fs18" style="cursor: pointer">
-            <span
-              class="fs18"
-              style="margin-right: 5px"
-              (click)="toggleCheckbox()"
-              >Ich stimme der</span
-            >
-            <button (click)="showPrivacy()">Datenschutzerklärung</button>
-            <span
-              class="fs18"
-              style="margin-left: 5px"
-              (click)="toggleCheckbox()"
-              >zu.</span
-            >
+              <span
+                class="fs18"
+                style="margin-right: 5px"
+                (click)="toggleCheckbox()"
+                >Ich stimme der</span
+              >
+              <button (click)="showPrivacy()">Datenschutzerklärung</button>
+              <span
+                class="fs18"
+                style="margin-left: 5px"
+                (click)="toggleCheckbox()"
+                >zu.
+              </span>
           </div>
+          <mat-error *ngIf="!checkboxChecked">
+            Bitte stimmen Sie der Datenschutzerklärung zu.
+          </mat-error>
         </div>
       </form>
 
