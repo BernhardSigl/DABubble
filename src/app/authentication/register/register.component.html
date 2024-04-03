@@ -73,20 +73,30 @@
           </mat-error>
         </div>
 
-        <div class="checkbox-field">
+        <div class="checkbox-field" style="cursor: pointer">
           <img
+            (click)="toggleCheckbox()"
             class="checkbox"
             [src]="
               checkboxChecked
                 ? '../../../assets/img/checkbox-true.png'
                 : '../../../assets/img/checkbox-false.png'
             "
-            (click)="toggleCheckbox()"
           />
-          <div class="fs18">
-            Ich stimme der
+          <div class="fs18" style="cursor: pointer">
+            <span
+              class="fs18"
+              style="margin-right: 5px"
+              (click)="toggleCheckbox()"
+              >Ich stimme der</span
+            >
             <button (click)="showPrivacy()">Datenschutzerklärung</button>
-            zu.
+            <span
+              class="fs18"
+              style="margin-left: 5px"
+              (click)="toggleCheckbox()"
+              >zu.</span
+            >
           </div>
         </div>
       </form>
@@ -96,7 +106,7 @@
           <button
             class="login-btn"
             [disabled]="!isValidForm()"
-            (click)="navigateToChooseAvatar(); "
+            (click)="navigateToChooseAvatar()"
           >
             Weiter
           </button>
