@@ -38,16 +38,14 @@ import { FirebaseService } from '../../firebase-services/firebase.service';
   styleUrls: ['./message-box-pc.component.scss'],
 })
 export class MessageBoxPcComponent {
+  @ViewChild('textareaRef') textareaRef!: ElementRef;
   public textArea: string = '';
   public isEmojiPickerVisible: boolean = false;
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
 
   constructor(
-    private elementRef: ElementRef,
     private firestore: Firestore,
-    private userDataService: UserListService,
     private privateMessageService: PrivateMessageService,
-    private firebase:FirebaseService
   ) {}
 
   userId: string | null = null;
@@ -60,11 +58,11 @@ export class MessageBoxPcComponent {
 
   async ngOnInit() {
     this.userId = localStorage.getItem('userId');
-
     if (this.userId) {
       await this.fetchUserDetails(this.userId);
     }
     this.subscribeToSelectedPrivateMessage();
+    this.textareaRef.nativeElement.focus();
   }
 
   private async fetchUserDetails(userId: string): Promise<void> {

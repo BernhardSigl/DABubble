@@ -8,6 +8,8 @@
       class="textarea"
       placeholder="Nachricht an {{ this.chatUserName }}"
       [(ngModel)]="textArea"
+      autofocus
+      #textareaRef
     ></textarea>
 
     <div class="add-ons">

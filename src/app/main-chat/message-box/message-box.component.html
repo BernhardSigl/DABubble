@@ -21,6 +21,8 @@
       placeholder="Nachricht an #{{ this.currentChannelName }}"
       [(ngModel)]="textArea"
       (input)="suggestUsers(); onTextAreaChange()"
+      #textareaRef
+      autofocus
     ></textarea>
 
     <div class="add-ons">

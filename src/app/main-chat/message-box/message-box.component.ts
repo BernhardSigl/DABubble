@@ -21,23 +21,20 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./message-box.component.scss'],
 })
 export class MessageBoxComponent implements OnInit{
-
+  @ViewChild('textareaRef') textareaRef!: ElementRef;
   public textArea: string = "";
   public isEmojiPickerVisible: boolean = false;
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
   @Input() userId: string | undefined;
   clickedUserIndex: number | null = null;
   constructor(
-    private elementRef: ElementRef,
     private firestore: Firestore,
     private userDataService: UserListService,
-    private id: GetIdService,
     private firebase: FirebaseService,
     private snackbar:MatSnackBar
   ) {
     this.getUserData();
     this.subscribeToChannelChanges();
-
   }
 
   mentionedUsers: { name: string, profilePicture: string }[] = [];
@@ -69,6 +66,7 @@ currentChannelName :string='';
   async ngOnInit() {
    await this.firebase.ngOnInit()
     this.currentChannelName = this.firebase.currentChannelName;
+    this.textareaRef.nativeElement.focus();
   }
 
   toggleEmojiPicker() {
