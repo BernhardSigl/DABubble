@@ -8,10 +8,9 @@ import {
   style,
   animate,
   transition,
-  keyframes,
 } from '@angular/animations';
 import { MatDividerModule } from '@angular/material/divider';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -31,7 +30,6 @@ import {
 } from '@angular/fire/firestore';
 import { User } from '../../classes/user.class';
 import { FirebaseService } from '../../firebase-services/firebase.service';
-import { DocumentReference } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { PolicyPopupComponent } from '../../popup/policy-popup/policy-popup.component';
@@ -102,7 +100,7 @@ export class LoginComponent implements OnInit {
   moveState: string = 'middle';
   animationPlayed: boolean = false;
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', [Validators.required, Validators.email, validateEmail]),
     password: new FormControl('', Validators.required),
   });
   isLoading: boolean = false;
@@ -116,7 +114,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private authyService: AuthyService,
     private ngZone: NgZone, // google
-    public firebase: FirebaseService, // push userId in firebase service
+    public firebase: FirebaseService,
     private snackBar: MatSnackBar,
     public dialog: MatDialog,
   ) {}
@@ -469,4 +467,16 @@ showImprint() {
     }, 2900);
     this.animationPlayed = true;
   }
+}
+
+function validateEmail(control: AbstractControl): { [key: string]: any } | null {
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (control.value && !emailPattern.test(control.value)) {
+    return { 'email': true };
+  }
+  const dotIndex = control.value.lastIndexOf('.');
+  if (dotIndex === -1 || dotIndex === control.value.length - 1) {
+    return { 'invalidEnd': true };
+  }
+  return null;
 }
