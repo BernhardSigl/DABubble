@@ -2,7 +2,7 @@
   <div class="selected-file" *ngIf="selectedFile">
     Selected file: {{ selectedFile.name }}
   </div>
-  <div *ngIf="mentionedUsers.length > 0" class="mentioned-users-container">
+  <div *ngIf="mentionedUsers.length > 0" class="mentioned-users-container scroll-bar">
     <div
       *ngFor="let user of mentionedUsers; let i = index"
       (click)="selectMention(i)"

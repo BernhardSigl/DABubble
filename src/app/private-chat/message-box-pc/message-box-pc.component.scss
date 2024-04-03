@@ -74,6 +74,31 @@ emoji-mart {
   cursor: pointer;
 }
 
+.mentioned-users {
+  color: black;
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+  &:hover {
+    font-weight: 700;
+    color: var(--primary);
+  }
+}
+
+.mentioned-users-container {
+  height: 13vh;
+  overflow: auto;
+}
+
+.suggest-profile-picture {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+}
+
 @media (max-width: 980px) {
   .message-box {
     padding: 0 16px 30px 16px;

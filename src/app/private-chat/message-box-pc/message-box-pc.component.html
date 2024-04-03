@@ -2,6 +2,18 @@
   <div class="selected-file" *ngIf="selectedFile">
     Selected file: {{ selectedFile.name }}
   </div>
+  <div *ngIf="mentionedUsers.length > 0" class="mentioned-users-container scroll-bar">
+    <div
+      *ngFor="let user of mentionedUsers; let i = index"
+      (click)="selectMention(i)"
+      class="mentioned-users scroll-container"
+    >
+      <img [src]="user.profilePicture" class="suggest-profile-picture" />
+      <!-- Display profile picture -->
+      <span>{{ user.name }}</span>
+      <!-- Display name -->
+    </div>
+  </div>
 
   <div class="textarea-with-addons">
     <textarea
@@ -20,7 +32,7 @@
         #fileInput
         style="display: none"
       />
-      
+
       <div class="add-ons-left">
         <img
           matTooltip="Bild hinzufügen"
@@ -41,9 +53,16 @@
           (emojiSelect)="addEmoji($event)"
           title="Wähle dein Emoji"
         ></emoji-mart>
+        <img
+          matTooltip="Markiere jemanden"
+          src="../../../assets/img/at-grey.png"
+          alt=""
+          class="mention"
+          (click)="addMention()"
+        />
       </div>
       <img
-        matTooltip="Markiere jemanden"
+        matTooltip="Senden"
         src="../../../assets/img/send-dark-blue.png"
         alt=""
         class="send"

@@ -12,7 +12,6 @@ import {
   getDoc,
 } from '@angular/fire/firestore';
 import { Message } from '../../classes/message.class';
-import { UserListService } from '../../firebase-services/user-list.service';
 import {
   getDownloadURL,
   getStorage,
@@ -20,7 +19,6 @@ import {
   uploadString,
 } from 'firebase/storage';
 import { Observable } from 'rxjs';
-import { PrivateMessage } from '../../classes/private-message.class';
 import { PrivateMessageService } from '../../firebase-services/private-message.service';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 
@@ -46,7 +44,10 @@ export class MessageBoxPcComponent {
   constructor(
     private firestore: Firestore,
     private privateMessageService: PrivateMessageService,
+    private firebase: FirebaseService,
   ) {}
+
+  mentionedUsers: { name: string; profilePicture: string }[] = [];
 
   userId: string | null = null;
   userName: string = '';
@@ -172,5 +173,44 @@ export class MessageBoxPcComponent {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
+  }
+
+  selectMention(index: number) {
+    // Handle mention selection
+    // Insert the selected mention into the textarea
+    const mentionedUser = this.mentionedUsers[index];
+    this.textArea = this.textArea.replace(`@${mentionedUser.name}`, ''); // Remove mention from the textarea
+    this.textArea += `${mentionedUser.name} `;
+    this.mentionedUsers = []; // Clear mentioned users after selection
+  }
+
+  addMention() {
+    // Add '@' to the text area
+    this.textArea += '@';
+    this.suggestUsers();
+    this.onTextAreaChange();
+  }
+
+  suggestUsers() {
+    if (this.textArea.includes('@')) {
+      this.mentionedUsers = this.firebase.usersArray
+        .filter(user =>
+          user.name.toLowerCase().includes(
+            this.textArea
+              .toLowerCase()
+              .slice(this.textArea.lastIndexOf('@') + 1)
+          )
+        )
+        .map(user => ({
+          name: user.name,
+          profilePicture: user.profileImg,
+        }));
+    } else {
+      this.mentionedUsers = [];
+    }
+  }
+ 
+  onTextAreaChange() {
+    this.suggestUsers();
   }
 }

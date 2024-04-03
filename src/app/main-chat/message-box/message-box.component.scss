@@ -76,13 +76,17 @@ emoji-mart {
 }
 
 .mentioned-users {
-  color: var(--primary);
-  font-weight: 800;
+  color: black;
+  font-weight: 400;
   cursor: pointer;
   display: flex;
   align-items: center;
   margin-bottom: 10px;
   gap: 10px;
+  &:hover {
+    font-weight: 700;
+    color: var(--primary);
+  }
 }
 
 .mentioned-users-container {
