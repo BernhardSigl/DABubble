@@ -33,7 +33,6 @@ constructor(
 ){}
 
 async ngOnInit(): Promise<void> {
-  // await this.firebase.ngOnInit(); // performance: alt
   this.addResizeListener();
   this.addBackgroundClickListener();
   this.updateChannelMembersAtStart();    

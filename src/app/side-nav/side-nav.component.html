@@ -135,10 +135,10 @@
             <div
               *ngFor="let channel of firebase.currentUserWithRights"
               class="channel"
-              (click)="selectChannel('channel', 't2dQ3EBs7tqADWn2ju5u')"
+              (click)="selectChannel('channel', 'j3EMpL1aoFADXPzb0kUN')"
             >
               <div
-                *ngIf="channel.channelId === 't2dQ3EBs7tqADWn2ju5u'"
+                *ngIf="channel.channelId === 'j3EMpL1aoFADXPzb0kUN'"
                 class="hashtag-and-name horicontal channel-distance-welcome"
                 [ngClass]="{
                   channelIsActive:
@@ -148,7 +148,7 @@
                 <div class="icon-size-24 hashtag"></div>
                 <span
                   class="fs18 channel-name"
-                  *ngIf="channel.channelId === 't2dQ3EBs7tqADWn2ju5u'"
+                  *ngIf="channel.channelId === 'j3EMpL1aoFADXPzb0kUN'"
                   >{{ channel.channelName }}</span
                 >
               </div>
@@ -161,14 +161,14 @@
                 (click)="selectChannel('channel', channel.channelId)"
                 [ngStyle]="{
                   'margin-bottom':
-                    channel.channelId === 't2dQ3EBs7tqADWn2ju5u'
+                    channel.channelId === 'j3EMpL1aoFADXPzb0kUN'
                       ? '-13px'
                       : null
                 }"
               >
                 <div
                   class="hashtag-and-name horicontal"
-                  *ngIf="!(channel.channelId === 't2dQ3EBs7tqADWn2ju5u')"
+                  *ngIf="!(channel.channelId === 'j3EMpL1aoFADXPzb0kUN')"
                   [ngClass]="{
                   channelIsActive:
                     channel.channelId === firebase.currentChannelId,
@@ -177,7 +177,7 @@
                   <div class="icon-size-24 hashtag"></div>
                   <span
                     class="fs18 channel-name"
-                    *ngIf="!(channel.channelId === 't2dQ3EBs7tqADWn2ju5u')"
+                    *ngIf="!(channel.channelId === 'j3EMpL1aoFADXPzb0kUN')"
                     >{{ channel.channelName }}</span
                   >
                 </div>

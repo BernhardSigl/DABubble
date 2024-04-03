@@ -188,7 +188,7 @@ export class FirebaseService {
     return collection(this.firestore, 'users');
   }
 
-  getSingleUserDocRef() { 
+  getSingleUserDocRef() {
     return doc(this.getUsersColRef(), this.loggedInUserId);
   }
 
@@ -223,7 +223,7 @@ export class FirebaseService {
       { statusChangeable: false },
       { merge: true }
     );
-    await this.ngOnInit();
+    // await this.ngOnInit();
   }
 
   async offline() {
@@ -301,6 +301,14 @@ export class FirebaseService {
     );
   }
 
+  async updateWelcomeChannel(updatedMembers: any) {
+    await setDoc(
+      this.currentOnClickedWelcomeChannelDocRef(),
+      { members: updatedMembers },
+      { merge: true }
+    );
+  }
+
   async updatedChannelName(updatedChannelName: string) {
     await setDoc(
       this.currentOnClickedSingleChannelDocRef(),
@@ -327,6 +335,10 @@ export class FirebaseService {
 
   currentOnClickedSingleChannelDocRef() {
     return doc(this.getChannelColRef(), this.currentChannelId);
+  }
+
+  currentOnClickedWelcomeChannelDocRef() {
+    return doc(this.getChannelColRef(), 'j3EMpL1aoFADXPzb0kUN');
   }
 
   async subAllChannels(): Promise<void> {
@@ -366,11 +378,11 @@ export class FirebaseService {
 
   async updateChannelMembers(channelsData: any): Promise<void> {
     const updatedMembers = [];
-    
+
     for (let member of channelsData.members) {
       const updatedMember = this.usersArray.find(
         (user) => user.userId === member.userId
-      );      
+      );
       if (updatedMember) {
         member.name = updatedMember.name;
         member.email = updatedMember.email;
@@ -396,12 +408,13 @@ export class FirebaseService {
         chatPartners.userId === this.getFirstId(currentChannelId)
     );
 
-    if (currentChannelId) {
+    if (currentChannelId !== '') {
       if (lastOpenedOnSideNav === 'channel') {
         const channelToSelect = this.channelsArray.find(
           (channel) => channel.channelId === currentChannelId
         );
-        if (channelToSelect) { // Check if channel was found
+        if (channelToSelect) {
+          // Check if channel was found
           await this.activeChannelId('channel', channelToSelect.channelId);
           this.setSelectedChannelId(channelToSelect.channelId);
         } else {
@@ -413,27 +426,26 @@ export class FirebaseService {
         //     privateMessages.privateMessageId === currentChannelId ||
         //     privateMessages.privateMessageId === reversePrivateMessageId
         // );
-          if (chatPartner) {
-            this.addNewPrivateMessage(chatPartner);
+        if (chatPartner) {
+          this.addNewPrivateMessage(chatPartner);
           await this.activeChannelId('privateChat', correctedPrivateMessageId);
-          } else {
-            await this.selectWelcomeChannel();
-          }
+        } else {
+          await this.selectWelcomeChannel();
+        }
         // this.lastOpenedPrivateMessageArray = privateMessageToSelect['members'][0];
       } else if (lastOpenedOnSideNav === 'distribute') {
         this.router.navigate(['/distributor']);
       }
     } else {
-        await this.addToWelcomeChannel();
+      await this.addToWelcomeChannel();
     }
   }
 
-  async addToWelcomeChannel() {    
-    this.channelMembers.push(this.loggedInUserArray[0]);
-    await this.updateChannel(this.channelMembers);
+  async addToWelcomeChannel() {
+    await this.updateWelcomeChannel(this.usersArray);
     await setDoc(
       this.getSingleUserDocRef(),
-      { channelRights: 't2dQ3EBs7tqADWn2ju5u' },
+      { channelRights: 'j3EMpL1aoFADXPzb0kUN' },
       { merge: true }
     );
     await this.selectWelcomeChannel();
@@ -441,8 +453,8 @@ export class FirebaseService {
 
   async selectWelcomeChannel() {
     await this.channelOrPrivateChat('channel');
-    await this.activeChannelId('channel', 't2dQ3EBs7tqADWn2ju5u');
-    this.setSelectedChannelId('t2dQ3EBs7tqADWn2ju5u');
+    await this.activeChannelId('channel', 'j3EMpL1aoFADXPzb0kUN');
+    this.setSelectedChannelId('j3EMpL1aoFADXPzb0kUN');
   }
 
   async addNewPrivateMessage(user: any) {
@@ -484,7 +496,7 @@ export class FirebaseService {
     }
   }
 
-  getFirstId(id: string): string {   
+  getFirstId(id: string): string {
     const parts = id.split('_');
     if (parts.length === 2) {
       return parts[0]; // Gibt die ID vor dem Unterstrich zurück
@@ -566,6 +578,7 @@ export class FirebaseService {
   }
 
   async checkChannelRights() {
+    // debugger;
     this.channelRightsIds = [];
     this.channelsArray.forEach((channel) => {
       channel.members.forEach((member: any) => {
@@ -793,5 +806,4 @@ export class FirebaseService {
       console.error('Error updating user name in channelMessages:', error);
     }
   }
-
 }

@@ -346,7 +346,6 @@ private showSuccessToastGuest(message: string): void {
   async submit() {
     const email = this.loginForm.value.email;
     const password = this.loginForm.value.password;
-
     if (
       this.loginForm.valid &&
       typeof email === 'string' &&
@@ -377,8 +376,8 @@ private showSuccessToastGuest(message: string): void {
         if (userDocId) {
             this.clearStorage();
             localStorage.setItem('userId', userDocId);
-            await this.firebase.online();
             this.navigateToMainPage();
+            await this.firebase.online();
             this.showSuccessToast('Successfully logged in');
         } else {
             console.log('User document does not exist.');
