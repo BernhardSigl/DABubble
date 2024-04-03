@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
@@ -36,12 +36,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './message-box.component.html',
   styleUrls: ['./message-box.component.scss'],
 })
-export class MessageBoxComponent implements OnInit {
+export class MessageBoxComponent implements OnInit  {
   @ViewChild('textareaRef') textareaRef!: ElementRef;
   public textArea: string = '';
   public isEmojiPickerVisible: boolean = false;
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
   @Input() userId: string | undefined;
+  
   clickedUserIndex: number | null = null;
   constructor(
     private firestore: Firestore,
@@ -52,6 +53,7 @@ export class MessageBoxComponent implements OnInit {
     this.getUserData();
     this.subscribeToChannelChanges();
   }
+  selectedFilePreview: string | undefined;
 
   mentionedUsers: { name: string; profilePicture: string }[] = [];
   userName: string = '';
@@ -70,7 +72,6 @@ export class MessageBoxComponent implements OnInit {
       this.userImage = userImage;
     });
   }
-
   private subscribeToChannelChanges(): void {
     // This subscription will update the local variable whenever the selected channel changes.
     // Make sure to unsubscribe properly to avoid memory leaks, e.g., by using a takeUntil mechanism or unsubscribing in ngOnDestroy.
@@ -184,6 +185,17 @@ export class MessageBoxComponent implements OnInit {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
+    this.updateSelectedFilePreview();
+  }
+
+  private updateSelectedFilePreview() {
+    if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.selectedFilePreview = e.target.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
   }
 
   // mention User
