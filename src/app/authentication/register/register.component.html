@@ -33,7 +33,7 @@
           <mat-error
             *ngIf="loginForm.get('name')?.touched && loginForm.get('name')?.errors?.['email']"
           >
-            Please enter a correct Name.
+            *Dieser Name ist leider ungültig.
           </mat-error>
         </div>
 
@@ -54,7 +54,7 @@
           <mat-error
             *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.errors?.['email']"
           >
-            Please enter the correct Email
+            *Diese E-Mail-Adresse ist leider ungültig.
           </mat-error>
         </div>
 
