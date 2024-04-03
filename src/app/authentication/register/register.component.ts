@@ -41,6 +41,9 @@ export class RegisterComponent {
     this.avatarDataService.selectedAvatar$.subscribe((avatarSrc) => { });
   }
 
+  ngOnInit() {
+    this.loadFromLocalStorage();
+  }
 
   isValidForm(): boolean {
     return this.loginForm.valid && this.checkboxChecked;
@@ -55,7 +58,41 @@ export class RegisterComponent {
       const name = this.loginForm.get('name')?.value;
       const email = this.loginForm.get('email')?.value;
       const password = this.loginForm.get('password')?.value;
+      this.saveToLocalStorage();
       this.router.navigate(['/chooseAvatar'], { queryParams: { name: name, email:email, password:password } });
+    }
+  }
+
+  saveToLocalStorage() {
+    const name = this.loginForm.get('name')?.value ?? '';
+    const email = this.loginForm.get('email')?.value ?? '';
+    const password = this.loginForm.get('password')?.value ?? '';
+    const checkbox = this.loginForm.get('checkbox')?.value ?? true;
+  
+    localStorage.setItem('name', name);
+    localStorage.setItem('email', email);
+    localStorage.setItem('password', password);
+    localStorage.setItem('checkbox', checkbox.toString());
+  }
+
+  loadFromLocalStorage() {
+    const name = localStorage.getItem('name');
+    const email = localStorage.getItem('email');
+    const password = localStorage.getItem('password');
+    const checkbox = localStorage.getItem('checkbox');
+
+
+    if (name) {
+      this.loginForm.get('name')?.setValue(name);
+    }
+    if (email) {
+      this.loginForm.get('email')?.setValue(email);
+    }
+    if (password) {
+      this.loginForm.get('password')?.setValue(password);
+    }
+    if (checkbox && checkbox === 'true') {
+     this.toggleCheckbox();
     }
   }
 
