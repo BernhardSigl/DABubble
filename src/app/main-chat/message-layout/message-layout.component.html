@@ -77,34 +77,6 @@
               title="Wähle dein Emoji"
               (emojiClick)="onEmojiClick($event, message)"
             ></emoji-mart>
-            <!--  *ngIf="isHovered[message.messageId]" -->
-            <div class="hover-options">
-              <img
-                src="../../../assets/img/add-reaction.png"
-                (click)="toggleEmojiPicker(message.messageId)"
-                alt=""
-              />
-              <img
-                src="../../../assets/img/thread.png"
-                alt=""
-                (click)="openThread(message, message.messageId)"
-              />
-              <img
-                *ngIf="message.senderId === userId"
-                src="../../../assets/img/three-dots-vertical.png"
-                alt=""
-                (click)="toggleEditMessage(message.messageId)"
-              />
-            </div>
-          </div>
-
-          <div
-            class="edit-message-popup"
-            *ngIf="isEditingEnabled[message.messageId]"
-          >
-            <p (click)="toggleToTextArea(message.messageId)">
-              Nachricht Bearbeiten
-            </p>
           </div>
 
           <div class="edit-message" *ngIf="isEditEnabled[message.messageId]">
@@ -130,6 +102,32 @@
               </button>
             </div>
           </div>
+          <div class="hover-options">
+            <img
+              src="../../../assets/img/add-reaction.png"
+              (click)="toggleEmojiPicker(message.messageId)"
+              alt=""
+            />
+            <img
+              src="../../../assets/img/thread.png"
+              alt=""
+              (click)="openThread(message, message.messageId)"
+            />
+            <img
+              *ngIf="message.senderId === userId"
+              src="../../../assets/img/three-dots-vertical.png"
+              alt=""
+              (click)="toggleEditMessage(message.messageId)"
+            />
+          </div>
+          <div
+          class="edit-message-popup"
+          *ngIf="isEditingEnabled[message.messageId]"
+        >
+          <p (click)="toggleToTextArea(message.messageId)">
+            Nachricht Bearbeiten
+          </p>
+        </div>
         </div>
         <img
           class="card-profile-img"

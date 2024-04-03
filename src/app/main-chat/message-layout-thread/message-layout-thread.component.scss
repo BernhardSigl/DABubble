@@ -88,7 +88,7 @@
 }
 
 .other-user .message {
-  background-color: #ECEEFE;
+  background-color: #eceefe;
   color: black;
   border-radius: 0px 30px 30px 30px;
   margin-left: 0;
@@ -119,6 +119,7 @@
 }
 
 .thread-message {
+  position: relative;
   &:hover {
     background: #eceefe;
     transition: background 225ms ease-in-out;
@@ -173,36 +174,33 @@ emoji-mart {
   }
 }
 
-.current-user .hover-options {
-  border: 1px solid #8c91f7;
-  border-radius: 30px 00px 30px 30px;
+.hover-options {
+  padding: 10px 20px;
   position: absolute;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 5px;
   bottom: 75px;
-  right: 120px;
+  border: 1px solid #8c91f7;
   display: none;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   background-color: white;
+  top: 0 !important;
+  img {
+    cursor: pointer;
+  }
+}
+
+.current-user .hover-options {
+  border-radius: 30px 30px 0 30px;
+  left: 20px;
 }
 
 .other-user .hover-options {
-  border: 1px solid #8c91f7;
-  border-radius: 0px 30px 30px 30px;
-  position: absolute;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 5px;
-  bottom: 75px;
-  left: 140px;
-  display: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  background-color: white;
+  border-radius: 30px 30px 30px 0;
+  right: 20px;
+  height: 20px;
 }
 
 .thread-message:hover .hover-options {
@@ -211,13 +209,15 @@ emoji-mart {
 }
 
 .edit-message-popup {
-  border-radius: 0px 30px 30px 30px;
+  border-radius: 30px;
+  border: 1px solid #8c91f7;
   position: absolute;
+  bottom: 20px;
   display: flex;
   align-items: center;
   padding: 15px;
   background-color: white;
-  right: 250px;
+  left: 20px;
   z-index: 10;
   p {
     font-weight: 900;
@@ -245,15 +245,20 @@ emoji-mart {
     color: #686868;
     border: 1px solid var(--dark-purple);
     border-radius: 30px 0px 30px 30px;
-
+    resize: none;
+    max-width: 190px;
     &:focus {
       outline: none;
     }
   }
+
   button {
     position: absolute;
     cursor: pointer;
     margin-bottom: 5px;
+    padding: 8px;
+    width: 86px;
+    font-size: 14px;
   }
 }
 
@@ -283,5 +288,35 @@ emoji-mart {
   &:hover {
     background-color: var(--dark-purple);
     transition: background-color 225ms ease-in-out;
+  }
+}
+@media (max-width: 980px) {
+  .current-user .hover-options {
+    left: 10px;
+  }
+
+  .other-user .hover-options {
+    right: 10px;
+  }
+
+  .edit-message-popup {
+    bottom: 20px;
+    left: 20px;
+    p {
+      font-weight: 900;
+      font-size: 16px;
+    }
+  }
+
+  .edit-message {
+    textarea {
+      max-width: 100%;
+    }
+    button {
+      position: absolute;
+      cursor: pointer;
+      margin-bottom: 5px;
+      padding: 8px;
+    }
   }
 }

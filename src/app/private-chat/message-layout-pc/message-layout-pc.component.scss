@@ -140,8 +140,8 @@ emoji-mart {
 .current-user .hover-options {
   border: 1px solid #8c91f7;
   border-radius: 25px 25px 0 25px;
-  bottom: 75px;
-  right: 75%;
+  bottom: 80px;
+  left: 35px;
   display: none;
 }
 
@@ -152,9 +152,9 @@ emoji-mart {
 
 .other-user .hover-options {
   border: 1px solid #8c91f7;
-  border-radius: 0px 25px 25px 25px;
-  bottom: 50px;
-  left: 75%;
+  border-radius: 25px 25px 25px 0;
+  bottom: 80px;
+  right: 35px;
   display: none;
 }
 
@@ -170,6 +170,7 @@ emoji-mart {
   img {
     width: 24px;
     height: 24px;
+    cursor: pointer;
     &:hover {
       transform: scale(1.1);
     }
@@ -177,14 +178,15 @@ emoji-mart {
 }
 
 .edit-message-popup {
-  border-radius: 0px 30px 30px 30px;
+  border-radius: 30px;
+  border: 1px solid #8c91f7;
   position: absolute;
-  bottom: 55px;
+  bottom: 25px;
   display: flex;
   align-items: center;
   padding: 15px;
   background-color: white;
-  right: 250px;
+  left: 35px;
   z-index: 10;
   p {
     font-weight: 900;
@@ -336,5 +338,17 @@ emoji-mart {
 
   .reactions {
     padding: 5px 4px !important;
+  }
+
+  .current-user .hover-options {
+    left: 10px;
+  }
+
+  .other-user .hover-options {
+    right: 10px;
+  }
+
+  .edit-message-popup {
+    left: 10px;
   }
 }

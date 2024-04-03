@@ -30,9 +30,7 @@
 
 <div class="divider" *ngIf="selectedMessage">
   <span class="fs18 answers">
-    <span>
-      {{ threadMessages.length }}&nbsp;
-    </span>
+    <span> {{ threadMessages.length }}&nbsp; </span>
     <span>Antworten</span>
   </span>
   <mat-divider></mat-divider>
@@ -51,12 +49,32 @@
       (mouseenter)="isHovered[message.messageId] = true"
       (mouseleave)="isHovered[message.messageId] = true"
     >
+      <div class="hover-options" *ngIf="isHovered[message.messageId]">
+        <img
+          src="../../../assets/img/add-reaction.png"
+          (click)="toggleEmojiPicker(message.messageId)"
+          alt=""
+        />
+        <img
+          *ngIf="message.senderId === userId"
+          src="../../../assets/img/three-dots-vertical.png"
+          alt=""
+          (click)="toggleEditMessageThread(message.messageId)"
+        />
+      </div>
+
       <div class="thread-msg-container">
         <div class="thread-profile-img">
           <img src="{{ message.image }}" alt="" width="70px" />
         </div>
-        <div class="msg-content column"
-        [ngStyle]="{ 'align-items': firebase.loggedInUserId === message.senderId ? 'flex-end' : 'flex-start' }"
+        <div
+          class="msg-content column"
+          [ngStyle]="{
+            'align-items':
+              firebase.loggedInUserId === message.senderId
+                ? 'flex-end'
+                : 'flex-start'
+          }"
         >
           <div class="name-time">
             <span class="fs18 bold">{{ message.name }}</span>
@@ -86,8 +104,8 @@
                 class="reactions"
                 (click)="toggleReactionThread(message, reaction.key)"
               >
-              <span class="emoji-in-chat">{{ reaction.key }}</span>
-              <span class="counter">{{ reaction.value.count }}</span>
+                <span class="emoji-in-chat">{{ reaction.key }}</span>
+                <span class="counter">{{ reaction.value.count }}</span>
               </button>
             </div>
 
@@ -97,20 +115,6 @@
               title="Choose your emoji"
               (emojiClick)="onEmojiClick($event, message)"
             ></emoji-mart>
-            <!--   -->
-            <div class="hover-options" *ngIf="isHovered[message.messageId]">
-              <img
-                src="../../../assets/img/add-reaction.png"
-                (click)="toggleEmojiPicker(message.messageId)"
-                alt=""
-              />
-              <img
-                *ngIf="message.senderId === userId"
-                src="../../../assets/img/three-dots-vertical.png"
-                alt=""
-                (click)="toggleEditMessageThread(message.messageId)"
-              />
-            </div>
           </div>
           <div
             class="edit-message-popup"

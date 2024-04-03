@@ -176,8 +176,8 @@ emoji-mart {
 .current-user .hover-options {
   border: 1px solid #8c91f7;
   border-radius: 25px 25px 0 25px;
-  bottom: 75px;
-  right: 75%;
+  bottom: 80px;
+  left: 35px;
   display: none;
 }
 
@@ -188,9 +188,9 @@ emoji-mart {
 
 .other-user .hover-options {
   border: 1px solid #8c91f7;
-  border-radius: 0px 25px 25px 25px;
-  bottom: 50px;
-  left: 75%;
+  border-radius: 25px 25px 25px 0;
+  bottom: 80px;
+  right: 35px;
   display: none;
 }
 
@@ -206,6 +206,7 @@ emoji-mart {
   img {
     width: 24px;
     height: 24px;
+    cursor: pointer;
     &:hover {
       transform: scale(1.1);
     }
@@ -213,14 +214,15 @@ emoji-mart {
 }
 
 .edit-message-popup {
-  border-radius: 0px 30px 30px 30px;
+  border-radius: 30px;
+  border: 1px solid #8c91f7;
   position: absolute;
-  bottom: 55px;
+  bottom: 25px;
   display: flex;
   align-items: center;
   padding: 15px;
   background-color: white;
-  right: 250px;
+  left: 35px;
   z-index: 10;
   p {
     font-weight: 900;
@@ -237,9 +239,10 @@ emoji-mart {
   display: flex;
   flex-direction: column;
   position: relative;
+  max-width: 375px;
 
   textarea {
-    padding: 40px;
+    padding: 40px 40px 65px;
     min-height: 10vh;
     cursor: text;
     caret-color: black;
@@ -257,7 +260,7 @@ emoji-mart {
 
   .edit-text-buttons {
     position: absolute;
-    bottom: 5px;
+    bottom: 15px;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -358,7 +361,7 @@ emoji-mart {
   .message {
     max-width: calc(100% - 40px) !important;
     min-width: calc(100% - 40px) !important;
-}
+  }
 
   .reactions-container {
     gap: 6px;
@@ -374,5 +377,30 @@ emoji-mart {
     .add-ons {
       padding: 0 35px 50px 35px;
     }
+  }
+
+  .edit-message {
+    width: 72vw;
+    .edit-text-buttons {
+      gap: 4px;
+
+      button {
+        font-size: 16px !important;
+        padding: 4px;
+        width: 100px;
+      }
+    }
+  }
+
+  .current-user .hover-options {
+    left: 10px;
+  }
+
+  .other-user .hover-options {
+    right: 10px;
+  }
+
+  .edit-message-popup {
+    left: 10px;
   }
 }

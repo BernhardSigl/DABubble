@@ -10,7 +10,12 @@ import {
   transition,
 } from '@angular/animations';
 import { MatDividerModule } from '@angular/material/divider';
-import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import {
+  FormGroup,
+  FormControl,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -31,7 +36,7 @@ import {
 import { User } from '../../classes/user.class';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PolicyPopupComponent } from '../../popup/policy-popup/policy-popup.component';
 import { ImprintPopupComponent } from '../../popup/imprint-popup/imprint-popup.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -46,7 +51,7 @@ import { MatDialog } from '@angular/material/dialog';
     ReactiveFormsModule,
     RouterModule,
     AngularFirestoreModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -90,7 +95,6 @@ import { MatDialog } from '@angular/material/dialog';
       transition('middle => top-left', animate('0.6s ease-out')),
     ]),
   ],
-  
 })
 export class LoginComponent implements OnInit {
   textState: string = 'hidden';
@@ -100,7 +104,11 @@ export class LoginComponent implements OnInit {
   moveState: string = 'middle';
   animationPlayed: boolean = false;
   loginForm = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email, validateEmail]),
+    email: new FormControl('', [
+      Validators.required,
+      Validators.email,
+      validateEmail,
+    ]),
     password: new FormControl('', Validators.required),
   });
   isLoading: boolean = false;
@@ -116,7 +124,7 @@ export class LoginComponent implements OnInit {
     private ngZone: NgZone, // google
     public firebase: FirebaseService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {}
   isGuest: boolean | undefined;
 
@@ -288,62 +296,66 @@ export class LoginComponent implements OnInit {
     // debugger;
     try {
       this.isLoading = true;
-        await this.authenticateGuest(guestEmail, guestPassword);
-        const userId = 'e7zSK07HmreqlBdt7cibNEcjAQW2';
-        this.clearStorage();
-        this.saveUserIdToLocalStorage(userId);
-        await this.firebase.online();
-        this.navigateToMainPageWithUserId(userId);
-        this.showSuccessToastGuest('Successfully logged in as guest' );
+      await this.authenticateGuest(guestEmail, guestPassword);
+      const userId = 'e7zSK07HmreqlBdt7cibNEcjAQW2';
+      this.clearStorage();
+      this.saveUserIdToLocalStorage(userId);
+      await this.firebase.online();
+      this.navigateToMainPageWithUserId(userId);
+      this.showSuccessToastGuest('Successfully logged in as guest');
     } catch (error: any) {
-        this.handleLoginErrorGuest(error);
+      this.handleLoginErrorGuest(error);
     }
     this.isLoading = false;
-}
+  }
 
-private async authenticateGuest(email: string, password: string): Promise<void> {
+  private async authenticateGuest(
+    email: string,
+    password: string
+  ): Promise<void> {
     await this.authyService.loginWithEmailAndPassword(email, password);
-}
+  }
 
-private saveUserIdToLocalStorage(userId: string): void {
+  private saveUserIdToLocalStorage(userId: string): void {
     localStorage.setItem('userId', userId);
-}
+  }
 
-private navigateToMainPageWithUserId(userId: string): void {
+  private navigateToMainPageWithUserId(userId: string): void {
     this.router.navigate(['/main'], { queryParams: { userId: userId } });
-}
+  }
 
-private handleLoginErrorGuest(error: any): void {
-    let errorMessage = 'Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.';
+  private handleLoginErrorGuest(error: any): void {
+    let errorMessage =
+      'Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.';
     if (
-        error.code === 'auth/invalid-email' ||
-        error.code === 'auth/user-not-found' ||
-        error.code === 'auth/wrong-password'
+      error.code === 'auth/invalid-email' ||
+      error.code === 'auth/user-not-found' ||
+      error.code === 'auth/wrong-password'
     ) {
-        errorMessage = 'Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.';
+      errorMessage =
+        'Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.';
     }
 
     this.snackBar.open(errorMessage, '', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: error.code === 'auth/invalid-email' ? 'top' : 'bottom',
-        panelClass: ['no-close-button'], 
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: error.code === 'auth/invalid-email' ? 'top' : 'bottom',
+      panelClass: ['no-close-button'],
     });
-}
+  }
 
-private showSuccessToastGuest(message: string): void {
-  this.snackBar.open(message, '', {
+  private showSuccessToastGuest(message: string): void {
+    this.snackBar.open(message, '', {
       duration: 3000,
       horizontalPosition: 'right',
       verticalPosition: 'bottom',
-      panelClass: ['no-close-button'], 
-  });
-}
-
+      panelClass: ['no-close-button'],
+    });
+  }
 
   async submit() {
     const email = this.loginForm.value.email;
-    const password = this.loginForm.value.password;
+    const password = this.loginForm.value.password;   
     if (
       this.loginForm.valid &&
       typeof email === 'string' &&
@@ -354,11 +366,11 @@ private showSuccessToastGuest(message: string): void {
       try {
         await this.login(email, password);
       } catch (err) {
-        console.error(err);
+        console.warn(err);
       }
       this.loginForm.enable();
       this.isLoading = false;
-    }else{
+    } else {
       this.email?.markAsTouched();
       this.password?.markAsTouched();
     }
@@ -366,79 +378,80 @@ private showSuccessToastGuest(message: string): void {
 
   async login(email: string, password: string) {
     try {
-        const userCredential = await this.authyService.loginWithEmailAndPassword(email, password);
-        this.userId = userCredential.user?.uid;
+      const userCredential = await this.authyService.loginWithEmailAndPassword(
+        email,
+        password
+      );
+      this.userId = userCredential.user?.uid;
 
-        const userDocId = await this.findUserDocumentId(this.userId);
-        
-        if (userDocId) {
-            this.clearStorage();
-            localStorage.setItem('userId', userDocId);
-            this.navigateToMainPage();
-            await this.firebase.online();
-            this.showSuccessToast('Successfully logged in');
-        } else {
-            console.log('User document does not exist.');
-        }
+      const userDocId = await this.findUserDocumentId(this.userId);
+
+      if (userDocId) {
+        this.clearStorage();
+        localStorage.setItem('userId', userDocId);
+        this.navigateToMainPage();
+        await this.firebase.online();
+        this.showSuccessToast('Successfully logged in');
+      } else {
+        console.log('User document does not exist.');
+      }
     } catch (error: any) {
-        this.handleLoginError(error);
+      this.handleLoginError(error);
     }
-}
+  }
 
-private async findUserDocumentId(userId: string): Promise<string | null> {
+  private async findUserDocumentId(userId: string): Promise<string | null> {
     const querySnapshot = await getDocs(
-        query(
-            collection(this.firestore, 'users'),
-            where('userId', '==', userId)
-        )
+      query(collection(this.firestore, 'users'), where('userId', '==', userId))
     );
 
     return querySnapshot.empty ? null : querySnapshot.docs[0].id;
-}
+  }
 
-private handleLoginError(error: any): void {
-    let errorMessage = 'Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.';
+  private handleLoginError(error: any): void {
+    let errorMessage =
+      'Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.';
     if (
-        error.code === 'auth/invalid-email' ||
-        error.code === 'auth/user-not-found' ||
-        error.code === 'auth/wrong-password'
+      error.code === 'auth/invalid-email' ||
+      error.code === 'auth/user-not-found' ||
+      error.code === 'auth/wrong-password'
     ) {
-        errorMessage = 'Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.';
+      errorMessage =
+        'Falsche E-Mail oder Passwort. Bitte überprüfen Sie Ihre Eingaben.';
     }
 
     this.snackBar.open(errorMessage, '', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: error.code === 'auth/invalid-email' ? 'top' : 'bottom',
-        panelClass: ['no-close-button'], 
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: error.code === 'auth/invalid-email' ? 'top' : 'bottom',
+      panelClass: ['no-close-button'],
     });
-}
+  }
 
-private navigateToMainPage(): void {
+  private navigateToMainPage(): void {
     this.router.navigate(['/main'], { queryParams: { userId: this.userId } });
-}
+  }
 
-private showSuccessToast(message: string): void {
+  private showSuccessToast(message: string): void {
     this.snackBar.open(message, '', {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'bottom',
-        panelClass: ['no-close-button'], 
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'bottom',
+      panelClass: ['no-close-button'],
     });
-}
+  }
 
-showPrivacy(){
-  this.dialog.open(PolicyPopupComponent, {
-    panelClass: ['border', 'imprint-policy-popup']
-  });
-}
+  showPrivacy() {
+    this.dialog.open(PolicyPopupComponent, {
+      panelClass: ['border', 'imprint-policy-popup'],
+    });
+  }
 
-showImprint() {
-  this.dialog.open(ImprintPopupComponent, {
-    panelClass: ['border', 'imprint-policy-popup']
-  });
-}
-
+  showImprint() {
+    this.dialog.open(ImprintPopupComponent, {
+      panelClass: ['border', 'imprint-policy-popup'],
+    });
+  }
 
   clearStorage() {
     sessionStorage.clear();
@@ -469,14 +482,16 @@ showImprint() {
   }
 }
 
-function validateEmail(control: AbstractControl): { [key: string]: any } | null {
+function validateEmail(
+  control: AbstractControl
+): { [key: string]: any } | null {
   const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   if (control.value && !emailPattern.test(control.value)) {
-    return { 'email': true };
+    return { email: true };
   }
   const dotIndex = control.value.lastIndexOf('.');
   if (dotIndex === -1 || dotIndex === control.value.length - 1) {
-    return { 'invalidEnd': true };
+    return { invalidEnd: true };
   }
   return null;
 }

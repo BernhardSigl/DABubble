@@ -71,22 +71,9 @@
               title="Choose your emoji"
               (emojiClick)="onEmojiClick($event, message)"
             ></emoji-mart>
-            <!--   -->
-            <div class="hover-options" *ngIf="isHovered[message.messageId]">
-              <img
-                src="../../../assets/img/add-reaction.png"
-                (click)="toggleEmojiPicker(message.messageId)"
-                alt=""
-              />
-              <img
-                *ngIf="message.senderId === userId"
-                src="../../../assets/img/three-dots-vertical.png"
-                alt=""
-                (click)="toggleEditMessage(message.messageId)"
-              />
-            </div>
+
           </div>
-          <!--  -->
+
           <div
             class="edit-message-popup"
             *ngIf="isEditingEnabled[message.messageId]"
@@ -119,6 +106,19 @@
               </button>
             </div>
           </div>
+        </div>
+        <div class="hover-options" *ngIf="isHovered[message.messageId]">
+          <img
+            src="../../../assets/img/add-reaction.png"
+            (click)="toggleEmojiPicker(message.messageId)"
+            alt=""
+          />
+          <img
+            *ngIf="message.senderId === userId"
+            src="../../../assets/img/three-dots-vertical.png"
+            alt=""
+            (click)="toggleEditMessage(message.messageId)"
+          />
         </div>
         <img
           class="card-profile-img"
