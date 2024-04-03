@@ -8,24 +8,15 @@ import {
   onSnapshot,
   doc,
   setDoc,
-  getDocs,
-  where,
-  limit,
-  QuerySnapshot,
 } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '../../classes/message.class';
 import { CommonModule } from '@angular/common';
-import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
-import { user } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
 import { map } from 'rxjs/operators';
-import { GetIdService } from '../../firebase-services/get-id.service';
 import { MatDrawer } from '@angular/material/sidenav';
-import { DrawerService } from '../../firebase-services/drawer.service';
 import { FirebaseService } from '../../firebase-services/firebase.service';
-import { LocalStorage } from 'ngx-webstorage';
 import { PrivateMessageService } from '../../firebase-services/private-message.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/view-specific-profile.component';
@@ -33,6 +24,7 @@ import { MessageServiceService } from '../../firebase-services/message-service.s
 import { DatePipe, registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { LOCALE_ID } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-message-layout-pc',
   standalone: true,
@@ -42,6 +34,7 @@ import { LOCALE_ID } from '@angular/core';
     PickerModule,
     FormsModule,
     MatDrawer,
+    MatProgressSpinnerModule
   ],
   templateUrl: './message-layout-pc.component.html',
   styleUrl: './message-layout-pc.component.scss',
@@ -56,6 +49,7 @@ export class MessageLayoutPcComponent {
   @Input() userImage!: string;
   @Input() privateMessageId!: string;
   @ViewChild('drawer') drawer!: MatDrawer;
+  isLoading: boolean = true;
 
   isHovered: { [key: string]: boolean } = {};
   public textArea: string = '';
@@ -102,6 +96,7 @@ export class MessageLayoutPcComponent {
     });
     registerLocaleData(localeDe);
     this.changeDetector.detectChanges();
+    this.isLoading = false;
   }
 
   formatMessageDate(date: Date | null): string {

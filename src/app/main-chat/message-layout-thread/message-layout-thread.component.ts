@@ -4,8 +4,6 @@ import {
   Input,
   OnInit,
   ViewChild,
-  Output,
-  EventEmitter,
 } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MainChatComponent } from '../main-chat.component';
@@ -21,17 +19,15 @@ import {
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '../../classes/message.class';
 import { CommonModule } from '@angular/common';
-import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
-import { user } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { DrawerService } from '../../firebase-services/drawer.service';
-import { MessageBoxThreadComponent } from '../thread/message-box-thread/message-box-thread.component';
 import { GetIdService } from '../../firebase-services/get-id.service';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MessageServiceService } from '../../firebase-services/message-service.service';
 import { ThreadComponent } from '../thread/thread.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-message-layout-thread',
@@ -44,6 +40,7 @@ import { ThreadComponent } from '../thread/thread.component';
     FormsModule,
     MessageLayoutThreadComponent,
     MatDividerModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './message-layout-thread.component.html',
   styleUrl: './message-layout-thread.component.scss',
@@ -74,7 +71,7 @@ export class MessageLayoutThreadComponent implements OnInit {
   @Input() threadId: string = '';
   messageId: string = '';
   selectedChannelId?: string;
-
+  isLoading: boolean = true;
   @ViewChild(ThreadComponent)
   threadLayout!: ThreadComponent;
 
@@ -83,6 +80,7 @@ export class MessageLayoutThreadComponent implements OnInit {
     await this.subThreadService();
     await this.subSelectedChannel();
     await this.firebase.ngOnInit();
+    this.isLoading = false;
   }
 
   async subThreadService() {

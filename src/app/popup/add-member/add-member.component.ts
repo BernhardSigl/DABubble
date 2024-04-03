@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Inject } from '@angular/core';
+import { Component, ElementRef, Inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -10,11 +10,16 @@ import { CommonModule } from '@angular/common';
 import { SelectMemberComponent } from '../select-member/select-member.component';
 import { FormsModule } from '@angular/forms';
 import { MemberServiceService } from '../member-service/member-service.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-add-member',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './add-member.component.html',
   styleUrl: './add-member.component.scss',
 })
@@ -28,6 +33,7 @@ export class AddMemberComponent {
   inputValue: string = '';
   addYourselfToInput = false;
   addGuestToInput = false;
+  isLoading: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<AddMemberComponent>,
@@ -39,7 +45,6 @@ export class AddMemberComponent {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    // await this.firebase.ngOnInit(); // performance: alt
     this.addResizeListener();
     this.addBackgroundClickListener();
     this.memberService.selectedUsers = [];
@@ -81,6 +86,7 @@ export class AddMemberComponent {
   }
 
   async addNewChannel() {
+    this.isLoading = true;
     const newChannel = new Channel({
       channelName: this.data.channelName,
       channelDescription: this.data.channelDescription,
@@ -94,8 +100,8 @@ export class AddMemberComponent {
     await this.firebase.addChannel(newChannel);
     await this.firebase.checkChannelRights();
     this.firebase.showOnlyChannelsWithRights();
-    // this.firebase.ngOnInit(); // performance: alt
     this.dialogRef.close();
+    this.isLoading = false;
   }
 
   pushMembersInChannel(newChannel: any) {

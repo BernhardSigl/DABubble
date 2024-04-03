@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { ThreadComponent } from './thread/thread.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { MessageLayoutComponent } from './message-layout/message-layout.component';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { UserListService } from '../firebase-services/user-list.service';
@@ -26,7 +26,6 @@ import { EditChannelComponent } from '../popup/edit-channel/edit-channel.compone
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageServiceService } from '../firebase-services/message-service.service';
-import { MessageLayoutThreadComponent } from './message-layout-thread/message-layout-thread.component';
 import { DrawerService } from '../firebase-services/drawer.service';
 
 @Component({
@@ -56,13 +55,10 @@ export class MainChatComponent implements OnInit {
   userId: string = '';
   selectedMessage: Message | null = null;
   messages$: Observable<Message[]> | undefined;
-
   @ViewChild(MessageLayoutComponent)
   messageLayout!: MessageLayoutComponent;
 
   public windowWidth!: number;
-  // @ViewChild(MessageLayoutThreadComponent)
-  // messageLayoutThread!: MessageLayoutThreadComponent;
 
   constructor(
     private userDataService: UserListService,
@@ -79,9 +75,7 @@ export class MainChatComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    // localStorage.removeItem('closeSideNav');
     this.subScrollEvent();
-    // this.hideChatDuringLoad('hidden');
     await this.firebase.pullLoggedInUserId();
     
     this.userId = this.firebase.loggedInUserId;
@@ -90,8 +84,6 @@ export class MainChatComponent implements OnInit {
     if (this.messageLayout) {
       this.messages$ = this.messageLayout.messages$;
     }
-    
-    // this.hideChatDuringLoad('visible');
     this.firebase.scheduleAutomaticUpdate();
     this.checkEmailChange();
   }

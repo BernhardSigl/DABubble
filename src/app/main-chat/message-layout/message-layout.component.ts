@@ -5,7 +5,6 @@ import {
   OnInit,
   ViewChild,
   ChangeDetectorRef,
-  HostListener,
 } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import {
@@ -16,17 +15,13 @@ import {
   onSnapshot,
   doc,
   setDoc,
-  getDocs,
 } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '../../classes/message.class';
 import { CommonModule } from '@angular/common';
-import { getDownloadURL, getStorage, ref } from 'firebase/storage';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
-import { user } from '@angular/fire/auth';
 import { FormsModule } from '@angular/forms';
 import { map } from 'rxjs/operators';
-import { GetIdService } from '../../firebase-services/get-id.service';
 import { MatDrawer } from '@angular/material/sidenav';
 import { DrawerService } from '../../firebase-services/drawer.service';
 import { FirebaseService } from '../../firebase-services/firebase.service';
@@ -36,6 +31,7 @@ import { MessageServiceService } from '../../firebase-services/message-service.s
 import { DatePipe, registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { LOCALE_ID } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @Component({
   selector: 'app-message-layout',
   standalone: true,
@@ -45,6 +41,7 @@ import { LOCALE_ID } from '@angular/core';
     PickerModule,
     FormsModule,
     MatDrawer,
+    MatProgressSpinnerModule
   ],
   templateUrl: './message-layout.component.html',
   styleUrls: ['./message-layout.component.scss'],
@@ -78,7 +75,7 @@ export class MessageLayoutComponent implements OnInit {
   selectedChannelId?: string;
   messages$: Observable<Message[]> = this.messagesSubject.asObservable();
   threadLength: number = 0;
-
+  isLoading: boolean = true;
   currentThreadId!: string;
 
   constructor(
@@ -111,6 +108,7 @@ export class MessageLayoutComponent implements OnInit {
     });
     registerLocaleData(localeDe);
     this.changeDetector.detectChanges();
+    this.isLoading = false;
   }
 
   navBehaviour() {
