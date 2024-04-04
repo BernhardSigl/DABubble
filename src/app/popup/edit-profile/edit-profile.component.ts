@@ -1,12 +1,23 @@
-import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-import { AbstractControl, FormsModule, NgForm, ValidatorFn } from '@angular/forms';
+import {
+  AbstractControl,
+  FormsModule,
+  NgForm,
+  ValidatorFn,
+} from '@angular/forms';
 import { AuthyService } from '../../firebase-services/authy.service';
-import { EmailSentComponent } from '../email-sent/email-sent.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { VerifyComponent } from '../verify/verify.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-edit-profile',
@@ -15,9 +26,11 @@ import { VerifyComponent } from '../verify/verify.component';
     CommonModule,
     FormsModule,
     MatFormFieldModule,
+    MatIconModule,
+    MatButtonModule,
   ],
   templateUrl: './edit-profile.component.html',
-  styleUrl: './edit-profile.component.scss'
+  styleUrl: './edit-profile.component.scss',
 })
 export class EditProfileComponent {
   @ViewChild('editProfileForm') editProfileForm!: NgForm;
@@ -34,12 +47,10 @@ export class EditProfileComponent {
     public dialogRef: MatDialogRef<EditProfileComponent>,
     private elementRef: ElementRef,
     private changeDetectorRef: ChangeDetectorRef,
-    private auth: AuthyService
-  ) { }
+  ) {}
 
   async ngOnInit(): Promise<void> {
-    // await this.firebase.ngOnInit(); // performance: alt
-    await this.firebase.selectLastOpenedChannel(); // performance: neu
+    await this.firebase.selectLastOpenedChannel();
     this.editProfileForm.form.setValidators(this.atLeastOneFieldRequired());
   }
 
@@ -56,26 +67,33 @@ export class EditProfileComponent {
   }
 
   ngAfterViewInit(): void {
-    const emailInputElement: HTMLInputElement | null = this.elementRef.nativeElement.querySelector('.edit-email input');
+    const emailInputElement: HTMLInputElement | null =
+      this.elementRef.nativeElement.querySelector('.edit-email input');
 
     if (emailInputElement) {
       this.emailInputPlaceholder = emailInputElement.placeholder;
 
-      if (this.emailInputPlaceholder.includes('gmail') || this.emailInputPlaceholder.includes('googlemail')) {
+      if (
+        this.emailInputPlaceholder.includes('gmail') ||
+        this.emailInputPlaceholder.includes('googlemail')
+      ) {
         this.hideEditEmail = true;
         this.changeDetectorRef.detectChanges();
       }
     }
   }
 
-   save() {
+  save() {
     this.isEmailValid = this.validateEmail(this.inputEmail);
 
     if (this.inputName.trim() === '' && this.inputEmail.trim() === '') {
       return;
     }
 
-    if (this.inputName.trim() !== '' && (this.isEmailValid || this.inputEmail === '')) {
+    if (
+      this.inputName.trim() !== '' &&
+      (this.isEmailValid || this.inputEmail === '')
+    ) {
       this.firebase.changeName(this.inputName);
       this.firebase.ngOnInit();
       this.dialogRef.close();
@@ -91,18 +109,18 @@ export class EditProfileComponent {
     }
   }
   async verify(inputEmail: string) {
-    const dialogRef=this.dialog.open(VerifyComponent, {
+    const dialogRef = this.dialog.open(VerifyComponent, {
       panelClass: 'border',
       data: {
         oldEmail: inputEmail,
       },
     });
-    await dialogRef.afterClosed().toPromise(); 
+    await dialogRef.afterClosed().toPromise();
   }
 
   googleMailNotChangeable(): boolean {
     const invalidEmails = ['gmail', 'googlemail'];
-    return invalidEmails.some(email => this.firebase.email.includes(email));
+    return invalidEmails.some((email) => this.firebase.email.includes(email));
   }
 
   validateEmail(email: string): boolean {
@@ -112,5 +130,9 @@ export class EditProfileComponent {
 
   resetEmailErrorMsg() {
     this.isEmailValid = this.validateEmail(this.inputEmail);
+  }
+
+  changeProfileImg() {
+
   }
 }

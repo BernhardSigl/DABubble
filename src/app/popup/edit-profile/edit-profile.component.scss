@@ -1,143 +1,155 @@
 .popup {
-    max-width: 420px;
-    width: 420px;
-    padding: 40px;
-    background-color: white;
-    border-radius: 30px;
-    gap: 2.8125rem; // 45px
-    display: flex;
-    flex-direction: column;
+  max-width: 420px;
+  width: 420px;
+  padding: 40px;
+  background-color: white;
+  border-radius: 30px;
+  gap: 2.8125rem; // 45px
+  display: flex;
+  flex-direction: column;
 }
 
 .cross-icon {
-    background-image: url('./../../../assets/img/cross-black.png');
-    background-size: 1.5rem 1.5rem; // 24px
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 100%;
-    width: 2.5rem; // 40px
-    height: 2.5rem;
+  background-image: url("./../../../assets/img/cross-black.png");
+  background-size: 1.5rem 1.5rem; // 24px
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 100%;
+  width: 2.5rem; // 40px
+  height: 2.5rem;
 
-    &:hover {
-        background-color: var(--background-color);
-        background-image: url('./../../../assets/img/cross-blue.png');
-    }
+  &:hover {
+    background-color: var(--background-color);
+    background-image: url("./../../../assets/img/cross-blue.png");
+  }
 }
 
 .profile-img-position {
-    width: 100%;
-    height: 12.5rem;
-    border-radius: 100%;
-    display: flex;
-    justify-content: center;
+  width: 100%;
+  height: 12.5rem;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
 
-    .profile-img {
-        height: 100%;
-        aspect-ratio: 1/1;
-        background-size: cover;
-        background-repeat: no-repeat;
-        border-radius: 50%;
-    }
+  .profile-img {
+    height: 100%;
+    aspect-ratio: 1/1;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+  }
+}
+
+.edit-profile-img {
+  position: absolute;
+  top: 125px;
+  right: 40px;
+  background-color: #f1f0f3;
+  z-index: 1;
+  &:hover {
+    background-color: #e1dfe4;
+  }
 }
 
 .edit-name {
-    display: flex;
-    flex-direction: column;
-    gap: .9375rem; // 15px
+  display: flex;
+  flex-direction: column;
+  gap: 0.9375rem; // 15px
 }
 
 .input-title {
-    gap: 1.25rem; // 20px
+  gap: 1.25rem; // 20px
 }
 
 .edit-email {
-    display: flex;
-    flex-direction: column;
-    gap: .9375rem; // 15px
-    margin-top: -1.8125rem; // -29px
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9375rem; // 15px
+  margin-top: -1.8125rem; // -29px
+  position: relative;
 
-    .email-img-and-email-title {
-        gap: 1.25rem; // 20px
-    }
+  .email-img-and-email-title {
+    gap: 1.25rem; // 20px
+  }
 
-    .email {
-        margin-left: calc(1.25rem + 1.875rem);
-        color: var(--third);
-        cursor: pointer;
-        outline: none;
-    }
+  .email {
+    margin-left: calc(1.25rem + 1.875rem);
+    color: var(--third);
+    cursor: pointer;
+    outline: none;
+  }
 
-    mat-error {
-        position: absolute;
-        top: 115%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: red !important;
-        width: 291px;
-    }
+  mat-error {
+    position: absolute;
+    top: 115%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: red !important;
+    width: 291px;
+  }
 }
 
 .cancel-save-btns {
-    display: flex;
-    justify-content: center;
-    gap: 2rem; // 32px
-    position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 2rem; // 32px
+  position: relative;
 
-    button {
-        border-radius: 5rem;
-        font-size: 1.125rem;
-        padding: 0.9rem 1rem;
-        border: none;
-        outline: none;
-        color: white;
-        font-weight: 700;
-        cursor: pointer;
+  button {
+    border-radius: 5rem;
+    font-size: 1.125rem;
+    padding: 0.9rem 1rem;
+    border: none;
+    outline: none;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .save-btn {
+    background-color: var(--primary);
+
+    &:hover {
+      background-color: #797ef3;
     }
+  }
 
-    .save-btn {
-        background-color: var(--primary);
+  .cancel-btn {
+    border: 1px solid var(--primary);
+    background-color: transparent;
+    color: var(--primary);
 
-        &:hover {
-            background-color: #797EF3;
-        }
+    &:hover {
+      background-color: var(--primary);
+      color: white;
     }
+  }
 
-    .cancel-btn {
-        border: 1px solid var(--primary);
-        background-color: transparent;
-        color: var(--primary);
-
-        &:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-    }
-
-    mat-error {
-        position: absolute;
-        top: 133%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: red !important;
-        width: 322px;
-    }
+  mat-error {
+    position: absolute;
+    top: 133%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: red !important;
+    width: 322px;
+  }
 }
 
 input {
-    padding: .9375rem 1.25rem; // 15px 20px
-    border: 1px solid #ccc;
-    border-radius: 1.875rem; // 30px
-    outline: none;
-    border-color: var(--light-purple);
-    font-size: 18px;
+  padding: 0.9375rem 1.25rem; // 15px 20px
+  border: 1px solid #ccc;
+  border-radius: 1.875rem; // 30px
+  outline: none;
+  border-color: var(--light-purple);
+  font-size: 18px;
 
-    &::placeholder {
-        color: var(--gray);
-    }
+  &::placeholder {
+    color: var(--gray);
+  }
 
-    &:hover,
-    &:focus {
-        border-color: var(--dark-purple);
-    }
+  &:hover,
+  &:focus {
+    border-color: var(--dark-purple);
+  }
 }

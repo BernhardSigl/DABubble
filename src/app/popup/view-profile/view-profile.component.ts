@@ -25,15 +25,10 @@ export class ViewProfileComponent {
   ) {
   }
 
-  async ngOnInit(): Promise<void> {
-    // await this.firebase.ngOnInit(); // performance: alt
-  }
-
   editProfile() {
     this.dialogRef.close();
     this.dialog.open(EditProfileComponent, {
-      position: { top: '6.875rem', right: '1.25rem' },
-      panelClass: 'no-border-tr'
+      panelClass: 'edit-profile-popup'
     });
   }
 }

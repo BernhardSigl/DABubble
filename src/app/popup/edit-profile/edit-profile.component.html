@@ -1,47 +1,78 @@
-<form #editProfileForm="ngForm" (ngSubmit)="save()" novalidate class="popup boxShadow">
+<button (click)="changeProfileImg()" class="edit-profile-img"
+mat-icon-button
+color="primary"
+aria-label="Example icon button with a home icon"
+>
+<mat-icon>edit</mat-icon>
+</button>
 
-    <div class="horicontal spaceBetween">
-        <h4 class="bold">Dein Profil bearbeiten</h4>
-        <div class="cross-icon icon-size-24" (click)="this.dialogRef.close();">
-        </div>
+<form
+  #editProfileForm="ngForm"
+  (ngSubmit)="save()"
+  novalidate
+  class="popup boxShadow"
+>
+  <div class="horicontal spaceBetween">
+    <h4 class="bold">Dein Profil bearbeiten</h4>
+    <div class="cross-icon icon-size-24" (click)="this.dialogRef.close()"></div>
+  </div>
 
+  <div class="profile-img-position">
+    <div
+      [style.background-image]="'url(' + firebase.profileImg + ')'"
+      class="profile-img"
+    ></div>
+  </div>
+
+  <div class="edit-name">
+    <div class="horicontal input-title">
+      <img
+        src="./../../../assets/img/account-circle-black.png"
+        class="icon-size-30"
+      />
+      <h5 class="bold">Vollständiger Name</h5>
     </div>
+    <input
+      [placeholder]="firebase.name"
+      [(ngModel)]="inputName"
+      name="inputName"
+    />
+  </div>
 
-    <div class="profile-img-position">
-        <div [style.background-image]="'url(' + firebase.profileImg + ')'" class="profile-img"></div>
+  <div class="edit-email" *ngIf="!googleMailNotChangeable()">
+    <div class="email-img-and-email-title horicontal">
+      <img src="./../../../assets/img/mail-black.png" />
+      <h5 class="bold">E-Mail Adresse</h5>
     </div>
+    <input
+      [placeholder]="firebase.email"
+      [(ngModel)]="inputEmail"
+      name="inputEmail"
+      (ngModelChange)="resetEmailErrorMsg()"
+    />
+    <mat-error
+      *ngIf="
+        editProfileForm.submitted &&
+        editProfileForm.controls['inputEmail'].touched &&
+        inputEmail !== '' &&
+        !isEmailValid
+      "
+    >
+      Diese E-Mail-Adresse ist leider ungültig.
+    </mat-error>
+  </div>
 
-    <div class="edit-name" >
-        <div class="horicontal input-title">
-            <img src="./../../../assets/img/account-circle-black.png" class="icon-size-30">
-            <h5 class="bold">Vollständiger Name</h5>
-        </div>
-        <input [placeholder]="firebase.name" [(ngModel)]="inputName" name="inputName">
-    </div>
-
-    <div class="edit-email" *ngIf="!googleMailNotChangeable()">
-        <div class="email-img-and-email-title horicontal">
-            <img src="./../../../assets/img/mail-black.png">
-            <h5 class="bold">E-Mail Adresse</h5>
-        </div>
-        <input [placeholder]="firebase.email" [(ngModel)]="inputEmail" name="inputEmail"
-            (ngModelChange)="resetEmailErrorMsg()">
-        <mat-error *ngIf="editProfileForm.submitted && 
-        editProfileForm.controls['inputEmail'].touched && 
-        inputEmail !== '' && 
-        !isEmailValid">
-            Diese E-Mail-Adresse ist leider ungültig.
-        </mat-error>
-    </div>
-
-    <div class="cancel-save-btns">
-        <button class="cancel-btn" (click)="this.dialogRef.close();">Abbrechen</button>
-        <button class="save-btn" type="submit" [disabled]="editProfileForm.invalid">Speichern</button>
-        <mat-error class="empty-field-error"
-            *ngIf="editProfileForm.submitted && inputName === '' && inputEmail === ''">Mindestens ein Feld muss
-            ausgefüllt werden</mat-error>
-    </div>
-
-
-
+  <div class="cancel-save-btns">
+    <button class="cancel-btn" (click)="this.dialogRef.close()">
+      Abbrechen
+    </button>
+    <button class="save-btn" type="submit" [disabled]="editProfileForm.invalid">
+      Speichern
+    </button>
+    <mat-error
+      class="empty-field-error"
+      *ngIf="editProfileForm.submitted && inputName === '' && inputEmail === ''"
+      >Mindestens ein Feld muss ausgefüllt werden</mat-error
+    >
+  </div>
 </form>
