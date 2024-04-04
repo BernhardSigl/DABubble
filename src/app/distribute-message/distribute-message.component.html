@@ -121,7 +121,7 @@
 
     <div class="message-box">
       <div class="selected-file" *ngIf="selectedFile">
-        Selected file: {{ selectedFile.name }}
+        <img [src]="selectedFilePreview" class="selected-file-preview" *ngIf="selectedFilePreview" />
       </div>
       <div *ngIf="mentionedUsers.length > 0" class="mentioned-users-container">
         <div

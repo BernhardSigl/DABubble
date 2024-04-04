@@ -86,7 +86,7 @@ export class DistributeMessageComponent implements OnInit {
   channelsToDisplay: any[] = [];
   selectedChannelNames: string[] = [];
   selectedUserName: string[] = [];
-
+  selectedFilePreview: string | undefined;
   constructor(
     private firebase: FirebaseService,
     private router: Router,
@@ -564,6 +564,17 @@ export class DistributeMessageComponent implements OnInit {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
+    this.updateSelectedFilePreview();
+  }
+
+  private updateSelectedFilePreview() {
+    if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.selectedFilePreview = e.target.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
   }
 
   // mention User

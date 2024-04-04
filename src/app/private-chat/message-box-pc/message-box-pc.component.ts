@@ -48,7 +48,7 @@ export class MessageBoxPcComponent {
   ) {}
 
   mentionedUsers: { name: string; profilePicture: string }[] = [];
-
+  selectedFilePreview: string | undefined;
   userId: string | null = null;
   userName: string = '';
   userImage: string = '';
@@ -104,12 +104,15 @@ export class MessageBoxPcComponent {
       console.error('No private message selected or user ID not found.');
       return;
     }
-
+    const isTextAreaNotEmpty = this.textArea.trim() !== '';
     try {
       if (this.textArea.trim() || this.selectedFile) {
         const newMessage = new Message();
         newMessage.senderId = this.userId;
-        newMessage.message = [this.textArea.trim()];
+        // newMessage.message = [this.textArea.trim()];
+        if (isTextAreaNotEmpty) {
+          newMessage.message.push(this.textArea);
+        }
         newMessage.time = Date.now();
         newMessage.name = this.userName;
         newMessage.image = this.userImage;
@@ -173,6 +176,17 @@ export class MessageBoxPcComponent {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
+    this.updateSelectedFilePreview();
+  }
+
+  private updateSelectedFilePreview() {
+    if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.selectedFilePreview = e.target.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
   }
 
   selectMention(index: number) {
