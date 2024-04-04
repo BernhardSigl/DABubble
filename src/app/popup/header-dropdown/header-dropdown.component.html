@@ -7,3 +7,7 @@
     <h4 (click)="showPrivacy()">Datenschutz</h4>
     <h4 (click)="logOut()">Ausloggen</h4>
 </div>
+
+<div class="spinner" *ngIf="isLoading">
+    <mat-spinner></mat-spinner>
+  </div>

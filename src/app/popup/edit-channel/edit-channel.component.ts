@@ -6,11 +6,12 @@ import { MatDividerModule } from '@angular/material/divider';
 import { ViewSpecificProfileComponent } from '../view-specific-profile/view-specific-profile.component';
 import { ListMembersComponent } from '../list-members/list-members.component';
 import { AddMembersRetrospectivelyComponent } from '../add-members-retrospectively/add-members-retrospectively.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-edit-channel',
   standalone: true,
-  imports: [MatDividerModule, CommonModule, ListMembersComponent],
+  imports: [MatDividerModule, CommonModule, ListMembersComponent, MatProgressSpinnerModule],
   templateUrl: './edit-channel.component.html',
   styleUrl: './edit-channel.component.scss',
 })
@@ -18,6 +19,7 @@ export class EditChannelComponent {
   channelNameEditMode: boolean = false;
   channelDescriptionEditMode: boolean = false;
   channelCreatedBy: any;
+  isLoading: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<EditChannelComponent>,
@@ -177,23 +179,27 @@ export class EditChannelComponent {
   }
 
   async updateChange() {
+    this.isLoading = true;
     await this.firebase.activeChannelId(
       'channel',
       this.firebase.currentChannelId
     );
     await this.firebase.subAllChannels();
     this.firebase.showOnlyChannelsWithRights();
+    this.isLoading = false;
   }
 
   async leaveChannel() {
+    this.isLoading = true;
     const updatedMembers = this.firebase.channelMembers.filter(
       (member) => member.userId !== this.firebase.loggedInUserId
     );
     await this.firebase.updateChannel(updatedMembers);
-    await this.firebase.selectLastOpenedChannel();
     await this.firebase.checkChannelRights();
+    await this.firebase.selectWelcomeChannel();
     this.firebase.showOnlyChannelsWithRights();
     this.dialogRef.close();
+    this.isLoading = false;
   }
 
   showProfile(user: any) {
