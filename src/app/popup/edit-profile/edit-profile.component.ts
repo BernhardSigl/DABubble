@@ -18,6 +18,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { VerifyComponent } from '../verify/verify.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { getDownloadURL, getStorage, ref, uploadBytes, uploadString } from 'firebase/storage';
+import { user } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-edit-profile',
@@ -40,7 +42,7 @@ export class EditProfileComponent {
   emailInputPlaceholder: string = '';
   hideEditEmail: boolean = false;
   isEmailValid = false;
-
+  previewImage: string | undefined;
   constructor(
     public firebase: FirebaseService,
     public dialog: MatDialog,
@@ -107,6 +109,11 @@ export class EditProfileComponent {
       this.dialogRef.close();
       this.verify(this.inputEmail);
     }
+    
+    if (this.previewImage) {
+      this.firebase.profileImg = this.previewImage;
+    }
+    
   }
   async verify(inputEmail: string) {
     const dialogRef = this.dialog.open(VerifyComponent, {
@@ -132,7 +139,36 @@ export class EditProfileComponent {
     this.isEmailValid = this.validateEmail(this.inputEmail);
   }
 
-  changeProfileImg() {
+  async onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
 
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      this.previewImage = e.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+
+    const storage = getStorage();
+    const storageRef = ref(storage, `profilePicture/${file.name}`);
+
+    try {
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      const userId = this.firebase.loggedInUserId;
+      if (userId) {
+        this.firebase.updateProfileImage(downloadURL, userId);
+      } else {
+        console.error('User ID not available');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
   }
+
+
+
+  changeProfileImg(){}
+
 }

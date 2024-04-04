@@ -1,10 +1,11 @@
-<button (click)="changeProfileImg()" class="edit-profile-img"
-mat-icon-button
-color="primary"
-aria-label="Example icon button with a home icon"
->
-<mat-icon>edit</mat-icon>
-</button>
+
+<label class="edit-profile-img" mat-icon-button color="primary" aria-label="Edit profile image">
+  <mat-icon>edit</mat-icon>
+  <input type="file" (change)="onFileSelected($event)" style="display: none;">
+</label>
+
+
+
 
 <form
   #editProfileForm="ngForm"
@@ -18,10 +19,9 @@ aria-label="Example icon button with a home icon"
   </div>
 
   <div class="profile-img-position">
-    <div
-      [style.background-image]="'url(' + firebase.profileImg + ')'"
-      class="profile-img"
-    ></div>
+    <div class="profile-img-position">
+      <div [style.background-image]="previewImage ? 'url(' + previewImage + ')' : 'url(' + firebase.profileImg + ')'" class="profile-img"></div>
+    </div>
   </div>
 
   <div class="edit-name">

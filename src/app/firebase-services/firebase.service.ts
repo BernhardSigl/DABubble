@@ -2,6 +2,7 @@ declare var google: any;
 import { Injectable, inject } from '@angular/core';
 import {
   DocumentData,
+  DocumentReference,
   Firestore,
   QueryDocumentSnapshot,
   addDoc,
@@ -785,4 +786,17 @@ export class FirebaseService {
       console.error('Error updating user name in channelMessages:', error);
     }
   }
+
+
+  updateProfileImage(imageUrl: string, userId: string) {
+    const userDocRef: DocumentReference<DocumentData> = doc(collection(this.firestore, 'users'), userId);
+    setDoc(userDocRef, { profileImg: imageUrl }, { merge: true })
+      .then(() => {
+        console.log('Profile image updated successfully');
+      })
+      .catch((error: any) => {
+        console.error('Error updating profile image:', error);
+      });
+  }
+
 }
