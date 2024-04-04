@@ -393,29 +393,23 @@ export class FirebaseService {
           (channel) => channel.channelId === currentChannelId
         );
         if (channelToSelect) {
-          // Check if channel was found
           await this.activeChannelId('channel', channelToSelect.channelId);
           this.setSelectedChannelId(channelToSelect.channelId);
         } else {
           await this.selectWelcomeChannel();
         }
       } else if (lastOpenedOnSideNav === 'privateChat') {
-        // this.privateMessagesArray.find(
-        //   (privateMessages) =>
-        //     privateMessages.privateMessageId === currentChannelId ||
-        //     privateMessages.privateMessageId === reversePrivateMessageId
-        // );
         if (chatPartner) {
           this.addNewPrivateMessage(chatPartner);
           await this.activeChannelId('privateChat', correctedPrivateMessageId);
         } else {
           await this.selectWelcomeChannel();
         }
-        // this.lastOpenedPrivateMessageArray = privateMessageToSelect['members'][0];
       } else if (lastOpenedOnSideNav === 'distribute') {
         this.router.navigate(['/distributor']);
       }
     } else {
+      console.log('test');
       await this.addToWelcomeChannel();
     }
   }
