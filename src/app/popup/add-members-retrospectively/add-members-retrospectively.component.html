@@ -1,41 +1,66 @@
 <div class="popup" (click)="closeSelectMemberDialog()">
+  <div class="top-nav-bar-mobile dNone">
+    <div class="grey-bar"></div>
+  </div>
 
-    <div class="top-nav-bar-mobile dNone">
-        <div class="grey-bar"></div>
-    </div>
+  <div class="spaceBetween horicontal">
+    <h4 class="bold">Leute hinzufügen</h4>
+    <div class="icon-size-24 cross-icon" (click)="this.dialogRef.close()"></div>
+  </div>
 
-    <div class="spaceBetween horicontal">
-        <h4 class="bold">Leute hinzufügen</h4>
-        <div class="icon-size-24 cross-icon" (click)="this.dialogRef.close();">
+  <div class="hashtag-and-channel-name horicontal">
+    <img src="./../../../assets/img/hashtag-blue.png" />
+    <span class="fs18">{{ firebase.currentChannelName }}</span>
+  </div>
+
+  <div class="input-box">
+    <div
+      #membersField
+      class="members-field"
+      [style.padding-bottom.rem]="
+        memberService.selectedUsers.length === 0 ? 0 : 1.25
+      "
+    >
+      <div class="dFlex member-scroll-box scroll-bar">
+        <div
+          *ngFor="let user of memberService.selectedUsers"
+          class="addedMembers"
+        >
+          <div class="horicontal">
+            <img
+              [src]="user.profileImg"
+              class="profile-img-small"
+              alt="Profilbild"
+            />
+            <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
+            <div
+              class="deleteMember"
+              (click)="removeUser(user)"
+              *ngIf="
+                user.userId !== 'e7zSK07HmreqlBdt7cibNEcjAQW2' &&
+                user.userId !== firebase.loggedInUserId
+              "
+            ></div>
+          </div>
         </div>
+      </div>
     </div>
 
-    <div class="hashtag-and-channel-name horicontal">
-        <img src="./../../../assets/img/hashtag-blue.png">
-        <span class="fs18">{{ firebase.currentChannelName }}</span>
-    </div>
+    <input
+      placeholder="Name eingeben"
+      (input)="filterSelectedUsers()"
+      id="inputField"
+      (click)="selectMemberBehaviour($event)"
+      [(ngModel)]="inputValue"
+    />
+  </div>
 
-    <div class="input-box">
+  <div class="dFlex spaceBetween" id="createBtn">
+    <div></div>
+    <button class="create" (click)="updateChannelMembers()">Hinzufügen</button>
+  </div>
+</div>
 
-        <div #membersField class="members-field" [style.padding-bottom.rem]="memberService.selectedUsers.length === 0 ? 0 : 1.25">
-            <div class="dFlex member-scroll-box scroll-bar">
-                <div *ngFor="let user of memberService.selectedUsers" class="addedMembers">
-                    <div class="horicontal">
-                        <img [src]="user.profileImg" class="profile-img-small" alt="Profilbild">
-                        <span class="fs18 userName maxNameLenth">{{ user.name }}</span>
-                        <div class="deleteMember" (click)="removeUser(user)" *ngIf="user.userId !== 'e7zSK07HmreqlBdt7cibNEcjAQW2' && user.userId !== firebase.loggedInUserId"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <input placeholder="Name eingeben" (input)="filterSelectedUsers()"
-        id="inputField" (click)="selectMemberBehaviour($event)" [(ngModel)]="inputValue">
-
-    </div> 
-
-    <div class="dFlex spaceBetween" id="createBtn">
-        <div></div>
-        <button class="create" (click)="updateChannelMembers()">Hinzufügen</button>
-    </div>
+<div class="spinner" *ngIf="isLoading">
+  <mat-spinner></mat-spinner>
 </div>

@@ -7,12 +7,12 @@
   }"
 >
   <div class="selected-msg-container">
-    <div class="thread-profile-img">
+    <div class="thread-profile-img" (click)="showProfile(selectedMessage.name)">
       <img src="{{ selectedMessage.image }}" alt="" width="70px" />
     </div>
     <div class="msg-content">
       <div class="name-time">
-        <span class="fs18 bold">{{ selectedMessage.name }}</span>
+        <span class="fs18 bold" (click)="showProfile(selectedMessage.name)">{{ selectedMessage.name }}</span>
         <span class="fs14">{{ selectedMessage.time | date : "HH:mm" }}</span>
       </div>
 
@@ -64,7 +64,7 @@
       </div>
 
       <div class="thread-msg-container">
-        <div class="thread-profile-img">
+        <div class="thread-profile-img"  (click)="showProfile(message.name)">
           <img src="{{ message.image }}" alt="" width="70px" />
         </div>
         <div
@@ -77,7 +77,7 @@
           }"
         >
           <div class="name-time">
-            <span class="fs18 bold">{{ message.name }}</span>
+            <span class="fs18 bold" (click)="showProfile(message.name)">{{ message.name }}</span>
             <span class="fs14">{{ message.time | date : "HH:mm" }}</span>
           </div>
 

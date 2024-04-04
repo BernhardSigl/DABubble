@@ -28,6 +28,8 @@ import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MessageServiceService } from '../../firebase-services/message-service.service';
 import { ThreadComponent } from '../thread/thread.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ViewSpecificProfileComponent } from '../../popup/view-specific-profile/view-specific-profile.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-message-layout-thread',
@@ -50,10 +52,11 @@ export class MessageLayoutThreadComponent implements OnInit {
   constructor(
     private threadService: DrawerService,
     private firestore: Firestore,
-    private id: GetIdService,
     public firebase: FirebaseService,
     private el: ElementRef,
-    private scrollHelper: MessageServiceService
+    private scrollHelper: MessageServiceService,
+    public dialog: MatDialog
+    
   ) {}
   selectedMessage: Message | null = null;
   threadMessages: Message[] = [];
@@ -283,4 +286,18 @@ export class MessageLayoutThreadComponent implements OnInit {
       })
     );
   }
+
+  showProfile(name: string) {
+    const filteredUsers = this.firebase.usersArray.filter(
+      (user) => user.name === name
+    );
+
+    this.dialog.open(ViewSpecificProfileComponent, {
+      data: {
+        user: filteredUsers[0],
+      },
+      panelClass: ['border', 'view-profile-popup']
+    });
+  }
 }
+
