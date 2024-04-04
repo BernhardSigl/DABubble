@@ -277,6 +277,15 @@ app-register {
   left: 0;
 }
 
+.selected-file{
+  img{
+    height: 100px;
+    width: auto;
+    border: 4px solid #797ef3;
+    border-radius: 10px;
+  }
+}
+
 // fonts:
 @font-face {
   font-display: swap;
