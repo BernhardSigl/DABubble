@@ -19,7 +19,6 @@ import { Message } from '../classes/message.class';
 import { Channel } from '../classes/channel.class';
 import { BehaviorSubject } from 'rxjs';
 import { PrivateMessage } from '../classes/private-message.class';
-import { ChangeDetectorRef } from '@angular/core';
 import { interval } from 'rxjs';
 import { startWith, switchMap } from 'rxjs/operators';
 import { PrivateMessageService } from './private-message.service';

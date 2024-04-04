@@ -1,87 +1,96 @@
 .popup {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem; // 20px
-    padding: 2.5rem; // 40px
-    background-color: white;
-    max-width: 54.5rem; // 872px
-    box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; // 20px
+  padding: 2.5rem; // 40px
+  background-color: white;
+  max-width: 54.5rem; // 872px
+  box-sizing: border-box;
 }
 
 .border {
-    padding: 1.125rem 1.25rem; // 18px 20px
-    border: 1px solid var(--light-purple);
-    border-radius: 2.5rem; // 40px
+  padding: 1.125rem 1.25rem; // 18px 20px
+  border: 1px solid var(--light-purple);
+  border-radius: 2.5rem; // 40px
 }
 
 .cross-icon {
-    background-image: url('./../../../assets/img/cross-black.png');
-    background-size: 1.5rem 1.5rem; // 24px
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 100%;
-    width: 2.5rem; // 40px
-    height: 2.5rem;
+  background-image: url("./../../../assets/img/cross-black.png");
+  background-size: 1.5rem 1.5rem; // 24px
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 100%;
+  width: 2.5rem; // 40px
+  height: 2.5rem;
 
-    &:hover {
-        background-color: var(--background-color);
-        background-image: url('./../../../assets/img/cross-blue.png');
-    }
+  &:hover {
+    background-color: var(--background-color);
+    background-image: url("./../../../assets/img/cross-blue.png");
+  }
 }
 
 .input-box {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem; // 20px
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; // 20px
+  position: relative;
+}
+
+mat-error {
+    position: absolute;
+    top: 4px;
+    left: 135px;
+    font-size: 14px;
+    color: red;
 }
 
 .input-border {
-    display: flex;
-    width: fill;
-    box-sizing: border-box;
-    padding: 1.125rem 1.25rem; // 18px 20px
-    border-radius: 2.5rem; // 40px
-    border: 1px solid var(--light-purple);
-    border-radius: 2.5rem; // 40px
+  display: flex;
+  width: fill;
+  box-sizing: border-box;
+  padding: 1.125rem 1.25rem; // 18px 20px
+  border-radius: 2.5rem; // 40px
+  border: 1px solid var(--light-purple);
+  border-radius: 2.5rem; // 40px
 
-    input {
-        color: black;
-        font-size: 1.125rem; // 18px
-        outline: none;
-        width: 100%;
-        border: none;
-        margin-left: .9375rem; // 15px
+  input {
+    color: black;
+    font-size: 1.125rem; // 18px
+    outline: none;
+    width: 100%;
+    border: none;
+    margin-left: 0.9375rem; // 15px
 
-        input::placeholder {
-            color: var(--Text-gray, #686868);
-        }
+    input::placeholder {
+      color: var(--Text-gray, #686868);
     }
+  }
 }
 
 .optional-text {
-    color: var(--Text-gray) !important;
+  color: var(--Text-gray) !important;
 }
 
 .create {
-    background-color: var(--primary);
-    border-radius: 5rem; // 80px
-    font-size: 1.125rem; // 18px
-    padding: .75rem 1.5625rem; // 12px 25px
-    border: none;
-    outline: none;
-    color: white;
-    font-weight: 700;
-    cursor: pointer;
-    width: 130px;
+  background-color: var(--primary);
+  border-radius: 5rem; // 80px
+  font-size: 1.125rem; // 18px
+  padding: 0.75rem 1.5625rem; // 12px 25px
+  border: none;
+  outline: none;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  width: 130px;
 
-    &:hover {
-        background-color: #797EF3;
-    }
+  &:hover {
+    background-color: #797ef3;
+  }
 }
 
 @media (max-width: 980px) {
-    .popup {
-      max-width: 100vw !important;
-      padding: 40px 20px;
-    }
+  .popup {
+    max-width: 100vw !important;
+    padding: 40px 20px;
+  }
 }
