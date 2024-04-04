@@ -62,7 +62,7 @@ export class MessageBoxThreadComponent implements OnInit {
   selectedThreadId: string | undefined;
   messageId: string | undefined;
   public selectedChannelId: string | undefined;
-
+  selectedFilePreview: string | undefined;
   @Output() threadIdEmitter: EventEmitter<string> = new EventEmitter<string>();
   constructor(
     private elementRef: ElementRef,
@@ -242,5 +242,16 @@ export class MessageBoxThreadComponent implements OnInit {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
+    this.updateSelectedFilePreview();
+  }
+
+  private updateSelectedFilePreview() {
+    if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.selectedFilePreview = e.target.result;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
   }
 }

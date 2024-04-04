@@ -1,6 +1,6 @@
 <div class="message-box">
   <div class="selected-file" *ngIf="selectedFile">
-    Selected file: {{ selectedFile.name }}
+    <img [src]="selectedFilePreview" class="selected-file-preview" *ngIf="selectedFilePreview" />
   </div>
 
   <div class="textarea-with-addons">
