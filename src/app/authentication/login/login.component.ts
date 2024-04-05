@@ -302,7 +302,7 @@ export class LoginComponent implements OnInit {
       this.saveUserIdToLocalStorage(userId);
       await this.firebase.online();
       this.navigateToMainPageWithUserId(userId);
-      this.showSuccessToastGuest('Successfully logged in as guest');
+      this.showSuccessToastGuest('Erfolgreich als Gast angemeldet');
     } catch (error: any) {
       this.handleLoginErrorGuest(error);
     }

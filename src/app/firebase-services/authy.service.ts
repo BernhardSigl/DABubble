@@ -105,40 +105,4 @@ export class AuthyService {
       });
     }
   }
-
-  // async completeEmailChange(): Promise<void> {
-  //   try {
-  //     const email = window.localStorage.getItem('emailForSignIn');
-
-  //     // Warten auf den aktuellen Benutzer
-  //     await new Promise<void>((resolve, reject) => {
-  //       const unsubscribe = this.auth.onAuthStateChanged((user) => {
-  //         if (user) {
-  //           resolve();
-  //         } else {
-  //           reject('No authenticated user found.');
-  //         }
-  //         unsubscribe();
-  //       });
-  //     });
-
-  //     // Aktualisiere die E-Mail-Adresse, wenn ein Benutzer gefunden wurde
-  //     const user = this.auth.currentUser;
-  //     if (
-  //       user &&
-  //       email &&
-  //       isSignInWithEmailLink(this.auth, window.location.href)
-  //     ) {
-  //       await updateEmail(user, email); // Hier wird die E-Mail-Adresse aktualisiert
-  //       window.localStorage.removeItem('emailForSignIn');
-  //     } else {
-  //       console.error(
-  //         'Error: Unable to update email. User not authenticated or missing email.'
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error('Error completing email change:', error);
-  //     throw error;
-  //   }
-  // }
 }

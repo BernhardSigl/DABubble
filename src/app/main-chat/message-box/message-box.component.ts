@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
@@ -8,7 +8,6 @@ import {
   Firestore,
   addDoc,
   collection,
-  getFirestore,
 } from '@angular/fire/firestore';
 import { Message } from '../../classes/message.class';
 import { UserListService } from '../../firebase-services/user-list.service';
@@ -19,7 +18,7 @@ import {
   uploadString,
 } from 'firebase/storage';
 import { Observable } from 'rxjs';
-import { GetIdService } from '../../firebase-services/get-id.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -32,6 +31,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     PickerModule,
     CommonModule,
     FormsModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './message-box.component.html',
   styleUrls: ['./message-box.component.scss'],
@@ -42,8 +42,9 @@ export class MessageBoxComponent implements OnInit  {
   public isEmojiPickerVisible: boolean = false;
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
   @Input() userId: string | undefined;
-  
+  isLoading: boolean = true;
   clickedUserIndex: number | null = null;
+
   constructor(
     private firestore: Firestore,
     private userDataService: UserListService,
@@ -73,8 +74,6 @@ export class MessageBoxComponent implements OnInit  {
     });
   }
   private subscribeToChannelChanges(): void {
-    // This subscription will update the local variable whenever the selected channel changes.
-    // Make sure to unsubscribe properly to avoid memory leaks, e.g., by using a takeUntil mechanism or unsubscribing in ngOnDestroy.
     this.firebase.selectedChannelId$.subscribe((channelId) => {
       this.currentChannelId = channelId;
     });
@@ -84,6 +83,7 @@ export class MessageBoxComponent implements OnInit  {
     await this.firebase.ngOnInit();
     this.currentChannelName = this.firebase.currentChannelName;
     this.textareaRef.nativeElement.focus();
+    this.isLoading = false;
   }
 
   toggleEmojiPicker() {

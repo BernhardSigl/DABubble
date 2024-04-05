@@ -45,7 +45,7 @@ export class EditChannelComponent {
     if (channelCreator) {
       this.channelCreatedBy = channelCreator;
     } else {
-      console.log('The creator of the channel does not exist anymore.');
+      console.log('Der Ersteller des Channels existiert nicht mehr.');
     }
   }
 

@@ -219,7 +219,6 @@ export class MessageLayoutThreadComponent implements OnInit {
         { reactions: message.reactions },
         { merge: true }
       );
-      console.log('Reactions updated successfully in Firestore');
     } catch (error) {
       console.error('Error updating reactions in Firestore:', error);
     }
@@ -257,8 +256,6 @@ export class MessageLayoutThreadComponent implements OnInit {
     );
     setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
       .then(() => {
-        console.log('Message successfully updated.');
-        // Disable edit mode after saving
         this.toggleEditMessageThread(messageId);
         this.isEditEnabled[messageId] = false;
         this.isEditingEnabled[messageId] = false;

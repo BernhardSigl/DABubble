@@ -26,6 +26,8 @@ import { Router } from '@angular/router';
 import { DrawerService } from '../firebase-services/drawer.service';
 import { MessageServiceService } from '../firebase-services/message-service.service';
 import { FormsModule } from '@angular/forms';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 @Component({
   selector: 'app-side-nav',
@@ -36,6 +38,7 @@ import { FormsModule } from '@angular/forms';
     MatDrawer,
     CommonModule,
     FormsModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './side-nav.component.html',
   styleUrl: './side-nav.component.scss',
@@ -50,7 +53,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class SideNavComponent implements OnInit {
   @ViewChild(MatDrawer) drawer!: MatDrawer;
-
+  isLoading: boolean = true;
   isOpen = false;
   isOpenSecond = false;
   userName: string = '';
@@ -102,11 +105,11 @@ export class SideNavComponent implements OnInit {
     this.checkMobileStatus();
     this.subscribeToCallToggleSideNavMobile();
     this.subscribeSideNavClosingFunction();
-
     this.channelArr = this.firebase.channelsArray;
     this.userArr = this.firebase.usersArray;
     this.filteredChannels = [...this.channelArr];
     this.filteredUsers = [...this.userArr];
+    this.isLoading = false;
   }
 
   @HostListener('window:resize', ['$event'])

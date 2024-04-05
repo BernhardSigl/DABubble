@@ -32,6 +32,7 @@ import { DatePipe, registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { LOCALE_ID } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 @Component({
   selector: 'app-message-layout',
   standalone: true,
@@ -339,7 +340,8 @@ export class MessageLayoutComponent implements OnInit {
     const reactionsData = message.reactions || {};
 
     setDoc(messageRef, { reactions: message.reactions }, { merge: true })
-      .then(() => console.log('Reactions successfully updated.'))
+      .then(() => {
+      })
       .catch((error) => console.error('Error updating reactions:', error));
   }
 

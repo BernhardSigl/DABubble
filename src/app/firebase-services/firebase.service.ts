@@ -224,9 +224,6 @@ export class FirebaseService {
       this.statusChangeable = loggedInUserInfo.statusChangeable;
       this.email = loggedInUserInfo.email;
       this.profileImg = loggedInUserInfo.profileImg;
-    } else {
-      // this.subAllUsers();
-      // console.log(this.usersArray);
     }
   }
 
@@ -783,7 +780,6 @@ export class FirebaseService {
     );
     setDoc(userDocRef, { profileImg: imageUrl }, { merge: true })
       .then(() => {
-        console.log('Profile image updated successfully');
       })
       .catch((error: any) => {
         console.error('Error updating profile image:', error);

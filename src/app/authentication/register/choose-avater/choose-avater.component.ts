@@ -157,7 +157,7 @@ private async updateUserDataWithImageURL(downloadURL: string): Promise<void> {
       this.user = user;
 
       await this.addUser().then((result: any) => {
-        this.snackBar.open('Successfully Registered', '', {
+        this.snackBar.open('Erfolgreich registriert', '', {
           duration: 3000, // Duration the toast is shown (in milliseconds)
           horizontalPosition: 'right', // Position of the toast
           verticalPosition: 'bottom',
@@ -165,7 +165,7 @@ private async updateUserDataWithImageURL(downloadURL: string): Promise<void> {
         });
       });
     } catch (error) {
-      this.snackBar.open('Registration failed. Please try again.', '', {
+      this.snackBar.open('Registrierung fehlgeschlagen', '', {
         duration: 3000, // Duration the toast is shown (in milliseconds)
         horizontalPosition: 'right', // Position of the toast
         verticalPosition: 'bottom',

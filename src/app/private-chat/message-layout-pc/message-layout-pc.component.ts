@@ -187,7 +187,6 @@ export class MessageLayoutPcComponent {
   }
 
   onEmojiClick(event: any, message: Message) {
-    console.log('Selected emoji:', event.emoji.native);
     this.addReaction(message, event.emoji.native);
   }
 
@@ -255,7 +254,7 @@ export class MessageLayoutPcComponent {
   
     // Ensure we only update the reactions field to minimize overwriting other data
     setDoc(messageRef, { reactions: message.reactions }, { merge: true })
-      .then(() => console.log('Reactions successfully updated.'))
+      .then(() => {})
       .catch((error) => console.error('Error updating reactions:', error));
   }
   
@@ -299,7 +298,6 @@ export class MessageLayoutPcComponent {
 
     setDoc(messageRef, { message: editedText.split('\n') }, { merge: true })
       .then(() => {
-        console.log('Message successfully updated.');
         this.isEditEnabled[messageId] = false;
         this.isEditingEnabled[messageId] = false;
         this.editedMessage[messageId] = '';
