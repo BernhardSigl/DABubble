@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDrawer } from '@angular/material/sidenav';
-
 import { AddChannelComponent } from '../popup/add-channel/add-channel.component';
 import { FirebaseService } from '../firebase-services/firebase.service';
 import { CommonModule } from '@angular/common';
@@ -23,11 +22,8 @@ import {
   animate,
 } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
-import { PrivateMessage } from '../classes/private-message.class';
-import { PrivateMessageService } from '../firebase-services/private-message.service';
 import { Router } from '@angular/router';
 import { DrawerService } from '../firebase-services/drawer.service';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MessageServiceService } from '../firebase-services/message-service.service';
 import { FormsModule } from '@angular/forms';
 
@@ -92,11 +88,9 @@ export class SideNavComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     public firebase: FirebaseService,
-    private privateMessageService: PrivateMessageService,
     private router: Router,
     private changeDetector: ChangeDetectorRef,
     public drawerService: DrawerService,
-    private breakpointObserver: BreakpointObserver,
     public scrollHelper: MessageServiceService
   ) {}
 

@@ -23,7 +23,6 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { FormsModule } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { DrawerService } from '../../firebase-services/drawer.service';
-import { GetIdService } from '../../firebase-services/get-id.service';
 import { FirebaseService } from '../../firebase-services/firebase.service';
 import { MessageServiceService } from '../../firebase-services/message-service.service';
 import { ThreadComponent } from '../thread/thread.component';

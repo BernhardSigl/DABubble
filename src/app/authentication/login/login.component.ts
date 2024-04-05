@@ -390,8 +390,7 @@ export class LoginComponent implements OnInit {
         this.clearStorage();
         localStorage.setItem('userId', userDocId);
         this.navigateToMainPage();
-        await this.firebase.online();
-        this.showSuccessToast('Successfully logged in');
+        this.showSuccessToast('Erfolgreich angemeldet');
       } else {
         console.log('User document does not exist.');
       }

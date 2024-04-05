@@ -27,6 +27,7 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageServiceService } from '../firebase-services/message-service.service';
 import { DrawerService } from '../firebase-services/drawer.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-main-chat',
@@ -45,6 +46,7 @@ import { DrawerService } from '../firebase-services/drawer.service';
     AddMembersRetrospectivelyComponent,
     ListMembersComponent,
     EditChannelComponent,
+    MatProgressSpinnerModule
   ],
   templateUrl: './main-chat.component.html',
   styleUrl: './main-chat.component.scss',
@@ -57,7 +59,7 @@ export class MainChatComponent implements OnInit {
   messages$: Observable<Message[]> | undefined;
   @ViewChild(MessageLayoutComponent)
   messageLayout!: MessageLayoutComponent;
-
+  isLoading: boolean = true;
   public windowWidth!: number;
 
   constructor(
@@ -77,7 +79,6 @@ export class MainChatComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.subScrollEvent();
     await this.firebase.pullLoggedInUserId();
-    
     this.userId = this.firebase.loggedInUserId;
 
     await this.getUserData(this.userId);
@@ -86,6 +87,7 @@ export class MainChatComponent implements OnInit {
     }
     this.firebase.scheduleAutomaticUpdate();
     this.checkEmailChange();
+    this.isLoading = false;
   }
 
   subScrollEvent() {

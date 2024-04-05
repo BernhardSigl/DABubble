@@ -4,7 +4,6 @@ import {
   DocumentData,
   DocumentReference,
   Firestore,
-  QueryDocumentSnapshot,
   addDoc,
   collection,
   doc,
@@ -61,30 +60,28 @@ export class FirebaseService {
   channelRightsIds: any[] = [];
   channelsDataWithRights: any[] = [];
 
-  currentPrivateMessageId!: string; // onclicked
-  currentPrivateMessageArray: any[] = []; // only use id's
-  currentPrivateMessageMembers: any[] = []; // don't use this
+  currentPrivateMessageId!: string;
+  currentPrivateMessageArray: any[] = [];
+  currentPrivateMessageMembers: any[] = [];
   lastOpenedPrivateMessageArray!: [];
-  privateMessagesArray: any[] = []; // don't use this
-  privateMessageId!: string; // don't use this
-  privateMessageExists: boolean = false; // don't use this
+  privateMessagesArray: any[] = [];
+  privateMessageId!: string;
+  privateMessageExists: boolean = false;
   lastOpenedElementSideNav!: string;
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
-  constructor(
-    private privateMessageService: PrivateMessageService,
-    private threadService: DrawerService
-  ) {}
+  constructor(private privateMessageService: PrivateMessageService) {}
 
   async ngOnInit(): Promise<void> {
     await this.pullLoggedInUserId();
     await this.subAllUsers();
-    await this.loggedInUserData();
     await this.subAllChannels();
     await this.checkChannelRights();
     await this.showOnlyChannelsWithRights();
     await this.subAllPrivateMessages();
     await this.selectLastOpenedChannel();
+    await this.loggedInUserData();
+    await this.online();
     this.scheduleAutomaticUpdate();
   }
 
@@ -162,7 +159,7 @@ export class FirebaseService {
       });
     });
   }
-
+  
   getUsersColRef() {
     return collection(this.firestore, 'users');
   }
@@ -202,7 +199,6 @@ export class FirebaseService {
       { statusChangeable: false },
       { merge: true }
     );
-    // await this.ngOnInit();
   }
 
   async offline() {
@@ -211,7 +207,6 @@ export class FirebaseService {
       { statusChangeable: true },
       { merge: true }
     );
-    await this.ngOnInit();
     await new Promise<void>((resolve) => {
       resolve();
     });
@@ -229,6 +224,9 @@ export class FirebaseService {
       this.statusChangeable = loggedInUserInfo.statusChangeable;
       this.email = loggedInUserInfo.email;
       this.profileImg = loggedInUserInfo.profileImg;
+    } else {
+      // this.subAllUsers();
+      // console.log(this.usersArray);
     }
   }
 
@@ -253,8 +251,6 @@ export class FirebaseService {
       { merge: true }
     );
   }
-
-  // Email Change:
 
   // Channels:
   async addChannel(newChannel: Channel) {
@@ -410,7 +406,6 @@ export class FirebaseService {
         this.router.navigate(['/distributor']);
       }
     } else {
-      console.log('test');
       await this.addToWelcomeChannel();
     }
   }
@@ -781,9 +776,11 @@ export class FirebaseService {
     }
   }
 
-
   updateProfileImage(imageUrl: string, userId: string) {
-    const userDocRef: DocumentReference<DocumentData> = doc(collection(this.firestore, 'users'), userId);
+    const userDocRef: DocumentReference<DocumentData> = doc(
+      collection(this.firestore, 'users'),
+      userId
+    );
     setDoc(userDocRef, { profileImg: imageUrl }, { merge: true })
       .then(() => {
         console.log('Profile image updated successfully');
@@ -792,5 +789,4 @@ export class FirebaseService {
         console.error('Error updating profile image:', error);
       });
   }
-
 }
