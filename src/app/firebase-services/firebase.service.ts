@@ -159,7 +159,7 @@ export class FirebaseService {
       });
     });
   }
-  
+
   getUsersColRef() {
     return collection(this.firestore, 'users');
   }
@@ -773,16 +773,16 @@ export class FirebaseService {
     }
   }
 
-  updateProfileImage(imageUrl: string, userId: string) {
+  async updateProfileImage(imageUrl: string, userId: string) {
     const userDocRef: DocumentReference<DocumentData> = doc(
       collection(this.firestore, 'users'),
       userId
     );
     setDoc(userDocRef, { profileImg: imageUrl }, { merge: true })
-      .then(() => {
-      })
+      .then(() => {})
       .catch((error: any) => {
         console.error('Error updating profile image:', error);
       });
+    await this.ngOnInit();
   }
 }

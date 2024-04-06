@@ -47,6 +47,13 @@
   right: 40px;
   background-color: #f1f0f3;
   z-index: 1;
+  border-radius: 100%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
   &:hover {
     background-color: #e1dfe4;
   }
@@ -105,6 +112,7 @@
     color: white;
     font-weight: 700;
     cursor: pointer;
+    width: 125px;
   }
 
   .save-btn {
