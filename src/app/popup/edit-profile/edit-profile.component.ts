@@ -54,6 +54,12 @@ export class EditProfileComponent {
   async ngOnInit(): Promise<void> {
     await this.firebase.selectLastOpenedChannel();
     this.editProfileForm.form.setValidators(this.atLeastOneFieldRequired());
+  // setInterval(() => {
+  //   console.log(this.editProfileForm.invalid);
+  //   console.log(this.inputName.trim() === '');
+  //   console.log(this.inputEmail.trim() === '');
+    
+  // }, 1000);
   }
 
   atLeastOneFieldRequired(): ValidatorFn {
@@ -86,7 +92,6 @@ export class EditProfileComponent {
   }
 
   save() {
-    this.isLoading = true;
     this.isEmailValid = this.validateEmail(this.inputEmail);
 
     if (this.inputName.trim() === '' && this.inputEmail.trim() === '') {
@@ -97,6 +102,7 @@ export class EditProfileComponent {
       this.inputName.trim() !== '' &&
       (this.isEmailValid || this.inputEmail === '')
     ) {
+      this.isLoading = true;
       this.firebase.changeName(this.inputName);
       this.firebase.ngOnInit();
       this.dialogRef.close();
@@ -106,6 +112,7 @@ export class EditProfileComponent {
       if (localStorage.getItem('inputEmail')) {
         localStorage.removeItem('inputEmail');
       }
+      this.isLoading = true;
       localStorage.setItem('inputEmail', this.inputEmail);
       this.dialogRef.close();
       this.verify(this.inputEmail);
@@ -160,5 +167,9 @@ export class EditProfileComponent {
       console.error('Error uploading image:', error);
     }
     this.isLoading = false;
+  }
+
+  areFieldsEmpty(): boolean {
+    return this.inputName.trim() === '' || this.inputEmail.trim() === '';
   }
 }
