@@ -83,7 +83,7 @@ export class SelectMemberComponent {
 }
 
 isUnClickableUser(userId: string): boolean {
-  return userId === 'e7zSK07HmreqlBdt7cibNEcjAQW2' || userId === this.firebase.loggedInUserId;
+  return userId === 'BbEWPuFwTxg2MsNq9LafzWxNh2u1' || userId === this.firebase.loggedInUserId;
 }
 
 }

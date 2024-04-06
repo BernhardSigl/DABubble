@@ -328,7 +328,7 @@ export class FirebaseService {
   }
 
   currentOnClickedWelcomeChannelDocRef() {
-    return doc(this.getChannelColRef(), 'j3EMpL1aoFADXPzb0kUN');
+    return doc(this.getChannelColRef(), '0lGTjEPv5uRfvNUuCf5L');
   }
 
   async subAllChannels(): Promise<void> {
@@ -428,7 +428,7 @@ export class FirebaseService {
     await this.updateWelcomeChannel(this.usersArray);
     await setDoc(
       this.getSingleUserDocRef(),
-      { channelRights: 'j3EMpL1aoFADXPzb0kUN' },
+      { channelRights: '0lGTjEPv5uRfvNUuCf5L' },
       { merge: true }
     );
     await this.selectWelcomeChannel();
@@ -436,8 +436,8 @@ export class FirebaseService {
 
   async selectWelcomeChannel() {
     await this.channelOrPrivateChat('channel');
-    await this.activeChannelId('channel', 'j3EMpL1aoFADXPzb0kUN');
-    this.setSelectedChannelId('j3EMpL1aoFADXPzb0kUN');
+    await this.activeChannelId('channel', '0lGTjEPv5uRfvNUuCf5L');
+    this.setSelectedChannelId('0lGTjEPv5uRfvNUuCf5L');
   }
 
   async addNewPrivateMessage(user: any) {
