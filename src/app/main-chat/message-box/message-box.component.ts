@@ -100,6 +100,7 @@ export class MessageBoxComponent implements OnInit  {
     const isFileSelected = !!this.selectedFile;
 
     if ((isTextAreaNotEmpty || isFileSelected) && this.currentChannelId) {
+      this.isLoading = true;
       try {
         const newMessage = new Message();
         newMessage.name = this.userName;
@@ -120,6 +121,7 @@ export class MessageBoxComponent implements OnInit  {
       } catch (error) {
         console.error('Error sending message:', error);
       }
+      this.isLoading = false;
     } else {
       this.snackbar.open('Cannot send empty message', '', {
         duration: 3000,
