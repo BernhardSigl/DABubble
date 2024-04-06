@@ -110,9 +110,9 @@ export class EditProfileComponent {
       this.verify(this.inputEmail);
     }
     
-    if (this.previewImage) {
-      this.firebase.profileImg = this.previewImage;
-    }
+    // if (this.previewImage) {
+    //   this.firebase.profileImg = this.previewImage;
+    // }
     
   }
   async verify(inputEmail: string) {
@@ -139,35 +139,59 @@ export class EditProfileComponent {
     this.isEmailValid = this.validateEmail(this.inputEmail);
   }
 
+  // async onFileSelected(event: any) {
+  //   const file = event.target.files[0];
+  //   if (!file) return;
+
+  //   const reader = new FileReader();
+  //   reader.onload = async (e) => {
+  //     this.previewImage = e.target?.result as string;
+  //   };
+  //   reader.readAsDataURL(file);
+
+  //   const storage = getStorage();
+  //   const storageRef = ref(storage, `profilePicture/${file.name}`);
+
+  //   try {
+  //     const snapshot = await uploadBytes(storageRef, file);
+  //     const downloadURL = await getDownloadURL(snapshot.ref);
+
+  //     const userId = this.firebase.loggedInUserId;
+  //     if (userId) {
+  //       this.firebase.updateProfileImage(downloadURL, userId);
+  //     } else {
+  //       console.error('User ID not available');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error uploading image:', error);
+  //   }
+  // }
+
+
   async onFileSelected(event: any) {
     const file = event.target.files[0];
     if (!file) return;
-
+  
     const reader = new FileReader();
     reader.onload = async (e) => {
       this.previewImage = e.target?.result as string;
     };
     reader.readAsDataURL(file);
-
+  
     const storage = getStorage();
     const storageRef = ref(storage, `profilePicture/${file.name}`);
-
+  
     try {
       const snapshot = await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
-
-      const userId = this.firebase.loggedInUserId;
-      if (userId) {
-        this.firebase.updateProfileImage(downloadURL, userId);
-      } else {
-        console.error('User ID not available');
-      }
+  
+      await this.firebase.updateProfileImage(downloadURL);
+      console.log('Profile image updated successfully');
     } catch (error) {
       console.error('Error uploading image:', error);
     }
   }
-
-
+  
 
   changeProfileImg(){}
 
