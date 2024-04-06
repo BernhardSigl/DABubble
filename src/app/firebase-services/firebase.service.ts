@@ -71,7 +71,10 @@ export class FirebaseService {
   lastOpenedElementSideNav!: string;
   router = inject(Router);
   firestore: Firestore = inject(Firestore);
-  constructor(private privateMessageService: PrivateMessageService) {}
+  constructor(
+    private privateMessageService: PrivateMessageService,
+    private drawerService: DrawerService
+  ) {}
 
   async ngOnInit(): Promise<void> {
     await this.pullLoggedInUserId();
@@ -251,7 +254,6 @@ export class FirebaseService {
   }
 
   async updateProfileImage(newImageURL: string): Promise<void> {
-    console.log(newImageURL);
     await setDoc(
       this.getSingleUserDocRef(),
       { profileImg: newImageURL },
@@ -265,6 +267,7 @@ export class FirebaseService {
     );
     this.updatedProfileImage = newImageURL;
     await this.ngOnInit();
+    this.drawerService.closeDrawer();
   }
 
   // Channels:
@@ -795,7 +798,6 @@ export class FirebaseService {
     newImageUrl: string,
     currentChannelId: string
   ): Promise<void> {
-    console.log(newImageUrl,currentChannelId);
     try {
       const q = query(
         collection(
@@ -812,11 +814,9 @@ export class FirebaseService {
           if (messageData['senderId'] === userId) {
             const messageRef = doc.ref; // Access the document reference
             // Update the profile image in the message data
-            console.log(messageData);
             const updatedData = { ...messageData, image: newImageUrl };
             // Set the updated data back to the document
             await setDoc(messageRef, updatedData);
-            console.log(updatedData);
           }
         } catch (updateError) {
           console.error(`Error updating message: ${updateError}`);

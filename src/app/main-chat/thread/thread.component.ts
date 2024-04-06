@@ -12,9 +12,7 @@ import { MessageLayoutComponent } from '../message-layout/message-layout.compone
 import { MessageLayoutThreadComponent } from '../message-layout-thread/message-layout-thread.component';
 import { Message } from '../../classes/message.class';
 import { MatDrawer } from '@angular/material/sidenav';
-import { MatDialog } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { NgControl } from '@angular/forms';
 import { DrawerService } from '../../firebase-services/drawer.service';
 import { MessageBoxThreadComponent } from './message-box-thread/message-box-thread.component';
 import { MessageServiceService } from '../../firebase-services/message-service.service';
@@ -85,6 +83,8 @@ export class ThreadComponent implements OnInit {
 
   toggleThread(): void {
     this.drawerService.closeDrawer();
+    localStorage.removeItem('threadMessage');
+    localStorage.removeItem('threadMessageId');
     if (this.isOpen) {
       this.drawerService.setSideNavBtnStatus(false);
     }

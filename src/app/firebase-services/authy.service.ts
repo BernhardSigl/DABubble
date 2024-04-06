@@ -98,7 +98,7 @@ export class AuthyService {
       verifyBeforeUpdateEmail(
       currentUser, newEmail, actionCodeSettings)
       .then(function() {
-        console.log('Verification email sent');
+        console.log('Email wurde gesendet');
       })
       .catch(function(error) {
        console.log('Fehler: ', error);

@@ -1,9 +1,6 @@
 import {
   Component,
-  ElementRef,
-  EventEmitter,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { HeaderComponent } from '../header/header.component';

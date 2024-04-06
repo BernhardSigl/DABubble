@@ -1,15 +1,11 @@
-import { EventEmitter, HostListener, Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Message } from '../classes/message.class';
 import {
   Firestore,
-  addDoc,
   collection,
-  doc,
   getDocs,
-  onSnapshot,
   query,
-  setDoc,
 } from '@angular/fire/firestore';
 import { MessageServiceService } from './message-service.service';
 
