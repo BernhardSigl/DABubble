@@ -160,7 +160,6 @@ export class MessageLayoutComponent implements OnInit {
     }
     this.navBehaviour();
   }
-
   // Call getThreadMessagesCount when loading messages
   async loadMessages(channelId: string): Promise<void> {
     const messagesCollection = collection(
@@ -215,10 +214,8 @@ export class MessageLayoutComponent implements OnInit {
     // Listen to changes in the thread collection
     onSnapshot(threadsRef, (querySnapshot) => {
       const threadMessagesCount = querySnapshot.size;
-
       // Update message.threadLength
       message.threadLength = threadMessagesCount;
-
       // Update Firestore document with the new thread length
       setDoc(
         doc(
@@ -242,11 +239,9 @@ export class MessageLayoutComponent implements OnInit {
     this.messages.forEach((message) => {
       const messageDate = new Date(message.time);
       const formattedDate = messageDate.toISOString().split('T')[0];
-
       if (!groups.has(formattedDate)) {
         groups.set(formattedDate, []);
       }
-
       groups.get(formattedDate)?.push(message);
     });
 
@@ -285,18 +280,14 @@ export class MessageLayoutComponent implements OnInit {
     if (!message.reactions[emoji]) {
       message.reactions[emoji] = { count: 0, users: {} };
     }
-
     let emojiReaction = message.reactions[emoji];
-
     // If the user has not already reacted with this emoji, add their reaction
     if (!emojiReaction.users[userId]) {
       emojiReaction.count += 1;
       emojiReaction.users[userId] = true; // Mark this user as having reacted with this emoji
     }
-
     // Update the message reactions in Firebase
     this.updateMessageReactions(this.selectedChannelId!, message);
-
     // Close the emoji picker UI
     this.closeEmojiPicker(message.messageId);
   }
@@ -309,9 +300,7 @@ export class MessageLayoutComponent implements OnInit {
     if (!message.reactions[emoji]) {
       message.reactions[emoji] = { count: 0, users: {} };
     }
-
     let emojiReaction = message.reactions[emoji];
-
     if (emojiReaction.users[userId]) {
       // If the user has already reacted with this emoji, remove their reaction
       emojiReaction.count = Math.max(0, emojiReaction.count - 1);
@@ -321,12 +310,10 @@ export class MessageLayoutComponent implements OnInit {
       emojiReaction.count += 1;
       emojiReaction.users[userId] = true;
     }
-
     // If no one has reacted with this emoji after toggling, remove the emoji from reactions
     if (emojiReaction.count === 0) {
       delete message.reactions[emoji];
     }
-
     // Proceed to update the message reactions in Firebase
     this.updateMessageReactions(this.selectedChannelId!, message);
   }

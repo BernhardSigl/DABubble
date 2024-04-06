@@ -791,6 +791,7 @@ export class FirebaseService {
     }
   }
 
+
   async updateProfileImageInMessages(
     userId: string,
     newImageUrl: string,
@@ -826,7 +827,20 @@ export class FirebaseService {
     } catch (error) {
       console.error('Error updating profile image in channelMessages:', error);
     }
-  }
+
+  // async updateProfileImage(imageUrl: string, userId: string) {
+  //   const userDocRef: DocumentReference<DocumentData> = doc(
+  //     collection(this.firestore, 'users'),
+  //     userId
+  //   );
+  //   setDoc(userDocRef, { profileImg: imageUrl }, { merge: true })
+  //     .then(() => {})
+  //     .catch((error: any) => {
+  //       console.error('Error updating profile image:', error);
+  //     });
+  //   await this.ngOnInit();
+
+  // }
 
   // async updateUserNameInThreads(
   //   userId: string,
@@ -897,4 +911,4 @@ export class FirebaseService {
   // }
   
   
-}
+}}
