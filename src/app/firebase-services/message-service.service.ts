@@ -15,11 +15,11 @@ export class MessageServiceService {
     if (channelOrPrivateChat === 'channel') {
       setTimeout(() => {
         this.scrollEventChannel.emit();
-      }, 10);
+      }, 200);
     } else if (channelOrPrivateChat === 'privateChat') {
       setTimeout(() => {
         this.scrollEventPrivateChat.emit();
-      }, 10);
+      }, 200);
     }
   }
 
@@ -32,10 +32,7 @@ export class MessageServiceService {
       const messageLayoutElement =
         this.threadComponent?.getNativeThreadElement();
       if (messageLayoutElement) {
-        // setTimeout(() => {
-                  messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
-
-        // }, 500);
+        messageLayoutElement.scrollTop = messageLayoutElement.scrollHeight;
       } else {
         console.warn(
           'messageLayoutElement is undefined. Unable to scroll to bottom.'
