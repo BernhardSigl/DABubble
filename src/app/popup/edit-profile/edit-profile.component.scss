@@ -161,3 +161,7 @@ input {
     border-color: var(--dark-purple);
   }
 }
+
+.save-btn:disabled {
+  cursor: not-allowed !important;
+}

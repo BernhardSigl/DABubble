@@ -25,6 +25,7 @@ import { DatePipe, registerLocaleData } from '@angular/common';
 import localeDe from '@angular/common/locales/de';
 import { LOCALE_ID } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 @Component({
   selector: 'app-message-layout-pc',
   standalone: true,
