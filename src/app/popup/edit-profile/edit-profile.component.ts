@@ -139,19 +139,18 @@ export class EditProfileComponent {
   }
 
   async onFileSelected(event: any) {
-    this.isLoading = true;
     const file = event.target.files[0];
     if (!file) return;
-  
     const reader = new FileReader();
     reader.onload = async (e) => {
       this.previewImage = e.target?.result as string;
     };
+    this.isLoading = true;
     reader.readAsDataURL(file);
   
     const storage = getStorage();
     const storageRef = ref(storage, `profilePicture/${file.name}`);
-  
+    this.isLoading = false;
     try {
       const snapshot = await uploadBytes(storageRef, file);
       const downloadURL = await getDownloadURL(snapshot.ref);
@@ -160,7 +159,6 @@ export class EditProfileComponent {
     } catch (error) {
       console.error('Error uploading image:', error);
     }
-    this.isLoading = false;
   }
 
   areFieldsEmpty(): boolean {
