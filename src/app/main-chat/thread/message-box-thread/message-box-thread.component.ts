@@ -15,17 +15,8 @@ import { FormsModule } from '@angular/forms';
 import {
   doc,
   Firestore,
-  addDoc,
-  collection,
-  query,
-  orderBy,
-  Timestamp,
-  getFirestore,
-  onSnapshot,
-  updateDoc,
   getDoc,
-  setDoc,
-  DocumentSnapshot,
+  setDoc
 } from '@angular/fire/firestore';
 import { Message, Thread } from '../../../classes/message.class';
 import { UserListService } from '../../../firebase-services/user-list.service';
@@ -39,6 +30,7 @@ import { Observable } from 'rxjs';
 import { DrawerService } from '../../../firebase-services/drawer.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FirebaseService } from '../../../firebase-services/firebase.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-message-box-thread',
@@ -49,6 +41,7 @@ import { FirebaseService } from '../../../firebase-services/firebase.service';
     PickerModule,
     CommonModule,
     FormsModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './message-box-thread.component.html',
   styleUrl: './message-box-thread.component.scss',
@@ -63,9 +56,9 @@ export class MessageBoxThreadComponent implements OnInit {
   messageId: string | undefined;
   public selectedChannelId: string | undefined;
   selectedFilePreview: string | undefined;
+  isLoading: boolean = false;
   @Output() threadIdEmitter: EventEmitter<string> = new EventEmitter<string>();
   constructor(
-    private elementRef: ElementRef,
     private firestore: Firestore,
     private userDataService: UserListService,
     private threadService: DrawerService,
@@ -90,7 +83,6 @@ export class MessageBoxThreadComponent implements OnInit {
         }
       }
     );
-      // Subscribe to the selectedChannelId$
   this.firebase.selectedChannelId$.subscribe(channelId => {
     if (channelId !== null) {
       this.selectedChannelId = channelId;
@@ -119,6 +111,7 @@ export class MessageBoxThreadComponent implements OnInit {
   }
 
   async sendMessageThread(): Promise<void> {
+    this.isLoading = true;
     try {
       this.validateMessage();
       const newThreadMessage = this.createThreadMessageFromInput();
@@ -131,6 +124,7 @@ export class MessageBoxThreadComponent implements OnInit {
         verticalPosition: 'bottom',
       });
     }
+    this.isLoading = false;
   }
 
   validateMessage(): void {
