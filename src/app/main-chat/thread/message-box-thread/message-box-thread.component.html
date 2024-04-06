@@ -28,7 +28,7 @@
         />
         <mat-divider class="vertical-divider"></mat-divider>
         <img
-          matTooltip="Open the emoji"
+          matTooltip="Wähle dein Emoji"
           class="emoji"
           src="../../../assets/img/emoji.png"
           (click)="toggleEmojiPicker()"
@@ -37,8 +37,14 @@
           class="emoji-mart"
           *ngIf="isEmojiPickerVisible"
           (emojiSelect)="addEmoji($event)"
-          title="Choose your emoji"
+          title="Wähle dein Emoji"
         ></emoji-mart>
+        <img
+        matTooltip="Markiere jemanden"
+        src="../../../assets/img/at-grey.png"
+        alt=""
+        class="mention"
+      />
       </div>
 
       <img

@@ -407,6 +407,10 @@ textarea {
   }
 }
 
+.emoji-mart-scroll {
+  height: 100px !important;
+}
+
 @media (max-width: 980px) {
   .main-chat,
   .private-chat-container,
