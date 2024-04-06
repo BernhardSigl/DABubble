@@ -132,12 +132,8 @@ export class MessageLayoutThreadComponent implements OnInit {
   
           // Update message properties if user data exists
           if (userData) {
-            if (userData.updatedName) {
-              message.name = userData.updatedName;
-            }
-            if (userData.updatedProfileImage) {
-              message.image = userData.updatedProfileImage;
-            }
+              message.name = userData.name;
+              message.image = userData.profileImg;
           }
   
           this.threadMessages.push(message);
