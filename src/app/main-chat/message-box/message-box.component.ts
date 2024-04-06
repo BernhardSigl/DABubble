@@ -55,6 +55,7 @@ export class MessageBoxComponent implements OnInit  {
     this.subscribeToChannelChanges();
   }
   selectedFilePreview: string | undefined;
+  filteredChannels: any[] = [];
 
   mentionedUsers: { name: string; profilePicture: string }[] = [];
   userName: string = '';
@@ -202,6 +203,7 @@ export class MessageBoxComponent implements OnInit  {
 
   onTextAreaChange() {
     this.suggestUsers();
+    this.suggestChannels();
   }
 
   suggestUsers() {
@@ -237,5 +239,29 @@ export class MessageBoxComponent implements OnInit  {
     this.textArea += '@';
     this.suggestUsers();
     this.onTextAreaChange();
+  }
+
+  selectChannel(index: number) {
+    // Handle channel selection
+    const selectedChannel = this.filteredChannels[index];
+    const channelName = selectedChannel.channelName;
+    this.textArea = this.textArea.replace(`#${channelName}`, ''); // Remove channel hashtag from the textarea
+    this.textArea += `${channelName} `;
+    this.filteredChannels = []; // Clear filtered channels after selection
+  }
+
+  suggestChannels() {
+    if (this.textArea.includes('#')) {
+      const searchTerm = this.textArea
+        .toLowerCase()
+        .slice(this.textArea.lastIndexOf('#') + 1);
+      this.filteredChannels = this.firebase.channelsArray.filter((channel) =>
+        channel.channelName.toLowerCase().includes(searchTerm)
+
+      );
+      console.log(this.filteredChannels)
+    } else {
+      this.filteredChannels = [];
+    }
   }
 }

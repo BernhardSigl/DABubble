@@ -15,6 +15,19 @@
     </div>
   </div>
 
+  <div
+  *ngIf="filteredChannels.length > 0"
+  class="mentioned-users-container scroll-bar"
+>
+  <div
+    *ngFor="let channels of filteredChannels; let i = index"
+    (click)="selectChannel(i)"
+    class="mentioned-users scroll-container"
+  >
+  <p>#{{channels.channelName}}</p>
+</div>
+</div>
+
   <div class="textarea-with-addons">
     <textarea
       class="textarea scroll-bar"

@@ -1,8 +1,15 @@
 <div class="message-box">
   <div class="selected-file" *ngIf="selectedFile">
-    <img [src]="selectedFilePreview" class="selected-file-preview" *ngIf="selectedFilePreview" />
+    <img
+      [src]="selectedFilePreview"
+      class="selected-file-preview"
+      *ngIf="selectedFilePreview"
+    />
   </div>
-  <div *ngIf="mentionedUsers.length > 0" class="mentioned-users-container scroll-bar">
+  <div
+    *ngIf="mentionedUsers.length > 0"
+    class="mentioned-users-container scroll-bar"
+  >
     <div
       *ngFor="let user of mentionedUsers; let i = index"
       (click)="selectMention(i)"
@@ -15,12 +22,26 @@
     </div>
   </div>
 
+  <div
+    *ngIf="filteredChannels.length > 0"
+    class="mentioned-users-container scroll-bar"
+  >
+    <div
+      *ngFor="let channels of filteredChannels; let i = index"
+      (click)="selectChannel(i)"
+      class="mentioned-users scroll-container"
+    >
+    <p>#{{channels.channelName}}</p>
+  </div>
+  </div>
+
   <div class="textarea-with-addons">
     <textarea
       class="textarea scroll-bar"
       placeholder="Nachricht an {{ this.chatUserName }}"
       [(ngModel)]="textArea"
       autofocus
+      (input)="suggestUsers(); suggestChannels(); onTextAreaChange()"
       #textareaRef
     ></textarea>
 

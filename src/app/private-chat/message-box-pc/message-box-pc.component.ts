@@ -40,11 +40,12 @@ export class MessageBoxPcComponent {
   public textArea: string = '';
   public isEmojiPickerVisible: boolean = false;
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
+  filteredChannels: any[] = [];
 
   constructor(
     private firestore: Firestore,
     private privateMessageService: PrivateMessageService,
-    private firebase: FirebaseService,
+    private firebase: FirebaseService
   ) {}
 
   mentionedUsers: { name: string; profilePicture: string }[] = [];
@@ -55,7 +56,7 @@ export class MessageBoxPcComponent {
   selectedFile?: File;
   messages$!: Observable<Message[]>;
   private currentPrivateMessageId: string | null = null;
-  chatUserName:string='';
+  chatUserName: string = '';
 
   async ngOnInit() {
     this.userId = localStorage.getItem('userId');
@@ -82,7 +83,7 @@ export class MessageBoxPcComponent {
   private subscribeToSelectedPrivateMessage(): void {
     this.privateMessageService.selectedPrivateMessage$.subscribe(
       (privateMessage) => {
-        this.chatUserName = privateMessage?.members[0].name
+        this.chatUserName = privateMessage?.members[0].name;
         this.currentPrivateMessageId = privateMessage
           ? privateMessage.privateMessageId
           : null;
@@ -151,7 +152,10 @@ export class MessageBoxPcComponent {
 
       newMessage.messageImage = downloadURL; // Set the download URL to the message
 
-      await addDoc(collection(this.firestore, messagesCollectionPath), newMessage.toJson());
+      await addDoc(
+        collection(this.firestore, messagesCollectionPath),
+        newMessage.toJson()
+      );
     } catch (error) {
       console.error('Error uploading file:', error);
       throw error; // Re-throw the error to propagate it upwards
@@ -198,24 +202,35 @@ export class MessageBoxPcComponent {
     this.mentionedUsers = []; // Clear mentioned users after selection
   }
 
+  selectChannel(index: number) {
+    // Handle channel selection
+    const selectedChannel = this.filteredChannels[index];
+    const channelName = selectedChannel.channelName;
+    this.textArea = this.textArea.replace(`#${channelName}`, ''); // Remove channel hashtag from the textarea
+    this.textArea += `${channelName} `;
+    this.filteredChannels = []; // Clear filtered channels after selection
+  }
+
   addMention() {
     // Add '@' to the text area
     this.textArea += '@';
     this.suggestUsers();
+    this.suggestChannels();
     this.onTextAreaChange();
   }
-
   suggestUsers() {
     if (this.textArea.includes('@')) {
       this.mentionedUsers = this.firebase.usersArray
-        .filter(user =>
-          user.name.toLowerCase().includes(
-            this.textArea
-              .toLowerCase()
-              .slice(this.textArea.lastIndexOf('@') + 1)
-          )
+        .filter((user) =>
+          user.name
+            .toLowerCase()
+            .includes(
+              this.textArea
+                .toLowerCase()
+                .slice(this.textArea.lastIndexOf('@') + 1)
+            )
         )
-        .map(user => ({
+        .map((user) => ({
           name: user.name,
           profilePicture: user.profileImg,
         }));
@@ -223,8 +238,24 @@ export class MessageBoxPcComponent {
       this.mentionedUsers = [];
     }
   }
- 
+
   onTextAreaChange() {
     this.suggestUsers();
+    this.suggestChannels();
+  }
+
+  suggestChannels() {
+    if (this.textArea.includes('#')) {
+      const searchTerm = this.textArea
+        .toLowerCase()
+        .slice(this.textArea.lastIndexOf('#') + 1);
+      this.filteredChannels = this.firebase.channelsArray.filter((channel) =>
+        channel.channelName.toLowerCase().includes(searchTerm)
+
+      );
+      console.log(this.filteredChannels)
+    } else {
+      this.filteredChannels = [];
+    }
   }
 }
