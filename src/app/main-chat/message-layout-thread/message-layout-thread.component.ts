@@ -132,7 +132,6 @@ export class MessageLayoutThreadComponent implements OnInit {
   
           // Update message properties if user data exists
           if (userData) {
-            console.log(userData)
             if (userData.updatedName) {
               message.name = userData.updatedName;
             }

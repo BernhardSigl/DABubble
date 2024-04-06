@@ -84,6 +84,7 @@
               [(ngModel)]="editedMessage[message.messageId]"
               rows="3"
               cols="50"
+              class="custom-textarea scroll-bar"
               >{{ getMessageText(message.messageId) | async }}</textarea
             >
             <div class="edit-text-buttons">

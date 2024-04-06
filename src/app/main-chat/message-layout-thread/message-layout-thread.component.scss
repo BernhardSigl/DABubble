@@ -187,6 +187,8 @@ emoji-mart {
   transition: opacity 0.3s ease-in-out;
   background-color: white;
   top: 0 !important;
+  z-index: 0;
+  max-height: 24px;
   img {
     cursor: pointer;
   }
@@ -230,6 +232,10 @@ emoji-mart {
   }
 }
 
+.custom-textarea {
+  margin-bottom: 47px !important;
+}
+
 .edit-message {
   display: flex;
   flex-direction: column;
@@ -242,11 +248,11 @@ emoji-mart {
     min-height: 4vh;
     cursor: text;
     caret-color: black;
-    color: #686868;
     border: 1px solid var(--dark-purple);
     border-radius: 30px 0px 30px 30px;
     resize: none;
     max-width: 190px;
+    font-size: 16px;
     &:focus {
       outline: none;
     }
@@ -293,6 +299,19 @@ emoji-mart {
 @media (max-width: 980px) {
   .current-user .hover-options {
     left: 10px;
+  }
+
+  .edit-message {
+    max-width: 40%;
+    min-width: 40%;
+  }
+
+  .edit-save {
+    right: 120px;
+  }
+
+  .edit-cancel {
+    right: 215px;
   }
 
   .other-user .hover-options {
