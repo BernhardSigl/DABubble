@@ -2,12 +2,38 @@
   <div class="selected-file" *ngIf="selectedFile">
     <img [src]="selectedFilePreview" class="selected-file-preview" *ngIf="selectedFilePreview" />
   </div>
+  <div *ngIf="mentionedUsers.length > 0" class="mentioned-users-container scroll-bar">
+    <div
+      *ngFor="let user of mentionedUsers; let i = index"
+      (click)="selectMention(i)"
+      class="mentioned-users scroll-container"
+    >
+      <img [src]="user.profilePicture" class="suggest-profile-picture" />
+      <!-- Display profile picture -->
+      <span>{{ user.name }}</span>
+      <!-- Display name -->
+    </div>
+  </div>
+
+  <div
+  *ngIf="filteredChannels.length > 0"
+  class="mentioned-users-container scroll-bar"
+>
+  <div
+    *ngFor="let channels of filteredChannels; let i = index"
+    (click)="selectChannel(i)"
+    class="mentioned-users scroll-container"
+  >
+  <p>#{{channels.channelName}}</p>
+</div>
+</div>
 
   <div class="textarea-with-addons">
     <textarea
       class="textarea scroll-bar"
       placeholder="Nachricht an #Entwicklerteam"
       [(ngModel)]="textArea"
+      (input)="suggestUsers(); onTextAreaChange();suggestChannels();"
     ></textarea>
 
     <div class="add-ons">
@@ -44,6 +70,7 @@
         src="../../../assets/img/at-grey.png"
         alt=""
         class="mention"
+        (click)="addMention()"
       />
       </div>
 

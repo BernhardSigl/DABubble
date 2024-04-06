@@ -23,7 +23,29 @@
     position: relative;
   }
 }
+.suggest-profile-picture {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+}
+.mentioned-users {
+  color: black;
+  font-weight: 400;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 10px;
+  &:hover {
+    font-weight: 700;
+    color: var(--primary);
+  }
+}
 
+.mentioned-users-container {
+  height: 13vh;
+  overflow: auto;
+}
 .add-ons {
   display: flex;
   justify-content: space-between;

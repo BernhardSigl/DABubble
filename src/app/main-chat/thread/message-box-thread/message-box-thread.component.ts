@@ -57,7 +57,11 @@ export class MessageBoxThreadComponent implements OnInit {
   public selectedChannelId: string | undefined;
   selectedFilePreview: string | undefined;
   isLoading: boolean = false;
+  mentionedUsers: { name: string; profilePicture: string }[] = [];
+  filteredChannels: any[] = [];
   @Output() threadIdEmitter: EventEmitter<string> = new EventEmitter<string>();
+
+
   constructor(
     private firestore: Firestore,
     private userDataService: UserListService,
@@ -246,6 +250,70 @@ export class MessageBoxThreadComponent implements OnInit {
         this.selectedFilePreview = e.target.result;
       };
       reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  onTextAreaChange() {
+    this.suggestUsers();
+    this.suggestChannels();
+  }
+
+  suggestUsers() {
+    if (this.textArea.includes('@')) {
+      this.mentionedUsers = this.firebase.usersArray
+        .filter(user =>
+          user.name.toLowerCase().includes(
+            this.textArea
+              .toLowerCase()
+              .slice(this.textArea.lastIndexOf('@') + 1)
+          )
+        )
+        .map(user => ({
+          name: user.name,
+          profilePicture: user.profileImg,
+        }));
+    } else {
+      this.mentionedUsers = [];
+    }
+  }
+
+  selectMention(index: number) {
+    // Handle mention selection
+    // Insert the selected mention into the textarea
+    const mentionedUser = this.mentionedUsers[index];
+    this.textArea = this.textArea.replace(`@${mentionedUser.name}`, ''); // Remove mention from the textarea
+    this.textArea += `${mentionedUser.name} `;
+    this.mentionedUsers = []; // Clear mentioned users after selection
+  }
+
+  addMention() {
+    // Add '@' to the text area
+    this.textArea += '@';
+    this.suggestUsers();
+    this.onTextAreaChange();
+  }
+
+  selectChannel(index: number) {
+    // Handle channel selection
+    const selectedChannel = this.filteredChannels[index];
+    const channelName = selectedChannel.channelName;
+    this.textArea = this.textArea.replace(`#${channelName}`, ''); // Remove channel hashtag from the textarea
+    this.textArea += `${channelName} `;
+    this.filteredChannels = []; // Clear filtered channels after selection
+  }
+
+  suggestChannels() {
+    if (this.textArea.includes('#')) {
+      const searchTerm = this.textArea
+        .toLowerCase()
+        .slice(this.textArea.lastIndexOf('#') + 1);
+      this.filteredChannels = this.firebase.channelsArray.filter((channel) =>
+        channel.channelName.toLowerCase().includes(searchTerm)
+
+      );
+      console.log(this.filteredChannels)
+    } else {
+      this.filteredChannels = [];
     }
   }
 }

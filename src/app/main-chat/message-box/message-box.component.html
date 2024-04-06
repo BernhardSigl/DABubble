@@ -33,7 +33,7 @@
       class="textarea scroll-bar"
       placeholder="Nachricht an #{{ this.currentChannelName }}"
       [(ngModel)]="textArea"
-      (input)="suggestUsers(); onTextAreaChange()"
+      (input)="suggestUsers(); onTextAreaChange();suggestChannels();"
       #textareaRef
       autofocus
     ></textarea>
