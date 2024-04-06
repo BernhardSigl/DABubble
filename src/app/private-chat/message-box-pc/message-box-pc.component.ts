@@ -21,6 +21,8 @@ import {
 import { Observable } from 'rxjs';
 import { PrivateMessageService } from '../../firebase-services/private-message.service';
 import { FirebaseService } from '../../firebase-services/firebase.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-message-box-pc',
@@ -31,6 +33,7 @@ import { FirebaseService } from '../../firebase-services/firebase.service';
     PickerModule,
     CommonModule,
     FormsModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './message-box-pc.component.html',
   styleUrls: ['./message-box-pc.component.scss'],
@@ -40,11 +43,13 @@ export class MessageBoxPcComponent {
   public textArea: string = '';
   public isEmojiPickerVisible: boolean = false;
   @ViewChild('emojiPicker') emojiPicker: ElementRef | undefined;
+  isLoading: boolean = false;
 
   constructor(
     private firestore: Firestore,
     private privateMessageService: PrivateMessageService,
     private firebase: FirebaseService,
+    private snackBar: MatSnackBar
   ) {}
 
   mentionedUsers: { name: string; profilePicture: string }[] = [];
@@ -101,15 +106,16 @@ export class MessageBoxPcComponent {
 
   async sendMessage(): Promise<void> {
     if (!this.currentPrivateMessageId || !this.userId) {
-      console.error('No private message selected or user ID not found.');
+      console.log('1');
+      
       return;
     }
     const isTextAreaNotEmpty = this.textArea.trim() !== '';
     try {
       if (this.textArea.trim() || this.selectedFile) {
+        this.isLoading = true;
         const newMessage = new Message();
         newMessage.senderId = this.userId;
-        // newMessage.message = [this.textArea.trim()];
         if (isTextAreaNotEmpty) {
           newMessage.message.push(this.textArea);
         }
@@ -127,8 +133,14 @@ export class MessageBoxPcComponent {
             newMessage.toJson()
           );
         }
-
         this.clearInputFields();
+        this.isLoading = false;
+      } else {
+        this.snackBar.open('Bitte Nachricht eingeben', '', {
+          duration: 3000,
+          horizontalPosition: 'right',
+          verticalPosition: 'bottom',
+        });
       }
     } catch (error) {
       console.error('Error sending message:', error);

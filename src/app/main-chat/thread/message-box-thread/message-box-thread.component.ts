@@ -118,7 +118,7 @@ export class MessageBoxThreadComponent implements OnInit {
       await this.handleFileUploadIfNeeded(newThreadMessage);
       this.clearInputFields();
     } catch (error) {
-      this.snackBar.open('Cannot send empty message', '', {
+      this.snackBar.open('Bitte Nachricht eingeben', '', {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom',

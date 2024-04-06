@@ -123,7 +123,7 @@ export class MessageBoxComponent implements OnInit  {
       }
       this.isLoading = false;
     } else {
-      this.snackbar.open('Cannot send empty message', '', {
+      this.snackbar.open('Bitte Nachricht eingeben', '', {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'bottom',
