@@ -261,7 +261,6 @@ export class MessageBoxComponent implements OnInit  {
         channel.channelName.toLowerCase().includes(searchTerm)
 
       );
-      console.log(this.filteredChannels)
     } else {
       this.filteredChannels = [];
     }
