@@ -114,8 +114,6 @@ export class MessageBoxPcComponent {
 
   async sendMessage(): Promise<void> {
     if (!this.currentPrivateMessageId || !this.userId) {
-      console.log('1');
-      
       return;
     }
     const isTextAreaNotEmpty = this.textArea.trim() !== '';
@@ -272,7 +270,6 @@ export class MessageBoxPcComponent {
         channel.channelName.toLowerCase().includes(searchTerm)
 
       );
-      console.log(this.filteredChannels)
     } else {
       this.filteredChannels = [];
     }

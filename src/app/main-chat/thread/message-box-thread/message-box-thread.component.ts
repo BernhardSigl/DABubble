@@ -294,12 +294,11 @@ export class MessageBoxThreadComponent implements OnInit {
   }
 
   selectChannel(index: number) {
-    // Handle channel selection
     const selectedChannel = this.filteredChannels[index];
     const channelName = selectedChannel.channelName;
-    this.textArea = this.textArea.replace(`#${channelName}`, ''); // Remove channel hashtag from the textarea
+    this.textArea = this.textArea.replace(`#${channelName}`, '');
     this.textArea += `${channelName} `;
-    this.filteredChannels = []; // Clear filtered channels after selection
+    this.filteredChannels = [];
   }
 
   suggestChannels() {
@@ -311,7 +310,6 @@ export class MessageBoxThreadComponent implements OnInit {
         channel.channelName.toLowerCase().includes(searchTerm)
 
       );
-      console.log(this.filteredChannels)
     } else {
       this.filteredChannels = [];
     }

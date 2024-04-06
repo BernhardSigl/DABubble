@@ -225,31 +225,39 @@ app-register {
 }
 
 /* scroll */
+.emoji-mart-scroll::-webkit-scrollbar-button:start:decrement,
+.emoji-mart-scroll::-webkit-scrollbar-button:end:increment,
 .scroll-bar-transparent::-webkit-scrollbar-button:start:decrement,
 .scroll-bar-transparent::-webkit-scrollbar-button:end:increment {
   background-size: 0 0 !important;
   background-image: none !important;
 }
 
+.emoji-mart-scroll::-webkit-scrollbar,
 .scroll-bar-transparent::-webkit-scrollbar {
   width: 0 !important;
 }
 
+.emoji-mart-scroll::-webkit-scrollbar,
 .scroll-bar::-webkit-scrollbar {
-  display: block;
-  width: 5px;
+  display: block !important;
+  width: 5px !important;
 }
 
+.emoji-mart-scroll::-webkit-scrollbar-track,
+.emoji-mart-scroll::-webkit-scrollbar-track,
 .scroll-bar-transparent::-webkit-scrollbar-track,
 .scroll-bar::-webkit-scrollbar-track {
   background-color: transparent;
 }
 
+.emoji-mart-scroll::-webkit-scrollbar-thumb,
 .scroll-bar-transparent::-webkit-scrollbar-thumb {
   background-color: transparent !important;
   border-radius: 0;
 }
 
+.emoji-mart-scroll::-webkit-scrollbar-thumb,
 .scroll-bar::-webkit-scrollbar-thumb {
   background-color: #adb0d9;
   border-radius: 10px;
@@ -408,7 +416,28 @@ textarea {
 }
 
 .emoji-mart-scroll {
-  height: 100px !important;
+  max-height: 175px !important;
+}
+
+emoji-mart {
+  background-color: #222222 !important;
+}
+
+.emoji-mart, .emoji-mart-dark {
+  border: none !important;
+}
+
+.emoji-mart-bar,
+.emoji-mart-anchors,
+.emoji-mart-preview,
+.emoji-mart-search,
+.emoji-mart-category-label,
+emoji-search {
+  display: none !important;
+}
+
+.emoji-mart, .emoji-mart-dark {
+  width: 198px !important;
 }
 
 @media (max-width: 980px) {

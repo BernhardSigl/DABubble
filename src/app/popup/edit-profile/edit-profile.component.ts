@@ -54,12 +54,6 @@ export class EditProfileComponent {
   async ngOnInit(): Promise<void> {
     await this.firebase.selectLastOpenedChannel();
     this.editProfileForm.form.setValidators(this.atLeastOneFieldRequired());
-  // setInterval(() => {
-  //   console.log(this.editProfileForm.invalid);
-  //   console.log(this.inputName.trim() === '');
-  //   console.log(this.inputEmail.trim() === '');
-    
-  // }, 1000);
   }
 
   atLeastOneFieldRequired(): ValidatorFn {
