@@ -15,6 +15,7 @@ import {
   onSnapshot,
   doc,
   setDoc,
+  getDoc,
 } from '@angular/fire/firestore';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '../../classes/message.class';
@@ -112,25 +113,34 @@ export class MessageLayoutThreadComponent implements OnInit {
     return this.el.nativeElement;
   }
 
-  fetchThreadMessages(messageId: string): void {
+  async fetchThreadMessages(messageId: string): Promise<void> {
     const threadsRef = collection(
       this.firestore,
       `channels/${this.selectedChannelId}/channelMessages/${messageId}/Thread`
     );
-    const q = query(threadsRef, orderBy('time')); // Assuming you have a 'time' field for ordering
-
+    const q = query(threadsRef, orderBy('time'));
+  
     onSnapshot(
       q,
       async (querySnapshot) => {
         this.threadMessages = [];
-        querySnapshot.forEach((doc) => {
-          const message = { messageId: doc.id, ...doc.data() } as Message; // Add the doc.id as messageId if needed
-
-          if (this.firebase.updatedName) {
-            message.name = this.firebase.updatedName;
-          } else {
-            message.name = message.name;
+        querySnapshot.forEach(async (doc) => {
+          const message = { messageId: doc.id, ...doc.data() } as Message;
+  
+          // Fetch the user data for this message
+          const userData = await this.getUserData(message.senderId);
+  
+          // Update message properties if user data exists
+          if (userData) {
+            console.log(userData)
+            if (userData.updatedName) {
+              message.name = userData.updatedName;
+            }
+            if (userData.updatedProfileImage) {
+              message.image = userData.updatedProfileImage;
+            }
           }
+  
           this.threadMessages.push(message);
         });
       },
@@ -139,6 +149,22 @@ export class MessageLayoutThreadComponent implements OnInit {
       }
     );
   }
+
+  async getUserData(userId: string): Promise<any> {
+    try {
+      const userDoc = await getDoc(doc(this.firestore, `users/${userId}`));
+      if (userDoc.exists()) {
+        return userDoc.data();
+      } else {
+        console.error(`User with ID ${userId} does not exist.`);
+        return null;
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      return null;
+    }
+  }
+  
 
   toggleEmojiPicker(messageId: string) {
     if (!this.isEmojiPickerVisible[messageId]) {

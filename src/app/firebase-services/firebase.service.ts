@@ -34,7 +34,7 @@ export class FirebaseService {
   email!: string;
   profileImg!: string;
   updatedName!: string;
-  updatedProfileImage!:string;
+  updatedProfileImage!: string;
   usersArray: any[] = [];
   loggedInUserId!: string;
   loggedInUserArray: any[] = [];
@@ -251,19 +251,18 @@ export class FirebaseService {
   }
 
   async updateProfileImage(newImageURL: string): Promise<void> {
-    console.log(newImageURL)
+    console.log(newImageURL);
     await setDoc(
       this.getSingleUserDocRef(),
-      {profileImg:newImageURL},
-      {merge:true}
-    )
+      { profileImg: newImageURL },
+      { merge: true }
+    );
 
     await this.updateProfileImageInMessages(
       this.loggedInUserId,
       newImageURL,
       this.currentChannelId
     );
-
     this.updatedProfileImage = newImageURL;
   }
 
@@ -562,7 +561,6 @@ export class FirebaseService {
   }
 
   async checkChannelRights() {
-    // debugger;
     this.channelRightsIds = [];
     this.channelsArray.forEach((channel) => {
       channel.members.forEach((member: any) => {
@@ -791,14 +789,12 @@ export class FirebaseService {
     }
   }
 
-
   async updateProfileImageInMessages(
     userId: string,
     newImageUrl: string,
     currentChannelId: string
   ): Promise<void> {
-    console.log(newImageUrl)
-    debugger;
+    console.log(newImageUrl,currentChannelId);
     try {
       const q = query(
         collection(
@@ -815,10 +811,11 @@ export class FirebaseService {
           if (messageData['senderId'] === userId) {
             const messageRef = doc.ref; // Access the document reference
             // Update the profile image in the message data
+            console.log(messageData);
             const updatedData = { ...messageData, image: newImageUrl };
             // Set the updated data back to the document
             await setDoc(messageRef, updatedData);
-            console.log(updatedData)
+            console.log(updatedData);
           }
         } catch (updateError) {
           console.error(`Error updating message: ${updateError}`);
@@ -828,87 +825,20 @@ export class FirebaseService {
       console.error('Error updating profile image in channelMessages:', error);
     }
 
-  // async updateProfileImage(imageUrl: string, userId: string) {
-  //   const userDocRef: DocumentReference<DocumentData> = doc(
-  //     collection(this.firestore, 'users'),
-  //     userId
-  //   );
-  //   setDoc(userDocRef, { profileImg: imageUrl }, { merge: true })
-  //     .then(() => {})
-  //     .catch((error: any) => {
-  //       console.error('Error updating profile image:', error);
-  //     });
-  //   await this.ngOnInit();
+    // async updateProfileImage(imageUrl: string, userId: string) {
+    //   const userDocRef: DocumentReference<DocumentData> = doc(
+    //     collection(this.firestore, 'users'),
+    //     userId
+    //   );
+    //   setDoc(userDocRef, { profileImg: imageUrl }, { merge: true })
+    //     .then(() => {})
+    //     .catch((error: any) => {
+    //       console.error('Error updating profile image:', error);
+    //     });
+    //   await this.ngOnInit();
 
-  // }
+    // }
+  }
 
-  // async updateUserNameInThreads(
-  //   userId: string,
-  //   newName: string,
-  //   currentChannelId: string,
-  //   messageId: string
-  // ): Promise<void> {
-  //   try {
-  //     const q = query(
-  //       collection(
-  //         this.firestore,
-  //         `channels/${currentChannelId}/channelMessages/${messageId}/Thread`
-  //       )
-  //     );
-  //     const querySnapshot = await getDocs(q);
-  //     for (const doc of querySnapshot.docs) {
-  //       try {
-  //         const threadData = doc.data(); // Retrieve the document data
-  //         const threadId = doc.id;
-  //         if (threadData['senderId'] === userId) {
-  //           const threadRef = doc.ref; // Access the document reference
-  //           // Update the user name in the thread data
-  //           const updatedData = { ...threadData, name: newName };
-  //           // Set the updated data back to the document
-  //           await setDoc(threadRef, updatedData);
-  //         }
-  //       } catch (updateError) {
-  //         console.error(`Error updating thread: ${updateError}`);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating user name in threads:', error);
-  //   }
-  // }
-  
-  // async updateProfileImageInThreads(
-  //   userId: string,
-  //   newImageUrl: string,
-  //   currentChannelId: string,
-  //   messageId: string
-  // ): Promise<void> {
-  //   try {
-  //     const q = query(
-  //       collection(
-  //         this.firestore,
-  //         `channels/${currentChannelId}/channelMessages/${messageId}/Thread`
-  //       )
-  //     );
-  //     const querySnapshot = await getDocs(q);
-  //     for (const doc of querySnapshot.docs) {
-  //       try {
-  //         const threadData = doc.data(); // Retrieve the document data
-  //         const threadId = doc.id;
-  //         if (threadData['senderId'] === userId) {
-  //           const threadRef = doc.ref; // Access the document reference
-  //           // Update the profile image in the thread data
-  //           const updatedData = { ...threadData, image: newImageUrl };
-  //           // Set the updated data back to the document
-  //           await setDoc(threadRef, updatedData);
-  //         }
-  //       } catch (updateError) {
-  //         console.error(`Error updating thread: ${updateError}`);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating profile image in threads:', error);
-  //   }
-  // }
-  
-  
-}}
+
+}

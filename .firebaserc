@@ -6,9 +6,16 @@
           "dabubble-342cb"
         ]
       }
+    },
+    "dabubble-2": {
+      "hosting": {
+        "dabubble": [
+          "dabubble-2"
+        ]
+      }
     }
   },
   "projects": {
-    "default": "dabubble-342cb"
+    "default": "dabubble-2"
   }
 }

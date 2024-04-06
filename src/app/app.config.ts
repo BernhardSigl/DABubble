@@ -15,16 +15,16 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       provideFirebaseApp(() =>
         initializeApp({
-          projectId: 'dabubble-342cb',
-          appId: '1:440475341248:web:546d028fb3799dc6203825',
-          storageBucket: 'dabubble-342cb.appspot.com',
-          apiKey: 'AIzaSyC0GvISE4kXc9teDSH0edGV8rKr_HEBz8E',
-          authDomain: 'dabubble-342cb.firebaseapp.com',
-          messagingSenderId: '440475341248',
+          projectId: 'dabubble-2',
+          appId: '1:838611660883:web:372cc0552fc6f960cb56a6',
+          storageBucket: 'dabubble-2.appspot.com',
+          apiKey: 'AIzaSyAo0KHMdZeulQnzCG847Kk9jhsYepp4fXs',
+          authDomain: 'dabubble-2.firebaseapp.com',
+          messagingSenderId: '838611660883',
         })
       )
     ),
     importProvidersFrom(provideAuth(() => getAuth())),
-    importProvidersFrom(provideFirestore(() => getFirestore())),
+    importProvidersFrom(provideFirestore(() => getFirestore()))
   ],
 };
